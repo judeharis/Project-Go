@@ -1,20 +1,42 @@
 import java.awt.*;
-import java.awt.desktop.OpenFilesHandler;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
 import java.io.*;
-import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+
+
+
+class Tuple{
+    int a;
+    int b;
+    Tuple(int a, int b){
+        this.a=a;
+        this.b=b;
+    }
+
+    public String toString() {
+        return "(" +a +"," + b+")";
+    }
+
+    public boolean equals(Tuple a) {
+        return this.a==a.a && this.b ==a.b;
+    }
+}
 
 public class Board extends Canvas   {
     Stones[][] stones = new Stones[19][19];
     static boolean editormode = true;
     static Stones placing= Stones.BLACK;
     Stones turn = Stones.BLACK;
-    static Color keystone = Color.BLACK;
+    static Stones tempkeystone  = Stones.KEYBLACKSTONE;
+    static Stones keystone = Stones.KEYBLACKSTONE;
+    static ArrayList<Tuple> keystones = new ArrayList<>();
+
+
 
 
     public void initBoard(){
@@ -22,18 +44,19 @@ public class Board extends Canvas   {
             for(int j=0; j<stones[i].length; j++) {
                 stones[i][j] = Stones.EMPTY;
                 if (editormode) stones[i][j] = Stones.INVALID;
-
-
             }
         }
     }
 
+    public  Stones[][] getStones(){
+        return this.stones;
+    }
 
-    public Board(){
+    public Board(JRadioButton w,JRadioButton b){
 
         addMouseListener(new MouseListener(){
             public void mouseClicked(MouseEvent e) {
-                System.out.println("Mouse was clicked");
+
                 int x = calulatePostionOnBoard(e.getX()-30);
                 int y =calulatePostionOnBoard(e.getY()-30);
 
@@ -43,8 +66,21 @@ public class Board extends Canvas   {
                 if (x <= 18 && y <= 18) {
                     if (editormode){
                         stones[x][y] = placing;
-                        if (placing ==Stones.KEYSTONE){
-                            placing = (keystone == Color.BLACK ? Stones.BLACK : Stones.WHITE);
+                        if (placing== Stones.KEYBLACKSTONE || placing == Stones.KEYWHITESTONE){
+                            keystones.add(new Tuple(x,y));
+                            for (Tuple k:keystones){
+                                stones[k.a][k.b]=placing;
+                            }
+                            if (placing==Stones.KEYBLACKSTONE){
+                                placing = Stones.BLACK ;
+                                b.setSelected(true);
+                            }else{
+                                placing = Stones.WHITE;
+                                w.setSelected(true);
+                            }
+                        }else{
+                            keystones.removeIf( new Tuple(x,y)::equals);
+                            System.out.println(keystones);
                         }
                     }else  if (stones[x ][y] == Stones.EMPTY) {
                         stones[x][y] = turn;
@@ -55,8 +91,10 @@ public class Board extends Canvas   {
                 }else{
                     System.out.println("Out of bound");
                 }
-                System.out.println(x+","+y+","+turn);//these co-ords are relative to the component
+                //System.out.println(x+","+y+","+turn);//these co-ords are relative to the component
                 repaint();
+
+
             }
 
             public void mouseEntered(MouseEvent arg0) {}
@@ -69,7 +107,7 @@ public class Board extends Canvas   {
     }
 
     public enum Stones {
-        BLACK,WHITE,VALID,EMPTY,INVALID,KEYSTONE
+        BLACK,WHITE,VALID,EMPTY,INVALID, KEYWHITESTONE,KEYBLACKSTONE
     }
 
     public int calulatePostionOnBoard(int x){
@@ -119,8 +157,17 @@ public class Board extends Canvas   {
                     case INVALID:  drawsquare( g,i*30+30,j*30+30 ,new Color(1f,0f,0f,.5f));
                         break;
 
-                    case KEYSTONE: drawoval(g,i*30+30,j*30+30 , keystone , true);
+                    case KEYBLACKSTONE:
+                    case KEYWHITESTONE:
+                        if (keystone==Stones.KEYBLACKSTONE) {
+                            drawoval(g, i * 30 + 30, j * 30 + 30, Color.BLACK, true);
+                        }else{
+                            drawoval(g, i * 30 + 30, j * 30 + 30, Color.WHITE, true);
+                        }
+
                         break;
+
+
                     case EMPTY: break;
 
 
@@ -128,17 +175,9 @@ public class Board extends Canvas   {
 
             }
         }
-
-        //g.drawString("Hello to JavaTutorial.net", 600, 10);
-
-
-
     }
 
 
-    public void actionPerformed(ActionEvent e) {
-        System.out.println("button pressed");
-    }
 
 
 
@@ -152,97 +191,106 @@ public class Board extends Canvas   {
 
     }
 
-    public static void editormode_init(JFrame frame){
+    public static void editormode_init(JFrame frame) {
 
         frame.setLayout(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000,1000);
-        frame.setLocation(400,0);
+        frame.setSize(1000, 1000);
+        frame.setLocation(400, 0);
         Container c = frame.getContentPane();
         //c.setBackground(Color.GRAY);
 
-        Board b = new Board();
-        b.initBoard();
-
-        b.setLocation(0,0);
-        b.setSize(600,600);
-        frame.add(b);
 
 
-        JRadioButton radiow = new JRadioButton("Place White Stones");
-        radiow.setLocation(600,120);
-        radiow.setSize(140,20);
-        frame.add(radiow);
-
-        JRadioButton radiob = new JRadioButton("Place Black Stones" , true);
-        radiob.setLocation(600,100);
-        radiob.setSize(220,20);
+        JRadioButton radiob = new JRadioButton("Place Black Stones", true);
+        radiob.setLocation(600, 100);
+        radiob.setSize(220, 20);
         frame.add(radiob);
 
-        JRadioButton radiov = new JRadioButton("Mark Valid Spots" );
-        radiov.setLocation(600,140);
-        radiov.setSize(220,20);
+        JRadioButton radiow = new JRadioButton("Place White Stones");
+        radiow.setLocation(600, 120);
+        radiow.setSize(140, 20);
+        frame.add(radiow);
+
+
+
+
+        Board b = new Board(radiow,radiob);
+        b.initBoard();
+
+        b.setLocation(0, 0);
+        b.setSize(600, 600);
+        frame.add(b);
+
+        JRadioButton radiov = new JRadioButton("Mark Valid Spots");
+        radiov.setLocation(600, 140);
+        radiov.setSize(220, 20);
         frame.add(radiov);
 
-        JRadioButton radioi = new JRadioButton("Mark Invalid Spots" );
-        radioi.setLocation(600,160);
-        radioi.setSize(220,20);
+        JRadioButton radioi = new JRadioButton("Mark Invalid Spots");
+        radioi.setLocation(600, 160);
+        radioi.setSize(220, 20);
         frame.add(radioi);
 
-        JRadioButton radBtoPlay = new JRadioButton("Black Plays First" , true);
-        radBtoPlay.setLocation(600,200);
-        radBtoPlay.setSize(220,20);
+        JRadioButton radBtoPlay = new JRadioButton("Black Plays First", true);
+        radBtoPlay.setLocation(600, 200);
+        radBtoPlay.setSize(220, 20);
         frame.add(radBtoPlay);
 
-        JRadioButton radWtoPlay = new JRadioButton("White Plays First" );
-        radWtoPlay.setLocation(600,220);
-        radWtoPlay.setSize(220,20);
+        JRadioButton radWtoPlay = new JRadioButton("White Plays First");
+        radWtoPlay.setLocation(600, 220);
+        radWtoPlay.setSize(220, 20);
         frame.add(radWtoPlay);
 
-        JRadioButton radLife = new JRadioButton("Keystone/s needs to live" , true);
-        radLife.setLocation(600,260);
-        radLife.setSize(220,20);
+        JRadioButton radLife = new JRadioButton("Keystone/s needs to live", true);
+        radLife.setLocation(600, 260);
+        radLife.setSize(220, 20);
         frame.add(radLife);
 
-        JRadioButton radDeath = new JRadioButton("Keystone/s need to die" );
-        radDeath.setLocation(600,280);
-        radDeath.setSize(220,20);
+        JRadioButton radDeath = new JRadioButton("Keystone/s need to die");
+        radDeath.setLocation(600, 280);
+        radDeath.setSize(220, 20);
         frame.add(radDeath);
 
 
-
         JButton keyBtn = new JButton("Place Key Stone");
-        keyBtn.setLocation(600,300);
-        keyBtn.setSize(200,40);
+        keyBtn.setLocation(600, 300);
+        keyBtn.setSize(200, 40);
         frame.add(keyBtn);
 
 
-
         JEditorPane probDesc = new JEditorPane();
-        probDesc.setBounds(600,360,200,80);
-        probDesc.setBorder( BorderFactory.createLineBorder(Color.black));
+        probDesc.setBounds(600, 360, 200, 80);
+        probDesc.setBorder(BorderFactory.createLineBorder(Color.black));
         probDesc.setText("Enter Description");
-        probDesc.repaint();
-        probDesc.setLocation(600,360);
-        probDesc.setSize(200,80);
+        probDesc.setLocation(600, 360);
+        probDesc.setSize(200, 80);
         frame.add(probDesc);
 
 
-
-
         JButton finBtn = new JButton("Finished");
-        finBtn.setLocation(600,540);
-        finBtn.setSize(200,40);
+        finBtn.setLocation(600, 540);
+        finBtn.setSize(200, 40);
         frame.add(finBtn);
 
 
-
-
-
-        ButtonGroup radgroup1 = new ButtonGroup();{ radgroup1.add(radiow);radgroup1.add(radiob);radgroup1.add(radiov);radgroup1.add(radioi);}
-        ButtonGroup radgroup2 = new ButtonGroup();{ radgroup2.add(radBtoPlay);radgroup2.add(radWtoPlay);}
-        ButtonGroup radgroup3 = new ButtonGroup();{ radgroup3.add(radLife);radgroup3.add(radDeath);}
-
+        ButtonGroup radgroup1 = new ButtonGroup();
+        {
+            radgroup1.add(radiow);
+            radgroup1.add(radiob);
+            radgroup1.add(radiov);
+            radgroup1.add(radioi);
+        }
+        ButtonGroup radgroup2 = new ButtonGroup();
+        {
+            radgroup2.add(radBtoPlay);
+            radgroup2.add(radWtoPlay);
+        }
+        ButtonGroup radgroup3 = new ButtonGroup();
+        {
+            radgroup3.add(radLife);
+            radgroup3.add(radDeath);
+        }
 
 
         frame.setVisible(true);
@@ -252,7 +300,7 @@ public class Board extends Canvas   {
         radiob.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 placing = Stones.BLACK;
-                keystone = Color.BLACK;
+                tempkeystone = Stones.KEYBLACKSTONE;
                 System.out.println("placing black stones");
             }
         });
@@ -260,7 +308,7 @@ public class Board extends Canvas   {
         radiow.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 placing = Stones.WHITE;
-                keystone = Color.WHITE;
+                tempkeystone = Stones.KEYWHITESTONE;
                 System.out.println("placing white stones");
             }
         });
@@ -281,7 +329,8 @@ public class Board extends Canvas   {
 
         keyBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                placing = Stones.KEYSTONE;
+                keystone = tempkeystone;
+                placing = keystone ;
             }
         });
 
@@ -296,7 +345,45 @@ public class Board extends Canvas   {
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 }
-                writer.write("hello") ;
+
+                Stones[][] stones = b.getStones();
+                for(int i=0; i<stones.length; i++) {
+                    for(int j=0; j<stones[i].length; j++) {
+                        switch (stones[j][i]) {
+                            case BLACK: writer.write("| x ") ;
+                                break;
+
+                            case WHITE:  writer.write("| o ") ;
+                                break;
+
+                            case VALID:  writer.write("| + ") ;
+                                break;
+
+                            case INVALID:   writer.write("| - ") ;
+                                break;
+
+                            case KEYBLACKSTONE: writer.write("| X ") ;
+                                break;
+
+                            case KEYWHITESTONE:  writer.write("| O ") ;
+                                break;
+
+                            case EMPTY: break;
+                        }
+                    }
+                    writer.write("|\r\n") ;
+
+                }
+
+                String whoplays = radBtoPlay.isSelected()?"Black":"White";
+                String kill  = radDeath.isSelected()?"Yes":"No";
+                String filekstone = keystones.toString();
+                writer.write("Play: "+whoplays +"\r\n") ;
+                writer.write("Kill: "+kill +"\r\n") ;
+                writer.write("Stone: "+filekstone + "\r\n") ;
+                writer.write("Description: "+probDesc.getText() + "\r\n") ;
+
+                writer.close();
 
             }
         });
