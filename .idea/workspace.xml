@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/Board.java" line="114" />
+    <bookmark url="file://$PROJECT_DIR$/src/Board.java" line="118" />
+    <bookmark url="file://$PROJECT_DIR$/src/Board.java" line="342" mnemonic="8" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="46abb312-39fe-47e4-8b90-d29c0cb32377" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Project - Go/Board$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Project - Go/Board$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Project - Go/Board.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Project - Go/Board.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Board.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -21,21 +20,24 @@
     <session id="1657554597">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="5" />
+          <entry key="project.closed" value="12" />
           <entry key="project.open.time.25" value="1" />
-          <entry key="project.open.time.3" value="3" />
+          <entry key="project.open.time.26" value="1" />
+          <entry key="project.open.time.28" value="1" />
+          <entry key="project.open.time.3" value="7" />
           <entry key="project.open.time.4" value="1" />
-          <entry key="project.opened" value="5" />
+          <entry key="project.open.time.55" value="1" />
+          <entry key="project.opened" value="12" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="4995" />
+          <entry key="java" value="7047" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="4995" />
+          <entry key="JAVA" value="7047" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -55,20 +57,16 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Board.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="244">
-              <caret line="31" column="37" lean-forward="true" selection-start-line="31" selection-start-column="37" selection-end-line="31" selection-end-column="37" />
+            <state relative-caret-position="281">
+              <caret line="152" column="46" selection-start-line="152" selection-start-column="46" selection-end-line="152" selection-end-column="46" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="class#Tuple#0" />
-                <element signature="method#Tuple#0;class#Tuple#0" />
-                <element signature="e#394#395#0" expanded="true" />
-                <element signature="e#436#437#0" expanded="true" />
-                <element signature="class#Stones#0;class#Board#0" />
-                <element signature="method#calulatePostionOnBoard#0;class#Board#0" />
-                <element signature="method#drawoval#0;class#Board#0" />
-                <element signature="method#drawsquare#0;class#Board#0" />
-                <element signature="class#8997:9196" />
-                <element signature="class#9237:9440" />
+                <element signature="method#Board#0;class#Board#0" expanded="true" />
+                <element signature="class#1967:3769" expanded="true" />
+                <element signature="e#4501#4508#0" expanded="true" />
+                <element signature="method#TupleArrayClone#0;class#Board#0" expanded="true" />
+                <element signature="method#getLiberties#0;class#Board#0" expanded="true" />
+                <element signature="method#checkForStrings#0;class#Board#0" expanded="true" />
+                <element signature="method#playermode_init#0;class#Board#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -109,44 +107,24 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="142" />
-    <option name="y" value="-8" />
-    <option name="width" value="1452" />
-    <option name="height" value="873" />
+    <option name="x" value="-7" />
+    <option name="width" value="974" />
+    <option name="height" value="1047" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="Project - Go" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Project - Go" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Project - Go" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Project - Go" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="PackagesPane" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1538177752388" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1538315621749" />
     <property name="last_opened_file_path" value="D:/Neon Workspace/Algs Assessed" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.folding" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -210,7 +188,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.122068234" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -221,7 +198,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49733475" weight="0.19305857" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49733475" weight="0.19496167" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3991323" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -277,20 +254,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Board.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="31" column="37" lean-forward="true" selection-start-line="31" selection-start-column="37" selection-end-line="31" selection-end-column="37" />
+        <state relative-caret-position="281">
+          <caret line="152" column="46" selection-start-line="152" selection-start-column="46" selection-end-line="152" selection-end-column="46" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="class#Tuple#0" />
-            <element signature="method#Tuple#0;class#Tuple#0" />
-            <element signature="e#394#395#0" expanded="true" />
-            <element signature="e#436#437#0" expanded="true" />
-            <element signature="class#Stones#0;class#Board#0" />
-            <element signature="method#calulatePostionOnBoard#0;class#Board#0" />
-            <element signature="method#drawoval#0;class#Board#0" />
-            <element signature="method#drawsquare#0;class#Board#0" />
-            <element signature="class#8997:9196" />
-            <element signature="class#9237:9440" />
+            <element signature="method#Board#0;class#Board#0" expanded="true" />
+            <element signature="class#1967:3769" expanded="true" />
+            <element signature="e#4501#4508#0" expanded="true" />
+            <element signature="method#TupleArrayClone#0;class#Board#0" expanded="true" />
+            <element signature="method#getLiberties#0;class#Board#0" expanded="true" />
+            <element signature="method#checkForStrings#0;class#Board#0" expanded="true" />
+            <element signature="method#playermode_init#0;class#Board#0" expanded="true" />
           </folding>
         </state>
       </provider>
