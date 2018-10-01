@@ -5,10 +5,7 @@
     <bookmark url="file://$PROJECT_DIR$/src/Board.java" line="342" mnemonic="8" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="46abb312-39fe-47e4-8b90-d29c0cb32377" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Board.java" afterDir="false" />
-    </list>
+    <list default="true" id="46abb312-39fe-47e4-8b90-d29c0cb32377" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,14 +17,14 @@
     <session id="1657554597">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="12" />
+          <entry key="project.closed" value="13" />
           <entry key="project.open.time.25" value="1" />
           <entry key="project.open.time.26" value="1" />
-          <entry key="project.open.time.28" value="1" />
+          <entry key="project.open.time.28" value="2" />
           <entry key="project.open.time.3" value="7" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.55" value="1" />
-          <entry key="project.opened" value="12" />
+          <entry key="project.opened" value="13" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -60,9 +57,7 @@
             <state relative-caret-position="281">
               <caret line="152" column="46" selection-start-line="152" selection-start-column="46" selection-end-line="152" selection-end-column="46" />
               <folding>
-                <element signature="method#Board#0;class#Board#0" expanded="true" />
-                <element signature="class#1967:3769" expanded="true" />
-                <element signature="e#4501#4508#0" expanded="true" />
+                <element signature="method#updateStoneStrings#0;class#Board#0" expanded="true" />
                 <element signature="method#TupleArrayClone#0;class#Board#0" expanded="true" />
                 <element signature="method#getLiberties#0;class#Board#0" expanded="true" />
                 <element signature="method#checkForStrings#0;class#Board#0" expanded="true" />
