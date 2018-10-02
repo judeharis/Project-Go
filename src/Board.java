@@ -63,8 +63,8 @@ public class Board extends Canvas   {
     static ArrayList<Tuple> keystones = new ArrayList<>();
     ArrayList<ArrayList<Tuple>> bStoneStrings = new ArrayList<ArrayList<Tuple>>();
     ArrayList<ArrayList<Tuple>> wStoneStrings = new ArrayList<ArrayList<Tuple>>();
-    ArrayList<ArrayList<Tuple>> bCapStrings = new ArrayList<ArrayList<Tuple>>();
-    ArrayList<ArrayList<Tuple>> wCapStrings = new ArrayList<ArrayList<Tuple>>();
+    ArrayList<Tuple> bCapStrings = new ArrayList<Tuple>();
+    ArrayList<Tuple> wCapStrings = new ArrayList<Tuple>();
 
 
 
@@ -94,41 +94,41 @@ public class Board extends Canvas   {
                 int y =calulatePostionOnBoard(e.getY()-30);
 
                 if (x <= 18 && y <= 18) {
-                    if (editormode){
-                        print("placing at: ("+x+","+y+")" );
-                        stones[x][y] = placing;
-                        if (placing== Stones.KEYBLACKSTONE || placing == Stones.KEYWHITESTONE){
-                            keystones.add(new Tuple(x,y));
-                            for (Tuple k:keystones){
-                                stones[k.a][k.b]=placing;
-                            }
-                            if (placing==Stones.KEYBLACKSTONE){
-                                placing = Stones.BLACK ;}
+                    if (selfCap(x,y,getEnemyColour(placing))){
+                            print("Can't Self Capture");}
+                    else{
+                        if (editormode){
+                            stones[x][y] = placing;
+                            if (placing== Stones.KEYBLACKSTONE || placing == Stones.KEYWHITESTONE){
+                                keystones.add(new Tuple(x,y));
+                                for (Tuple k:keystones){
+                                    stones[k.a][k.b]=placing;
+                                }
+                                if (placing==Stones.KEYBLACKSTONE){
+                                    placing = Stones.BLACK ;}
+                                else{
+                                    placing = Stones.WHITE;}}
                             else{
-                                placing = Stones.WHITE;}
-                        }
-                        else{
-                            keystones.removeIf( new Tuple(x,y)::equals);}}
-                    else if (stones[x ][y] == Stones.EMPTY) {
-                        stones[x][y] = turn;
-                        turn = (turn == Stones.BLACK) ? Stones.WHITE : Stones.BLACK;}
-                    else {
-                        System.out.println("Stone already there");}
-                    updateStringsSingle(x,y);
-                }
+                                keystones.removeIf( new Tuple(x,y)::equals);}}
+                        else if (stones[x ][y] == Stones.EMPTY || stones[x ][y] == Stones.VALID) {
+                                stones[x][y] = turn;
+                                turn = (turn == Stones.BLACK) ? Stones.WHITE : Stones.BLACK;}
+                        else {
+                            System.out.println("Stone already there");}
+                        updateStringsSingle(x,y);}}
                 else{
                     System.out.println("Out of bound");
                 }
 
                 updateStringsFull();
-                //updateCaptureStrings();
-                print(checkForCaps(getStoneColour(placing)));
-                print(checkForCaps(Stones.WHITE));
-                print(checkForCaps(Stones.BLACK));
+
+                updateCaptureStrings(placing);
+                updateCaptureStrings(getEnemyColour(placing));
+
+                if (!editormode)placing =turn;
+
                 repaint();
-                //System.out.println("Black:"+ bStoneStrings);
-                // print(bCapStrings);
-                // System.out.println("White:"+ wStoneStrings);
+
             }
             public void mouseReleased(MouseEvent e) {}
         });
@@ -136,6 +136,22 @@ public class Board extends Canvas   {
 
     }
 
+
+    private boolean selfCap(int i , int j, Stones colour ){
+
+        if (colour != Stones.BLACK && colour != Stones.WHITE) return false;
+
+        ArrayList<Tuple> capString =  (colour== Stones.WHITE ? wCapStrings:  bCapStrings);
+        ArrayList<Tuple> libs = getLiberties(i, j);
+        if (capString.contains(new Tuple(i, j))) { print("About to cap"); return false;}
+        for(Tuple t :libs){
+            if(stones[t.a][t.b] != colour ){
+
+                print("Not Self Cap");
+                return false;}
+        }
+        return true;
+    }
 
     private ArrayList<Tuple> getCaptureStringFor(ArrayList<Tuple> sstring) {
 
@@ -146,46 +162,51 @@ public class Board extends Canvas   {
         }
         ArrayList<Tuple> l = TupleArrayClone(sstring);
         capstring.removeAll(l);
-        print("stonelist: "+sstring);
-        print("caplist: "+capstring);
         return capstring;
     }
 
-    private void updateCaptureStrings() {
-        wCapStrings.clear();
-        bCapStrings.clear();
-        for (ArrayList<Tuple> tlist : wStoneStrings){
-            wCapStrings.add(getCaptureStringFor(tlist));
-        }
-
-        for (ArrayList<Tuple> tlist : bStoneStrings){
-            bCapStrings.add(getCaptureStringFor(tlist));
-        }
-
-    }
-
-    private boolean checkForCaps(Stones colour){
+    private boolean updateCaptureStrings( Stones colour) {
         if (getStoneColour(colour) != Stones.BLACK && getStoneColour(colour) != Stones.WHITE)  return false;
+        ArrayList<Tuple> capString =  (colour== Stones.WHITE ? bCapStrings:  wCapStrings);
         ArrayList<ArrayList<Tuple>> stoneStrings = (colour== Stones.WHITE ? bStoneStrings: wStoneStrings);
+        capString.clear();
         boolean anyCap = false;
-
         for (ArrayList<Tuple> tlist : stoneStrings){
             ArrayList<Tuple> capList = getCaptureStringFor(tlist);
-            boolean captured = true;
+            ArrayList<Tuple> needList = new ArrayList<Tuple>();
             for (Tuple t : capList){
-                print(colour);
-                if (getStoneColour(stones[t.a][t.b]) != colour ){
-                    captured = false;
-                    print(t);
-                    break;}
+                if (stones[t.a][t.b]!=colour) needList.add(t);
             }
-            if (captured){
+            if (needList.size()==1){
+                capString.add(needList.get(0));}
+            else if(needList.size()==0){
                 removeStonesOnBoard(tlist);
                 anyCap=true;}
         }
         return anyCap;
 
     }
+
+    // private boolean checkForCaps(Stones colour){
+    //     if (getStoneColour(colour) != Stones.BLACK && getStoneColour(colour) != Stones.WHITE)  return false;
+    //     ArrayList<ArrayList<Tuple>> stoneStrings = (colour== Stones.WHITE ? bStoneStrings: wStoneStrings);
+    //     boolean anyCap = false;
+    //
+    //     for (ArrayList<Tuple> tlist : stoneStrings){
+    //         ArrayList<Tuple> capList = getCaptureStringFor(tlist);
+    //         boolean captured = true;
+    //         for (Tuple t : capList){
+    //             if (getStoneColour(stones[t.a][t.b]) != colour ){
+    //                 captured = false;
+    //                 break;}
+    //         }
+    //         if (captured){
+    //             removeStonesOnBoard(tlist);
+    //             anyCap=true;}
+    //     }
+    //     return anyCap;
+    //
+    // }
 
     private void removeStonesOnBoard(ArrayList<Tuple> tlist){
         for(Tuple t : tlist){
@@ -351,6 +372,12 @@ public class Board extends Canvas   {
         return s;
     }
 
+    public Stones getEnemyColour(Stones s){
+        if( getStoneColour(s) == Stones.BLACK )return Stones.WHITE;
+        if( getStoneColour(s) == Stones.WHITE )return Stones.BLACK;
+        return s;
+    }
+
 
 
 
@@ -383,6 +410,7 @@ public class Board extends Canvas   {
     public static void editormode_init(JFrame frame) {
         frame.getContentPane().removeAll();
         frame.repaint();
+        placing = Stones.BLACK;
 
         Board b = init_board(frame);
         JRadioButton radiob = (JRadioButton) initComponent(600,100,220,20, frame ,new JRadioButton("Place Black Stones",true));
