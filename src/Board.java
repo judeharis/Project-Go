@@ -55,18 +55,26 @@ class StoneStringResponse {
 @SuppressWarnings("serial")
 public class Board extends Canvas   {
     Stones[][] stones = new Stones[19][19];
+
+
     static boolean editormode = true;
     static Stones placing= Stones.BLACK;
     Stones turn = Stones.BLACK;
+
+
     static Stones tempkeystone  = Stones.KEYBLACKSTONE;
     static Stones keystone = Stones.KEYBLACKSTONE;
     static ArrayList<Tuple> keystones = new ArrayList<>();
+
+
     ArrayList<ArrayList<Tuple>> bStoneStrings = new ArrayList<ArrayList<Tuple>>();
     ArrayList<ArrayList<Tuple>> wStoneStrings = new ArrayList<ArrayList<Tuple>>();
     ArrayList<Tuple> bCapStrings = new ArrayList<Tuple>();
     ArrayList<Tuple> wCapStrings = new ArrayList<Tuple>();
 
-
+    Tuple ko;
+    Tuple maybeko;
+    Tuple fullko;
 
 
     public void initBoard(){
@@ -94,7 +102,9 @@ public class Board extends Canvas   {
                 int y =calulatePostionOnBoard(e.getY()-30);
 
                 if (x <= 18 && y <= 18) {
-                    if (selfCap(x,y,getEnemyColour(placing))){
+                    if (stones[x][y]== Stones.KO){
+                        print("Can't Place On KO");}
+                    else if (selfCap(x,y,getEnemyColour(placing))){
                             print("Can't Self Capture");}
                     else{
                         if (editormode){
@@ -110,9 +120,16 @@ public class Board extends Canvas   {
                                     placing = Stones.WHITE;}}
                             else{
                                 keystones.removeIf( new Tuple(x,y)::equals);}}
-                        else if (stones[x ][y] == Stones.EMPTY || stones[x ][y] == Stones.VALID) {
-                                stones[x][y] = turn;
-                                turn = (turn == Stones.BLACK) ? Stones.WHITE : Stones.BLACK;}
+                        else if (stones[x][y] == Stones.EMPTY || stones[x ][y] == Stones.VALID) {
+                                if (stones[x][y] == Stones.KO){
+                                    print("Can't Place Due There Due To Ko");}
+                                else{
+                                    stones[x][y] = turn;
+                                    if (fullko != null){
+                                        stones[fullko.a][fullko.b] =Stones.VALID;
+                                        fullko = null;
+                                    }
+                                    turn = (turn == Stones.BLACK) ? Stones.WHITE : Stones.BLACK;}}
                         else {
                             System.out.println("Stone already there");}
                         updateStringsSingle(x,y);}}
@@ -121,10 +138,14 @@ public class Board extends Canvas   {
                 }
 
                 updateStringsFull();
-
-                updateCaptureStrings(placing);
-                updateCaptureStrings(getEnemyColour(placing));
-
+                ko = null;
+                maybeko = null;
+                checkForCaps(placing);
+                checkForCaps(getEnemyColour(placing));
+                if (ko !=null) {
+                    stones[ko.a][ko.b] = Stones.KO;
+                    fullko = new Tuple(ko.a, ko.b);
+                }
                 if (!editormode)placing =turn;
 
                 repaint();
@@ -143,11 +164,9 @@ public class Board extends Canvas   {
 
         ArrayList<Tuple> capString =  (colour== Stones.WHITE ? wCapStrings:  bCapStrings);
         ArrayList<Tuple> libs = getLiberties(i, j);
-        if (capString.contains(new Tuple(i, j))) { print("About to cap"); return false;}
+        if (capString.contains(new Tuple(i, j)))  return false;
         for(Tuple t :libs){
             if(stones[t.a][t.b] != colour ){
-
-                print("Not Self Cap");
                 return false;}
         }
         return true;
@@ -165,7 +184,7 @@ public class Board extends Canvas   {
         return capstring;
     }
 
-    private boolean updateCaptureStrings( Stones colour) {
+    private boolean checkForCaps( Stones colour) {
         if (getStoneColour(colour) != Stones.BLACK && getStoneColour(colour) != Stones.WHITE)  return false;
         ArrayList<Tuple> capString =  (colour== Stones.WHITE ? bCapStrings:  wCapStrings);
         ArrayList<ArrayList<Tuple>> stoneStrings = (colour== Stones.WHITE ? bStoneStrings: wStoneStrings);
@@ -178,10 +197,12 @@ public class Board extends Canvas   {
                 if (stones[t.a][t.b]!=colour) needList.add(t);
             }
             if (needList.size()==1){
-                capString.add(needList.get(0));}
+                capString.add(needList.get(0));
+                if (needList.get(0).equals(maybeko)) ko = maybeko;}
             else if(needList.size()==0){
                 removeStonesOnBoard(tlist);
-                anyCap=true;}
+                anyCap=true;
+                if(tlist.size() == 1) maybeko= new Tuple(tlist.get(0).a,tlist.get(0).b);}
         }
         return anyCap;
 
@@ -301,7 +322,7 @@ public class Board extends Canvas   {
     }
 
     public enum Stones {
-        BLACK,WHITE,VALID,EMPTY,INVALID, KEYWHITESTONE,KEYBLACKSTONE
+        BLACK,WHITE,VALID,EMPTY,INVALID, KEYWHITESTONE,KEYBLACKSTONE,KO;
     }
 
     public int calulatePostionOnBoard(int x){
@@ -358,6 +379,10 @@ public class Board extends Canvas   {
                             drawoval(g, i * 30 + 30, j * 30 + 30, Color.WHITE, true);}
 
                         break;
+
+                    case KO:
+                        drawsquare( g,i*30+30,j*30+30 ,new Color(0f,0f,1f,.5f));
+                    break;
 
                     case EMPTY:
                         break;
