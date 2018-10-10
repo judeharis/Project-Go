@@ -1,71 +1,26 @@
+package Go;
+
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import javax.swing.filechooser.*;
-import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 
-
-class Tuple{
-    int a;
-    int b;
-    Tuple(int a, int b){
-        this.a=a;
-        this.b=b;
-    }
-
-    public String toString() {
-        return "(" +a +"," + b+")";
-    }
-
-    @Override
-    public boolean equals(Object a) {
-        boolean equals = false;
-        if (a != null && a instanceof Tuple){
-            Tuple t = (Tuple) (a);
-            equals =  this.a==t.a && this.b ==t.b;
-        }
-        return equals;
-    }
-
-    public int hashCode() {
-      int result = 17;
-      result = 31 * result + a + 31*result + b;
-      return result;
-    }
-    public Tuple clone(Tuple t ){
-        return new Tuple(t.a, t.b);
-    }
-}
-
-
-class StoneStringResponse {
-    public final boolean state;
-    public final ArrayList<Tuple> list;
-
-    public StoneStringResponse(boolean state, ArrayList<Tuple> list) {
-        this.state = state;
-        this.list = list;
-    }
-}
 
 @SuppressWarnings("serial")
-public class Board extends Canvas   {
-    static Stones[][] stones = new Stones[19][19];
+public class Board extends Canvas implements MouseMotionListener{
+    Stones[][] stones = new Stones[19][19];
 
-
-    static boolean editormode = true;
-    static Stones placing= Stones.BLACK;
+    boolean ai = true;
+    boolean computer = false;
+    Stones placing= Stones.BLACK;
     Stones turn = Stones.BLACK;
     boolean capToWin;
-
-    static Stones tempkeystone  = Stones.KEYBLACKSTONE;
-    static Stones keystone = Stones.KEYBLACKSTONE;
-    static ArrayList<Tuple> keystones = new ArrayList<>();
+    Stones tempkeystone  = Stones.KEYBLACKSTONE;
+    Stones keystone = Stones.KEYBLACKSTONE;
+    ArrayList<Tuple> keystones = new ArrayList<>();
 
 
     ArrayList<ArrayList<Tuple>> bStoneStrings = new ArrayList<ArrayList<Tuple>>();
@@ -75,76 +30,114 @@ public class Board extends Canvas   {
 
     Tuple ko;
     Tuple maybeko;
-    String desc;
 
+	String desc ="No Problem Loaded";
+
+	int boardTotal = 800;
+	int boardSize = boardTotal/20;
+	
+	int posX;
+	int posY;
+	Timer timer;
+	ArrayList<Tuple> validMoves;
+	
+
+	
 
     public void initBoard(){
         for(int i=0; i<stones.length; i++) {
             for(int j=0; j<stones[i].length; j++) {
                 stones[i][j] = Stones.EMPTY;
-                if (editormode) stones[i][j] = Stones.INVALID;
+                if (GoProject.editormode) stones[i][j] = Stones.INVALID;
             }
         }
+
+        tempkeystone = Stones.KEYBLACKSTONE;
+        keystone = Stones.KEYBLACKSTONE;
+        placing = Stones.BLACK;
+        keystones.clear();
+        bStoneStrings.clear();
+        bStoneStrings.clear();
+        bCapStrings.clear();
+        wCapStrings.clear();
+        validMoves =getAllValidMoves();
+        ko = null;
     }
 
     public Board(){
-
+    	addMouseMotionListener(this);
         addMouseListener(new MouseListener(){
             public void mouseClicked(MouseEvent e) {}
-            public void mouseEntered(MouseEvent e) {}
-            public void mouseExited(MouseEvent arg0) {}
+            public void mouseEntered(MouseEvent e) {
+            	startTimer();
+            }
+            public void mouseExited(MouseEvent arg0) {
+            	endTimer();
+            }
             public void mousePressed(MouseEvent e) {
 
-                int x = calulatePostionOnBoard(e.getX()-30);
-                int y =calulatePostionOnBoard(e.getY()-30);
+                int x = calulatePostionOnBoard(e.getX()-boardSize);
+                int y =calulatePostionOnBoard(e.getY()-boardSize);
 
-                if (x <= 18 && x>=0 && y <= 18 && y>=0) {
-                    if (stones[x][y]== Stones.KO){
-                        print("Can't Place On KO");}
-                    else if (selfCap(x,y,getEnemyColour(placing))){
-                            print("Can't Self Capture");}
-                    else{
-                        if (editormode){
-                            stones[x][y] = placing;
-                            removeKo();
-                            if (placing== Stones.KEYBLACKSTONE || placing == Stones.KEYWHITESTONE){
-                                keystones.add(new Tuple(x,y));
-                                for (Tuple k:keystones){
-                                    stones[k.a][k.b]=placing;
-                                }
-                                placing = getStoneColour(placing);}
-                            else{
-                                keystones.removeIf( new Tuple(x,y)::equals);}}
-                        else if (stones[x][y] == Stones.EMPTY || stones[x ][y] == Stones.VALID) {
-                                if (stones[x][y] == Stones.KO){
-                                    print("Can't Place Due There Due To Ko");}
-                                else{
-                                    stones[x][y] = turn;
-                                    removeKo();
-                                    turn = (turn == Stones.BLACK) ? Stones.WHITE : Stones.BLACK;}}
-                        else {
-                            System.out.println("Stone already there");}
-                        updateStringsSingle(x,y);}}
-                else{
-                    System.out.println("Out of bound");
-                }
-
-                updateStringsFull();
-                maybeko = null;
-                checkForCaps(placing);
-                checkForCaps(getEnemyColour(placing));
-                if (ko !=null) stones[ko.a][ko.b] = Stones.KO;
-                if (!editormode)placing =turn;
-
-                repaint();
+                if (!computer) takeTurn(x, y);
 
             }
             public void mouseReleased(MouseEvent e) {}
+            
         });
+        
+       
 
 
     }
+    
+    public void takeTurn(int i, int j) {
+    	if (withinBounds(i,j)) {
+            if (stones[i][j]== Stones.KO){
+                print("Can't Place On KO");}
+            else if (selfCap(i,j,Stones.getEnemyColour(placing))){
+                    print("Can't Self Capture");}
+            else{
+                if (GoProject.editormode){
+                    stones[i][j] = placing;
+                    removeKo();
+                    if (placing== Stones.KEYBLACKSTONE || placing == Stones.KEYWHITESTONE){
+                        keystones.add(new Tuple(i,j));
+                        for (Tuple k:keystones){
+                            stones[k.a][k.b]=placing;
+                        }
+                        placing = Stones.getStoneColour(placing);}
+                    else{
+                        keystones.removeIf( new Tuple(i,j)::equals);}}
+                else if (stones[i][j] == Stones.EMPTY || stones[i][j] == Stones.VALID) {
+                        stones[i][j] = turn;
+                        removeKo();
+                        turn = (turn == Stones.BLACK) ? Stones.WHITE : Stones.BLACK;
+                        if (!ai) computer = true;}
+                else {
+                    System.out.println("Stone already there");}
+                updateStringsSingle(i,j);}}
+        else{
+            System.out.println("Out of bound");
+        }
 
+        updateStringsFull();
+        maybeko = null;
+        checkForCaps(placing);
+        checkForCaps(Stones.getEnemyColour(placing));
+        if (ko !=null) stones[ko.a][ko.b] = Stones.KO;
+        if (!GoProject.editormode)placing =turn;
+        validMoves =getAllValidMoves();
+        if(!ai){
+            repaint();
+            GoProject.updateGUI();}
+        if (computer) new Minimaxer(this,keystones, Stones.getEnemyColour(turn));
+
+    }
+
+    
+    
+    
     private void removeKo(){
         if (ko != null){
             stones[ko.a][ko.b] =Stones.VALID;
@@ -156,14 +149,41 @@ public class Board extends Canvas   {
         if (colour != Stones.BLACK && colour != Stones.WHITE) return false;
 
         ArrayList<Tuple> capString =  (colour== Stones.WHITE ? wCapStrings:  bCapStrings);
+        ArrayList<ArrayList<Tuple>> stoneStrings =  (colour== Stones.WHITE ? bStoneStrings:  wStoneStrings);
         ArrayList<Tuple> libs = getLiberties(i, j);
         if (capString.contains(new Tuple(i, j)))  return false;
-        for(Tuple t :libs){
-            if(stones[t.a][t.b] != colour ){
+        
+        
+        ArrayList<Tuple> sstring= new ArrayList<Tuple>();
+        sstring.add(new Tuple(i,j));
+        for(Tuple t :libs ){
+            if (stones[t.a][t.b] == Stones.getEnemyColour(colour)){
+                StoneStringResponse libsStringres = checkForStrings( t.a ,  t.b, stoneStrings, Stones.getEnemyColour(colour));
+                if(!libsStringres.state){
+                    sstring.add(t);}
+                else{
+                	//This tupleArrayMerger combines string of liberty stone with string of current stone
+                    sstring= tupleArrayMerger(sstring,libsStringres.list);}}
+        }
+        
+        for (Tuple t :getCaptureStringFor(sstring)) {
+            if(stones[t.a][t.b]!=colour && stones[t.a][t.b]!= Stones.getKeyStone(colour)){
                 return false;}
         }
         return true;
     }
+    
+    
+    private ArrayList<Tuple> tupleArrayMerger(ArrayList<Tuple> a,ArrayList<Tuple> b){
+    	ArrayList<Tuple> l = new ArrayList<Tuple>();
+    	l.addAll(a);
+    	for (Tuple t : b ) {
+    		if (!l.contains(t)) l.add(t);
+    	}
+		return l;
+    	
+    }
+
 
     private ArrayList<Tuple> getCaptureStringFor(ArrayList<Tuple> sstring) {
 
@@ -177,8 +197,8 @@ public class Board extends Canvas   {
         return capstring;
     }
 
-    private boolean checkForCaps( Stones colour) {
-        if (getStoneColour(colour) != Stones.BLACK && getStoneColour(colour) != Stones.WHITE)  return false;
+    public boolean checkForCaps( Stones colour) {
+        if (Stones.getStoneColour(colour) != Stones.BLACK && Stones.getStoneColour(colour) != Stones.WHITE)  return false;
         ArrayList<Tuple> capString =  (colour== Stones.WHITE ? bCapStrings:  wCapStrings);
         ArrayList<ArrayList<Tuple>> stoneStrings = (colour== Stones.WHITE ? bStoneStrings: wStoneStrings);
         capString.clear();
@@ -187,7 +207,7 @@ public class Board extends Canvas   {
             ArrayList<Tuple> capList = getCaptureStringFor(tlist);
             ArrayList<Tuple> needList = new ArrayList<Tuple>();
             for (Tuple t : capList){
-                if (stones[t.a][t.b]!=colour) needList.add(t);
+                if (stones[t.a][t.b]!=colour && stones[t.a][t.b]!= Stones.getKeyStone(colour) ) needList.add(t);
             }
             if (needList.size()==1){
                 capString.add(needList.get(0));
@@ -208,9 +228,9 @@ public class Board extends Canvas   {
     }
 
     private void updateStringsSingle(int i , int j){
-        if (getStoneColour(stones[i][j])==Stones.BLACK || getStoneColour(stones[i][j]) == Stones.WHITE){
-            removeOldStoneFromString(i,j,getStoneColour(stones[i][j])==Stones.BLACK ? wStoneStrings:bStoneStrings);
-            ArrayList<ArrayList<Tuple>> stoneStrings = getStoneColour(stones[i][j])==Stones.BLACK ? bStoneStrings:wStoneStrings;
+        if (Stones.getStoneColour(stones[i][j])==Stones.BLACK || Stones.getStoneColour(stones[i][j]) == Stones.WHITE){
+            removeOldStoneFromString(i,j,Stones.getStoneColour(stones[i][j])==Stones.BLACK ? wStoneStrings:bStoneStrings);
+            ArrayList<ArrayList<Tuple>> stoneStrings = Stones.getStoneColour(stones[i][j])==Stones.BLACK ? bStoneStrings:wStoneStrings;
             StoneStringResponse stringed = checkForStrings( i ,  j, stoneStrings,stones[i][j]);
             if (!stringed.state){
                 //print("Stone: " + i + ","+ j);
@@ -219,18 +239,18 @@ public class Board extends Canvas   {
                 sstring.add(new Tuple(i,j));
                 for(Tuple t :libs ){
 
-                    if (stones[t.a][t.b] == getStoneColour(stones[i][j])){
+                    if (stones[t.a][t.b] == Stones.getStoneColour(stones[i][j])){
                         StoneStringResponse libsStringres = checkForStrings( t.a ,  t.b, stoneStrings,stones[i][j]);
                         if(!libsStringres.state){
                             sstring.add(t);
                             stoneStrings.add(sstring);}
                         else{
-                            stoneStrings.remove(libsStringres.list);
-                            stoneStrings.remove(sstring);
-                            ArrayList<Tuple> l = TupleArrayClone(sstring) ;
-                            libsStringres.list.removeAll(l);
-                            sstring.addAll(libsStringres.list);
-                            stoneStrings.add(sstring);}}
+                        	//This part combines string of liberty stone with string of current stone
+                        	if (libsStringres.list != sstring) {
+	                            stoneStrings.remove(libsStringres.list);
+	                            stoneStrings.remove(sstring);
+	                            sstring = tupleArrayMerger(sstring,libsStringres.list);
+	                            stoneStrings.add(sstring);}}}
                 }
                 if (sstring.size()==1){stoneStrings.add(sstring);}}
             stoneStrings.removeIf(item -> item.isEmpty());}
@@ -239,8 +259,7 @@ public class Board extends Canvas   {
             removeOldStoneFromString(i,j,wStoneStrings);}
     }
 
-
-    private void updateStringsFull(){
+    public void updateStringsFull(){
         for(int i=0; i<stones.length; i++) {
             for(int j=0; j<stones[i].length; j++) {
                  updateStringsSingle(i,j);
@@ -257,13 +276,6 @@ public class Board extends Canvas   {
 
     }
 
-    public ArrayList<Tuple> TupleArrayClone(ArrayList<Tuple> s){
-        ArrayList<Tuple> l = new ArrayList<Tuple>();
-        for(Tuple o : s) {
-            l.add(new Tuple(o.a,o.b));
-        }
-        return l;
-    }
 
     public ArrayList<Tuple> getLiberties(int i , int j){
         ArrayList<Tuple> libs = new ArrayList<Tuple>();
@@ -277,10 +289,9 @@ public class Board extends Canvas   {
     }
 
 
-
     public StoneStringResponse checkForStrings(int i , int j , ArrayList<ArrayList<Tuple>> stoneStrings , Stones stoneColour){
 
-        if (getStoneColour(stones[i][j])==getStoneColour(stoneColour)){
+        if (Stones.getStoneColour(stones[i][j])==Stones.getStoneColour(stoneColour)){
             Tuple k = new Tuple(i, j);
             if (stoneStrings.isEmpty())return new StoneStringResponse(false,null);
             for (ArrayList<Tuple> bStrings : stoneStrings ){
@@ -291,25 +302,108 @@ public class Board extends Canvas   {
         return  new StoneStringResponse(false,null);
     }
 
-    public enum Stones {
-        BLACK,WHITE,VALID,EMPTY,INVALID, KEYWHITESTONE,KEYBLACKSTONE,KO;
+
+    public ArrayList<Tuple> getAllValidMoves() {
+    	ArrayList<Tuple>  validMoves = new ArrayList<Tuple>();
+    	for(int i=0; i<stones.length; i++) {
+            for(int j=0; j<stones[i].length; j++) {
+            	if (checkValidMove(i,j)) validMoves.add(new Tuple(i,j));
+            }
+    	}
+    	return validMoves;
     }
 
-    public int calulatePostionOnBoard(int x){
-        return  (x % 30 > 15 ? (x + (30 - (x % 30))) : (x - (x % 30)))/30;
+    public boolean checkValidMove(int x , int y) {
+        if(withinBounds(x,y)){
+            if(stones[x][y]== Stones.KO){
+                //print("Can't Place On KO");
+                return false;}
+            else if(selfCap(x,y,Stones.getEnemyColour(turn))){
+                    //print("Can't Self Capture");
+            		return false;}
+            else{
+                if (stones[x][y] == Stones.EMPTY || stones[x][y] == Stones.VALID) return true;
+                else //print("Stone already there");
+                return false;}}
+        else{
+            //print("Out of bound");
+            return false;}
+
     }
 
+
+
+
+    public void paint(Graphics g ){
+        for (int i =boardSize; i < boardTotal; i+=boardSize){
+            g.setColor(Color.RED);
+            g.drawLine(i,boardSize,i, boardTotal-boardSize);
+            g.drawLine(boardSize,i,boardTotal-boardSize, i);
+        }
+
+
+        for(int i = 4; i<17; i+=6) {
+        	g.setColor(Color.BLUE);
+            g.fillOval(boardSize*i - 3 ,boardSize*4 -3,6,6);
+            g.fillOval(boardSize*i - 3 ,boardSize*10 -3,6,6);
+            g.fillOval(boardSize*i - 3 ,boardSize*16 -3,6,6);
+
+        }
+
+
+        for(int i=0; i<stones.length; i++) {
+            for(int j=0; j<stones[i].length; j++) {
+                switch (stones[i][j]) {
+                    case BLACK:  drawoval(g,(i+1)*boardSize,(j+1)*boardSize , Color.BLACK, false);
+                        break;
+
+                    case WHITE:  drawoval(g,(i+1)*boardSize,(j+1)*boardSize , Color.WHITE, false);
+                        break;
+
+                    case VALID:  //drawoval(g,(i+1)*boardSize,(j+1)*boardSize,new Color(0f,1f,0f,.5f ),false);
+                        break;
+
+                    case INVALID:  //drawoval( g,(i+1)*boardSize,(j+1)*boardSize ,new Color(1f,0f,0f,.1f),false);
+                        break;
+
+                    case KEYBLACKSTONE:
+                    case KEYWHITESTONE:
+                        if (keystone==Stones.KEYBLACKSTONE) {
+                            drawoval(g,(i+1)*boardSize,(j+1)*boardSize, Color.BLACK, true);}
+                        else{
+                            drawoval(g, (i+1)*boardSize,(j+1)*boardSize, Color.WHITE, true);}
+
+                        break;
+
+                    case KO:
+                        drawsquare( g,(i+1)*boardSize,(j+1)*boardSize ,new Color(0f,0f,1f,.5f));
+                    break;
+
+                    case EMPTY:
+                        break;
+                }
+            }
+        }
+
+        for (Tuple t :validMoves){
+        	drawoval(g,(t.a+1)*boardSize,(t.b+1)*boardSize,new Color(0f,1f,0f,.5f ),false);
+        }
+
+        if((GoProject.editormode && withinBounds(posX,posY))||checkValidMove(posX,posY)) {
+        	drawoval(g,(posX+1)*boardSize,(posY+1)*boardSize,Stones.stoneToColor(placing),Stones.isKey(placing));}
+        
+    }
 
     public void drawoval(Graphics g,  int x, int y , Color c , boolean key) {
         g.setColor(c);
-        g.fillOval(x-5, y-5, 10, 10);
+        g.fillOval(x-10, y-10, 20, 20);
         if (key){
             g.setColor(new Color(255,175,55));
             g.drawOval(x-7, y-7, 14, 14);}
         else{
             g.setColor(Color.BLACK);}
 
-        g.drawOval(x-5, y-5, 10, 10);
+        g.drawOval(x-10, y-10, 20, 20);
     }
 
     public void drawsquare(Graphics g,  int x, int y , Color c) {
@@ -318,480 +412,61 @@ public class Board extends Canvas   {
     }
 
 
-    public void paint(Graphics g ){
-        for (int i =30; i < 600; i+=30){
-            g.setColor(Color.RED);
-            g.drawLine(i,30,i, 570);
-            g.drawLine(30,i,570, i);
+    public int calulatePostionOnBoard(int x){
+    	if ((x % boardSize <= (boardSize*3/7))){
+    		return (x - (x % boardSize)) /boardSize;} 
+    	else if ((x % boardSize >= (boardSize*4/7))) {
+    		return ((x - (x % boardSize)) +  boardSize)/boardSize;}
+    	else return -1;
+    }
+
+    public ArrayList<Tuple> TupleArrayClone(ArrayList<Tuple> s){
+        ArrayList<Tuple> l = new ArrayList<Tuple>();
+        for(Tuple o : s) {
+            l.add(new Tuple(o.a,o.b));
         }
-
-
-        for(int i=0; i<stones.length; i++) {
-            for(int j=0; j<stones[i].length; j++) {
-                switch (stones[i][j]) {
-                    case BLACK:  drawoval(g,i*30+30,j*30+30 , Color.BLACK, false);
-                        break;
-
-                    case WHITE:  drawoval(g,i*30+30,j*30+30 , Color.WHITE, false);
-                        break;
-
-                    case VALID:  drawsquare(g,i*30+30,j*30+30,new Color(0f,1f,0f,.5f ));
-                        break;
-
-                    case INVALID:  drawsquare( g,i*30+30,j*30+30 ,new Color(1f,0f,0f,.5f));
-                        break;
-
-                    case KEYBLACKSTONE:
-                    case KEYWHITESTONE:
-                        if (keystone==Stones.KEYBLACKSTONE) {
-                            drawoval(g, i * 30 + 30, j * 30 + 30, Color.BLACK, true);}
-                        else{
-                            drawoval(g, i * 30 + 30, j * 30 + 30, Color.WHITE, true);}
-
-                        break;
-
-                    case KO:
-                        drawsquare( g,i*30+30,j*30+30 ,new Color(0f,0f,1f,.5f));
-                    break;
-
-                    case EMPTY:
-                        break;
-                }
-            }
-        }
+        return l;
     }
 
-    public Stones getStoneColour(Stones s){
-        if( s == Stones.KEYBLACKSTONE )return Stones.BLACK;
-        if( s == Stones.KEYWHITESTONE )return Stones.WHITE;
-        return s;
-    }
-
-    public Stones getEnemyColour(Stones s){
-        if( getStoneColour(s) == Stones.BLACK )return Stones.WHITE;
-        if( getStoneColour(s) == Stones.WHITE )return Stones.BLACK;
-        return s;
-    }
-
-
-
-
-
-    public static void main(String[] args) throws IOException  {
-
-        JFrame frame = new JFrame("New Frame");
-        frame.setLayout(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 1000);
-        frame.setLocation(400, 0);
-        frame.getContentPane().removeAll();
-        frame.repaint();
-
-        Board b = init_board(frame);
-
-        if (editormode)  editormode_init(frame,b);
-        firstmenus(frame,b);
-
-
-
-    }
-
-    public static Board init_board(JFrame frame){
-        Board b = new Board();
-        b.initBoard();
-        b.setLocation(0, 0);
-        b.setSize(600, 600);
-        return b;
-    }
-
-
-    public static void editormode_init(JFrame frame, Board b) {
-        frame.getContentPane().removeAll();
-        frame.repaint();
-        frame.add(b);
-        b.initBoard();
-
-        tempkeystone = Stones.KEYBLACKSTONE;
-        keystone = Stones.KEYBLACKSTONE;
-        placing = Stones.BLACK;
-        keystones.clear();
-        JRadioButton radiob = (JRadioButton) initComponent(600,100,220,20, frame ,new JRadioButton("Place Black Stones",true) , "radiob" );
-        JRadioButton radiow = (JRadioButton) initComponent(600,120,220,20, frame ,new JRadioButton("Place White Stones") ,"radiow");
-        JRadioButton radiov = (JRadioButton) initComponent(600,140,220,20, frame ,new JRadioButton("Mark Valid Spots"),"radiov" );
-        JRadioButton radioi = (JRadioButton) initComponent(600,160,220,20, frame ,new JRadioButton("Mark Invalid Spots"),"radioi");
-        JRadioButton radBtoPlay = (JRadioButton) initComponent(600,200,220,20, frame ,new JRadioButton("Black Plays First", true),"radBtoPlay");
-        JRadioButton radWtoPlay = (JRadioButton) initComponent(600,220,220,20, frame ,new JRadioButton("White Plays First"),"radWtoPlay");
-        JRadioButton radLife = (JRadioButton) initComponent(600,260,220,20, frame ,new JRadioButton("Keystone/s needs to live" ),"radLife");
-        JRadioButton radDeath = (JRadioButton) initComponent(600,280,220,20, frame ,new JRadioButton("Keystone/s needs to die" , true),"radDeath");
-        JButton keyBtn = (JButton) initComponent(600,300,220,40, frame ,new JButton("Place Key Black Stone"),"keyBtn");
-        JEditorPane probDesc = (JEditorPane) initComponent(600,360,220,80, frame ,new  JEditorPane(), "probDesc");
-        probDesc.setBounds(600, 360, 220, 80);
-        probDesc.setBorder(BorderFactory.createLineBorder(Color.black));
-        probDesc.setText("Enter Description");
-        JButton finBtn =  (JButton) initComponent(600,540,220,40, frame ,new JButton("Finished"),"finBtn");
-        ButtonGroup radgroup1 = new ButtonGroup();{
-            radgroup1.add(radiow);
-            radgroup1.add(radiob);
-            radgroup1.add(radiov);
-            radgroup1.add(radioi);
-        }
-        ButtonGroup radgroup2 = new ButtonGroup();{
-            radgroup2.add(radBtoPlay);
-            radgroup2.add(radWtoPlay);
-        }
-        ButtonGroup radgroup3 = new ButtonGroup();{
-            radgroup3.add(radLife);
-            radgroup3.add(radDeath);
-        }
-
-
-
-        frame.setVisible(true);
-
-        radiob.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                placing = Stones.BLACK;
-                tempkeystone = Stones.KEYBLACKSTONE;
-                keyBtn.setText("Place Key Black Stone");
-                System.out.println("placing black stones");
-            }
-        });
-
-        radiow.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                placing = Stones.WHITE;
-                tempkeystone = Stones.KEYWHITESTONE;
-                keyBtn.setText("Place Key White Stone");
-                System.out.println("placing white stones");
-            }
-        });
-
-        radiov.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                placing = Stones.VALID;
-                System.out.println("setting valid spaces");
-            }
-        });
-
-        radioi.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                placing = Stones.INVALID;
-                System.out.println("setting invalid spaces");
-            }
-        });
-
-        keyBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                keystone = tempkeystone;
-                placing = keystone ;
-                if (placing== Stones.KEYBLACKSTONE) radiob.setSelected(true);
-                if (placing== Stones.KEYWHITESTONE) radiow.setSelected(true);
-            }
-        });
-
-        finBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-                final JFileChooser fc = new JFileChooser();
-                File workingDirectory = new File(System.getProperty("user.dir"));
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", "txt", "text");
-                fc.setFileFilter(filter);
-                fc.setCurrentDirectory(workingDirectory);
-                if (fc.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
-                    String filename =  fc.getSelectedFile().getName();
-                    if (filename.length() <= 2) filename += ".txt";
-                    else if((filename).substring(filename.length()-3).equals(".txt")){
-                        filename += ".txt";}
-
-                    PrintWriter writer = null;
-                    try {writer = new PrintWriter(filename);}
-                    catch (FileNotFoundException e1) {e1.printStackTrace();}
-
-                    for(int i=0; i<stones.length; i++) {
-                        for(int j=0; j<stones[i].length; j++) {
-                            switch (stones[j][i]) {
-                                case BLACK: writer.write("| x ") ;
-                                    break;
-
-                                case WHITE:  writer.write("| o ") ;
-                                    break;
-
-                                case VALID:  writer.write("| + ") ;
-                                    break;
-
-                                case INVALID:   writer.write("| - ") ;
-                                    break;
-
-                                case KEYBLACKSTONE: writer.write("| X ") ;
-                                    break;
-
-                                case KEYWHITESTONE:  writer.write("| O ") ;
-                                    break;
-
-                                case KO:  writer.write("| K ") ;
-                                    break;
-
-                                case EMPTY: break;
-                            }
-                        }
-                        writer.write("|\r\n") ;
-
-                    }
-
-                    String whoplays = radBtoPlay.isSelected()?"Black":"White";
-                    String kill  = radDeath.isSelected()?"Yes":"No";
-                    String filekstone = keystones.toString();
-                    writer.write("Play: "+whoplays +"\r\n") ;
-                    writer.write("Kill: "+kill +"\r\n") ;
-                    writer.write("Key Stone/s: "+filekstone + "\r\n") ;
-                    writer.write("Description: "+probDesc.getText() + "\r\n") ;
-                    writer.close();}
-
-
-            }
-        });
-
-
-    }
-
-    public static JComponent initComponent(int x, int y , int width , int height , JFrame frame , JComponent j,String jname){
-        j.setSize(width, height);
-        j.setLocation(x,y);
-        j.setName(jname);
-        frame.add(j);
-        return j ;
-    }
-
-    public static void playermode_init(JFrame frame ,  Board b){
-
-        frame.getContentPane().removeAll();
-        frame.repaint();
-        frame.add(b);
-        b.initBoard();
-
-        JLabel lbl1 = new JLabel("This is text");
-        lbl1.setLocation(600,100);
-        lbl1.setSize(200,20);
-        frame.add(lbl1);
-
-    }
-
-    public static void firstmenus(JFrame frame , Board b) throws IOException {
-
-        MenuBar menuBar = new MenuBar();
-        Menu fileMenu = new Menu("File");
-        Menu editMenu = new Menu("Edit");
-        MenuItem editorodeMenuItem = new MenuItem("Editor Mode");
-        MenuItem playermodeMenuItem = new MenuItem("Player Mode");
-        MenuItem saveMenuItem = new MenuItem("Save");
-        MenuItem loadMenuItem = new MenuItem("Load");
-        MenuItem exitMenuItem = new MenuItem("Exit");
-
-        fileMenu.add(loadMenuItem);
-        fileMenu.add(saveMenuItem);
-        fileMenu.add(exitMenuItem);
-        editMenu.add(editorodeMenuItem);
-        editMenu.add(playermodeMenuItem);
-        menuBar.add(fileMenu);
-        menuBar.add(editMenu);
-        frame.setMenuBar(menuBar);
-
-        exitMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-
-        editorodeMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                editormode = true;
-                editormode_init(frame ,b );
-
-
-            }
-        });
-
-        playermodeMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                editormode = false;
-
-                playermode_init(frame , b);
-
-
-            }
-        });
-
-        loadMenuItem.addActionListener(new ActionListener()  {
-            public void actionPerformed(ActionEvent e) {
-
-                final JFileChooser fc = new JFileChooser();
-                File workingDirectory = new File(System.getProperty("user.dir"));
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", "txt", "text");
-                fc.setFileFilter(filter);
-                fc.setCurrentDirectory(workingDirectory);
-
-                if (fc.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
-                    BufferedReader br ;
-                    String st;
-                    int x = 0;
-                    int y = 0;
-                    StringBuilder desc = new StringBuilder();
-                    String[] lkeystones = null ;
-                    try {br = new BufferedReader(new FileReader(fc.getSelectedFile()));
-                        while ((st = br.readLine()) != null){
-                            x =0;
-                            if (y<19){
-                                for(int i = 2, n = st.length() ; i < n ; i+=4) {
-                                    char c = st.charAt(i);
-                                    switch (c){
-                                        case 'x': stones[x][y] = Stones.BLACK;
-                                            break;
-                                        case 'X':
-                                            stones[x][y] = Stones.KEYBLACKSTONE;
-                                            tempkeystone = Stones.KEYBLACKSTONE;
-                                            keystone = Stones.KEYBLACKSTONE;
-                                            break;
-                                        case 'o': stones[x][y] = Stones.WHITE;
-                                            break;
-                                        case 'O': stones[x][y] = Stones.KEYWHITESTONE;
-                                            tempkeystone = Stones.KEYWHITESTONE;
-                                            keystone = Stones.KEYWHITESTONE;
-                                            break;
-                                        case 'K': stones[x][y] = Stones.KO;
-                                            break;
-                                        case '+': stones[x][y] = Stones.VALID;
-                                            break;
-                                        case '-': stones[x][y] = Stones.INVALID;
-                                            break;
-                                    }
-                                    x++;
-                                }}
-
-                            if(y==19) b.turn = toStone(st.split(" ")[1]);
-                            if(y==20) b.capToWin = st.split(" ")[1].equals("Yes")?true:false;
-                            if(y==21) lkeystones = st.replaceAll("[\\[\\]\\)\\(]","").split(" ");
-                            if(y>21) desc.append(st);
-                            y++;
-                        }
-
-                    }
-                    catch (FileNotFoundException e1 ) {e1.printStackTrace();}
-                    catch (IOException e1 ) {e1.printStackTrace();}
-
-                    print("Turn: " + b.turn);
-                    print("Cap to win: " + b.capToWin);
-                    for (int i=2; i<lkeystones.length;i++){
-                        int ta;
-                        int tb;
-                        String[] temp= lkeystones[i].split(",");
-                        ta = Integer.parseInt(temp[0]);
-                        tb = Integer.parseInt(temp[1]);
-                        keystones.add(new Tuple(ta,tb));
-                    }
-                    print("Key Stones: " + keystones);
-                    b.desc = desc.toString();
-
-                    b.repaint();
-
-                }
-
-
-            }
-        });
-
-
-        saveMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-
-                final JFileChooser fc = new JFileChooser();
-                File workingDirectory = new File(System.getProperty("user.dir"));
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", "txt", "text");
-                fc.setFileFilter(filter);
-                fc.setCurrentDirectory(workingDirectory);
-                if (fc.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
-                    String filename =  fc.getSelectedFile().getName();
-
-                    if (filename.length() <= 2) filename += ".txt";
-                    else if((filename).substring(filename.length()-3).equals(".txt")){
-                        filename += ".txt";}
-
-                    PrintWriter writer = null;
-                    try {writer = new PrintWriter(filename);}
-                    catch (FileNotFoundException e1) {e1.printStackTrace();}
-
-                    for(int i=0; i<stones.length; i++) {
-                        for(int j=0; j<stones[i].length; j++) {
-                            switch (stones[j][i]) {
-                                case BLACK: writer.write("| x ") ;
-                                    break;
-
-                                case WHITE:  writer.write("| o ") ;
-                                    break;
-
-                                case VALID:  writer.write("| + ") ;
-                                    break;
-
-                                case INVALID:   writer.write("| - ") ;
-                                    break;
-
-                                case KEYBLACKSTONE: writer.write("| X ") ;
-                                    break;
-
-                                case KEYWHITESTONE:  writer.write("| O ") ;
-                                    break;
-
-                                case KO:  writer.write("| K ") ;
-                                    break;
-
-                                case EMPTY: break;
-                            }
-                        }
-                        writer.write("|\r\n") ;
-
-                    }
-
-                    JEditorPane l = new JEditorPane() ;
-                    if (editormode){
-                        Component[] components = frame.getContentPane().getComponents();
-                        for (Component c : components){
-                            JRadioButton k ;
-                            if(c.getName()== "radBtoPlay"){
-                                k =  (JRadioButton) c;
-                                String whoplays = k.isSelected()?"Black":"White";
-                                writer.write("Play: "+whoplays +"\r\n") ;}
-                            if(c.getName()== "radDeath"){
-                                k =  (JRadioButton) c;
-                                String kill  = k.isSelected()?"Yes":"No";
-                                writer.write("Kill: "+kill +"\r\n") ;}
-                            if(c.getName()== "probDesc") l =  (JEditorPane) c;
-                        }
-                    }
-
-                    String filekstone = keystones.toString();
-                    writer.write("Key Stone/s: "+filekstone + "\r\n") ;
-                    writer.write("Description: "+l.getText() + "\r\n") ;
-
-                    writer.close();}
-
-
-
-
-
-            }
-        });
-
-
-
-
-    }
-    public static Stones toStone(String stone){
-        if (stone.toUpperCase().equals("BLACK")) return Stones.BLACK;
-        return Stones.WHITE;
-    }
     public static void print(Object o){
         System.out.println(o);
     }
+   
+    private void startTimer() {
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+            	repaint();
+
+            }
+        };
+
+        timer = new Timer(true);
+        timer.schedule(task, 0, 100);
+    }
+    
+    private void endTimer() {
+    	if (timer!=null) {
+    		posX = -1;
+    		posY = -1;
+    		repaint();
+    		timer.cancel();
+    	}
+    }
+
+    public boolean withinBounds(int x, int y){
+    	if(x <= 18 && x>=0 && y <= 18 && y>=0) return true;
+    	return false;
+    	
+    }
+    
+	public void mouseDragged(MouseEvent e) {}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		posX = calulatePostionOnBoard(e.getX()-boardSize);
+    	posY = calulatePostionOnBoard(e.getY()-boardSize);
+	}
 
 
 }

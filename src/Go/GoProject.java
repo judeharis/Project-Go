@@ -33,23 +33,22 @@ public class GoProject {
 	
 	static boolean editormode = true;
 
-	
+	static JFrame frame;
+	static Board b;
     public static void main(String[] args) throws IOException  {
 
-        JFrame frame = new JFrame("New Frame");
+        frame = new JFrame("New Frame");
         frame.setLayout(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 1000);
-        frame.setLocation(400, 0);
+        frame.setSize(1920, 1080);
+        frame.setLocation(0, 0);
         frame.getContentPane().removeAll();
         frame.repaint();
 
-        Board b = init_board(frame);
+        b = init_board();
 
-        if (editormode)  editormode_init(frame,b);
-        firstmenus(frame,b);
-
-
+        if (editormode)  editormode_init();
+        firstmenus();
 
     }
 	
@@ -57,36 +56,36 @@ public class GoProject {
         System.out.println(o);
     }
     
-    public static Board init_board(JFrame frame){
-        Board b = new Board();
+    public static Board init_board(){
+        b = new Board();
         b.initBoard();
         b.setLocation(0, 0);
-        b.setSize(600, 600);
+        b.setSize(b.boardTotal, b.boardTotal);
 
         return b;
     }
     
-    public static void editormode_init(JFrame frame, Board b) {
+    public static void editormode_init() {
         frame.getContentPane().removeAll();
         frame.repaint();
         frame.add(b);
         b.initBoard();
 
 
-        JRadioButton radiob = (JRadioButton) initComponent(600,100,220,20, frame ,new JRadioButton("Place Black Stones",true) , "radiob" );
-        JRadioButton radiow = (JRadioButton) initComponent(600,120,220,20, frame ,new JRadioButton("Place White Stones") ,"radiow");
-        JRadioButton radiov = (JRadioButton) initComponent(600,140,220,20, frame ,new JRadioButton("Mark Valid Spots"),"radiov" );
-        JRadioButton radioi = (JRadioButton) initComponent(600,160,220,20, frame ,new JRadioButton("Mark Invalid Spots"),"radioi");
-        JRadioButton radBtoPlay = (JRadioButton) initComponent(600,200,220,20, frame ,new JRadioButton("Black Plays First", true),"radBtoPlay");
-        JRadioButton radWtoPlay = (JRadioButton) initComponent(600,220,220,20, frame ,new JRadioButton("White Plays First"),"radWtoPlay");
-        JRadioButton radLife = (JRadioButton) initComponent(600,260,220,20, frame ,new JRadioButton("Keystone/s needs to live" ),"radLife");
-        JRadioButton radDeath = (JRadioButton) initComponent(600,280,220,20, frame ,new JRadioButton("Keystone/s needs to die" , true),"radDeath");
-        JButton keyBtn = (JButton) initComponent(600,300,220,40, frame ,new JButton("Place Key Black Stone"),"keyBtn");
-        JEditorPane probDesc = (JEditorPane) initComponent(600,360,220,80, frame ,new  JEditorPane(), "probDesc");
-        probDesc.setBounds(600, 360, 220, 80);
+        JRadioButton radiob = (JRadioButton) initComponent(b.boardTotal,100,220,20, frame ,new JRadioButton("Place Black Stones",true) , "radiob" );
+        JRadioButton radiow = (JRadioButton) initComponent(b.boardTotal,120,220,20, frame ,new JRadioButton("Place White Stones") ,"radiow");
+        JRadioButton radiov = (JRadioButton) initComponent(b.boardTotal,140,220,20, frame ,new JRadioButton("Mark Valid Spots"),"radiov" );
+        JRadioButton radioi = (JRadioButton) initComponent(b.boardTotal,160,220,20, frame ,new JRadioButton("Mark Invalid Spots"),"radioi");
+        JRadioButton radBtoPlay = (JRadioButton) initComponent(b.boardTotal,200,220,20, frame ,new JRadioButton("Black Plays First", true),"radBtoPlay");
+        JRadioButton radWtoPlay = (JRadioButton) initComponent(b.boardTotal,220,220,20, frame ,new JRadioButton("White Plays First"),"radWtoPlay");
+        JRadioButton radLife = (JRadioButton) initComponent(b.boardTotal,260,220,20, frame ,new JRadioButton("Keystone/s needs to live" ),"radLife");
+        JRadioButton radDeath = (JRadioButton) initComponent(b.boardTotal,280,220,20, frame ,new JRadioButton("Keystone/s needs to die" , true),"radDeath");
+        JButton keyBtn = (JButton) initComponent(b.boardTotal,300,220,40, frame ,new JButton("Place Key Black Stone"),"keyBtn");
+        JEditorPane probDesc = (JEditorPane) initComponent(b.boardTotal,360,220,80, frame ,new  JEditorPane(), "probDesc");
+        probDesc.setBounds(b.boardTotal, 360, 220, 80);
         probDesc.setBorder(BorderFactory.createLineBorder(Color.black));
         probDesc.setText("Enter Description");
-        JButton finBtn =  (JButton) initComponent(600,540,220,40, frame ,new JButton("Finished"),"finBtn");
+        JButton finBtn =  (JButton) initComponent(b.boardTotal,540,220,40, frame ,new JButton("Finished"),"finBtn");
         ButtonGroup radgroup1 = new ButtonGroup();{
             radgroup1.add(radiow);
             radgroup1.add(radiob);
@@ -111,6 +110,7 @@ public class GoProject {
                 b.placing = Stones.BLACK;
                 b.tempkeystone = Stones.KEYBLACKSTONE;
                 keyBtn.setText("Place Key Black Stone");
+                b.repaint();
                 System.out.println("placing black stones");
             }
         });
@@ -120,6 +120,7 @@ public class GoProject {
                 b.placing = Stones.WHITE;
                 b.tempkeystone = Stones.KEYWHITESTONE;
                 keyBtn.setText("Place Key White Stone");
+                b.repaint();
                 System.out.println("placing white stones");
             }
         });
@@ -220,17 +221,15 @@ public class GoProject {
         return j ;
     }
 
-    public static void playermode_init(JFrame frame ,  Board b){
+    public static void playermode_init(){
 
         frame.getContentPane().removeAll();
         frame.repaint();
         frame.add(b);
         b.initBoard();
 
-        JLabel lbl1 = new JLabel("This is text");
-        lbl1.setLocation(600,100);
-        lbl1.setSize(200,20);
-        frame.add(lbl1);
+        initComponent(b.boardTotal, 100 , 200 , 20 , frame ,  new JLabel("No Problem Loaded"),"desclbl");
+        initComponent(b.boardTotal, 200 , 200 , 20 , frame ,  new JLabel("Turn: "+ b.turn),"turnlbl");
         
 //        Random rand = new Random();
 //        ArrayList<Tuple> all  = b.getAllValidMoves();
@@ -243,7 +242,7 @@ public class GoProject {
 
     }
 
-    public static void firstmenus(JFrame frame , Board b) throws IOException {
+    public static void firstmenus() throws IOException {
 
         MenuBar menuBar = new MenuBar();
         Menu fileMenu = new Menu("File");
@@ -272,7 +271,7 @@ public class GoProject {
         editorodeMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 editormode = true;
-                editormode_init(frame ,b );
+                editormode_init();
 
 
             }
@@ -281,7 +280,7 @@ public class GoProject {
         playermodeMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 editormode = false;
-                playermode_init(frame , b);
+                playermode_init();
 
 
             }
@@ -360,8 +359,9 @@ public class GoProject {
                     b.updateStringsFull();
                     b.checkForCaps(Stones.getEnemyColour(b.turn));
                     b.checkForCaps(b.turn);
-          
+                    b.validMoves =b.getAllValidMoves();
                     b.repaint();
+                    updateGUI();
 
                 }
 
@@ -455,6 +455,24 @@ public class GoProject {
 
 
     }
+
+	
+    public static void updateGUI() {
+    	for (Component c : frame.getContentPane().getComponents()) {
+    		if (c.getName().equals("turnlbl")) { 
+    			JLabel l = (JLabel) c;
+    			l.setText("Turn: "+ b.turn);
+    		}
+    		
+    		if (c.getName().equals("desclbl")) { 
+    			JLabel l = (JLabel) c;
+    			l.setText(b.desc);
+    		}
+    			
+    		
+    	}  
+		
+	}
     
 
 }

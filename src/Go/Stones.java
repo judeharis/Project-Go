@@ -1,5 +1,7 @@
 package Go;
 
+import java.awt.Color;
+
 public enum Stones {
     BLACK,WHITE,VALID,EMPTY,INVALID, KEYWHITESTONE,KEYBLACKSTONE,KO;
 	
@@ -28,5 +30,17 @@ public enum Stones {
 		if (s == Stones.WHITE)return Stones.KEYWHITESTONE;
 		return s;
 	}
+	
+	public static Color stoneToColor(Stones s) {
+		if (s == Stones.BLACK || s ==  Stones.KEYBLACKSTONE)return Color.BLACK;
+		if (s == Stones.WHITE || s ==  Stones.KEYWHITESTONE )return Color.WHITE;
+		return Color.GRAY;
+	}
+	
+	public static boolean isKey(Stones s) {
+        if( s == Stones.KEYBLACKSTONE || s == Stones.KEYWHITESTONE )return true;
+		return false;
+	}
+
 
 }
