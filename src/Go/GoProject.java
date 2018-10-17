@@ -31,23 +31,26 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GoProject {
 	
-	static boolean editormode = true;
+	static boolean editormode = false;
 
 	static JFrame frame;
 	static Board b;
+	
+	
     public static void main(String[] args) throws IOException  {
 
         frame = new JFrame("New Frame");
         frame.setLayout(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1920, 1080);
-        frame.setLocation(0, 0);
+        frame.setSize(1440, 900);
+        frame.setLocation(1920, 0);
         frame.getContentPane().removeAll();
         frame.repaint();
 
         b = init_board();
 
-        if (editormode)  editormode_init();
+        if (editormode)  {editormode_init();}
+        else {playermode_init();}
         firstmenus();
 
     }
@@ -230,7 +233,7 @@ public class GoProject {
 
         initComponent(b.boardTotal, 100 , 200 , 20 , frame ,  new JLabel("No Problem Loaded"),"desclbl");
         initComponent(b.boardTotal, 200 , 200 , 20 , frame ,  new JLabel("Turn: "+ b.turn),"turnlbl");
-        
+        frame.setVisible(true);
 //        Random rand = new Random();
 //        ArrayList<Tuple> all  = b.getAllValidMoves();
 //        int n = rand.nextInt(b.getAllValidMoves().size());
@@ -344,8 +347,6 @@ public class GoProject {
                     catch (FileNotFoundException e1 ) {e1.printStackTrace();}
                     catch (IOException e1 ) {e1.printStackTrace();}
                     
-                    //print("Turn: " + b.turn);
-                    //print("Cap to win: " + b.capToWin);
                     for (int i=2; i<lkeystones.length;i++){
                         int ta;
                         int tb;
@@ -354,7 +355,8 @@ public class GoProject {
                         tb = Integer.parseInt(temp[1]);
                         b.keystones.add(new Tuple(ta,tb));
                     }
-                    //print("Key Stones: " + b.keystones);
+
+                    b.placing = b.turn;
                     b.desc = desc.toString();
                     b.updateStringsFull();
                     b.checkForCaps(Stones.getEnemyColour(b.turn));

@@ -7,48 +7,45 @@ public class Minimaxer  implements Runnable{
 	 Board originalBoard ;
 	 ArrayList<Tuple> keystones;
 	 static Stones human;
+	 Tuple choice;
 
-
-	 Minimaxer(Board originalBoard, ArrayList<Tuple> keystones, Stones humanColour) {
+	 Minimaxer(Board originalBoard, ArrayList<Tuple> keystones) {
 		 this.originalBoard = originalBoard;
 		 this.keystones = keystones;
-		 this.human = humanColour;
+		 this.choice = null;
 	 }
 	 
 
-	 static int minimax(Board currentBoard ,ArrayList<Tuple> validMoves, ArrayList<Tuple> keystonelist , boolean isLive ) {
+	 static int minimax(Board currentBoard ,ArrayList<Tuple> validMoves, ArrayList<Tuple> keystonelist , boolean isLive , int depth, Minimaxer minimaxer) {
 
 
 	 	ArrayList<Integer> score = new ArrayList<>();
 
-		if (keystoneLives(keystonelist)) return -1;
+		if (keystoneLives(keystonelist)) return Integer.MIN_VALUE;
 
-		if (validMoves.isEmpty())return 1;
+		if (validMoves.size() == 0)return Integer.MAX_VALUE;
 
-
-	  
-	    // If current move is maximizer, find the maximum attainable 
-	    // value
-
+		depth++;
 		for (Tuple t : validMoves) {
-			Board b = new Board();
-			b.initBoard();
-			b.stones = currentBoard.stones.clone();
-			b.turn = currentBoard.turn;
-			b.placing = b.turn;
-			b.ko = currentBoard.ko;
-			b.updateStringsFull();
-			b.checkForCaps(Stones.getEnemyColour(b.turn));
-			b.checkForCaps(b.turn);
+			int returnscore;
+			Board b = Board.cloneBoard(currentBoard);
 			b.ai= true;
 			b.computer = false;
 			b.takeTurn(t.a,t.b);
-
-
-			score.add((minimax(b,b.getAllValidMoves(),keyStoneRemaining(b,keystonelist),false)));
-			minimax(b,b.getAllValidMoves(),keyStoneRemaining(b,keystonelist),true);
+			
+			
+			
+			
+			returnscore =minimax(b,b.getAllValidMoves(),keyStoneRemaining(b,keystonelist),!isLive,depth,minimaxer);
+			score.add(returnscore);
+			if(depth==1) {
+				print(depth);
+				print("x: "+t.a+" y: "+t.b);
+				print(returnscore);}
+			
+			if(returnscore==Integer.MIN_VALUE && depth==1) minimaxer.choice = t.clone();
 		}
-
+		
 		if(isLive) return Collections.max(score);
 		else  return Collections.min(score);
 
@@ -57,8 +54,7 @@ public class Minimaxer  implements Runnable{
 
 	@Override
 	public void run() {
-		minimax(originalBoard,originalBoard.validMoves,keystones,false);
-		
+		minimax(originalBoard,originalBoard.validMoves,keystones,false,0,this);
 	}
 
 
@@ -75,5 +71,8 @@ public class Minimaxer  implements Runnable{
 	 	return false;
 	}
 	  
-	 
+    public static void print(Object o){
+        System.out.println(o);
+    }
+   
 }

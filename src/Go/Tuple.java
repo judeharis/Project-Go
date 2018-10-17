@@ -11,7 +11,7 @@ class Tuple{
     public String toString() {
         return "(" +a +"," + b+")";
     }
-
+    
     @Override
     public boolean equals(Object a) {
         boolean equals = false;
@@ -27,7 +27,13 @@ class Tuple{
       result = 31 * result + a + 31*result + b;
       return result;
     }
-    public Tuple clone(Tuple t ){
+    
+    
+    public static Tuple clone(Tuple t ){
         return new Tuple(t.a, t.b);
+    }
+    
+    public Tuple clone(){
+        return new Tuple(this.a, this.b);
     }
 }

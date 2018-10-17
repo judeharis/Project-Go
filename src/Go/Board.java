@@ -11,59 +11,40 @@ import java.util.TimerTask;
 
 @SuppressWarnings("serial")
 public class Board extends Canvas implements MouseMotionListener{
-    Stones[][] stones = new Stones[19][19];
-
-    boolean ai = true;
+    boolean ai = false;
     boolean computer = false;
+    boolean capToWin;
+    
+	int boardTotal = 800;
+	int boardSize = boardTotal/20;
+	int posX;
+	int posY;
+	
+	String desc ="No Problem Loaded";
+
+	Timer timer;
+	
+	
     Stones placing= Stones.BLACK;
     Stones turn = Stones.BLACK;
-    boolean capToWin;
     Stones tempkeystone  = Stones.KEYBLACKSTONE;
     Stones keystone = Stones.KEYBLACKSTONE;
-    ArrayList<Tuple> keystones = new ArrayList<>();
-
-
-    ArrayList<ArrayList<Tuple>> bStoneStrings = new ArrayList<ArrayList<Tuple>>();
-    ArrayList<ArrayList<Tuple>> wStoneStrings = new ArrayList<ArrayList<Tuple>>();
-    ArrayList<Tuple> bCapStrings = new ArrayList<Tuple>();
-    ArrayList<Tuple> wCapStrings = new ArrayList<Tuple>();
+    
+    Stones[][] stones = new Stones[19][19];
 
     Tuple ko;
     Tuple maybeko;
 
-	String desc ="No Problem Loaded";
+    ArrayList<Tuple> keystones = new ArrayList<>();
+    ArrayList<Tuple> bCapStrings = new ArrayList<Tuple>();
+    ArrayList<Tuple> wCapStrings = new ArrayList<Tuple>();
+    ArrayList<Tuple> validMoves;
 
-	int boardTotal = 800;
-	int boardSize = boardTotal/20;
-	
-	int posX;
-	int posY;
-	Timer timer;
-	ArrayList<Tuple> validMoves;
-	
+    ArrayList<ArrayList<Tuple>> bStoneStrings = new ArrayList<ArrayList<Tuple>>();
+    ArrayList<ArrayList<Tuple>> wStoneStrings = new ArrayList<ArrayList<Tuple>>();
+
 
 	
-
-    public void initBoard(){
-        for(int i=0; i<stones.length; i++) {
-            for(int j=0; j<stones[i].length; j++) {
-                stones[i][j] = Stones.EMPTY;
-                if (GoProject.editormode) stones[i][j] = Stones.INVALID;
-            }
-        }
-
-        tempkeystone = Stones.KEYBLACKSTONE;
-        keystone = Stones.KEYBLACKSTONE;
-        placing = Stones.BLACK;
-        keystones.clear();
-        bStoneStrings.clear();
-        bStoneStrings.clear();
-        bCapStrings.clear();
-        wCapStrings.clear();
-        validMoves =getAllValidMoves();
-        ko = null;
-    }
-
     public Board(){
     	addMouseMotionListener(this);
         addMouseListener(new MouseListener(){
@@ -90,7 +71,79 @@ public class Board extends Canvas implements MouseMotionListener{
 
 
     }
+ 
+	
+
+    public void initBoard(){
+        for(int i=0; i<stones.length; i++) {
+            for(int j=0; j<stones[i].length; j++) {
+                stones[i][j] = Stones.EMPTY;
+                if (GoProject.editormode) stones[i][j] = Stones.INVALID;
+            }
+        }
+
+        tempkeystone = Stones.KEYBLACKSTONE;
+        keystone = Stones.KEYBLACKSTONE;
+        placing = Stones.BLACK;
+        keystones.clear();
+        bStoneStrings.clear();
+        bStoneStrings.clear();
+        bCapStrings.clear();
+        wCapStrings.clear();
+        validMoves =getAllValidMoves();
+        ko = null;
+    }
     
+    public static Board cloneBoard(Board oB) {
+    	Board nB = new Board();
+    	nB.ai = oB.ai;
+    	nB.computer = oB.computer;
+    	nB.capToWin = oB.capToWin;
+    	nB.boardTotal = oB.boardTotal;
+    	nB.boardSize = oB.boardSize;
+    	nB.placing = oB.placing;
+    	nB.turn = oB.turn;
+    	nB.tempkeystone = oB.tempkeystone;
+    	nB.keystone = oB.keystone;
+    	nB.stones = cloneBoardStones(oB.stones);
+    	if(oB.ko!=null)nB.ko = oB.ko.clone();
+    	
+    	nB.keystones = tupleArrayClone(oB.keystones);
+    	nB.validMoves = tupleArrayClone(oB.validMoves);
+    	nB.bCapStrings = tupleArrayClone(oB.bCapStrings);
+    	nB.wCapStrings = tupleArrayClone(oB.wCapStrings);
+    	nB.bStoneStrings = twoDTupleArrayClone(oB.bStoneStrings);
+    	nB.wStoneStrings = twoDTupleArrayClone(oB.wStoneStrings);
+    	
+    	return nB;
+    } 
+    
+    public static Stones[][] cloneBoardStones(Stones[][] oS){
+    	  Stones[][] nS = new Stones[19][19];
+    	  for(int i=0; i<oS.length; i++) {
+              for(int j=0; j<oS[i].length; j++) {
+            	  nS[i][j] =  oS[i][j];      
+              }
+          }
+    	return nS;
+    }
+    
+    public static ArrayList<ArrayList<Tuple>> twoDTupleArrayClone(ArrayList<ArrayList<Tuple>> ol){
+    	ArrayList<ArrayList<Tuple>> nl = new  ArrayList<ArrayList<Tuple>>() ;
+    	 for(ArrayList<Tuple> l : ol) {
+             nl.add(tupleArrayClone(l));
+         }
+    	return nl;
+    }
+    
+    public static ArrayList<Tuple> tupleArrayClone(ArrayList<Tuple> s){
+        ArrayList<Tuple> l = new ArrayList<Tuple>();
+        for(Tuple o : s) {
+            l.add(new Tuple(o.a,o.b));
+        }
+        return l;
+    }
+   
     public void takeTurn(int i, int j) {
     	if (withinBounds(i,j)) {
             if (stones[i][j]== Stones.KO){
@@ -113,12 +166,12 @@ public class Board extends Canvas implements MouseMotionListener{
                         stones[i][j] = turn;
                         removeKo();
                         turn = (turn == Stones.BLACK) ? Stones.WHITE : Stones.BLACK;
-                        if (!ai) computer = true;}
+                        if (!ai)computer = !computer;}
                 else {
-                    System.out.println("Stone already there");}
+                    print("Stone already there");}
                 updateStringsSingle(i,j);}}
         else{
-            System.out.println("Out of bound");
+            print("Out of bound");
         }
 
         updateStringsFull();
@@ -127,17 +180,23 @@ public class Board extends Canvas implements MouseMotionListener{
         checkForCaps(Stones.getEnemyColour(placing));
         if (ko !=null) stones[ko.a][ko.b] = Stones.KO;
         if (!GoProject.editormode)placing =turn;
-        validMoves =getAllValidMoves();
-        if(!ai){
+        
+        
+        if(!ai) {
             repaint();
+            validMoves =getAllValidMoves();
             GoProject.updateGUI();}
-        if (computer) new Minimaxer(this,keystones, Stones.getEnemyColour(turn));
+        if (computer) {
+        	Minimaxer k = new Minimaxer(this,keystones);
+        	Minimaxer.human=Stones.getEnemyColour(turn);
+        	k.run();
+        	takeTurn(k.choice.a,k.choice.b);
+        }
+//        print("bstrings" +bStoneStrings);
+//        print("bcapStrings"+bCapStrings);
 
     }
 
-    
-    
-    
     private void removeKo(){
         if (ko != null){
             stones[ko.a][ko.b] =Stones.VALID;
@@ -157,8 +216,8 @@ public class Board extends Canvas implements MouseMotionListener{
         ArrayList<Tuple> sstring= new ArrayList<Tuple>();
         sstring.add(new Tuple(i,j));
         for(Tuple t :libs ){
-            if (stones[t.a][t.b] == Stones.getEnemyColour(colour)){
-                StoneStringResponse libsStringres = checkForStrings( t.a ,  t.b, stoneStrings, Stones.getEnemyColour(colour));
+            if (Stones.getStoneColour(stones[t.a][t.b]) == Stones.getEnemyColour(colour)){
+                StoneStringResponse libsStringres = checkForStrings( t.a ,  t.b, stoneStrings);
                 if(!libsStringres.state){
                     sstring.add(t);}
                 else{
@@ -167,12 +226,11 @@ public class Board extends Canvas implements MouseMotionListener{
         }
         
         for (Tuple t :getCaptureStringFor(sstring)) {
-            if(stones[t.a][t.b]!=colour && stones[t.a][t.b]!= Stones.getKeyStone(colour)){
+            if(Stones.getStoneColour(stones[t.a][t.b])!= Stones.getStoneColour(colour)){
                 return false;}
         }
         return true;
     }
-    
     
     private ArrayList<Tuple> tupleArrayMerger(ArrayList<Tuple> a,ArrayList<Tuple> b){
     	ArrayList<Tuple> l = new ArrayList<Tuple>();
@@ -192,7 +250,7 @@ public class Board extends Canvas implements MouseMotionListener{
             capstring.removeAll(getLiberties(t.a, t.b));
             capstring.addAll(getLiberties(t.a, t.b));
         }
-        ArrayList<Tuple> l = TupleArrayClone(sstring);
+        ArrayList<Tuple> l = tupleArrayClone(sstring);
         capstring.removeAll(l);
         return capstring;
     }
@@ -207,7 +265,7 @@ public class Board extends Canvas implements MouseMotionListener{
             ArrayList<Tuple> capList = getCaptureStringFor(tlist);
             ArrayList<Tuple> needList = new ArrayList<Tuple>();
             for (Tuple t : capList){
-                if (stones[t.a][t.b]!=colour && stones[t.a][t.b]!= Stones.getKeyStone(colour) ) needList.add(t);
+                if (Stones.getStoneColour(stones[t.a][t.b])!=Stones.getStoneColour(colour)) needList.add(t);
             }
             if (needList.size()==1){
                 capString.add(needList.get(0));
@@ -231,16 +289,15 @@ public class Board extends Canvas implements MouseMotionListener{
         if (Stones.getStoneColour(stones[i][j])==Stones.BLACK || Stones.getStoneColour(stones[i][j]) == Stones.WHITE){
             removeOldStoneFromString(i,j,Stones.getStoneColour(stones[i][j])==Stones.BLACK ? wStoneStrings:bStoneStrings);
             ArrayList<ArrayList<Tuple>> stoneStrings = Stones.getStoneColour(stones[i][j])==Stones.BLACK ? bStoneStrings:wStoneStrings;
-            StoneStringResponse stringed = checkForStrings( i ,  j, stoneStrings,stones[i][j]);
+            StoneStringResponse stringed = checkForStrings(i, j,stoneStrings);
             if (!stringed.state){
                 //print("Stone: " + i + ","+ j);
                 ArrayList<Tuple> libs =  getLiberties(i,j);
                 ArrayList<Tuple> sstring= new ArrayList<Tuple>();
                 sstring.add(new Tuple(i,j));
                 for(Tuple t :libs ){
-
-                    if (stones[t.a][t.b] == Stones.getStoneColour(stones[i][j])){
-                        StoneStringResponse libsStringres = checkForStrings( t.a ,  t.b, stoneStrings,stones[i][j]);
+                    if ( Stones.getStoneColour(stones[t.a][t.b]) == Stones.getStoneColour(stones[i][j])){
+                        StoneStringResponse libsStringres = checkForStrings(t.a,t.b,stoneStrings);
                         if(!libsStringres.state){
                             sstring.add(t);
                             stoneStrings.add(sstring);}
@@ -268,7 +325,7 @@ public class Board extends Canvas implements MouseMotionListener{
     }
 
     public void removeOldStoneFromString(int  i , int j , ArrayList<ArrayList<Tuple>> stoneStrings ){
-        StoneStringResponse stringed = checkForStrings( i ,  j, stoneStrings,stones[i][j]);
+        StoneStringResponse stringed = checkForStrings( i ,  j, stoneStrings);
         if (stringed.state){
             stoneStrings.remove(stringed.list);
             updateStringsFull();
@@ -289,16 +346,16 @@ public class Board extends Canvas implements MouseMotionListener{
     }
 
 
-    public StoneStringResponse checkForStrings(int i , int j , ArrayList<ArrayList<Tuple>> stoneStrings , Stones stoneColour){
+    public StoneStringResponse checkForStrings(int i , int j , ArrayList<ArrayList<Tuple>> stoneStrings){
 
-        if (Stones.getStoneColour(stones[i][j])==Stones.getStoneColour(stoneColour)){
-            Tuple k = new Tuple(i, j);
-            if (stoneStrings.isEmpty())return new StoneStringResponse(false,null);
-            for (ArrayList<Tuple> bStrings : stoneStrings ){
-                if (bStrings.contains(k)) {
-                    return new StoneStringResponse(true,bStrings);};
-            }
+
+        Tuple k = new Tuple(i, j);
+        if (stoneStrings.isEmpty())return new StoneStringResponse(false,null);
+        for (ArrayList<Tuple> bStrings : stoneStrings ){
+            if (bStrings.contains(k)) {
+                return new StoneStringResponse(true,bStrings);};
         }
+
         return  new StoneStringResponse(false,null);
     }
 
@@ -420,13 +477,7 @@ public class Board extends Canvas implements MouseMotionListener{
     	else return -1;
     }
 
-    public ArrayList<Tuple> TupleArrayClone(ArrayList<Tuple> s){
-        ArrayList<Tuple> l = new ArrayList<Tuple>();
-        for(Tuple o : s) {
-            l.add(new Tuple(o.a,o.b));
-        }
-        return l;
-    }
+
 
     public static void print(Object o){
         System.out.println(o);
