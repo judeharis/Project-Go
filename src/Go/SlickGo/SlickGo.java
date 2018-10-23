@@ -64,13 +64,13 @@ public class SlickGo extends StateBasedGame {
 		return (xpos >= x && xpos <= (x+w)  && ypos >= y && ypos <= (y+h) );
 	}
 	
-    public static void loadFile(Board board) {
+    public static void loadFile(Board board , boolean editormode) {
     	final JFileChooser fc = new JFileChooser();
-        File workingDirectory = new File(System.getProperty("user.dir"));
+        File workingDirectory = new File(System.getProperty("user.dir")+"\\Computer Boards");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", "txt", "text");
         fc.setFileFilter(filter);
         fc.setCurrentDirectory(workingDirectory);
-
+        board.initBoard(editormode);
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             BufferedReader br ;
             String st;
@@ -90,13 +90,11 @@ public class SlickGo extends StateBasedGame {
                                     break;
                                 case 'X':
                                 	board.stones[x][y] = Stones.KEYBLACKSTONE;
-                                	board.tempkeystone = Stones.KEYBLACKSTONE;
                                 	board. keystone = Stones.KEYBLACKSTONE;
                                     break;
                                 case 'o': board.stones[x][y] = Stones.WHITE;
                                     break;
                                 case 'O': board.stones[x][y] = Stones.KEYWHITESTONE;
-                                	board.tempkeystone = Stones.KEYWHITESTONE;
                                 	board.keystone = Stones.KEYWHITESTONE;
                                     break;
                                 case 'K': board.stones[x][y] = Stones.KO;
@@ -115,6 +113,7 @@ public class SlickGo extends StateBasedGame {
                     if(y>21) desc.append(st);
                     y++;
                 }
+                br.close();
 
             }
             catch (FileNotFoundException e1 ) {e1.printStackTrace();}
@@ -133,13 +132,17 @@ public class SlickGo extends StateBasedGame {
             board.ai = false;
             board.blackFirst = (board.turn==Stones.BLACK);
             board.placing = board.turn;
-            board.desc = desc.toString();
+            board.desc = desc.toString().replace("Description: ", "");
             board.updateStringsFull();
             board.checkForCaps(board.turn);
             board.checkForCaps(Stones.getEnemyColour(board.turn));
-            
+            board.winMsg="";
             board.validMoves = board.getAllValidMoves();
             board.resetboard =Board.cloneBoard(board);
+        	Minimaxer.other=Stones.getEnemyColour(board.turn);
+        	if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))Minimaxer.keystonecolour = Stones.WHITE;
+    		else Minimaxer.keystonecolour = Stones.BLACK;
+        	print(Minimaxer.other=Minimaxer.keystonecolour);
            
 
         }
@@ -208,6 +211,7 @@ public class SlickGo extends StateBasedGame {
             String filekstone = board.keystones.toString();
             writer.write("Key Stone/s: "+filekstone + "\r\n") ;
             writer.write("Description: "+board.desc + "\r\n") ;
+
 
             writer.close();}
 

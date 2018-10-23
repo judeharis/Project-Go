@@ -13,15 +13,14 @@ public class Board{
     boolean computer = false;
     boolean blackFirst;
     boolean capToWin;
-    
+    boolean passing;
     
 	int gcsize = 1000;
 	int boardSize = gcsize * 4 /5;
 	int TileSize = boardSize/20;
 	int stoneSize = TileSize;
-
-	int posX;
-	int posY;
+	String winMsg= "";
+	
 	
 	String desc ="No Problem Loaded";
 
@@ -30,7 +29,6 @@ public class Board{
 	
     Stones placing= Stones.BLACK;
     Stones turn = Stones.BLACK;
-    Stones tempkeystone  = Stones.KEYBLACKSTONE;
     Stones keystone = Stones.KEYBLACKSTONE;
     
     Stones[][] stones = new Stones[19][19];
@@ -44,10 +42,91 @@ public class Board{
     ArrayList<Tuple> bCapStrings = new ArrayList<Tuple>();
     ArrayList<Tuple> wCapStrings = new ArrayList<Tuple>();
     ArrayList<Tuple> validMoves;
+    ArrayList<Tuple> goodMoves;
 
     ArrayList<ArrayList<Tuple>> bStoneStrings = new ArrayList<ArrayList<Tuple>>();
     ArrayList<ArrayList<Tuple>> wStoneStrings = new ArrayList<ArrayList<Tuple>>();
 
+    
+    public void takeTurn(int i, int j, boolean  editormode , boolean check) {
+    	if (withinBounds(i,j) && !passing) {
+            if (stones[i][j]== Stones.KO){
+                print("Can't Place On KO");}
+            else if (selfCap(i,j,Stones.getEnemyColour(placing))){
+                print("Can't Self Capture");}
+            else{
+                if (editormode){
+                    stones[i][j] = placing;
+                    removeKo();
+                    if (placing== Stones.KEYBLACKSTONE || placing == Stones.KEYWHITESTONE){
+                        keystones.add(new Tuple(i,j));
+                        for (Tuple k:keystones){
+                            stones[k.a][k.b]=placing;
+                        }
+                        placing = Stones.getStoneColour(placing);}
+                    else{
+                        keystones.removeIf( new Tuple(i,j)::equals);}}
+                else if (stones[i][j] == Stones.EMPTY || stones[i][j] == Stones.VALID) {
+                        stones[i][j] = turn;
+                        removeKo();
+                        turn = Stones.getEnemyColour(turn);
+                        if (!ai)computer = !computer;}
+                else {
+                	
+                    print(i+" "+j + stones[i][j]+" already there");}
+                updateStringsSingle(i,j);}}
+        else if (passing) {
+        	removeKo();
+        	print(turn + " passing");
+        	turn = Stones.getEnemyColour(turn);
+        	if (!ai)computer = !computer;
+        	passing=false;
+        	}
+        else print("Out of bound");
+        
+    	
+        updateStringsFull();
+        maybeko = null;
+        checkForCaps(placing);
+        checkForCaps(Stones.getEnemyColour(placing));
+        if (ko !=null) stones[ko.a][ko.b] = Stones.KO;
+        if (!editormode)placing =turn;
+        
+        validMoves =getAllValidMoves();
+	    if(!check) {
+	    	goodMoves = removeBadMovess();
+		    print(turn + " validMoves"+validMoves);
+	    }
+
+
+	    ArrayList<Tuple> liveList = Minimaxer.keyStoneRemaining(this,keystones);
+
+	    print("livelist"+liveList);
+
+	    winMsg="";
+	    if ((liveList.isEmpty() && capToWin) || (validMoves.isEmpty() && !capToWin)) winMsg="You Win";
+	    else if ((liveList.isEmpty() && !capToWin) || (validMoves.isEmpty() && capToWin)) winMsg="You Lose";
+
+        if (computer && !liveList.isEmpty() && !check) {
+        	Minimaxer k = new Minimaxer(this,keystones);
+        	k.run();
+        	
+    		if(k.choice == null && !this.validMoves.isEmpty()) {
+    			k.choice= this.validMoves.get(0);
+    			print("Player winning");}
+    		else if(k.choice == null && capToWin) {
+    			this.passing=true;
+    			k.choice= new Tuple(-9,-9);
+    			print("Player winning");
+    		}
+        	if (k.choice == null)computer = !computer;
+        	else takeTurn(k.choice.a,k.choice.b , editormode,false);}
+        
+//        print("goodMoves" +goodMoves);
+//        print("bstrings" +bStoneStrings);
+//        print("bcapStrings"+bCapStrings);
+
+    }
 
     public void initBoard(boolean editormode){
         for(int i=0; i<stones.length; i++) {
@@ -57,7 +136,6 @@ public class Board{
             }
         }
 
-        tempkeystone = Stones.KEYBLACKSTONE;
         keystone = Stones.KEYBLACKSTONE;
         placing = Stones.BLACK;
         blackFirst = true;
@@ -68,6 +146,9 @@ public class Board{
         bCapStrings.clear();
         wCapStrings.clear();
         validMoves =getAllValidMoves();
+        goodMoves =removeBadMoves();
+        winMsg="";
+        passing=false;
         ko = null;
         resetboard =cloneBoard(this);
     }
@@ -80,22 +161,24 @@ public class Board{
     	nB.boardSize = oB.boardSize;
     	nB.placing = oB.placing;
     	nB.turn = oB.turn;
-    	nB.tempkeystone = oB.tempkeystone;
     	nB.keystone = oB.keystone;
     	nB.stones = cloneBoardStones(oB.stones);
     	if(oB.ko!=null)nB.ko = oB.ko.clone();
     	
     	nB.keystones = tupleArrayClone(oB.keystones);
     	nB.validMoves = tupleArrayClone(oB.validMoves);
+    	nB.goodMoves = tupleArrayClone(oB.goodMoves);
     	nB.bCapStrings = tupleArrayClone(oB.bCapStrings);
     	nB.wCapStrings = tupleArrayClone(oB.wCapStrings);
     	nB.bStoneStrings = twoDTupleArrayClone(oB.bStoneStrings);
     	nB.wStoneStrings = twoDTupleArrayClone(oB.wStoneStrings);
+    	nB.passing = oB.passing;
+    	nB.passing = oB.passing;
+    	nB.desc = oB.desc;
+    	nB.winMsg = oB.winMsg;
     	nB.resetboard = nB;
-    	
     	return nB;
     } 
-
     
     public static Stones[][] cloneBoardStones(Stones[][] oS){
     	  Stones[][] nS = new Stones[19][19];
@@ -123,68 +206,12 @@ public class Board{
         return l;
     }
    
-    public void takeTurn(int i, int j, boolean  editormode) {
-    	if (withinBounds(i,j)) {
-            if (stones[i][j]== Stones.KO){
-                print("Can't Place On KO");}
-            else if (selfCap(i,j,Stones.getEnemyColour(placing))){
-                    print("Can't Self Capture");}
-            else{
-                if (editormode){
-                    stones[i][j] = placing;
-                    removeKo();
-                    if (placing== Stones.KEYBLACKSTONE || placing == Stones.KEYWHITESTONE){
-                        keystones.add(new Tuple(i,j));
-                        for (Tuple k:keystones){
-                            stones[k.a][k.b]=placing;
-                        }
-                        placing = Stones.getStoneColour(placing);}
-                    else{
-                        keystones.removeIf( new Tuple(i,j)::equals);}}
-                else if (stones[i][j] == Stones.EMPTY || stones[i][j] == Stones.VALID) {
-                        stones[i][j] = turn;
-                        removeKo();
-                        turn = (turn == Stones.BLACK) ? Stones.WHITE : Stones.BLACK;
-                        if (!ai)computer = !computer;}
-                else {
-                    print("Stone already there");}
-                updateStringsSingle(i,j);}}
-        else{
-            print("Out of bound");
-        }
+   
 
-        updateStringsFull();
-        maybeko = null;
-        checkForCaps(placing);
-        checkForCaps(Stones.getEnemyColour(placing));
-        if (ko !=null) stones[ko.a][ko.b] = Stones.KO;
-        if (!editormode)placing =turn;
-        
-        validMoves =getAllValidMoves();
-       // print("bstrings" +bStoneStrings);
-        if (computer && !keystones.isEmpty()) {
-        	Minimaxer k = new Minimaxer(this,keystones);
-        	Minimaxer.human=Stones.getEnemyColour(turn);
-        	k.run();
-        	if (k.choice == null) {
-        		computer = !computer;
-        	}else takeTurn(k.choice.a,k.choice.b , editormode);
-        }
-
-//        print("bcapStrings"+bCapStrings);
-
-    }
-
-    private void removeKo(){
-        if (ko != null){
-            stones[ko.a][ko.b] =Stones.VALID;
-            ko = null;}
-        }
 
     private boolean selfCap(int i , int j, Stones colour ){
 
         if (colour != Stones.BLACK && colour != Stones.WHITE) return false;
-
         ArrayList<Tuple> capString =  (colour== Stones.WHITE ? wCapStrings:  bCapStrings);
         ArrayList<ArrayList<Tuple>> stoneStrings =  (colour== Stones.WHITE ? bStoneStrings:  wStoneStrings);
         ArrayList<Tuple> libs = getLiberties(i, j);
@@ -247,7 +274,7 @@ public class Board{
             }
             if (needList.size()==1){
                 capString.add(needList.get(0));
-                if (needList.get(0).equals(maybeko)) ko = maybeko;}
+                if (needList.get(0).equals(maybeko) && tlist.size() == 1) ko = maybeko;}
             else if(needList.size()==0){
                 removeStonesOnBoard(tlist);
                 anyCap=true;
@@ -263,24 +290,22 @@ public class Board{
         }
     }
 
+
+
+    
     private void updateStringsSingle(int i , int j){
         if (Stones.getStoneColour(stones[i][j])==Stones.BLACK || Stones.getStoneColour(stones[i][j]) == Stones.WHITE){
             removeOldStoneFromString(i,j,Stones.getStoneColour(stones[i][j])==Stones.BLACK ? wStoneStrings:bStoneStrings);
             ArrayList<ArrayList<Tuple>> stoneStrings = Stones.getStoneColour(stones[i][j])==Stones.BLACK ? bStoneStrings:wStoneStrings;
             StoneStringResponse stringed = checkForStrings(i, j,stoneStrings);
             if (!stringed.state){
-                //print("Stone: " + i + ","+ j);
                 ArrayList<Tuple> libs =  getLiberties(i,j);
                 ArrayList<Tuple> sstring= new ArrayList<Tuple>();
                 sstring.add(new Tuple(i,j));
                 for(Tuple t :libs ){
-                    if ( Stones.getStoneColour(stones[t.a][t.b]) == Stones.getStoneColour(stones[i][j])){
+                    if (Stones.getStoneColour(stones[t.a][t.b]) == Stones.getStoneColour(stones[i][j])){
                         StoneStringResponse libsStringres = checkForStrings(t.a,t.b,stoneStrings);
-                        if(!libsStringres.state){
-                            sstring.add(t);
-                            stoneStrings.remove(sstring);
-                            stoneStrings.add(sstring);}
-                        else{
+                        if(libsStringres.state){
                         	//This part combines string of liberty stone with string of current stone
                         	if (libsStringres.list != sstring) {
 	                            stoneStrings.remove(libsStringres.list);
@@ -294,7 +319,7 @@ public class Board{
             removeOldStoneFromString(i,j,bStoneStrings);
             removeOldStoneFromString(i,j,wStoneStrings);}
     }
-
+   
     public void updateStringsFull(){
         for(int i=0; i<stones.length; i++) {
             for(int j=0; j<stones[i].length; j++) {
@@ -326,18 +351,14 @@ public class Board{
 
 
     public StoneStringResponse checkForStrings(int i , int j , ArrayList<ArrayList<Tuple>> stoneStrings){
-
-
         Tuple k = new Tuple(i, j);
         if (stoneStrings.isEmpty())return new StoneStringResponse(false,null);
         for (ArrayList<Tuple> bStrings : stoneStrings ){
             if (bStrings.contains(k)) {
                 return new StoneStringResponse(true,bStrings);};
         }
-
         return  new StoneStringResponse(false,null);
     }
-
 
     public ArrayList<Tuple> getAllValidMoves() {
     	ArrayList<Tuple>  validMoves = new ArrayList<Tuple>();
@@ -347,6 +368,62 @@ public class Board{
             }
     	}
     	return validMoves;
+    }
+    
+
+    
+    public ArrayList<Tuple> removeBadMoves() {
+        ArrayList<ArrayList<Tuple>> stoneStrings = Stones.getStoneColour(turn)==Stones.BLACK ? bStoneStrings:wStoneStrings;
+        ArrayList<Tuple> capString =  (Stones.getStoneColour(turn)== Stones.WHITE ? bCapStrings:  wCapStrings);
+        ArrayList<Tuple> goodMoves = tupleArrayClone(validMoves);
+        for (ArrayList<Tuple> tlist : stoneStrings){
+        	ArrayList<Tuple> capList = getCaptureStringFor(tlist);
+        	ArrayList<Tuple> needList = new ArrayList<Tuple>();
+            for (Tuple t : capList){
+                if (Stones.getStoneColour(stones[t.a][t.b])!=Stones.getEnemyColour(turn)) needList.add(t);
+            }
+        	if (needList.size() == 2) {
+        		int freeSpots= 0;
+        		for (Tuple t : needList ) {
+        			ArrayList<Tuple> libs = getLiberties(t.a, t.b);
+        			for (Tuple k : libs) {		
+        				if (Stones.getStoneColour(stones[k.a][k.b]) != Stones.BLACK && Stones.getStoneColour(stones[k.a][k.b]) != Stones.WHITE )freeSpots++;
+        			}	
+        		}
+        		if (freeSpots==0) {
+        			Tuple t1 = new Tuple (needList.get(0).a , needList.get(0).b);
+        			Tuple t2 = new Tuple (needList.get(1).a , needList.get(1).b);
+        			if (!capString.contains(t1))goodMoves.remove(t1);
+        			if (!capString.contains(t2))goodMoves.remove(t2);}}
+        }
+        return goodMoves;
+    }
+    
+    
+    
+    
+    
+    public ArrayList<Tuple> removeBadMovess() {
+        ArrayList<ArrayList<Tuple>> stoneStrings = Stones.getStoneColour(turn)==Stones.BLACK ? bStoneStrings:wStoneStrings;
+        ArrayList<Tuple> capString =  (Stones.getStoneColour(turn)== Stones.WHITE ? bCapStrings:  wCapStrings);
+        ArrayList<Tuple> goodMoves = tupleArrayClone(validMoves);
+        for (ArrayList<Tuple> tlist : stoneStrings){
+        	ArrayList<Tuple> capList = getCaptureStringFor(tlist);
+        	ArrayList<Tuple> needList = new ArrayList<Tuple>();
+            for (Tuple t : capList){
+                if (Stones.getStoneColour(stones[t.a][t.b])!=Stones.getEnemyColour(turn)) needList.add(t);
+            }
+        	if (needList.size() == 2) {
+        		for (Tuple t : needList ) {
+        			Board k = Board.cloneBoard(this);
+        			if (stones[t.a][t.b]!= Stones.INVALID) {
+	        			k.takeTurn(t.a, t.b, false, true);
+	        			if(Stones.getStoneColour(turn)== Stones.WHITE && k.wCapStrings.size() > wCapStrings.size() && !capString.contains(t)){
+	        				goodMoves.remove(t);}
+	        			if(Stones.getStoneColour(turn)== Stones.BLACK && k.bCapStrings.size() > bCapStrings.size() && !capString.contains(t)){
+	        				goodMoves.remove(t);}}}}
+        }
+        return goodMoves;
     }
 
     public boolean checkValidMove(int x , int y) {
@@ -367,8 +444,14 @@ public class Board{
 
     }
 
+    private void removeKo(){
+        if (ko != null){
+            stones[ko.a][ko.b] =Stones.VALID;
+            ko = null;}
+    }
 
-    public void draw(Graphics g) {
+
+    public void draw(Graphics g,boolean editormode) {
     	
 		g.setBackground(Color.lightGray);
         for (float i =TileSize; i < boardSize; i+=TileSize){
@@ -396,7 +479,7 @@ public class Board{
                     case WHITE:  drawoval(g,(i+1)*TileSize,(j+1)*TileSize , Color.white, false);
                         break;
 
-                    case VALID:  //drawoval(g,(i+1)*boardSize,(j+1)*boardSize,new Color(0f,1f,0f,.5f ),false);
+                    case VALID:  if (editormode)drawoval(g,(i+1)*boardSize,(j+1)*boardSize,new Color(0f,1f,0f,.5f ),false);
                         break;
 
                     case INVALID:  //drawoval( g,(i+1)*boardSize,(j+1)*boardSize ,new Color(1f,0f,0f,.1f),false);

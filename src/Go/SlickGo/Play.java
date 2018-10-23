@@ -34,18 +34,20 @@ public class Play extends BasicGameState {
 		int by =  board.calulatePostionOnBoard(ypos-board.TileSize);
 		
 
-		board.draw(g);
+		board.draw(g,false);
         if(board.checkValidMove(bx,by)) {
         	board.drawoval(g,(bx+1)*board.TileSize,(by+1)*board.TileSize,Stones.stoneToColor(board.placing),Stones.isKey(board.placing));}
         
         
         g.drawString("Turn: "+board.placing.toString(), board.boardSize, board.TileSize);
 		g.drawString(board.desc, board.boardSize, board.TileSize+40);
+		g.drawString(board.winMsg, board.boardSize, board.TileSize+80);
 		
 		//SlickGo.drawButton(board.boardSize+200 ,board.TileSize,150,40,board.placing.toString(), g,false);
 		SlickGo.drawButton(board.boardSize ,board.TileSize +560,200,50,"Load", g ,SlickGo.regionChecker(board.boardSize ,board.TileSize +560,200,50,gc));
 		SlickGo.drawButton(board.boardSize +220,board.TileSize +560,200,50,"Reset", g,SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +560,200,50,gc));
 		SlickGo.drawButton(board.boardSize ,board.TileSize +620,200,50,"Save", g,SlickGo.regionChecker(board.boardSize ,board.TileSize +620,200,50,gc));
+		SlickGo.drawButton(board.boardSize +220,board.TileSize +620,200,50,"Pass", g,SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +620,200,50,gc));
 		SlickGo.drawButton(board.boardSize ,board.TileSize +680,200,50,"Menu", g,SlickGo.regionChecker(board.boardSize ,board.TileSize +680,200,50,gc));
 
     
@@ -60,13 +62,18 @@ public class Play extends BasicGameState {
 		int by =  board.calulatePostionOnBoard(ypos-board.TileSize);
 		 
 		if (input.isMousePressed(0)) {
-			if (SlickGo.withinBounds(bx,by)) if (!board.computer) board.takeTurn(bx,by , false);
+			if (SlickGo.withinBounds(bx,by)) if (!board.computer) board.takeTurn(bx,by , false,false);
 		
-			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +560,200,50,gc))SlickGo.loadFile(board);
+			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +560,200,50,gc))SlickGo.loadFile(board,true);
 			
 			if (SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +560,200,50,gc)) {
 				board = board.resetboard;
 				board.resetboard = Board.cloneBoard(board);}
+			
+			if (SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +620,200,50,gc)) {
+				board.passing = true;
+				board.takeTurn(bx,by,false,false);}
+			
 			
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +620,200,50,gc))SlickGo.saveFile(board);
 			
