@@ -1,12 +1,10 @@
 package Go.SlickGo;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Minimaxer  implements Runnable{
 	 Board originalBoard ;
 	 ArrayList<Tuple> keystones;
-	 static Stones other;
 	 static Stones keystonecolour;
 	 Tuple choice;
 	 static int max = 1000;//Integer.MAX_VALUE;
@@ -26,11 +24,12 @@ public class Minimaxer  implements Runnable{
 	 
 	 	ArrayList<Tuple> validMoves = currentBoard.validMoves;
 	 	ArrayList<Tuple> goodMoves = currentBoard.goodMoves;
+
 //	 	print(currentBoard.placing+" valid moves:"+validMoves + " good moves: " + currentBoard.goodMoves);
-		if (keystoneLives(keystonelist)) { print("die"); return min;}
+		if (keystoneLives(keystonelist)) return min;
 		depth++;
-		if (currentBoard.placing != other && validMoves.size() == 0) {print("live");return max;}
-		else if (currentBoard.placing == other && goodMoves.size() == 0) {
+		if (currentBoard.placing != keystonecolour && validMoves.size() == 0) return max;
+		else if (currentBoard.placing == keystonecolour && goodMoves.size() == 0) {
 			currentBoard.passing = true;
 			goodMoves = validMoves;
 			validMoves.add(new Tuple(-9,-9));
@@ -48,16 +47,17 @@ public class Minimaxer  implements Runnable{
 				b.ai= true;
 				b.computer = false;
 				b.takeTurn(t.a,t.b,false,false);
-				
+				if(depth==1  )print(depth + " " + t.clone());
 				int returnscore =minimax(b,keyStoneRemaining(b,keystonelist),!isLive,depth,minimaxer,alpha,beta);
-
+			
 		        best = Math.max(best, returnscore); 
 		        alpha = Math.max(alpha, best);
 		        if(best == max && depth==1 ) minimaxer.choice = t.clone();
-		        else if(depth==1  ){ 
+		        else if(depth==1){ 
 		        	b.passing = true;
 		        	returnscore =minimax(b,keyStoneRemaining(b,keystonelist),!isLive,depth,minimaxer,alpha,beta);
-			        if(returnscore == max)  minimaxer.choice = t.clone();
+			        if(returnscore == max)  {minimaxer.choice = t.clone();print(depth + " " + t.clone());}
+			        
 		        }
 				if (beta <= alpha) break;
 			}
@@ -72,15 +72,15 @@ public class Minimaxer  implements Runnable{
 				b.ai= true;
 				b.computer = false;
 				b.takeTurn(t.a,t.b,false,false);
-				
+				if(depth==1  )print(depth + " " + t.clone());
 				int returnscore =minimax(b,keyStoneRemaining(b,keystonelist),!isLive,depth,minimaxer,alpha,beta);
 		        best = Math.min(best, returnscore); 
 		        beta = Math.min(beta, best);	
 		        if(best == min && depth==1 ) minimaxer.choice = t.clone();
-		        else if(depth==1 ){       
+		        else if(depth==1){       
 		        	b.passing = true;
 		        	returnscore =minimax(b,keyStoneRemaining(b,keystonelist),!isLive,depth,minimaxer,alpha,beta);
-			        if(returnscore == max)  minimaxer.choice = t.clone();
+		            if(returnscore == max)  {minimaxer.choice = t.clone();print(depth + " " + t.clone());}
 		        }
 		        if (beta <= alpha)break;
 		    }
@@ -94,9 +94,9 @@ public class Minimaxer  implements Runnable{
 
 	@Override
 	public void run() {
-		print("Ai Started");
+		print("Ai Running");
 		minimax(originalBoard,keystones,originalBoard.capToWin,0,this,min,max);
-		print("Ai Stopped");
+		print("Ai Done");
 	}
 
 

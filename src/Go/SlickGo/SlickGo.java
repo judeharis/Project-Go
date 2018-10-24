@@ -70,8 +70,9 @@ public class SlickGo extends StateBasedGame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", "txt", "text");
         fc.setFileFilter(filter);
         fc.setCurrentDirectory(workingDirectory);
-        board.initBoard(editormode);
+
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            board.initBoard(editormode);
             BufferedReader br ;
             String st;
             int x = 0;
@@ -136,13 +137,10 @@ public class SlickGo extends StateBasedGame {
             board.updateStringsFull();
             board.checkForCaps(board.turn);
             board.checkForCaps(Stones.getEnemyColour(board.turn));
-            board.winMsg="";
             board.validMoves = board.getAllValidMoves();
             board.resetboard =Board.cloneBoard(board);
-        	Minimaxer.other=Stones.getEnemyColour(board.turn);
         	if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))Minimaxer.keystonecolour = Stones.WHITE;
     		else Minimaxer.keystonecolour = Stones.BLACK;
-        	print(Minimaxer.other=Minimaxer.keystonecolour);
            
 
         }
