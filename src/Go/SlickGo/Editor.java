@@ -20,10 +20,8 @@ public class Editor extends BasicGameState {
 	Font font;
 	TextField desc;
 	
-	public Editor(int state ,int gcsize) {
-		this.board = new Board();
-		this.board.initBoard(true);
-		
+	public Editor(int state ,int gcsize  ) {
+		this.board = Board.cloneBoard(SlickGo.mainBoard);
 	}
 
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
@@ -48,14 +46,14 @@ public class Editor extends BasicGameState {
 
 		board.draw(g,true);
         if(withinBounds(bx,by)) {
-        	board.drawoval(g,(bx+1)*board.TileSize,(by+1)*board.TileSize,Stones.stoneToColor(board.placing),Stones.isKey(board.placing));}
+        	board.drawoval(g,(bx+1)*board.TileSize,(by+1)*board.TileSize,board.placing.stoneToColor(),board.placing.isKey());}
         
         
 
-		SlickGo.drawRButton(board.boardSize , board.TileSize +40 , "Place Black Stones", g, board.placing == Stones.BLACK||board.placing == Stones.KEYBLACKSTONE);
-		SlickGo.drawRButton(board.boardSize , board.TileSize +80, "Place White Stones", g,board.placing == Stones.WHITE||board.placing == Stones.KEYWHITESTONE);
-		SlickGo.drawRButton(board.boardSize , board.TileSize +120, "Mark Valid Spots", g,board.placing==Stones.VALID);
-		SlickGo.drawRButton(board.boardSize , board.TileSize +160, "Mark Invalid Spots", g,board.placing==Stones.INVALID);
+		SlickGo.drawRButton(board.boardSize , board.TileSize +40 , "Place Black Stones", g, board.placing == Stone.BLACK||board.placing == Stone.KEYBLACKSTONE);
+		SlickGo.drawRButton(board.boardSize , board.TileSize +80, "Place White Stones", g,board.placing == Stone.WHITE||board.placing == Stone.KEYWHITESTONE);
+		SlickGo.drawRButton(board.boardSize , board.TileSize +120, "Mark Valid Spots", g,board.placing==Stone.VALID);
+		SlickGo.drawRButton(board.boardSize , board.TileSize +160, "Mark Invalid Spots", g,board.placing==Stone.INVALID);
 		
 		SlickGo.drawRButton(board.boardSize , board.TileSize +220, "Black Plays First", g, board.blackFirst);
 		SlickGo.drawRButton(board.boardSize , board.TileSize +260, "White Plays First", g, !board.blackFirst);
@@ -63,7 +61,7 @@ public class Editor extends BasicGameState {
 		SlickGo.drawRButton(board.boardSize , board.TileSize +320, "Keystone/s needs to die", g, board.capToWin);
 		SlickGo.drawRButton(board.boardSize , board.TileSize +360, "Keystone/s needs to live", g, !board.capToWin);
 		
-		SlickGo.drawButton(board.boardSize ,board.TileSize +400,200,50,"Place KeyStone", g,Stones.isKey(board.placing) || SlickGo.regionChecker(board.boardSize ,board.TileSize +400,200,50,gc));
+		SlickGo.drawButton(board.boardSize ,board.TileSize +400,200,50,"Place KeyStone", g,board.placing.isKey() || SlickGo.regionChecker(board.boardSize ,board.TileSize +400,200,50,gc));
 		SlickGo.drawButton(board.boardSize ,board.TileSize +560,200,50,"Load", g ,SlickGo.regionChecker(board.boardSize ,board.TileSize +560,200,50,gc));
 		SlickGo.drawButton(board.boardSize +220,board.TileSize +560,200,50,"Reset", g,SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +560,200,50,gc));
 		SlickGo.drawButton(board.boardSize ,board.TileSize +620,200,50,"Save", g,SlickGo.regionChecker(board.boardSize ,board.TileSize +620,200,50,gc));
@@ -82,21 +80,21 @@ public class Editor extends BasicGameState {
 		int bx =  board.calulatePostionOnBoard(xpos-board.TileSize);
 		int by =  board.calulatePostionOnBoard(ypos-board.TileSize);
 		board.desc = desc.getText();
-		if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))board.keystone = Stones.KEYWHITESTONE;
-		else board.keystone = Stones.KEYBLACKSTONE;
+		if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))board.keystone = Stone.KEYWHITESTONE;
+		else board.keystone = Stone.KEYBLACKSTONE;
 		
 		if (input.isMousePressed(0)) {
 			if (SlickGo.withinBounds(bx,by)) if (!board.computer) board.takeTurn(bx,by , true,false);
 		
 
 			
-			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +40,200,40,gc)) {board.placing = Stones.BLACK;}
+			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +40,200,40,gc)) {board.placing = Stone.BLACK;}
 			
-			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +80,200,40,gc)) {board.placing = Stones.WHITE;}
+			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +80,200,40,gc)) {board.placing = Stone.WHITE;}
 			
-			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +120,200,40,gc)) board.placing = Stones.VALID;
+			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +120,200,40,gc)) board.placing = Stone.VALID;
 			
-			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +160,200,40,gc)) board.placing = Stones.INVALID;
+			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +160,200,40,gc)) board.placing = Stone.INVALID;
 			
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +220,200,40,gc)) board.blackFirst=true;
 				
@@ -117,7 +115,10 @@ public class Editor extends BasicGameState {
 			
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +620,200,50,gc))SlickGo.saveFile(board);
 			
-			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +680,200,50,gc))sbg.enterState(0);
+			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +680,200,50,gc)) {
+				SlickGo.mainBoard = Board.cloneBoard(board);
+				sbg.enterState(0);
+			}
 		}
 	}
 

@@ -28,11 +28,24 @@ public class SlickGo extends StateBasedGame {
 	public static final int gcheigth = 1000;
 	public static final int gcwidth = 1200;
 	public static final int maxfps = 60;
+	public static Board mainBoard;
+	public static Menu menuI;
+	public static Play playI;
+	public static Editor editorI;
+	
+	
 	public SlickGo(String gamename) {
+
 		super(gamename);
-		this.addState(new Menu(menu,gcheigth));
-		this.addState(new Play(play,gcheigth));
-		this.addState(new Editor(play,gcheigth));
+		mainBoard =new Board();
+		SlickGo.mainBoard.initBoard(true);
+		menuI = new Menu(menu,gcheigth);
+		playI = new Play(play,gcheigth);
+		editorI = new Editor(play,gcheigth);
+
+		this.addState(menuI);
+		this.addState(playI);
+		this.addState(editorI);
 
 	}
 
@@ -87,28 +100,28 @@ public class SlickGo extends StateBasedGame {
                         for(int i = 2, n = st.length() ; i < n ; i+=4) {
                             char c = st.charAt(i);
                             switch (c){
-                                case 'x': board.stones[x][y] = Stones.BLACK;
+                                case 'x': board.stones[x][y] = Stone.BLACK;
                                     break;
                                 case 'X':
-                                	board.stones[x][y] = Stones.KEYBLACKSTONE;
-                                	board. keystone = Stones.KEYBLACKSTONE;
+                                	board.stones[x][y] = Stone.KEYBLACKSTONE;
+                                	board. keystone = Stone.KEYBLACKSTONE;
                                     break;
-                                case 'o': board.stones[x][y] = Stones.WHITE;
+                                case 'o': board.stones[x][y] = Stone.WHITE;
                                     break;
-                                case 'O': board.stones[x][y] = Stones.KEYWHITESTONE;
-                                	board.keystone = Stones.KEYWHITESTONE;
+                                case 'O': board.stones[x][y] = Stone.KEYWHITESTONE;
+                                	board.keystone = Stone.KEYWHITESTONE;
                                     break;
-                                case 'K': board.stones[x][y] = Stones.KO;
+                                case 'K': board.stones[x][y] = Stone.KO;
                                     break;
-                                case '+': board.stones[x][y] = Stones.VALID;
+                                case '+': board.stones[x][y] = Stone.VALID;
                                     break;
-                                case '-': board.stones[x][y] = Stones.INVALID;
+                                case '-': board.stones[x][y] = Stone.INVALID;
                                     break;
                             }
                             x++;
                         }}
 
-                    if(y==19) board.turn = Stones.toStone(st.split(" ")[1]);
+                    if(y==19) board.turn = Stone.toStone(st.split(" ")[1]);
                     if(y==20) board.capToWin = st.split(" ")[1].equals("Yes")?true:false;
                     if(y==21) lkeystones = st.replaceAll("[\\[\\]\\)\\(]","").split(" ");
                     if(y>21) desc.append(st);
@@ -131,16 +144,16 @@ public class SlickGo extends StateBasedGame {
             
             board.computer = false;
             board.ai = false;
-            board.blackFirst = (board.turn==Stones.BLACK);
+            board.blackFirst = (board.turn==Stone.BLACK);
             board.placing = board.turn;
             board.desc = desc.toString().replace("Description: ", "");
             board.updateStringsFull();
             board.checkForCaps(board.turn);
-            board.checkForCaps(Stones.getEnemyColour(board.turn));
+            board.checkForCaps(board.turn.getEnemyColour());
             board.validMoves = board.getAllValidMoves();
             board.resetboard =Board.cloneBoard(board);
-        	if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))Minimaxer.keystonecolour = Stones.WHITE;
-    		else Minimaxer.keystonecolour = Stones.BLACK;
+        	if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))Minimaxer.keystonecolour = Stone.WHITE;
+    		else Minimaxer.keystonecolour = Stone.BLACK;
            
 
         }

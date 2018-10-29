@@ -39,15 +39,16 @@ public class Menu extends BasicGameState {
 		int xpos = Mouse.getX();
 		int ypos =  Math.abs(gc.getHeight() - Mouse.getY());
 		mouse = "x : " + xpos + " y: " + ypos; 
-		if (SlickGo.regionChecker(500,300,200,100,gc)) {
-			if(input.isMousePressed(0))sbg.enterState(1);}
-		
-		if (SlickGo.regionChecker(500,420,200,100,gc)) {
-			if(input.isMousePressed(0))sbg.enterState(2);}
-		
-		
-		if (SlickGo.regionChecker(500,540,200,100,gc)) {
-			if(input.isMousePressed(0))System.exit(0);}
+		if(input.isMousePressed(0)) {
+			if (SlickGo.regionChecker(500,300,200,100,gc)) {
+					SlickGo.playI.board = SlickGo.mainBoard;
+					sbg.enterState(1);}
+			
+			if (SlickGo.regionChecker(500,420,200,100,gc)) sbg.enterState(2);
+			
+			
+			if (SlickGo.regionChecker(500,540,200,100,gc)) System.exit(0);
+		}
 	}
 
 	public int getID() {
