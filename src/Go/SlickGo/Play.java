@@ -5,6 +5,7 @@ package Go.SlickGo;
 import java.util.ArrayList;
 
 import org.lwjgl.input.Mouse;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -25,6 +26,7 @@ public class Play extends BasicGameState {
 	Thread t1;
 	Minimaxer k;
 	boolean aiStarted = false;
+	boolean turnOffComputer = false;
 
 
 	public Play(int state ,int gcsize) {
@@ -36,6 +38,7 @@ public class Play extends BasicGameState {
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+
 		bg.draw(0, 0, (float) 0.5);
 		int xpos = Mouse.getX();
 		int ypos =  Math.abs(gc.getHeight() - Mouse.getY());
@@ -52,11 +55,15 @@ public class Play extends BasicGameState {
         g.drawString("Turn: "+board.placing.toString(), board.boardSize, board.TileSize);
 		g.drawString(board.desc, board.boardSize, board.TileSize+40);
 		g.drawString(winMsg, board.boardSize, board.TileSize+80);
-		SlickGo.drawButton(board.boardSize ,board.TileSize +440,420,50,gameMsg, g ,false);
+		SlickGo.drawButton(board.boardSize ,board.TileSize +380,420,50,gameMsg, g ,false);
 
 
 		
 		//SlickGo.drawButton(board.boardSize+200 ,board.TileSize,150,40,board.placing.toString(), g,false);
+		SlickGo.drawButton(board.boardSize ,board.TileSize +440,200,50,"AI " +(turnOffComputer?"Disabled":"Enabled"), g ,!turnOffComputer,Color.green);
+		SlickGo.drawButton(board.boardSize +220,board.TileSize +440,90,50,"Undo", g ,SlickGo.regionChecker(board.boardSize +220 ,board.TileSize +440,90,50,gc));
+		SlickGo.drawButton(board.boardSize +330,board.TileSize +440,90,50,"Redo", g ,SlickGo.regionChecker(board.boardSize +330 ,board.TileSize +440,90,50,gc));
+		
 		SlickGo.drawButton(board.boardSize ,board.TileSize +500,200,50,"Start AI", g,SlickGo.regionChecker(board.boardSize ,board.TileSize +500,200,50,gc));
 		SlickGo.drawButton(board.boardSize +220,board.TileSize +500,200,50,"Stop AI", g,SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +500,200,50,gc));
 		SlickGo.drawButton(board.boardSize ,board.TileSize +560,200,50,"Load", g ,SlickGo.regionChecker(board.boardSize ,board.TileSize +560,200,50,gc));
@@ -64,6 +71,7 @@ public class Play extends BasicGameState {
 		SlickGo.drawButton(board.boardSize ,board.TileSize +620,200,50,"Save", g,SlickGo.regionChecker(board.boardSize ,board.TileSize +620,200,50,gc));
 		SlickGo.drawButton(board.boardSize +220,board.TileSize +620,200,50,"Pass", g,SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +620,200,50,gc));
 		SlickGo.drawButton(board.boardSize ,board.TileSize +680,200,50,"Menu", g,SlickGo.regionChecker(board.boardSize ,board.TileSize +680,200,50,gc));
+	
 
     
 	}
@@ -75,76 +83,104 @@ public class Play extends BasicGameState {
 		int ypos =  Math.abs(gc.getHeight() - Mouse.getY());
 		int bx =  board.calulatePostionOnBoard(xpos-board.TileSize);
 		int by =  board.calulatePostionOnBoard(ypos-board.TileSize);
-		
-		if(ai)aicounter++;
-		if(aicounter==60) {	
-			aicounter=0;
-			ai=false;
-			makeComputerMove();
 
-		}
+		
+//		if(ai)aicounter++;
+//		if(aicounter==60) {	
+//			aicounter=0;
+//			ai=false;
+//			makeComputerMove();
+//		}else if(aicounter == 1) gameMsg= "Ai Started";
+		
+		
+		if(ai) {
+			ai=false;
+			gameMsg= "Ai Started";
+			makeComputerMove();}
+		
 		
 		if (input.isMousePressed(0)) {
-			if (SlickGo.withinBounds(bx,by) && !board.computer && !gameOver) {
+			//Place Stone
+			if (SlickGo.withinBounds(bx,by) && !aiStarted && !gameOver) {
 				board.passing = false;
-				board.takeTurn(bx,by , false,false);
-				if(board.computer) {
-					ai=true;
-					gameMsg= "Ai Started";}}
-
+				makeMove(bx,by);}
 			
-			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +500,200,50,gc)) {
-				board.computer = true;
-				ai=true;
-				gameMsg= "Ai Started";
+			//Pass
+			if (SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +620,200,50,gc) && !gameOver) {
+				board.passing = true;
+				makeMove(bx,by);}
+			
+			//Undo
+			if (SlickGo.regionChecker(board.boardSize +220,board.TileSize +440,90,50,gc) && board.undoBoard != null) {
+				resetPlayScreen();
+				board.undoBoard.redoBoard =  Board.cloneBoard(board);
+				board = Board.cloneBoard(board.undoBoard);
 			}
 			
+			//Redo
+			if (SlickGo.regionChecker(board.boardSize +330,board.TileSize +440,90,50,gc)&& board.redoBoard != null) {
+				resetPlayScreen();
+				board = Board.cloneBoard(board.redoBoard);
+			}
+
+			//Toggle AI
+			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +440,200,50,gc)) turnOffComputer=!turnOffComputer;
 			
+			//Start AI
+			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +500,200,50,gc)) ai=true;
+			
+			//Stop AI
 			if (SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +500,200,50,gc) && aiStarted) {
 				if (k != null)k.exit = true;
 				aiStarted = false;
 				t1 =null;
 				k = null;
-				board.computer = false;
 				gameMsg= "Ai Stopped";
 			}
 			
+			//Load
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +560,200,50,gc)) {
 				resetPlayScreen();
 				SlickGo.loadFile(board,true);}
 			
+			//Reset
 			if (SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +560,200,50,gc)) {
 				board = board.resetboard;
 				resetPlayScreen();
 				board.resetboard = Board.cloneBoard(board);}
 			
-			if (SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +620,200,50,gc) && !gameOver) {
-				board.passing = true;
-				board.takeTurn(bx,by,false,false);
-				if(board.computer) {
-					ai=true;
-					gameMsg= "Ai Started";}}
+
 
 			
 			
+			//Save
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +620,200,50,gc))SlickGo.saveFile(board);
 			
-			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +680,200,50,gc))sbg.enterState(0);
+			//Menu
+			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +680,200,50,gc)) {
+				resetPlayScreen();
+				sbg.enterState(0);
+			}
 		}
 		
     	if (t1 != null && !t1.isAlive() && aiStarted) {
     		aiStarted=false;
         	if (k.choice != null) board.takeTurn(k.choice.a,k.choice.b , false,false);
-        	else {
-        		winMsg= "AI says " + board.placing.getEnemyColour()+" Wins";
-        		board.computer=false;}
-        	
+        	else winMsg= "AI says " + board.placing.getEnemyColour()+" Wins";
 			gameMsg= "Ai Done";
 			afterMove();
     	}
 
 		
 	}
+	
+	
+	public void makeMove(int bx,int by) {
+		boolean moveMade = board.takeTurn(bx,by,false,false);
+		afterMove();
+		if(!turnOffComputer && moveMade)ai=true;
+	}
+	
 	
 	public void afterMove() {
 		   ArrayList<Tuple> liveList = Minimaxer.keyStoneRemaining(board,board.keystones);
@@ -164,13 +200,13 @@ public class Play extends BasicGameState {
 	}
 	
 	public void makeComputerMove() {
-		 ArrayList<Tuple> liveList = Minimaxer.keyStoneRemaining(board,board.keystones);
+		ArrayList<Tuple> liveList = Minimaxer.keyStoneRemaining(board,board.keystones);
 
-	        if (!liveList.isEmpty()) {
-	        	k = new Minimaxer(board,board.keystones);
-	        	t1 = new Thread(k,"t1");
-	        	t1.start(); 
-	        	aiStarted= true;}
+        if (!liveList.isEmpty()) {
+        	k = new Minimaxer(board,board.keystones);
+        	t1 = new Thread(k,"t1");
+        	t1.start(); 
+        	aiStarted= true;}
 	}
 	
 	public void resetPlayScreen() {

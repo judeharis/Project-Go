@@ -84,7 +84,7 @@ public class Editor extends BasicGameState {
 		else board.keystone = Stone.KEYBLACKSTONE;
 		
 		if (input.isMousePressed(0)) {
-			if (SlickGo.withinBounds(bx,by)) if (!board.computer) board.takeTurn(bx,by , true,false);
+			if (SlickGo.withinBounds(bx,by)) board.takeTurn(bx,by , true,false);
 		
 
 			
@@ -116,6 +116,10 @@ public class Editor extends BasicGameState {
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +620,200,50,gc))SlickGo.saveFile(board);
 			
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +680,200,50,gc)) {
+				if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))Minimaxer.keystonecolour = Stone.WHITE;
+	    		else Minimaxer.keystonecolour = Stone.BLACK;
+				board.turn = Minimaxer.keystonecolour;
+				board.placing = Minimaxer.keystonecolour;					
 				SlickGo.mainBoard = Board.cloneBoard(board);
 				sbg.enterState(0);
 			}

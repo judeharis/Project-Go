@@ -23,7 +23,7 @@ public class Minimaxer  implements Runnable{
 
 		if (minimaxer.exit) return 0;
 	 	ArrayList<Tuple> validMoves = currentBoard.validMoves;
-	 	ArrayList<Tuple> goodMoves = currentBoard.goodMoves;
+	 	ArrayList<Tuple> goodMoves = currentBoard.removeBadMovess();
 
 //	 	print(currentBoard.placing+" valid moves:"+validMoves + " good moves: " + currentBoard.goodMoves);
 		if (keystoneLives(keystonelist)) return min;
@@ -44,9 +44,7 @@ public class Minimaxer  implements Runnable{
 				//print("\n\r"+minimaxer.line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + currentBoard.goodMoves +" \ndepth: " + depth +" step taken: " + t);
 
 				Board b = Board.cloneBoard(currentBoard);
-				b.ai= true;
-				b.computer = false;
-				b.takeTurn(t.a,t.b,false,false);
+				b.takeTurn(t.a,t.b,false,true);
 				if(depth==1  )print(depth + " " + t.clone());
 				int returnscore =minimax(b,keyStoneRemaining(b,keystonelist),!isLive,depth,minimaxer,alpha,beta);
 			
@@ -68,9 +66,7 @@ public class Minimaxer  implements Runnable{
 			for (Tuple t : goodMoves) {
 				//print("\n\r"+minimaxer.line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + currentBoard.goodMoves +" \ndepth: " + depth +" step taken: " + t);
 				Board b = Board.cloneBoard(currentBoard);
-				b.ai= true;
-				b.computer = false;
-				b.takeTurn(t.a,t.b,false,false);
+				b.takeTurn(t.a,t.b,false,true);
 				if(depth==1  )print(depth + " " + t.clone());
 				int returnscore =minimax(b,keyStoneRemaining(b,keystonelist),!isLive,depth,minimaxer,alpha,beta);
 		        best = Math.min(best, returnscore); 
@@ -94,7 +90,7 @@ public class Minimaxer  implements Runnable{
 	@Override
 	public void run() {
 			print("Ai Running");
-			originalBoard.goodMoves = originalBoard.removeBadMovess();
+			//originalBoard.goodMoves = originalBoard.removeBadMovess();
 			if (originalBoard.blackFirst && originalBoard.turn == Stone.WHITE || !originalBoard.blackFirst && originalBoard.turn == Stone.BLACK ) 
 					minimax(originalBoard,keystones,originalBoard.capToWin,0,this,min,max);
 			else 	minimax(originalBoard,keystones,!originalBoard.capToWin,0,this,min,max);

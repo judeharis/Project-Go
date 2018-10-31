@@ -32,6 +32,7 @@ public class SlickGo extends StateBasedGame {
 	public static Menu menuI;
 	public static Play playI;
 	public static Editor editorI;
+	public static AppGameContainer appgc;
 	
 	
 	public SlickGo(String gamename) {
@@ -59,13 +60,18 @@ public class SlickGo extends StateBasedGame {
 	}
 	
 	public static void main(String[] args) throws IOException, SlickException  {
-		 AppGameContainer appgc;
+
 
 		 appgc = new AppGameContainer(new SlickGo(gamename));
 		 appgc.setShowFPS(false);
 		 appgc.setDisplayMode(1280, 840, false);
 		 appgc.setTargetFrameRate(maxfps);
+		 appgc.setAlwaysRender(true);
+		 appgc.setClearEachFrame(false);
 		 appgc.start();
+
+
+
 
 
 	 }
@@ -78,6 +84,7 @@ public class SlickGo extends StateBasedGame {
 	}
 	
     public static void loadFile(Board board , boolean editormode) {
+    	
     	final JFileChooser fc = new JFileChooser();
         File workingDirectory = new File(System.getProperty("user.dir")+"\\Computer Boards");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", "txt", "text");
@@ -85,6 +92,7 @@ public class SlickGo extends StateBasedGame {
         fc.setCurrentDirectory(workingDirectory);
 
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        	
             board.initBoard(editormode);
             BufferedReader br ;
             String st;
@@ -128,6 +136,7 @@ public class SlickGo extends StateBasedGame {
                     y++;
                 }
                 br.close();
+    
 
             }
             catch (FileNotFoundException e1 ) {e1.printStackTrace();}
@@ -141,9 +150,7 @@ public class SlickGo extends StateBasedGame {
                 tb = Integer.parseInt(temp[1]);
                 board.keystones.add(new Tuple(ta,tb));
             }
-            
-            board.computer = false;
-            board.ai = false;
+                      
             board.blackFirst = (board.turn==Stone.BLACK);
             board.placing = board.turn;
             board.desc = desc.toString().replace("Description: ", "");
@@ -239,6 +246,18 @@ public class SlickGo extends StateBasedGame {
         g.fillRect(x, y, w, h);
         g.setColor(Color.black);
         if(hover) g.setColor(Color.yellow);
+        g.drawRect(x, y, w, h);
+        g.setColor(Color.black);
+        g.drawString(string,x+(w/5),y+(h/5) );
+        
+    	
+    }
+    
+    public static void drawButton(int x, int y , int w , int h, String string,Graphics g ,boolean hover , Color hc) {
+        g.setColor(Color.transparent);
+        g.fillRect(x, y, w, h);
+        g.setColor(Color.black);
+        if(hover) g.setColor(hc);
         g.drawRect(x, y, w, h);
         g.setColor(Color.black);
         g.drawString(string,x+(w/5),y+(h/5) );
