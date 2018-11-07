@@ -82,9 +82,13 @@ public class Editor extends BasicGameState {
 		board.desc = desc.getText();
 		if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))board.keystone = Stone.KEYWHITESTONE;
 		else board.keystone = Stone.KEYBLACKSTONE;
+
 		
 		if (input.isMousePressed(0)) {
-			if (SlickGo.withinBounds(bx,by)) board.takeTurn(bx,by , true,false);
+			if (SlickGo.withinBounds(bx,by)) {		
+				board.takeTurn(bx,by , true,false);
+				print(board.getSafeStringsCount(board.placing));
+			}
 		
 
 			

@@ -27,6 +27,7 @@ public class Play extends BasicGameState {
 	Minimaxer k;
 	boolean aiStarted = false;
 	boolean turnOffComputer = false;
+	static boolean heuristic = true;
 
 
 	public Play(int state ,int gcsize) {
@@ -47,7 +48,7 @@ public class Play extends BasicGameState {
 		
 
 		board.draw(g,false);
-        if(board.checkValidMove(bx,by)) {
+        if(board.checkValidMove(bx,by) && board.validMoves.contains(new Tuple(bx,by))) {
         	board.drawoval(g,(bx+1)*board.TileSize,(by+1)*board.TileSize,board.placing.stoneToColor(),board.placing.isKey());}
         
         
@@ -61,8 +62,9 @@ public class Play extends BasicGameState {
 		
 		//SlickGo.drawButton(board.boardSize+200 ,board.TileSize,150,40,board.placing.toString(), g,false);
 		SlickGo.drawButton(board.boardSize ,board.TileSize +440,200,50,"AI " +(turnOffComputer?"Disabled":"Enabled"), g ,!turnOffComputer,Color.green);
-		SlickGo.drawButton(board.boardSize +220,board.TileSize +440,90,50,"Undo", g ,SlickGo.regionChecker(board.boardSize +220 ,board.TileSize +440,90,50,gc));
-		SlickGo.drawButton(board.boardSize +330,board.TileSize +440,90,50,"Redo", g ,SlickGo.regionChecker(board.boardSize +330 ,board.TileSize +440,90,50,gc));
+		SlickGo.drawButton(board.boardSize +220,board.TileSize +440,200,50,"Heuristics " +(!heuristic?"Off":"On"), g ,heuristic,Color.green);
+		SlickGo.drawButton(board.boardSize +220,board.TileSize +680,90,50,"Undo", g ,SlickGo.regionChecker(board.boardSize +220 ,board.TileSize +680,90,50,gc));
+		SlickGo.drawButton(board.boardSize +330,board.TileSize +680,90,50,"Redo", g ,SlickGo.regionChecker(board.boardSize +330 ,board.TileSize +680,90,50,gc));
 		
 		SlickGo.drawButton(board.boardSize ,board.TileSize +500,200,50,"Start AI", g,SlickGo.regionChecker(board.boardSize ,board.TileSize +500,200,50,gc));
 		SlickGo.drawButton(board.boardSize +220,board.TileSize +500,200,50,"Stop AI", g,SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +500,200,50,gc));
@@ -103,28 +105,33 @@ public class Play extends BasicGameState {
 			//Place Stone
 			if (SlickGo.withinBounds(bx,by) && !aiStarted && !gameOver) {
 				board.passing = false;
+				gameMsg = "";
 				makeMove(bx,by);}
 			
 			//Pass
 			if (SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +620,200,50,gc) && !gameOver) {
+				gameMsg = "";
 				board.passing = true;
 				makeMove(bx,by);}
 			
 			//Undo
-			if (SlickGo.regionChecker(board.boardSize +220,board.TileSize +440,90,50,gc) && board.undoBoard != null) {
+			if (SlickGo.regionChecker(board.boardSize +220,board.TileSize +680,90,50,gc) && board.undoBoard != null) {
 				resetPlayScreen();
 				board.undoBoard.redoBoard =  Board.cloneBoard(board);
 				board = Board.cloneBoard(board.undoBoard);
 			}
 			
 			//Redo
-			if (SlickGo.regionChecker(board.boardSize +330,board.TileSize +440,90,50,gc)&& board.redoBoard != null) {
+			if (SlickGo.regionChecker(board.boardSize +330,board.TileSize +680,90,50,gc)&& board.redoBoard != null) {
 				resetPlayScreen();
 				board = Board.cloneBoard(board.redoBoard);
 			}
 
 			//Toggle AI
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +440,200,50,gc)) turnOffComputer=!turnOffComputer;
+			
+			//Toggle Heuristics
+			if (SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +440,200,50,gc)) heuristic=!heuristic;
 			
 			//Start AI
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +500,200,50,gc)) ai=true;

@@ -1,6 +1,8 @@
 package Go.SlickGo;
 
 import org.newdawn.slick.Color;
+import java.util.ArrayList;
+
 
 public enum Stone {
     BLACK,WHITE,VALID,EMPTY,INVALID, KEYWHITESTONE,KEYBLACKSTONE,KO;
@@ -64,6 +66,20 @@ public enum Stone {
 	public boolean isKey() {
         return ( this == Stone.KEYBLACKSTONE || this == Stone.KEYWHITESTONE );
 	}
-
+	
+	public ArrayList<ArrayList<Tuple>> getSStrings(Board b){
+        if( this.getStoneColour() == Stone.BLACK )return b.bStoneStrings;
+        if( this.getStoneColour() == Stone.WHITE )return b.wStoneStrings;
+        return null;
+		
+	}
+	
+	public ArrayList<Tuple> getCapList(Board b){
+        if( this.getStoneColour() == Stone.BLACK )return b.bCapStrings;
+        if( this.getStoneColour() == Stone.WHITE )return b.wCapStrings;
+        return null;
+		
+	}
+	
 
 }
