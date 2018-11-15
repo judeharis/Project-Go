@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.lwjgl.input.Mouse;
@@ -15,7 +18,6 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -60,7 +62,11 @@ public class SlickGo extends StateBasedGame {
 	}
 	
 	public static void main(String[] args) throws IOException, SlickException  {
-
+        try{ UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");}
+        catch (ClassNotFoundException e1) {e1.printStackTrace();}
+        catch (InstantiationException e1){ e1.printStackTrace();}
+        catch (IllegalAccessException e1){ e1.printStackTrace();}
+        catch (UnsupportedLookAndFeelException e1) {e1.printStackTrace();}
 
 		 appgc = new AppGameContainer(new SlickGo(gamename));
 		 appgc.setShowFPS(false);
@@ -90,8 +96,10 @@ public class SlickGo extends StateBasedGame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", "txt", "text");
         fc.setFileFilter(filter);
         fc.setCurrentDirectory(workingDirectory);
-
-        if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        JFrame w = new JFrame();
+        w.setAlwaysOnTop(true);
+        w.setVisible(false);
+        if (fc.showOpenDialog(w) == JFileChooser.APPROVE_OPTION) {
         	
             board.initBoard(editormode);
             BufferedReader br ;
@@ -164,21 +172,25 @@ public class SlickGo extends StateBasedGame {
            
 
         }
+        w.dispose();
     }
 	
-    public static void saveFile(Board board) {
+    public static void saveFile(Board board)  {
 
 
         final JFileChooser fc = new JFileChooser();
-        File workingDirectory = new File(System.getProperty("user.dir"));
+
+        
+        File workingDirectory = new File(System.getProperty("user.dir")+"\\Computer Boards");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", "txt", "text");
         fc.setFileFilter(filter);
         fc.setCurrentDirectory(workingDirectory);
-        if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-
-            
         
-            
+        JFrame w = new JFrame();
+        w.setAlwaysOnTop(true);
+        w.setVisible(false);
+        if (fc.showSaveDialog(w) == JFileChooser.APPROVE_OPTION) {
+
             String filename =  fc.getSelectedFile().getAbsolutePath(); 
             String shortname = fc.getSelectedFile().getName();
             if (shortname.length() <= 3) filename += ".txt";
@@ -232,7 +244,8 @@ public class SlickGo extends StateBasedGame {
 
 
             writer.close();}
-
+  
+        w.dispose();
     }
  
     public static boolean withinBounds(int x, int y){

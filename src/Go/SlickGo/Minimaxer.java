@@ -36,16 +36,15 @@ public class Minimaxer  implements Runnable{
 		if (currentBoard.placing != keystonecolour && validMoves.size() == 0) return max;
 		else if (currentBoard.placing == keystonecolour && goodMoves.size() == 0) {
 			currentBoard.passing = true;
-			//goodMoves = validMoves;
 			goodMoves.add(new Tuple(-9,-9));
 		}
 		if (goodMoves.size() == 0) {goodMoves = validMoves;}
 		
 //		for (Tuple t : currentBoard.keystones) {
 //			StoneStringResponse stringRes = currentBoard.checkForStrings(t.a,t.b,keystonecolour.getSStrings(currentBoard)); 
-//			if (stringRes.state && currentBoard.checkStringSafety(stringRes.list, keystonecolour)==1)return max;
+//			if (stringRes.state&& depth !=1 && currentBoard.checkStringSafety(stringRes.list, keystonecolour,new ArrayList<Tuple>())==1)return max;
 //		}
-		
+
 		if (Play.heuristic && depth>5) return Evaluator.evaluateBoard(currentBoard,minimaxer.originalBoard,minimaxer);
 		
 		

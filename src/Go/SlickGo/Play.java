@@ -184,6 +184,7 @@ public class Play extends BasicGameState {
 	
 	public void makeMove(int bx,int by) {
 		boolean moveMade = board.takeTurn(bx,by,false,false);
+		winMsg="";
 		afterMove();
 		if(!turnOffComputer && moveMade)ai=true;
 	}
@@ -208,7 +209,7 @@ public class Play extends BasicGameState {
 	
 	public void makeComputerMove() {
 		ArrayList<Tuple> liveList = Minimaxer.keyStoneRemaining(board,board.keystones);
-
+		winMsg="";
         if (!liveList.isEmpty()) {
         	k = new Minimaxer(board,board.keystones);
         	t1 = new Thread(k,"t1");

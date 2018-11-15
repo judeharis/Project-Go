@@ -1,6 +1,8 @@
 package Go.SlickGo;
 
 
+import java.util.ArrayList;
+
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
@@ -87,7 +89,9 @@ public class Editor extends BasicGameState {
 		if (input.isMousePressed(0)) {
 			if (SlickGo.withinBounds(bx,by)) {		
 				board.takeTurn(bx,by , true,false);
-				print(board.getSafeStringsCount(board.placing));
+				ArrayList<Tuple> e = new ArrayList<Tuple>();
+				print(board.getSafeStringsCount(board.placing,e));
+				print(e.size());
 			}
 		
 
@@ -122,8 +126,8 @@ public class Editor extends BasicGameState {
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +680,200,50,gc)) {
 				if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))Minimaxer.keystonecolour = Stone.WHITE;
 	    		else Minimaxer.keystonecolour = Stone.BLACK;
-				board.turn = Minimaxer.keystonecolour;
-				board.placing = Minimaxer.keystonecolour;					
+				board.turn = (board.blackFirst)? Stone.BLACK:Stone.WHITE;
+				board.placing = board.turn;					
 				SlickGo.mainBoard = Board.cloneBoard(board);
 				sbg.enterState(0);
 			}

@@ -100,7 +100,7 @@ public class Board{
         if (!editormode)placing =turn;
 
         validMoves =getAllValidMoves();
-
+//        if (editormode && !validMoves.isEmpty())print(removeBadMovess(placing));
 
         return moveMade;
 
@@ -204,25 +204,37 @@ public class Board{
     	return validMoves;
     }
 
+//    public ArrayList<Tuple> removeBadMoves() {
+//        ArrayList<ArrayList<Tuple>> stoneStrings = turn.getStoneColour()==Stone.BLACK ? bStoneStrings:wStoneStrings;
+//        ArrayList<Tuple> capString =  (turn.getStoneColour()== Stone.WHITE ? bCapStrings:  wCapStrings);
+//        ArrayList<Tuple> goodMoves = tupleArrayClone(validMoves);
+//        for (ArrayList<Tuple> tlist : stoneStrings){
+//        	ArrayList<Tuple> needList = getNeedList(tlist,turn.getEnemyColour());
+//        	if (needList.size() == 2) {
+//        		for (Tuple t : needList ) {
+//        			Board k = Board.cloneBoard(this);
+//        			if (stones[t.a][t.b]!= Stone.INVALID) {
+//	        			k.takeTurn(t.a, t.b, false, true);
+//	        			if(turn.getStoneColour()== Stone.WHITE && k.wCapStrings.size() > wCapStrings.size() && !capString.contains(t)){
+//	        				goodMoves.remove(t);}
+//	        			if(turn.getStoneColour()== Stone.BLACK && k.bCapStrings.size() > bCapStrings.size() && !capString.contains(t)){
+//	        				goodMoves.remove(t);}}}}
+//        }
+//        return goodMoves;
+//    }
+    
+//    
     public ArrayList<Tuple> removeBadMoves() {
-        ArrayList<ArrayList<Tuple>> stoneStrings = turn.getStoneColour()==Stone.BLACK ? bStoneStrings:wStoneStrings;
-        ArrayList<Tuple> capString =  (turn.getStoneColour()== Stone.WHITE ? bCapStrings:  wCapStrings);
         ArrayList<Tuple> goodMoves = tupleArrayClone(validMoves);
-        for (ArrayList<Tuple> tlist : stoneStrings){
-        	ArrayList<Tuple> needList = getNeedList(tlist,turn.getEnemyColour());
-        	if (needList.size() == 2) {
-        		for (Tuple t : needList ) {
-        			Board k = Board.cloneBoard(this);
-        			if (stones[t.a][t.b]!= Stone.INVALID) {
-	        			k.takeTurn(t.a, t.b, false, true);
-	        			if(turn.getStoneColour()== Stone.WHITE && k.wCapStrings.size() > wCapStrings.size() && !capString.contains(t)){
-	        				goodMoves.remove(t);}
-	        			if(turn.getStoneColour()== Stone.BLACK && k.bCapStrings.size() > bCapStrings.size() && !capString.contains(t)){
-	        				goodMoves.remove(t);}}}}
-        }
+    	ArrayList<Tuple> e = new ArrayList<Tuple>();
+    	getSafeStringsCount(turn.getStoneColour(),e);
+    	goodMoves.removeAll(e);
+
         return goodMoves;
     }
     
+
+	
     public ArrayList<Tuple> removeBadMovess() {
         ArrayList<ArrayList<Tuple>> stoneStrings = turn.getStoneColour()==Stone.BLACK ? bStoneStrings:wStoneStrings;
         ArrayList<Tuple> capString =  turn.getStoneColour()== Stone.BLACK ? wCapStrings: bCapStrings;
@@ -233,7 +245,7 @@ public class Board{
         		for (Tuple t : needList ) {
         			boolean toBreak = false;
         			if (capString.contains(t)) continue;
-        			ArrayList<Tuple> libs=  getLiberties(t.a, t.b);
+        			ArrayList<Tuple> libs=  getAdjacent(t.a, t.b);
         			for (Tuple l : libs) {
         				if (stones[l.a][l.b].getStoneColour() != Stone.WHITE && stones[l.a][l.b].getStoneColour() != Stone.BLACK && !needList.contains(l)) {
         					toBreak = true;
@@ -241,6 +253,35 @@ public class Board{
         				}else if(stones[l.a][l.b].getStoneColour() == turn ){
                    		 	StoneStringResponse libsStringres = checkForStrings( l.a ,  l.b, stoneStrings);
                    		 	if (libsStringres.state && getNeedList(libsStringres.list, turn.getEnemyColour()).size() >2)  {
+                   		 		toBreak = true;
+                   		 		break;}}
+        			}
+        			if(!toBreak)goodMoves.remove(t);
+        			
+        		}
+        	}
+        }
+        return goodMoves;
+    }
+    
+    public ArrayList<Tuple> removeBadMovess(Stone colour) {
+        ArrayList<ArrayList<Tuple>> stoneStrings = colour.getStoneColour()==Stone.BLACK ? bStoneStrings:wStoneStrings;
+        ArrayList<Tuple> capString =  colour.getStoneColour()== Stone.BLACK ? wCapStrings: bCapStrings;
+        ArrayList<Tuple> goodMoves = tupleArrayClone(validMoves);
+        for (ArrayList<Tuple> tlist : stoneStrings){
+        	ArrayList<Tuple> needList = getNeedList(tlist,colour.getEnemyColour());
+        	if (needList.size() == 2) {
+        		for (Tuple t : needList ) {
+        			boolean toBreak = false;
+        			if (capString.contains(t)) continue;
+        			ArrayList<Tuple> libs=  getAdjacent(t.a, t.b);
+        			for (Tuple l : libs) {
+        				if (stones[l.a][l.b].getStoneColour() != Stone.WHITE && stones[l.a][l.b].getStoneColour() != Stone.BLACK && !needList.contains(l)) {
+        					toBreak = true;
+        					break;
+        				}else if(stones[l.a][l.b].getStoneColour() == colour ){
+                   		 	StoneStringResponse libsStringres = checkForStrings( l.a ,  l.b, stoneStrings);
+                   		 	if (libsStringres.state && getNeedList(libsStringres.list, colour.getEnemyColour()).size() >2)  {
                    		 		toBreak = true;
                    		 		break;}}
         			}
@@ -345,7 +386,7 @@ public class Board{
 
     public static void print(Object o){
         System.out.println(o);
-        Play.gameMsg=(String)o;
+        //Play.gameMsg=(String)o;
     }
    
     public int calulatePostionOnBoard(int x){
@@ -377,7 +418,7 @@ public class Board{
 //        }
 //        ArrayList<Tuple> capString =  (enemycolour== Stone.WHITE ? wCapStrings:  bCapStrings);
 //        ArrayList<ArrayList<Tuple>> stoneStrings =  (enemycolour== Stone.WHITE ? bStoneStrings:  wStoneStrings);
-//        ArrayList<Tuple> libs = getLiberties(i, j);
+//        ArrayList<Tuple> libs = getAdjacent(i, j);
 //        if (capString.contains(new Tuple(i, j))) {
 //            long end = System.nanoTime();
 //            fullTime += (end - start );
@@ -412,48 +453,221 @@ public class Board{
     
     
     
-	public int getSafeStringsCount(Stone colour) {
+	public int getSafeStringsCount(Stone colour,ArrayList<Tuple> eyelist) {
 		int retval = 0;
-		ArrayList<ArrayList<Tuple>> stoneStrings =  (colour== Stone.WHITE ? wStoneStrings:  bStoneStrings);
+		ArrayList<ArrayList<Tuple>> stoneStrings =  (colour== Stone.WHITE ? wStoneStrings:  bStoneStrings);;
 		for (ArrayList<Tuple> list :stoneStrings) {
-			retval += checkStringSafety(list, colour);
+			retval += checkStringSafety(list, colour,eyelist);
 		}
 		return retval;
 	}
 	
 	
-	public int checkStringSafety(ArrayList<Tuple> list,Stone colour) {
+	public boolean checkEnemySurronding(Tuple e , Tuple t, Stone colour, ArrayList<Tuple> checkedList, boolean alreadyDiag ) {
+		
+		ArrayList<Tuple> surE = getSurrounding(e.a,e.b); 
+		ArrayList<Tuple> diagE = getDiag(e.a,e.b); 
+		ArrayList<Tuple> furtherChecking = new ArrayList<Tuple>();
+		int safeNeed = surE.size();
+		int safeNum = 0; 
+		if (safeNeed < 8)alreadyDiag = true;
+		for(Tuple k : surE) {
+			if (k.equals(t) || (stones[k.a][k.b].getStoneColour() == colour.getStoneColour()) ) {
+				safeNum++;
+				continue;}
+			else if (stones[k.a][k.b].getStoneColour() == colour.getEnemyColour()) {
+				if (checkedList.contains(k)) safeNum++;
+				else furtherChecking.add(k);
+				continue;
+			}else if (diagE.contains(k) && !alreadyDiag) {
+				alreadyDiag=true;
+				safeNum++;
+				continue;
+			}
+			return false;
+		}
+		
+		ArrayList<Tuple> newCheckedList = tupleArrayClone(checkedList);
+		newCheckedList.add(e);
+		if ((safeNum+ furtherChecking.size())>= safeNeed) {
+			for (Tuple k : furtherChecking) {
+				if  (checkEnemySurronding(k,t,colour,newCheckedList,alreadyDiag))safeNum++;
+				else if(!alreadyDiag) {
+					alreadyDiag=true;
+					safeNum++;
+				}
+			}
+		}
+		
+		
+		
+		
+		
+		return (safeNum >= safeNeed);
+		
+	}
+	
+
+	public ArrayList<Tuple> getCheckForSafetyList(ArrayList<Tuple> usedDiag,Tuple t) {
+		ArrayList<Tuple> returnList = new ArrayList<Tuple>();
+		ArrayList<Tuple> tlibs = getAdjacent(t.a,t.b);
+		int finalsize = usedDiag.size();
+		for (Tuple u : usedDiag) {
+			ArrayList<Tuple> ulibs = getAdjacent(u.a,u.b);
+			for (Tuple k :tlibs) {
+				if (returnList.size() <finalsize && ulibs.contains(k) && !returnList.contains(k)) returnList.add(k);
+			}
+		}
+		
+		
+		return returnList;
+	}
+	
+
+
+	public int checkStringSafety(ArrayList<Tuple> list,Stone colour,ArrayList<Tuple> eyelist) {
 		if (colour.getStoneColour() !=Stone.BLACK && colour.getStoneColour() !=Stone.WHITE) return 0;
 		ArrayList<Tuple> needList = getNeedList(list,colour.getEnemyColour());
+		ArrayList<Tuple> tempEyeList  = new ArrayList<Tuple>();
 		if (needList.size() >= 2) {
 			int eyes = 0;
     		for (Tuple t : needList ) {
+    			if (eyelist.contains(t)) {
+    				eyes++;
+    				continue;
+    			}
     			ArrayList<Tuple> sur = getSurrounding(t.a,t.b);
-    			ArrayList<Tuple> libs = getLiberties(t.a,t.b);
+    			ArrayList<Tuple> libs = getAdjacent(t.a,t.b);
+    			ArrayList<Tuple> diag = getDiag(t.a,t.b);
+    			ArrayList<Tuple> usedDiag = new ArrayList<Tuple>();
     			int surrondingNumber = sur.size();
+    			
     			for (Tuple l : sur) {
     				if (stones[l.a][l.b].getStoneColour() != Stone.BLACK && stones[l.a][l.b].getStoneColour() != Stone.WHITE && !isAdjacentAll(l,colour)) surrondingNumber--;
     				if (libs.contains(l) && needList.contains(l)) surrondingNumber=0;
-    				else if(stones[l.a][l.b].getStoneColour() == colour.getEnemyColour()) {
+    				else if(stones[l.a][l.b].getStoneColour() == colour.getEnemyColour()){
     					StoneStringResponse stringRes  = checkForStrings(l.a,l.b,colour.getEnemyColour().getSStrings(this));
     					if (stringRes.state) {
     						ArrayList<Tuple> eNeedList = getNeedList(stringRes.list,colour);
-    						if (eNeedList.size()!=1)surrondingNumber--;
-    						else if (eNeedList.size()==1 && !eNeedList.get(0).equals(t)) surrondingNumber--; }}
+    						if (eNeedList.size()!=1 ||  (eNeedList.size()==1 && !eNeedList.get(0).equals(t)) ||  (!checkEnemySurronding(l,t,colour,new ArrayList<Tuple>(),false))) {
+    							if(diag.contains(l)) {
+    								usedDiag.add(l);
+    								surrondingNumber--;
+    							}
+    							else surrondingNumber=0;}
+    						}
+    					}
     			}
-    			if (sur.size() == 3 && surrondingNumber >1 ) eyes++;
-    			else if(sur.size() == 5 && surrondingNumber >4 )eyes++;
-    			else if(sur.size() == 8 && surrondingNumber >6 )eyes++;
+
+    			if (usedDiag.size() >= 2) {
+    				ArrayList<Tuple> checkThese = getCheckForSafetyList(usedDiag, t);
+    				//ArrayList<Tuple> checkThese = new ArrayList<Tuple>();
+
+    				int safes = 0;
+    				for (Tuple l : checkThese) {
+    					StoneStringResponse stringRes  = checkForStrings(l.a,l.b,colour.getSStrings(this));
+    					if (stringRes.state){
+    						 ArrayList<Tuple> newEyeList  =tupleArrayClone(eyelist);
+    						 newEyeList.add(t);
+    						 safes +=checkStringSafety(stringRes.list,colour,newEyeList);
+    					}
+    				}
+    				if (safes == checkThese.size()) surrondingNumber+=safes;
+    				
+    			} 
+    			
+    			if (sur.size() == 3 && surrondingNumber >1 ) {
+    				tempEyeList.add(t);
+    				eyes++;}
+    			else if(sur.size() == 5 && surrondingNumber ==5) {
+    				tempEyeList.add(t);
+    				eyes++;}
+    			else if(sur.size() == 8 && surrondingNumber >6) {
+    				tempEyeList.add(t);
+    				eyes++;}
     			
     		}
-    		if (eyes>=2) return 1;
+    		if (eyes>=2) {
+    			eyelist.addAll(tempEyeList);
+    			return 1;
+    		}
     	}
 		return 0;
 		
 	}
 	
+//
+//	//Only works eyes without adjacent enemies
+//	public int checkStringSafety(ArrayList<Tuple> list,Stone colour,ArrayList<Tuple> eyelist) {
+//		if (colour.getStoneColour() !=Stone.BLACK && colour.getStoneColour() !=Stone.WHITE) return 0;
+//		ArrayList<Tuple> needList = getNeedList(list,colour.getEnemyColour());
+//		ArrayList<Tuple> tempEyeList  = new ArrayList<Tuple>();
+//		if (needList.size() >= 2) {
+//			int eyes = 0;
+//    		for (Tuple t : needList ) {
+//    			ArrayList<Tuple> sur = getSurrounding(t.a,t.b);
+//    			ArrayList<Tuple> libs = getAdjacent(t.a,t.b);
+//    			ArrayList<Tuple> diag = getDiag(t.a,t.b);
+//    			ArrayList<Tuple> usedDiag = new ArrayList<Tuple>();
+//    			int surrondingNumber = sur.size();
+//    			
+//    			for (Tuple l : sur) {
+//    				if (stones[l.a][l.b].getStoneColour() != Stone.BLACK && stones[l.a][l.b].getStoneColour() != Stone.WHITE && !isAdjacentAll(l,colour)) surrondingNumber--;
+//    				if (libs.contains(l) && needList.contains(l)) surrondingNumber=0;
+//    				else if(stones[l.a][l.b].getStoneColour() == colour.getEnemyColour()){
+//    					StoneStringResponse stringRes  = checkForStrings(l.a,l.b,colour.getEnemyColour().getSStrings(this));
+//    					if (stringRes.state) {
+//    						ArrayList<Tuple> eNeedList = getNeedList(stringRes.list,colour);
+//    						if (eNeedList.size()!=1 ||  (eNeedList.size()==1 && !eNeedList.get(0).equals(t)) ||  (!checkEnemySurronding(l,t,colour,new ArrayList<Tuple>(),false))) {
+//    							if(diag.contains(l)) {
+//    								usedDiag.add(l);
+//    								surrondingNumber--;
+//    							}
+//    							else surrondingNumber=0;}
+//    						}
+//    					}
+//    			}
+//
+//    			if (usedDiag.size() >= 2) {
+//    				ArrayList<Tuple> checkThese = new ArrayList<Tuple>();
+//    				for (Tuple l : libs) {
+//    					if (!list.contains(l)) checkThese.add(l);
+//    				}
+//    				for (Tuple l : checkThese) {
+//    					StoneStringResponse stringRes  = checkForStrings(l.a,l.b,colour.getSStrings(this));
+//    					if (stringRes.state){
+//    						ArrayList<Tuple> sneedList = getNeedList(stringRes.list,colour.getEnemyColour());
+//    						for(Tuple k :sneedList) {
+//    							if (!k.equals(t) && needList.contains(k)) surrondingNumber+=2;
+//    							else if (simpleEye(k,colour));
+//    						}
+//    					}
+//    				}
+//    				
+//    			} 
+//    			
+//    			if (sur.size() == 3 && surrondingNumber >1 && !eyelist.contains(t) ) {
+//    				tempEyeList.add(t);
+//    				eyes++;}
+//    			else if(sur.size() == 5 && surrondingNumber ==5 && !eyelist.contains(t)) {
+//    				tempEyeList.add(t);
+//    				eyes++;}
+//    			else if(sur.size() == 8 && surrondingNumber >6 && !eyelist.contains(t)) {
+//    				tempEyeList.add(t);
+//    				eyes++;}
+//    			
+//    		}
+//    		if (eyes>=2) {
+//    			eyelist.addAll(tempEyeList);
+//    			return 1;
+//    		}
+//    	}
+//		return 0;
+//		
+//	}
+
 	public boolean isAdjacentAll(Tuple t,Stone colour) {
-		ArrayList<Tuple> libs = getLiberties(t.a,t.b);
+		ArrayList<Tuple> libs = getAdjacent(t.a,t.b);
 		for(Tuple l : libs) {
 			if (stones[l.a][l.b] != colour)return false;
 		}
@@ -472,7 +686,7 @@ public class Board{
 
         if (enemyCapString.contains(new Tuple(i, j))) return false;
         
-        ArrayList<Tuple> libs = getLiberties(i, j);
+        ArrayList<Tuple> libs = getAdjacent(i, j);
         if (currentCapString.contains(new Tuple(i, j))) {
             for (Tuple t :libs) {
             	if (stones[t.a][t.b].getStoneColour() == enemycolour.getEnemyColour()){
@@ -502,7 +716,7 @@ public class Board{
             ArrayList<ArrayList<Tuple>> stoneStrings = stones[i][j].getStoneColour()==Stone.BLACK ? bStoneStrings:wStoneStrings;
             StoneStringResponse stringed = checkForStrings(i, j,stoneStrings);
             if (!stringed.state){
-                ArrayList<Tuple> libs =  getLiberties(i,j);
+                ArrayList<Tuple> libs =  getAdjacent(i,j);
                 ArrayList<Tuple> sstring= new ArrayList<Tuple>();
                 sstring.add(new Tuple(i,j));
                 for(Tuple t :libs ){
@@ -527,8 +741,8 @@ public class Board{
 
         ArrayList<Tuple> capstring = new ArrayList<Tuple>();
         for (Tuple t : sstring){
-            capstring.removeAll(getLiberties(t.a, t.b));
-            capstring.addAll(getLiberties(t.a, t.b));
+            capstring.removeAll(getAdjacent(t.a, t.b));
+            capstring.addAll(getAdjacent(t.a, t.b));
         }
         ArrayList<Tuple> l = tupleArrayClone(sstring);
         capstring.removeAll(l);
@@ -597,7 +811,7 @@ public class Board{
 
     }
     
-    private ArrayList<Tuple> getLiberties(int i , int j){
+    private ArrayList<Tuple> getAdjacent(int i , int j){
         ArrayList<Tuple> libs = new ArrayList<Tuple>();
         if (i>=1) libs.add(new Tuple(i-1,j));
         if (i<=17) libs.add(new Tuple(i+1,j));
@@ -606,12 +820,20 @@ public class Board{
         return libs;
     }
     
+
+    
+    public ArrayList<Tuple>  getDiag(int i , int j) {
+        ArrayList<Tuple> diag = new ArrayList<Tuple>();
+        if (i>=1 && j>=1) diag.add(new Tuple(i-1,j-1));
+        if (i<=17 && j<=17) diag.add(new Tuple(i+1,j+1));
+        if (i<=17 && j>=1)diag.add(new Tuple(i+1,j-1));
+        if (i>=1 && j<=17) diag.add(new Tuple(i-1,j+1));
+        return diag;
+    }
+    
     private ArrayList<Tuple> getSurrounding(int i , int j){
-        ArrayList<Tuple> sur = getLiberties(i,j);
-        if (i>=1 && j>=1) sur.add(new Tuple(i-1,j-1));
-        if (i<=17 && j<=17) sur.add(new Tuple(i+1,j+1));
-        if (i<=17 && j>=1)sur.add(new Tuple(i+1,j-1));
-        if (i>=1 && j<=17) sur.add(new Tuple(i-1,j+1));
+        ArrayList<Tuple> sur = getAdjacent(i,j);
+        sur.addAll(getDiag(i,j));
         return sur;
     }
     
