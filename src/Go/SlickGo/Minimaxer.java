@@ -21,31 +21,54 @@ public class Minimaxer  implements Runnable{
 	 }
 	 
 
-	 static int minimax(Board currentBoard , ArrayList<Tuple> keystonelist , boolean isLive , int depth, Minimaxer minimaxer, int alpha,int beta, ArrayList<Tuple> soFar) {
-		if (minimaxer.exit) return 0;
+	 int minimax(Board currentBoard , ArrayList<Tuple> keystonelist , boolean isLive , int depth, int alpha,int beta, ArrayList<Tuple> soFar) {
+		if (this.exit) return 0;
 	 	ArrayList<Tuple> validMoves = currentBoard.validMoves;
 	 	long s = System.nanoTime();
 	 	ArrayList<Tuple> goodMoves = currentBoard.removeBadMovess();
         long e = System.nanoTime();
         Board.arrayTimes[0] += (e - s );
         
-
-//	 	print(currentBoard.placing+" valid moves:"+validMoves + " good moves: " + currentBoard.goodMoves);
-		if (keystoneLives(keystonelist)) return min;
 		depth++;
-		if (currentBoard.placing != keystonecolour && validMoves.size() == 0) return max;
+//	 	print(currentBoard.placing+" valid moves:"+validMoves + " good moves: " + currentBoard.goodMoves);
+		if (keystoneLives(keystonelist)) {
+			int retval = min;
+//			print("eval: "+retval);
+//			print(soFar);
+			return retval;
+		}
+
+		if (currentBoard.placing != keystonecolour && validMoves.size() == 0) {
+			int retval = max;
+//			print("eval: "+retval);
+//			print(soFar);
+			return retval;
+		}
 		else if (currentBoard.placing == keystonecolour && goodMoves.size() == 0) {
 			currentBoard.passing = true;
-			goodMoves.add(new Tuple(-9,-9));
-		}
+			goodMoves.add(new Tuple(-9,-9));}
+		
 		if (goodMoves.size() == 0) {goodMoves = validMoves;}
 		
+		//Forbidden Third 
 //		for (Tuple t : currentBoard.keystones) {
 //			StoneStringResponse stringRes = currentBoard.checkForStrings(t.a,t.b,keystonecolour.getSStrings(currentBoard)); 
-//			if (stringRes.state&& depth !=1 && currentBoard.checkStringSafety(stringRes.list, keystonecolour,new ArrayList<Tuple>())==1)return max;
+//			if (stringRes.state&& depth !=1 && currentBoard.checkStringSafety(stringRes.list, keystonecolour,new ArrayList<Tuple>())==1) {
+//				int retval =max;
+////				print("safe: "+retval);
+////				print(soFar);
+//				return retval;
+//			}
 //		}
 
-		if (Play.heuristic && depth>5) return Evaluator.evaluateBoard(currentBoard,minimaxer.originalBoard,minimaxer);
+		if (Play.heuristic && depth>2) {
+			Evaluator evaluator = new Evaluator(currentBoard,originalBoard,obCounts);
+
+			int retval =evaluator.evaluateCurrentBoard();
+//			print("eval: "+retval);
+//			print(soFar);
+			return retval;
+		}
 		
 		
 		
@@ -57,7 +80,7 @@ public class Minimaxer  implements Runnable{
 
 			
 			for (Tuple t : goodMoves) {
-//				print("\n\r"+minimaxer.line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " + t);
+//				print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " + t);
 
 				Board b = Board.cloneBoard(currentBoard);
 
@@ -68,20 +91,20 @@ public class Minimaxer  implements Runnable{
 		        
 				if(depth==1  )print(depth + " " + t.clone());
 		    	ArrayList<Tuple> newSofar = Board.tupleArrayClone(soFar);
-//		    	newSofar.add(t);
+		    	newSofar.add(t);
 //				print(newSofar);
 				
-				int returnscore =minimax(b,keyStoneRemaining(b,keystonelist),!isLive,depth,minimaxer,alpha,beta,newSofar);
+				int returnscore =minimax(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta,newSofar);
 			 	
 		        if(returnscore > best && depth==1 ) {
-		        	minimaxer.choice = t.clone();
+		        	this.choice = t.clone();
 		        	if (returnscore == max)print("Living");
 		        	else if (returnscore == min)print("Dead");
-		        	else print(returnscore);
+		        	else print("end:"+returnscore);
 		        }else if (depth ==1) {
 		        	if (returnscore == max)print("Living");
 		        	else if (returnscore == min)print("Dead");
-		        	else print(returnscore);
+		        	else print("end:"+returnscore);
 		        }
 		        
 		        
@@ -97,7 +120,7 @@ public class Minimaxer  implements Runnable{
 //		        	returnscore =minimax(b,keyStoneRemaining(b,keystonelist),!isLive,depth,minimaxer,alpha,beta);
 //			        if(returnscore == max)  {minimaxer.choice = t.clone();print(depth + " " + t.clone());}
 //		        }
-				if (beta <= alpha) break;
+				if (beta < alpha) break;
 			}
 			
 			return best;}
@@ -105,7 +128,7 @@ public class Minimaxer  implements Runnable{
 			int best = max;
 	        
 			for (Tuple t : goodMoves) {
-//				print("\n\r"+minimaxer.line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " + t);
+//				print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " + t);
 				Board b = Board.cloneBoard(currentBoard);
 		    	long ttstart = System.nanoTime();
 				b.takeTurn(t.a,t.b,false,true);
@@ -113,18 +136,18 @@ public class Minimaxer  implements Runnable{
 		        Board.takeTurnTime += (ttend - ttstart );
 				if(depth==1  )print(depth + " " + t.clone());
 		    	ArrayList<Tuple> newSofar = Board.tupleArrayClone(soFar);
-//		    	newSofar.add(t);
+		    	newSofar.add(t);
 //				print(newSofar);
-				int returnscore =minimax(b,keyStoneRemaining(b,keystonelist),!isLive,depth,minimaxer,alpha,beta,newSofar);
+				int returnscore =minimax(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta,newSofar);
 		        if(returnscore < best && depth==1 ) {
-		        	minimaxer.choice = t.clone();
+		        	this.choice = t.clone();
 		        	if (returnscore == max)print("Living");
 		        	else if (returnscore == min)print("Dead");
-		        	else print(returnscore);
+		        	else print("end:"+returnscore);
 		        }else if (depth ==1) {
 		        	if (returnscore == max)print("Living");
 		        	else if (returnscore == min)print("Dead");
-		        	else print(returnscore);
+		        	else print("end:"+returnscore);
 		        }
 		        
 		        
@@ -139,7 +162,7 @@ public class Minimaxer  implements Runnable{
 //		        	returnscore =minimax(b,keyStoneRemaining(b,keystonelist),!isLive,depth,minimaxer,alpha,beta);
 //		            if(returnscore == max)  {minimaxer.choice = t.clone();print(depth + " " + t.clone());}
 //		        }
-		        if (beta <= alpha)break;
+		        if (beta < alpha)break;
 		    }
 			
 			return best;}
@@ -163,8 +186,8 @@ public class Minimaxer  implements Runnable{
 
 	    	
 			if (originalBoard.blackFirst && originalBoard.turn == Stone.WHITE || !originalBoard.blackFirst && originalBoard.turn == Stone.BLACK ) 
-					minimax(originalBoard,keystones,originalBoard.capToWin,0,this,min,max,sofar);
-			else 	minimax(originalBoard,keystones,!originalBoard.capToWin,0,this,min,max,sofar);
+					minimax(originalBoard,keystones,originalBoard.capToWin,0,min,max,sofar);
+			else 	minimax(originalBoard,keystones,!originalBoard.capToWin,0,min,max,sofar);
 			
 			
 	        long end = System.nanoTime();
@@ -185,7 +208,7 @@ public class Minimaxer  implements Runnable{
 	static public ArrayList<Tuple> keyStoneRemaining(Board b,ArrayList<Tuple> keystonelist){
 	 	ArrayList<Tuple> liveList = new ArrayList<Tuple>();
 		for (Tuple t : keystonelist){
-			if (b.stones[t.a][t.b].getStoneColour() == keystonecolour) liveList.add(new Tuple(t.a,t.b));
+			if (b.stones[t.a][t.b].getSC() == keystonecolour) liveList.add(new Tuple(t.a,t.b));
 		}
 		return liveList;
 	}

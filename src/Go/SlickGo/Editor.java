@@ -68,7 +68,8 @@ public class Editor extends BasicGameState {
 		SlickGo.drawButton(board.boardSize +220,board.TileSize +560,200,50,"Reset", g,SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +560,200,50,gc));
 		SlickGo.drawButton(board.boardSize ,board.TileSize +620,200,50,"Save", g,SlickGo.regionChecker(board.boardSize ,board.TileSize +620,200,50,gc));
 		SlickGo.drawButton(board.boardSize ,board.TileSize +680,200,50,"Menu", g,SlickGo.regionChecker(board.boardSize ,board.TileSize +680,200,50,gc));
-	
+		SlickGo.drawButton(board.boardSize +220,board.TileSize +680,90,50,"Undo", g ,SlickGo.regionChecker(board.boardSize +220 ,board.TileSize +680,90,50,gc));
+		SlickGo.drawButton(board.boardSize +330,board.TileSize +680,90,50,"Redo", g ,SlickGo.regionChecker(board.boardSize +330 ,board.TileSize +680,90,50,gc));
 
 
 	}
@@ -82,16 +83,38 @@ public class Editor extends BasicGameState {
 		int bx =  board.calulatePostionOnBoard(xpos-board.TileSize);
 		int by =  board.calulatePostionOnBoard(ypos-board.TileSize);
 		board.desc = desc.getText();
+		Stone currentKeystone = board.keystone;
 		if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))board.keystone = Stone.KEYWHITESTONE;
 		else board.keystone = Stone.KEYBLACKSTONE;
-
+		
+		if(currentKeystone != board.keystone) {
+            for (Tuple k:board.keystones){
+                board.stones[k.a][k.b]=board.keystone;
+            }
+            board.updateStringsFull();
+            board.checkForCaps(board.keystone,true);
+            board.checkForCaps(board.keystone.getEC(),true);
+		}
+		
+		if (input.isMousePressed(1)) {
+			if (SlickGo.withinBounds(bx,by)) print(bx+","+by);
+		}
+		
 		
 		if (input.isMousePressed(0)) {
 			if (SlickGo.withinBounds(bx,by)) {		
 				board.takeTurn(bx,by , true,false);
-				ArrayList<Tuple> e = new ArrayList<Tuple>();
-				print(board.getSafeStringsCount(board.placing,e));
-				print(e.size());
+				//ArrayList<Tuple> e = new ArrayList<Tuple>();
+				if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))Minimaxer.keystonecolour = Stone.WHITE;
+	    		else Minimaxer.keystonecolour = Stone.BLACK;
+				Evaluator evaluator = new Evaluator(board);
+				print(evaluator. evaluateCurrentBoard());
+
+				
+				//For the unconditional life check
+//				print(board.getSafeStringsCount(board.placing,e));
+//				print(e.size());
+				
 			}
 		
 
@@ -129,8 +152,21 @@ public class Editor extends BasicGameState {
 				board.turn = (board.blackFirst)? Stone.BLACK:Stone.WHITE;
 				board.placing = board.turn;					
 				SlickGo.mainBoard = Board.cloneBoard(board);
+				SlickGo.mainBoard.resetboard = Board.cloneBoard(board);
 				sbg.enterState(0);
 			}
+			
+			//Undo
+			if (SlickGo.regionChecker(board.boardSize +220,board.TileSize +680,90,50,gc) && board.undoBoard != null) {
+				board.undoBoard.redoBoard =  Board.cloneBoard(board);
+				board = Board.cloneBoard(board.undoBoard);
+			}
+			
+			//Redo
+			if (SlickGo.regionChecker(board.boardSize +330,board.TileSize +680,90,50,gc)&& board.redoBoard != null) {
+				board = Board.cloneBoard(board.redoBoard);
+			}
+			
 		}
 	}
 

@@ -100,6 +100,9 @@ public class Play extends BasicGameState {
 			gameMsg= "Ai Started";
 			makeComputerMove();}
 		
+		if (input.isMousePressed(1)) {
+			if (SlickGo.withinBounds(bx,by)) print(bx+","+by);
+		}
 		
 		if (input.isMousePressed(0)) {
 			//Place Stone
@@ -173,7 +176,7 @@ public class Play extends BasicGameState {
     	if (t1 != null && !t1.isAlive() && aiStarted) {
     		aiStarted=false;
         	if (k.choice != null) board.takeTurn(k.choice.a,k.choice.b , false,false);
-        	else winMsg= "AI says " + board.placing.getEnemyColour()+" Wins";
+        	else winMsg= "AI says " + board.placing.getEC()+" Wins";
 			gameMsg= "Ai Done";
 			afterMove();
     	}

@@ -38,15 +38,15 @@ public enum Stone {
     }
 
 
-    public Stone getStoneColour(){
+    public Stone getSC(){
         if( this == Stone.KEYBLACKSTONE )return Stone.BLACK;
         if( this == Stone.KEYWHITESTONE )return Stone.WHITE;
         return this;
     }
 
-    public Stone getEnemyColour(){
-        if( this.getStoneColour() == Stone.BLACK )return Stone.WHITE;
-        if( this.getStoneColour() == Stone.WHITE )return Stone.BLACK;
+    public Stone getEC(){
+        if( this.getSC() == Stone.BLACK )return Stone.WHITE;
+        if( this.getSC() == Stone.WHITE )return Stone.BLACK;
         return this;
     }
 
@@ -68,15 +68,15 @@ public enum Stone {
 	}
 	
 	public ArrayList<ArrayList<Tuple>> getSStrings(Board b){
-        if( this.getStoneColour() == Stone.BLACK )return b.bStoneStrings;
-        if( this.getStoneColour() == Stone.WHITE )return b.wStoneStrings;
+        if( this.getSC() == Stone.BLACK )return b.bStoneStrings;
+        if( this.getSC() == Stone.WHITE )return b.wStoneStrings;
         return null;
 		
 	}
 	
 	public ArrayList<Tuple> getCapList(Board b){
-        if( this.getStoneColour() == Stone.BLACK )return b.bCapStrings;
-        if( this.getStoneColour() == Stone.WHITE )return b.wCapStrings;
+        if( this.getSC() == Stone.BLACK )return b.bCapStrings;
+        if( this.getSC() == Stone.WHITE )return b.wCapStrings;
         return null;
 		
 	}

@@ -27,8 +27,8 @@ public class SlickGo extends StateBasedGame {
 	public static final int menu = 0;
 	public static final int play = 1;
 	public static final int editor = 2;
-	public static final int gcheigth = 1000;
-	public static final int gcwidth = 1200;
+	public static final int gcheigth = 1080;
+	public static final int gcwidth = 1600;
 	public static final int maxfps = 60;
 	public static Board mainBoard;
 	public static Menu menuI;
@@ -70,6 +70,7 @@ public class SlickGo extends StateBasedGame {
 
 		 appgc = new AppGameContainer(new SlickGo(gamename));
 		 appgc.setShowFPS(false);
+		 appgc.setDisplayMode(gcwidth, gcheigth, false);
 		 appgc.setDisplayMode(1280, 840, false);
 		 appgc.setTargetFrameRate(maxfps);
 		 appgc.setAlwaysRender(true);
@@ -163,8 +164,8 @@ public class SlickGo extends StateBasedGame {
             board.placing = board.turn;
             board.desc = desc.toString().replace("Description: ", "");
             board.updateStringsFull();
-            board.checkForCaps(board.turn);
-            board.checkForCaps(board.turn.getEnemyColour());
+            board.checkForCaps(board.turn,false);
+            board.checkForCaps(board.turn.getEC(),false);
             board.validMoves = board.getAllValidMoves();
             board.resetboard =Board.cloneBoard(board);
         	if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))Minimaxer.keystonecolour = Stone.WHITE;
