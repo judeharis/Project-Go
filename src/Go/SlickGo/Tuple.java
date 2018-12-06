@@ -70,12 +70,6 @@ class Tuple implements Comparable<Tuple>{
         return new Tuple(this.a, this.b);
     }
     
-//    public abstract class CustomComparator implements Comparator<Tuple> {
-//        @Override
-//        public int compare(Tuple o1, Tuple o2) {
-//            return o1.a > o2.b;
-//        }
-//    }
 
 	@Override
 	public int compareTo(Tuple t) {

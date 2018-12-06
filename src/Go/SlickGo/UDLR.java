@@ -2,7 +2,7 @@ package Go.SlickGo;
 
 
 public enum UDLR {
-	UP,DOWN,LEFT,RIGHT,NODIR;
+	UP,DOWN,LEFT,RIGHT,NODIR,HOR,VERT;
 	
 	public boolean isEmpty() {
 		if (this==NODIR) return true;

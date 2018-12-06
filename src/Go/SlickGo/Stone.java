@@ -81,5 +81,13 @@ public enum Stone {
 		
 	}
 	
+	public ArrayList<Tuple> getCappedList(Board b){
+        if( this.getSC() == Stone.BLACK )return b.bCappedStrings;
+        if( this.getSC() == Stone.WHITE )return b.wCappedStrings;
+        return null;
+		
+	}
+	
+	
 
 }

@@ -61,7 +61,7 @@ public class Minimaxer  implements Runnable{
 //			}
 //		}
 
-		if (Play.heuristic && depth>2) {
+		if (Play.heuristic && depth>1) {
 			Evaluator evaluator = new Evaluator(currentBoard,originalBoard,obCounts);
 
 			int retval =evaluator.evaluateCurrentBoard();
@@ -89,7 +89,7 @@ public class Minimaxer  implements Runnable{
 		        long ttend = System.nanoTime();
 		        Board.takeTurnTime += (ttend - ttstart );
 		        
-				if(depth==1  )print(depth + " " + t.clone());
+				if(depth==1)System.out.print(t.clone()+ " :");
 		    	ArrayList<Tuple> newSofar = Board.tupleArrayClone(soFar);
 		    	newSofar.add(t);
 //				print(newSofar);
@@ -100,11 +100,11 @@ public class Minimaxer  implements Runnable{
 		        	this.choice = t.clone();
 		        	if (returnscore == max)print("Living");
 		        	else if (returnscore == min)print("Dead");
-		        	else print("end:"+returnscore);
+		        	else print(returnscore);
 		        }else if (depth ==1) {
 		        	if (returnscore == max)print("Living");
 		        	else if (returnscore == min)print("Dead");
-		        	else print("end:"+returnscore);
+		        	else print(returnscore);
 		        }
 		        
 		        
@@ -134,7 +134,7 @@ public class Minimaxer  implements Runnable{
 				b.takeTurn(t.a,t.b,false,true);
 		        long ttend = System.nanoTime();
 		        Board.takeTurnTime += (ttend - ttstart );
-				if(depth==1  )print(depth + " " + t.clone());
+				if(depth==1)System.out.print(t.clone()+ " :");
 		    	ArrayList<Tuple> newSofar = Board.tupleArrayClone(soFar);
 		    	newSofar.add(t);
 //				print(newSofar);
@@ -143,11 +143,11 @@ public class Minimaxer  implements Runnable{
 		        	this.choice = t.clone();
 		        	if (returnscore == max)print("Living");
 		        	else if (returnscore == min)print("Dead");
-		        	else print("end:"+returnscore);
+		        	else print(returnscore);
 		        }else if (depth ==1) {
 		        	if (returnscore == max)print("Living");
 		        	else if (returnscore == min)print("Dead");
-		        	else print("end:"+returnscore);
+		        	else print(returnscore);
 		        }
 		        
 		        
@@ -178,6 +178,12 @@ public class Minimaxer  implements Runnable{
 	@Override
 	public void run() {
 			print("Ai Running");
+
+			if (Play.heuristic) {
+				Evaluator evaluator = new Evaluator(originalBoard,originalBoard,obCounts);
+				print("current board :" +evaluator.evaluateCurrentBoard());
+			}
+			
 			int i =1000000;
 	    	long start = System.nanoTime();
 	    	

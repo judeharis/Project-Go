@@ -139,6 +139,7 @@ public class Play extends BasicGameState {
 			//Start AI
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +500,200,50,gc)) ai=true;
 			
+			
 			//Stop AI
 			if (SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +500,200,50,gc) && aiStarted) {
 				if (k != null)k.exit = true;

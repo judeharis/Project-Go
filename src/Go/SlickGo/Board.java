@@ -42,6 +42,9 @@ public class Board{
     ArrayList<Tuple> keystones = new ArrayList<>();
     ArrayList<Tuple> bCapStrings = new ArrayList<Tuple>();
     ArrayList<Tuple> wCapStrings = new ArrayList<Tuple>();
+    
+    ArrayList<Tuple> bCappedStrings = new ArrayList<Tuple>();
+    ArrayList<Tuple> wCappedStrings = new ArrayList<Tuple>();
     ArrayList<Tuple> validMoves;
 
     ArrayList<ArrayList<Tuple>> bStoneStrings = new ArrayList<ArrayList<Tuple>>();
@@ -131,6 +134,8 @@ public class Board{
         wStoneStrings.clear();
         bCapStrings.clear();
         wCapStrings.clear();
+        bCappedStrings.clear();
+        wCappedStrings.clear();
         validMoves =getAllValidMoves();
         passing=false;
         ko = null;
@@ -152,6 +157,8 @@ public class Board{
     	nB.validMoves = tupleArrayClone(oB.validMoves);
     	nB.bCapStrings = tupleArrayClone(oB.bCapStrings);
     	nB.wCapStrings = tupleArrayClone(oB.wCapStrings);
+    	nB.bCappedStrings = tupleArrayClone(oB.bCappedStrings);
+    	nB.wCappedStrings = tupleArrayClone(oB.wCappedStrings);
     	nB.bStoneStrings = twoDTupleArrayClone(oB.bStoneStrings);
     	nB.wStoneStrings = twoDTupleArrayClone(oB.wStoneStrings);
     	nB.passing = oB.passing;
@@ -169,9 +176,13 @@ public class Board{
         	checkForCaps(Stone.BLACK,editormode);
         	checkForCaps(Stone.WHITE,editormode);
         	return false;
-        }
+        }else if (colour.getSC() == Stone.WHITE) bCappedStrings.clear();
+        else wCappedStrings.clear();
+   
+
         ArrayList<Tuple> capString =  (colour== Stone.WHITE ? bCapStrings:  wCapStrings);
         ArrayList<ArrayList<Tuple>> stoneStrings = (colour== Stone.WHITE ? bStoneStrings: wStoneStrings);
+        ArrayList<Tuple> cappedStrings = (colour== Stone.WHITE ? bCappedStrings: wCappedStrings);
         capString.clear();
         boolean anyCap = false;
         for (ArrayList<Tuple> tlist : stoneStrings){
@@ -185,7 +196,9 @@ public class Board{
                 capString.add(needList.get(0));
                 if (needList.get(0).equals(maybeko) && tlist.size() == 1) ko = maybeko;}
             else if(needList.size()==0){
+                cappedStrings.addAll(tlist);
                 removeStonesOnBoard(tlist,editormode);
+
                 anyCap=true;
                 if(tlist.size() == 1) maybeko= new Tuple(tlist.get(0).a,tlist.get(0).b);}
         }
