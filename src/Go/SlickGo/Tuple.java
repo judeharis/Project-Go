@@ -3,9 +3,9 @@ import static  Go.SlickGo.UDLR.*;
 
 import java.util.ArrayList;
 
-class Tuple implements Comparable<Tuple>{
-    int a;
-    int b;
+public class Tuple implements Comparable<Tuple>{
+    public int a;
+    public int b;
     Tuple(int a, int b){
         this.a=a;
         this.b=b;

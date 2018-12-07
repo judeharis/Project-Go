@@ -86,12 +86,12 @@ public class Board{
         else if (passing) {
         	passing=false;
         	moveMade=true;
-        	removeKo();
         	if (!check) {
         		print(turn + " passed");
         	    undoBoard = cloneBoard(this);
         	    redoBoard = null;
         	}
+        	removeKo();
         	turn = turn.getEC();
         	}
         else print("Out of bound");
@@ -415,6 +415,11 @@ public class Board{
     	
     }
     
+    public boolean withinBounds(Tuple t){
+    	if(t.a <= 18 && t.a>=0 && t.b <= 18 && t.b>=0) return true;
+    	return false;
+    	
+    }
  
     
 
