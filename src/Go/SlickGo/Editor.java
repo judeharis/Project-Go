@@ -3,6 +3,9 @@ package Go.SlickGo;
 
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
@@ -109,6 +112,28 @@ public class Editor extends BasicGameState {
 	    		else Minimaxer.keystonecolour = Stone.BLACK;
 				Evaluator evaluator = new Evaluator(board);
 				print(evaluator. evaluateCurrentBoard());
+				
+				PatternSearcher ps = new PatternSearcher(board,Stone.BLACK);
+				
+				Pattern l1 = new Pattern(0,0,Stone.BLACK,false,false,false);
+				Pattern l2 = new Pattern(0,-1,Stone.BLACK,false,true,false);
+				Pattern l3 = new Pattern(0,1,Stone.BLACK,false,false,false);
+				Pattern l4 = new Pattern(0,2,Stone.BLACK,false,false,false);
+				Pattern l5 = new Pattern(0,3,Stone.BLACK,false,true,false);
+
+
+				ArrayList<Pattern> pattern2 = Pattern.stringToPattern("-o/-xxx-", Stone.BLACK);
+				
+				ArrayList<Pattern> pattern = new ArrayList<Pattern>(Arrays.asList(l1,l2,l3,l4,l5));
+
+				for (ArrayList<Tuple> sstring : Stone.BLACK.getSStrings(board)) {
+					if (!sstring.isEmpty()) {
+						//ps.stringMatch(sstring, pattern);
+						ps.stringMatch(sstring, pattern2);
+
+					}
+				}
+
 
 				
 				//For the unconditional life check
