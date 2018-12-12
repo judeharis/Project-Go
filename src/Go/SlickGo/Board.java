@@ -367,10 +367,11 @@ public class Board{
             }
         }
         
-        for (Tuple t :validMoves){
-        	drawoval(g,(t.a+1)*TileSize,(t.b+1)*TileSize,new Color(0f,1f,0f,.5f ),false);
-        }
-    	
+        if(!editormode) {
+	        for (Tuple t :validMoves){
+	        	drawoval(g,(t.a+1)*TileSize,(t.b+1)*TileSize,new Color(0f,1f,0f,.5f ),false);
+	        }
+    	}
     	
     	
     }
@@ -617,6 +618,33 @@ public class Board{
 		
 	}
 
+	
+	
+	public boolean checkStringSafetyv2(ArrayList<Tuple> list,Stone colour) {
+		Board checkBoard = cloneBoard(this);
+		checkBoard.turn = colour.getEC();
+		ArrayList<Tuple> vMoves = checkBoard.getAllValidMoves();
+		checkBoard.removeKo();
+		while (!vMoves.isEmpty()) {
+			for (Tuple t: vMoves) {
+				checkBoard.stones[t.a][t.b]= colour.getEC();
+				
+			}
+			checkBoard.removeKo();
+			checkBoard.updateStringsFull();
+			checkBoard.checkForCaps(colour.getEC(), false);
+			checkBoard.checkForCaps(colour,false);
+
+
+			vMoves = checkBoard.getAllValidMoves();
+		}
+		
+		if(colour.getSStrings(checkBoard).contains(list)) return true;
+		
+		return false;
+	}
+	
+	
 	public boolean isAdjacentAll(Tuple t,Stone colour) {
 		ArrayList<Tuple> adj = getAdjacent(t.a,t.b);
 		for(Tuple l : adj) {
@@ -699,6 +727,51 @@ public class Board{
         capstring.removeAll(l);
         return capstring;
     }
+    
+    public void flip() {
+	    undoBoard = cloneBoard(this);
+	    redoBoard = null;
+    	Board nB = cloneBoard(this);
+        for(int i=0; i<stones.length; i++) {
+            for(int j=0; j<stones[i].length; j++) {
+            	nB.stones[j][18-i]= this.stones[j][i];
+            }
+        }
+        ArrayList<Tuple> nkeystones = new ArrayList<Tuple>();
+        for(Tuple t:keystones) {
+        	nkeystones.add(new Tuple(t.a,18-t.b));
+        }
+        keystones = nkeystones;
+        if(ko!=null)ko= new Tuple(ko.a,18-ko.b);
+        stones = nB.stones;
+        updateStringsFull();
+        checkForCaps(turn.getSC(),true);
+        checkForCaps(turn.getEC(),true);
+        validMoves =getAllValidMoves();
+    }
+    
+    public void rotate() {
+	    undoBoard = cloneBoard(this);
+	    redoBoard = null;
+    	Board nB = cloneBoard(this);
+        for(int i=0; i<stones.length; i++) {
+            for(int j=0; j<stones[i].length; j++) {
+            	nB.stones[i][18-j]= this.stones[j][i];
+            }
+        }
+        ArrayList<Tuple> nkeystones = new ArrayList<Tuple>();
+        for(Tuple t:keystones) {
+        	nkeystones.add(new Tuple(t.b,18-t.a));
+        }
+        keystones = nkeystones;
+        if(ko!=null)ko= new Tuple(ko.b,18-ko.a);
+        stones = nB.stones;
+        updateStringsFull();
+        checkForCaps(turn.getSC(),true);
+        checkForCaps(turn.getEC(),true);
+        validMoves =getAllValidMoves();
+    }
+    
     
     public ArrayList<Tuple> getNeedList(ArrayList<Tuple> sstring,Stone enemycolour) {
     	ArrayList<Tuple> needList = new ArrayList<Tuple>();

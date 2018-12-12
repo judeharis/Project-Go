@@ -73,6 +73,9 @@ public class Editor extends BasicGameState {
 		SlickGo.drawButton(board.boardSize ,board.TileSize +680,200,50,"Menu", g,SlickGo.regionChecker(board.boardSize ,board.TileSize +680,200,50,gc));
 		SlickGo.drawButton(board.boardSize +220,board.TileSize +680,90,50,"Undo", g ,SlickGo.regionChecker(board.boardSize +220 ,board.TileSize +680,90,50,gc));
 		SlickGo.drawButton(board.boardSize +330,board.TileSize +680,90,50,"Redo", g ,SlickGo.regionChecker(board.boardSize +330 ,board.TileSize +680,90,50,gc));
+		SlickGo.drawButton(board.boardSize +220,board.TileSize +620,90,50,"Rotate", g ,SlickGo.regionChecker(board.boardSize +220 ,board.TileSize +620,90,50,gc));
+		SlickGo.drawButton(board.boardSize +330,board.TileSize +620,90,50,"Flip", g ,SlickGo.regionChecker(board.boardSize +330 ,board.TileSize +620,90,50,gc));
+
 
 
 	}
@@ -95,8 +98,9 @@ public class Editor extends BasicGameState {
                 board.stones[k.a][k.b]=board.keystone;
             }
             board.updateStringsFull();
-            board.checkForCaps(board.keystone,true);
+            board.checkForCaps(board.keystone.getSC(),true);
             board.checkForCaps(board.keystone.getEC(),true);
+            board.placing= board.placing.getSC();
 		}
 		
 		if (input.isMousePressed(1)) {
@@ -115,30 +119,21 @@ public class Editor extends BasicGameState {
 				
 				PatternSearcher ps = new PatternSearcher(board,Stone.BLACK);
 				
-				Pattern l1 = new Pattern(0,0,Stone.BLACK,false,false,false);
-				Pattern l2 = new Pattern(0,-1,Stone.BLACK,false,true,false);
-				Pattern l3 = new Pattern(0,1,Stone.BLACK,false,false,false);
-				Pattern l4 = new Pattern(0,2,Stone.BLACK,false,false,false);
-				Pattern l5 = new Pattern(0,3,Stone.BLACK,false,true,false);
 
 
 				ArrayList<Pattern> pattern2 = Pattern.stringToPattern("-o/-xxx-", Stone.BLACK);
-				
-				ArrayList<Pattern> pattern = new ArrayList<Pattern>(Arrays.asList(l1,l2,l3,l4,l5));
+				ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxrozlo", Stone.BLACK);
 
 				for (ArrayList<Tuple> sstring : Stone.BLACK.getSStrings(board)) {
 					if (!sstring.isEmpty()) {
-						//ps.stringMatch(sstring, pattern);
+
+						ps.stringMatch(sstring, pattern);
 						ps.stringMatch(sstring, pattern2);
 
 					}
 				}
 
 
-				
-				//For the unconditional life check
-//				print(board.getSafeStringsCount(board.placing,e));
-//				print(e.size());
 				
 			}
 		
@@ -190,6 +185,17 @@ public class Editor extends BasicGameState {
 			//Redo
 			if (SlickGo.regionChecker(board.boardSize +330,board.TileSize +680,90,50,gc)&& board.redoBoard != null) {
 				board = Board.cloneBoard(board.redoBoard);
+			}
+			
+			
+			//Rotate
+			if (SlickGo.regionChecker(board.boardSize +220,board.TileSize +620,90,50,gc)) {
+				board.rotate();
+			}
+			
+			//Flip
+			if (SlickGo.regionChecker(board.boardSize +330,board.TileSize +620,90,50,gc)) {
+				board.flip();
 			}
 			
 		}

@@ -35,6 +35,9 @@ public class HeuristicsRunner {
 		SideThreeGap sideThreeGap= new SideThreeGap(e);
 		retval += sideThreeGap.evaluate(sstring);
 		
+		SideFourGap sideFourGap= new SideFourGap(e);
+		retval += sideFourGap.evaluate(sstring);
+		
 		SideFiveGap sideFiveGap= new SideFiveGap(e);
 		retval += sideFiveGap.evaluate(sstring);
 		

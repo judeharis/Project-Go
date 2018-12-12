@@ -90,10 +90,10 @@ public class Evaluator {
 			ArrayList<Tuple> cBsstring = cB.checkForStrings(t.a, t.b, kscolour.getSStrings(cB));
 			if (!cBsstring.isEmpty()) {
 
-				ArrayList<Tuple> e = new ArrayList<Tuple>();
-				if (cB.checkStringSafety(cBsstring, kscolour, e) == 1)
-					retval += 1000000;
-				retval += e.size() * 500;
+
+//				if (cB.checkStringSafety(cBsstring, kscolour, e) == 1)retval += 1000000;
+				if (cB.checkStringSafetyv2(cBsstring, kscolour))retval += 1000000;
+
 				ArrayList<Tuple> cBneedList = cB.getNeedList(cBsstring, kscolour.getEC());
 				retval += cBneedList.size() * 20;
 				for (Tuple k : cBneedList) {
