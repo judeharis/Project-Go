@@ -3,7 +3,6 @@ package Go.SlickGo;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 import static Go.SlickGo.UDLR.*;
 
 
@@ -80,12 +79,11 @@ public class PatternSearcher {
 			
 		}
 		
-//		print(match);
+
 		ArrayList<Tuple> ret= new ArrayList<Tuple>(); 
 		
 		for(Tuple t :match)if(b.withinBounds(t)&&b.stones[t.a][t.b].getSC() == colour)ret.add(t);
-//		print(ret);
-//		if(retDir!=null)retDir[0]=foundNum;
+
 		
 		return ret;
 	}
@@ -178,7 +176,7 @@ public class PatternSearcher {
 	}
 	
 
-	boolean isCorner(Tuple t) {
+	public boolean isCorner(Tuple t) {
 	    if(t.a == 0 && t.b==0) return true;
 	    if(t.a == 18 && t.b==0) return true;
 	    if(t.a == 0 && t.b==18) return true;

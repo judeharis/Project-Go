@@ -30,8 +30,6 @@ public class Pattern {
 	
 	public static ArrayList<Pattern> stringToPattern(String string,Stone colour) {
 		ArrayList<Pattern> p = new ArrayList<Pattern>();
-//		String s = "_-----------------X/------------------x/----------------e*x/";
-//		string=s;
 		String negatives="";
 		int i=0;
 		int x=0;

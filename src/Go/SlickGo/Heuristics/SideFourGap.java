@@ -48,17 +48,61 @@ public class SideFourGap implements HeuristicI {
 			if (e.isEnemy(S3) && e.isEnemy(S4))retval -= 500;
 			
 			
-//			retval += 1000;
-//			if (e.isThere(S2) && e.isThere(S5))retval -= 1000;
-//			else if (e.isThere(S2) || e.isThere(S5))retval -= 500;
-//			if (e.isThere(S3) && e.isThere(S4))retval += 500;
-//			else if (e.isThere(S3) || e.isThere(S4))retval += 500;
-//			
-//			if (e.isEnemy(S3) || e.isEnemy(S4))retval -= 500;
-//			if (e.isEnemy(S3) && e.isEnemy(S4))retval -= 1000;
+
+			return retval;
+		}
+		
+		pattern = Pattern.sToPv2("xrxrxrxrxrxzdxdS", Stone.BLACK);
+		bar6 =ps.stringMatch(sstring, pattern);
+		
+		if (!bar6.isEmpty()) {
+			boolean diagSide= ps.dirSideToBool();
+			UDLR side = ps.dirNumToDir();
+			Tuple S1 = bar6.get(0).side(side);
+			Tuple S2 = S1.side(side.diag(diagSide));
+			Tuple S3 = S2.side(side.diag(diagSide));
+			Tuple S4 = S3.side(side.diag(diagSide));
+			Tuple S5 = S4.side(side.diag(diagSide));
+			Tuple S6 = S5.side(side.diag(diagSide));
+
+			if (e.isThere(S5)) return 0;
+			if (e.isEnemy(S3))retval -= 100;
+			if (e.isEnemy(S6))retval -= 120;
+			if (e.isEnemy(S3) && e.isThere(S4))retval += 500;
+			if (e.isEnemy(S4) && e.isThere(S3))retval += 1000;
+			
+
+			if (e.isEnemies(S3,S6) && e.isThere(S4))retval -= 1100;
+			
+
 			
 			return retval;
 		}
+		
+		
+		pattern = Pattern.sToPv2("xrxrxdxurxrxrxddS", Stone.BLACK);
+		bar6 =ps.stringMatch(sstring, pattern);
+		
+		if (!bar6.isEmpty()) {
+			boolean diagSide= ps.dirSideToBool();
+			UDLR side = ps.dirNumToDir();
+			Tuple S1 = bar6.get(0).side(side);
+			Tuple S2 = S1.side(side.diag(diagSide));
+			Tuple S3 = S2.side(side.diag(diagSide));
+			Tuple S4 = S3.side(side.diag(diagSide));
+			Tuple S5 = S4.side(side.diag(diagSide));
+			Tuple S6 = S5.side(side.diag(diagSide));
+
+			
+			if (e.isEnemies(S1))retval -= 120;
+			if (e.isEnemies(S6))retval -= 100;
+			
+			if (e.isEnemies(S5,S6))retval -= 200;
+			
+			
+			return retval;
+		}
+		
 		
 		return retval;
 

@@ -67,7 +67,7 @@ public class SideFiveGap implements HeuristicI {
 			Tuple S4 = S3.side(side.diag(diagSide));
 			Tuple S5 = S4.side(side.diag(diagSide));
 			Tuple S6 = S5.side(side.diag(diagSide));
-			Tuple S7 = S6.side(side.diag(diagSide));
+
 
 
 

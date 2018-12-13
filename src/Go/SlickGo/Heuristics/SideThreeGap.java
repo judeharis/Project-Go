@@ -60,9 +60,14 @@ public class SideThreeGap implements HeuristicI {
 			Tuple S1 = bar5.get(0).side(side);
 			Tuple S2 = S1.side(side.diag(diagSide));
 			Tuple S3 = S2.side(side.diag(diagSide));
-
+			Tuple S4 = S3.side(side.diag(diagSide));
+			retval +=150;
 			if (e.isThere(S3))retval += 10000;
-			if (e.isEnemy(S3))retval -= 200;
+			if (e.isEnemy(S3))retval -= 300;
+			
+			if (e.isThere(S2))retval -= 300;
+			if (e.isThere(S4))retval -= 300;
+			
 			return retval;
 		}
 		
@@ -79,8 +84,11 @@ public class SideThreeGap implements HeuristicI {
 			Tuple S5 = S4.side(side.diag(diagSide));
 
 			if (e.isTheres(S1,S5))retval += 10000;
-			if (e.isEnemy(S1) && e.isThere(S5))retval -= 200;
-			if (e.isEnemy(S5) && e.isThere(S1))retval -= 200;
+			if (e.isEnemy(S1) && e.isThere(S5))retval -= 300;
+			if (e.isEnemy(S5) && e.isThere(S1))retval -= 300;
+			
+			if (e.isThere(S5))retval += 100;
+			if (e.isThere(S1))retval += 100;
 			return retval;
 		}
 		

@@ -630,11 +630,11 @@ public class Board{
 				checkBoard.stones[t.a][t.b]= colour.getEC();
 				
 			}
-			checkBoard.removeKo();
+
 			checkBoard.updateStringsFull();
 			checkBoard.checkForCaps(colour.getEC(), false);
 			checkBoard.checkForCaps(colour,false);
-
+			checkBoard.removeKo();
 
 			vMoves = checkBoard.getAllValidMoves();
 		}
