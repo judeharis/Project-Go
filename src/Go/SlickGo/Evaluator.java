@@ -25,48 +25,9 @@ public class Evaluator {
 		this.oBCounts = null;
 	}
 
-	// Useless
-/*	public int evaluateBoard() {
-		int retval = 0;
-		int mult = 0;
-		Stone kscolour = Minimaxer.keystonecolour;
-		Stone colour = oB.turn;
-		ArrayList<Tuple> obAtariList = kscolour == Stone.WHITE ? oB.wCapStrings : oB.bCapStrings;
-		ArrayList<Tuple> cbAtariList = kscolour == Stone.WHITE ? cB.wCapStrings : cB.bCapStrings;
 
-		Tuple cbCounts = Evaluator.countStone(colour, cB.stones);
-		ArrayList<Tuple> cEyes = new ArrayList<Tuple>();
-		ArrayList<Tuple> oEyes = new ArrayList<Tuple>();
-		int cSafeStrings = cB.getSafeStringsCount(kscolour, cEyes);
-		int oSafeStrings = oB.getSafeStringsCount(kscolour, oEyes);
-		int eyeDifference = (cEyes.size() - oEyes.size());
-
-		if (colour == kscolour)
-			mult = 1;
-		else
-			mult = -1;
-
-		retval += (eyeDifference) * (-200) * mult;
-		retval += (cSafeStrings - oSafeStrings) * 400 * mult;
-
-		// Check if keyStone is in Safety
-
-		// if current board stone - original board stone count
-		retval += (cbCounts.a - oBCounts.a) * 100 * mult;
-
-		// if current board stone - original board stone count
-		retval += (oBCounts.b - cbCounts.b) * 80 * mult;
-
-		// if current board stone - current board enemy stone count
-		retval += (cbCounts.a - cbCounts.b) * 50 * mult;
-
-		// if more atari's than when started
-		retval += (obAtariList.size() - cbAtariList.size()) * (200 * mult);
-
-		return retval;
-	}*/
-
-	public int evaluateCurrentBoard() {
+	//old
+	public int evaluateCurrentBoardOld() {
 		int retval = 0;
 
 		ArrayList<Tuple> cbAtariList = kscolour.getCapList(cB);
@@ -74,34 +35,32 @@ public class Evaluator {
 		Tuple cbCounts = countStone(kscolour, cB.stones);
 		if (numberOfStrings != 0 && cbAtariList.size() != 0)
 			retval += cbAtariList.size() * (cbAtariList.size() / numberOfStrings) * (-300);
-		
+
 
 		if (cB.ko != null)retval += 500;
-		
+
 		retval -= invalidInNeedList(enemycolour.getSStrings(cB),kscolour);
 		retval += invalidInNeedList(kscolour.getSStrings(cB),enemycolour);
 
-		
 
 		retval += cbCounts.a * 5;
 		retval += cbCounts.b * -5;
-		
+
 		for (Tuple t : cB.keystones) {
 			ArrayList<Tuple> cBsstring = cB.checkForStrings(t.a, t.b, kscolour.getSStrings(cB));
 			if (!cBsstring.isEmpty()) {
 
 
-//				if (cB.checkStringSafety(cBsstring, kscolour, e) == 1)retval += 1000000;
-				if (cB.checkStringSafetyv2(cBsstring, kscolour))retval += 1000000;
+				if (cB.checkStringSafetyv2(cBsstring, kscolour))return Integer.MAX_VALUE;
 
 				ArrayList<Tuple> cBneedList = cB.getNeedList(cBsstring, kscolour.getEC());
 				retval += cBneedList.size() * 20;
 				for (Tuple k : cBneedList) {
 					if (cB.stones[k.a][k.b] == Stone.INVALID)
-						retval += 1000000;
+						return Integer.MAX_VALUE;
 				}
-				
-				HeuristicsRunner hrunner= new HeuristicsRunner(cB , this,cBsstring); 
+
+				HeuristicsRunner hrunner= new HeuristicsRunner(cB , this,cBsstring);
 				retval += hrunner.runHeuristics();
 
 			}
@@ -109,20 +68,47 @@ public class Evaluator {
 
 
 
-		
+
 		getStringMap(kscolour, cB.stones, true);
 
 
 		return retval;
 
 	}
-	
+
+
+
+	public  int evaluateCurrentBoard() {
+		int retval = 0;
+
+
+		if (cB.ko != null)retval += 500;
+
+		for (Tuple t : cB.keystones) {
+			ArrayList<Tuple> cBsstring = cB.checkForStrings(t.a, t.b, kscolour.getSStrings(cB));
+			if (!cBsstring.isEmpty()) {
+
+
+				if (cB.checkStringSafetyv2(cBsstring, kscolour))return Integer.MAX_VALUE;
+				ArrayList<Tuple> cBneedList = cB.getNeedList(cBsstring, kscolour.getEC());
+				for (Tuple k : cBneedList)if (cB.stones[k.a][k.b] == Stone.INVALID)return Integer.MAX_VALUE;
+				
+
+				HeuristicsRunner hrunner= new HeuristicsRunner(cB , this,cBsstring);
+				retval += hrunner.runHeuristics();
+
+			}
+		}
+
+		return retval;
+	}
+
 
 /*	public int sixDiesEightLives(ArrayList<Tuple> sstring) {
 		int retval = 0;
 		ArrayList<Tuple> bar6 = checkStringForBar(sstring, 6,1);
 		if (!bar6.isEmpty())retval += barEval6(bar6, sstring, 6);
-		
+
 //		ArrayList<Tuple> bar7 = checkStringForBar(sstring, 7);
 //		ArrayList<Tuple> bar8 = checkStringForBar(sstring, 8);
 //		if (!bar7.isEmpty())
@@ -130,7 +116,7 @@ public class Evaluator {
 //
 //		if (!bar8.isEmpty())
 //			retval += barEval(bar8, sstring, 8);
-		
+
 		return retval;
 
 	}
@@ -150,7 +136,7 @@ public class Evaluator {
 
 		return retval;
 	}
-	
+
 	public int sideTwoGap(ArrayList<Tuple> sstring) {
 		int retval = 0;
 		ArrayList<Tuple> bar4 = checkStringForBar(sstring, 4,1);
@@ -169,7 +155,7 @@ public class Evaluator {
 
 		return retval;
 	}
-	
+
 	public int sideThreeGap(ArrayList<Tuple> sstring) {
 		int retval=0;
 		ArrayList<Tuple> bar5 = checkStringForBar(sstring, 5,1);
@@ -189,7 +175,7 @@ public class Evaluator {
 				}}}
 		return retval;
 	}
-		
+
 	public int sideFiveGap(ArrayList<Tuple> sstring) {
 		int retval=0;
 		ArrayList<Tuple> bar7 = checkStringForBar(sstring, 7,1);
@@ -216,10 +202,10 @@ public class Evaluator {
 				}}}
 		return retval;
 	}
-*/	
+*/
 
-	
-	
+
+
 	public ArrayList<Tuple> checkStringForBar(ArrayList<Tuple> sstring, int barlength,int distFromSide) {
 
 		Collections.sort(sstring);
@@ -277,14 +263,14 @@ public class Evaluator {
 		boolean vert = (barOrien(sstring)==VERT);
 		boolean hor = (barOrien(sstring)==HOR);
 		Tuple t= sstring.get(1);
-		
+
 		if(vert) {
 			if (t.a - d == 0 && (t.b != 0 || t.b != 18))
 				return LEFT;
 			if (t.a + d == 18 && (t.b != 0 || t.b != 18))
 				return RIGHT;
 		}
-		
+
 		if(hor) {
 			if (t.b - d == 0 && (t.a != 0 || t.a != 18))
 				return UP;
@@ -293,7 +279,7 @@ public class Evaluator {
 		}
 		return NODIR;
 	}
-	
+
 	public UDLR barOrien(ArrayList<Tuple> sstring) {
 		if(sstring.size()>1) {
 			if(sstring.get(0).a == sstring.get(sstring.size()-1).a) return VERT;
@@ -323,26 +309,26 @@ public class Evaluator {
 		if(!cB.withinBounds(t)) return false;
 		return cB.stones[t.a][t.b].getSC() == kscolour.getEC();
 	}
-	
+
 	public boolean capped(Tuple t) {
 		return kscolour.getCappedList(cB).contains(t);
 	}
 
-	
+
 	public boolean isEnemies(Tuple...ts) {
 		for (Tuple t :ts){
 			if (!isEnemy(t)) return false;
 		}
 		return true;
 	}
-	
+
 	public boolean isTheres(Tuple...ts) {
 		for (Tuple t :ts){
 			if (!isThere(t)) return false;
 		}
 		return true;
 	}
-	
+
 	public boolean ecapped(Tuple t) {
 		return enemycolour.getCappedList(cB).contains(t);
 	}
@@ -373,7 +359,7 @@ public class Evaluator {
 	public void print(Object o) {
 		System.out.println(o);
 	}
-	
+
 	public int invalidInNeedList(ArrayList<ArrayList<Tuple>> colourStrings, Stone enemycolour) {
 		int retval =0;
 		for (ArrayList<Tuple> sstring :colourStrings ) {

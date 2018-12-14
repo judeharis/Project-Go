@@ -66,8 +66,8 @@ public class SideFourGap implements HeuristicI {
 			Tuple S6 = S5.side(side.diag(diagSide));
 
 			if (e.isThere(S5)) return 0;
-			if (e.isEnemy(S3))retval -= 100;
-			if (e.isEnemy(S6))retval -= 120;
+			if (e.isEnemy(S3))retval -= 95;
+			if (e.isEnemy(S6))retval -= 100;
 			if (e.isEnemy(S3) && e.isThere(S4))retval += 500;
 			if (e.isEnemy(S4) && e.isThere(S3))retval += 1000;
 			

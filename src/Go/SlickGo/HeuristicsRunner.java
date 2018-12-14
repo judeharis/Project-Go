@@ -20,10 +20,21 @@ public class HeuristicsRunner {
 	public int runHeuristics(){
 		int retval =0;
 		
-		SixDiesEightLives sixDiesEightLives= new SixDiesEightLives(e);
-		retval += sixDiesEightLives.evaluate(sstring);
-//		SixDiesEightLives2 sixDiesEightLives2= new SixDiesEightLives2(e);
-//		retval += sixDiesEightLives2.evaluate(sstring);
+		
+		SixDie sixDie= new SixDie(e);
+		retval += sixDie.evaluate(sstring);
+		
+		
+		SevenUnsettled sevenUnsettled= new SevenUnsettled(e);
+		retval += sevenUnsettled.evaluate(sstring);
+		
+		LineTwoSideEscape lineTwoSideEscape= new LineTwoSideEscape(e);
+		retval += lineTwoSideEscape.evaluate(sstring);
+		
+		
+//		SixDiesEightLives sixDiesEightLives= new SixDiesEightLives(e);
+//		retval += sixDiesEightLives.evaluate(sstring);
+		
 		
 		
 		SideOneGap sideOneGap= new SideOneGap(e);

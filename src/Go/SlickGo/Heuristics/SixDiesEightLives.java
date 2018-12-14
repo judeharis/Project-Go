@@ -25,8 +25,8 @@ public class SixDiesEightLives implements HeuristicI {
 		ps = new PatternSearcher(e.cB,e.kscolour);
 
 		
-		ArrayList<Tuple> bar6 = e.checkStringForBar(sstring, 6,1);
-		if (!bar6.isEmpty())retval += barEval6(bar6, sstring, 6);
+//		ArrayList<Tuple> bar6 = e.checkStringForBar(sstring, 6,1);
+//		if (!bar6.isEmpty())retval += barEval6(bar6, sstring, 6);
 		
 
 //		ArrayList<Tuple> bar8 = checkStringForBar(sstring, 8);
