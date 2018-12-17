@@ -24,7 +24,7 @@ public class Play extends BasicGameState {
 	boolean ai = false;
 	int aicounter;
 	Thread t1;
-	Minimaxer k;
+	MoveFinder k;
 	boolean aiStarted = false;
 	boolean turnOffComputer = false;
 	static boolean heuristic = true;
@@ -86,13 +86,6 @@ public class Play extends BasicGameState {
 		int bx =  board.calulatePostionOnBoard(xpos-board.TileSize);
 		int by =  board.calulatePostionOnBoard(ypos-board.TileSize);
 
-		
-//		if(ai)aicounter++;
-//		if(aicounter==60) {	
-//			aicounter=0;
-//			ai=false;
-//			makeComputerMove();
-//		}else if(aicounter == 1) gameMsg= "Ai Started";
 		
 		
 		if(ai) {
@@ -195,15 +188,15 @@ public class Play extends BasicGameState {
 	
 	
 	public void afterMove() {
-		   ArrayList<Tuple> liveList = Minimaxer.keyStoneRemaining(board,board.keystones);
+		   ArrayList<Tuple> liveList = MoveFinder.keyStoneRemaining(board,board.keystones);
 	        
-	        liveList = Minimaxer.keyStoneRemaining(board,board.keystones);
-		    if ((liveList.isEmpty() && !board.capToWin) || (board.validMoves.isEmpty() &&board.capToWin && board.turn != Minimaxer.keystonecolour)) {
+	        liveList = MoveFinder.keyStoneRemaining(board,board.keystones);
+		    if ((liveList.isEmpty() && !board.capToWin) || (board.validMoves.isEmpty() &&board.capToWin && board.turn != MoveFinder.keystonecolour)) {
 		    	winMsg= (board.blackFirst?"Black":"White") + " Lost";
 		    	//gameOver=true;
 		    }
 		    
-		    if ((liveList.isEmpty() && board.capToWin) || (board.validMoves.isEmpty() && !board.capToWin && board.turn != Minimaxer.keystonecolour)) {
+		    if ((liveList.isEmpty() && board.capToWin) || (board.validMoves.isEmpty() && !board.capToWin && board.turn != MoveFinder.keystonecolour)) {
 		    	winMsg= (board.blackFirst?"Black":"White") + " Won";
 		    	//gameOver=true;
 		    }
@@ -212,10 +205,10 @@ public class Play extends BasicGameState {
 	}
 	
 	public void makeComputerMove() {
-		ArrayList<Tuple> liveList = Minimaxer.keyStoneRemaining(board,board.keystones);
+		ArrayList<Tuple> liveList = MoveFinder.keyStoneRemaining(board,board.keystones);
 		winMsg="";
         if (!liveList.isEmpty()) {
-        	k = new Minimaxer(board,board.keystones);
+        	k = new MoveFinder(board,board.keystones);
         	t1 = new Thread(k,"t1");
         	t1.start(); 
         	aiStarted= true;}

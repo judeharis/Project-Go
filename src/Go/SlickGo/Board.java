@@ -22,7 +22,7 @@ public class Board{
 	static long[] arrayTimes = new long[10];
 	static float takeTurnTime = 0;
 	String desc ="No Problem Loaded";
-
+	String boardString;
 
 	
 	
@@ -111,12 +111,48 @@ public class Board{
 
         validMoves =getAllValidMoves();
 //        if (editormode && !validMoves.isEmpty())print(removeBadMovess(placing));
-
+        boardString = boardToString();
         return moveMade;
 
     }
 
+    public String boardToString() {
+    	StringBuilder s = new StringBuilder();
+        for(int i=0; i<stones.length; i++) {
+            for(int j=0; j<stones[i].length; j++) {
+                switch (stones[j][i]) {
+                    case BLACK: s.append("| x ") ;
+                        break;
 
+                    case WHITE:  s.append("| o ") ;
+                        break;
+
+                    case VALID:  s.append("| + ") ;
+                        break;
+
+                    case INVALID:   s.append("| - ") ;
+                        break;
+
+                    case KEYBLACKSTONE: s.append("| X ") ;
+                        break;
+
+                    case KEYWHITESTONE:  s.append("| O ") ;
+                        break;
+
+                    case KO: s.append("| K ") ;
+                        break;
+
+                    case EMPTY: break;
+                }
+            }
+            s.append("|\r\n") ;
+
+        }
+        return s.toString();
+    	
+    }
+    
+    
     public void initBoard(boolean editormode){
         for(int i=0; i<stones.length; i++) {
             for(int j=0; j<stones[i].length; j++) {
@@ -186,7 +222,7 @@ public class Board{
         capString.clear();
         boolean anyCap = false;
         for (ArrayList<Tuple> tlist : stoneStrings){
-            ArrayList<Tuple> capList = getCaptureStringFor(tlist);
+            ArrayList<Tuple> capList = getLibs(tlist,true);
             ArrayList<Tuple> needList = new ArrayList<Tuple>();
             for (Tuple t : capList){
                 if (stones[t.a][t.b].getSC()!=colour.getSC()) needList.add(t);
@@ -252,7 +288,7 @@ public class Board{
         ArrayList<Tuple> capString =  turn.getSC()== Stone.BLACK ? wCapStrings: bCapStrings;
         ArrayList<Tuple> goodMoves = tupleArrayClone(validMoves);
         for (ArrayList<Tuple> tlist : stoneStrings){
-        	ArrayList<Tuple> needList = getNeedList(tlist,turn.getEC());
+        	ArrayList<Tuple> needList = getNeedList(tlist,turn.getEC(),true);
         	if (needList.size() == 2) {
         		for (Tuple t : needList ) {
         			boolean toBreak = false;
@@ -264,7 +300,7 @@ public class Board{
         					break;
         				}else if(stones[l.a][l.b].getSC() == turn ){
         					ArrayList<Tuple> sstring = checkForStrings( l.a ,  l.b, stoneStrings);
-                   		 	if (!sstring.isEmpty() && getNeedList(sstring, turn.getEC()).size() >2)  {
+                   		 	if (!sstring.isEmpty() && getNeedList(sstring, turn.getEC(),true).size() >2)  {
                    		 		toBreak = true;
                    		 		break;}}
         			}
@@ -281,7 +317,7 @@ public class Board{
         ArrayList<Tuple> capString =  colour.getSC()== Stone.BLACK ? wCapStrings: bCapStrings;
         ArrayList<Tuple> goodMoves = tupleArrayClone(validMoves);
         for (ArrayList<Tuple> tlist : stoneStrings){
-        	ArrayList<Tuple> needList = getNeedList(tlist,colour.getEC());
+        	ArrayList<Tuple> needList = getNeedList(tlist,colour.getEC(),true);
         	if (needList.size() == 2) {
         		for (Tuple t : needList ) {
         			boolean toBreak = false;
@@ -293,7 +329,7 @@ public class Board{
         					break;
         				}else if(stones[l.a][l.b].getSC() == colour ){
         					ArrayList<Tuple> sstring = checkForStrings( l.a ,  l.b, stoneStrings);
-                   		 	if (!sstring.isEmpty() && getNeedList(sstring, colour.getEC()).size() >2)  {
+                   		 	if (!sstring.isEmpty() && getNeedList(sstring, colour.getEC(),true).size() >2)  {
                    		 		toBreak = true;
                    		 		break;}}
         			}
@@ -458,7 +494,7 @@ public class Board{
 //        }
 // 
 //        
-//        for (Tuple t :getCaptureStringFor(sstring)) {
+//        for (Tuple t :getLibs(sstring)) {
 //            if(stones[t.a][t.b].getSC()!=enemycolour.getSC()){
 //                long end = System.nanoTime();
 //                fullTime += (end - start );
@@ -545,7 +581,7 @@ public class Board{
 	//Not 100%
 	public int checkStringSafety(ArrayList<Tuple> list,Stone colour,ArrayList<Tuple> eyelist) {
 		if (colour.getSC() !=Stone.BLACK && colour.getSC() !=Stone.WHITE) return 0;
-		ArrayList<Tuple> needList = getNeedList(list,colour.getEC());
+		ArrayList<Tuple> needList = getNeedList(list,colour.getEC(),true);
 		ArrayList<Tuple> tempEyeList  = new ArrayList<Tuple>();
 		if (needList.size() >= 2) {
 			int eyes = 0;
@@ -571,7 +607,7 @@ public class Board{
     				else if(stones[l.a][l.b].getSC() == colour.getEC()){
     					ArrayList<Tuple> sstring  = checkForStrings(l.a,l.b,colour.getEC().getSStrings(this));
     					if (!sstring.isEmpty()) {
-    						ArrayList<Tuple> eNeedList = getNeedList(sstring,colour);
+    						ArrayList<Tuple> eNeedList = getNeedList(sstring,colour,true);
     						if (eNeedList.size()!=1 ||  (eNeedList.size()==1 && !eNeedList.get(0).equals(t)) ||  (!checkEnemySurronding(l,t,colour,new ArrayList<Tuple>(),false))) {
     							if(diag.contains(l)) {
     								usedDiag.add(l);
@@ -670,7 +706,7 @@ public class Board{
             for (Tuple t :adj) {
             	if (stones[t.a][t.b].getSC() == enemycolour.getEC()){
             		 ArrayList<Tuple> sstring = checkForStrings( t.a ,  t.b, stoneStrings);
-            		 if (!sstring.isEmpty() && getNeedList(sstring, enemycolour).size() >1)  return false;}
+            		 if (!sstring.isEmpty() && getNeedList(sstring, enemycolour,true).size() >1)  return false;}
             	else if (stones[t.a][t.b].getSC() != Stone.BLACK && stones[t.a][t.b].getSC() != Stone.WHITE)return false;
             }
         	return true;}  
@@ -716,17 +752,18 @@ public class Board{
             removeOldStoneFromString(i,j,wStoneStrings);}
     }
     
-    public ArrayList<Tuple> getCaptureStringFor(ArrayList<Tuple> sstring) {
+    public ArrayList<Tuple> getLibs(ArrayList<Tuple> sstring,boolean unique) {
 
         ArrayList<Tuple> capstring = new ArrayList<Tuple>();
         for (Tuple t : sstring){
-            capstring.removeAll(getAdjacent(t.a, t.b));
+            if(unique)capstring.removeAll(getAdjacent(t.a, t.b));
             capstring.addAll(getAdjacent(t.a, t.b));
         }
         ArrayList<Tuple> l = tupleArrayClone(sstring);
         capstring.removeAll(l);
         return capstring;
     }
+    
     
     public void flip() {
 	    undoBoard = cloneBoard(this);
@@ -773,9 +810,9 @@ public class Board{
     }
     
     
-    public ArrayList<Tuple> getNeedList(ArrayList<Tuple> sstring,Stone enemycolour) {
+    public ArrayList<Tuple> getNeedList(ArrayList<Tuple> sstring,Stone enemycolour,boolean unique) {
     	ArrayList<Tuple> needList = new ArrayList<Tuple>();
-        ArrayList<Tuple> capList = getCaptureStringFor(sstring);
+        ArrayList<Tuple> capList = getLibs(sstring,unique);
         for (Tuple t : capList){
             if (stones[t.a][t.b].getSC()!=enemycolour.getSC()) needList.add(t);
         }

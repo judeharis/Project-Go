@@ -3,20 +3,20 @@ package Go;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Minimaxer  implements Runnable{
+public class MoveFinder  implements Runnable{
 	 Board originalBoard ;
 	 ArrayList<Tuple> keystones;
 	 static Stones human;
 	 Tuple choice;
 
-	 Minimaxer(Board originalBoard, ArrayList<Tuple> keystones) {
+	 MoveFinder(Board originalBoard, ArrayList<Tuple> keystones) {
 		 this.originalBoard = originalBoard;
 		 this.keystones = keystones;
 		 this.choice = null;
 	 }
-	 
 
-	 static int minimax(Board currentBoard ,ArrayList<Tuple> validMoves, ArrayList<Tuple> keystonelist , boolean isLive , int depth, Minimaxer minimaxer) {
+
+	 static int alphaBeta(Board currentBoard ,ArrayList<Tuple> validMoves, ArrayList<Tuple> keystonelist , boolean isLive , int depth, MoveFinder moveFinder) {
 
 
 	 	ArrayList<Integer> score = new ArrayList<>();
@@ -32,29 +32,29 @@ public class Minimaxer  implements Runnable{
 			b.ai= true;
 			b.computer = false;
 			b.takeTurn(t.a,t.b);
-			
-			
-			
-			
-			returnscore =minimax(b,b.getAllValidMoves(),keyStoneRemaining(b,keystonelist),!isLive,depth,minimaxer);
+
+
+
+
+			returnscore =alphaBeta(b,b.getAllValidMoves(),keyStoneRemaining(b,keystonelist),!isLive,depth,moveFinder);
 			score.add(returnscore);
 			if(depth==1) {
 				print(depth);
 				print("x: "+t.a+" y: "+t.b);
 				print(returnscore);}
-			
-			if(returnscore==Integer.MIN_VALUE && depth==1) minimaxer.choice = t.clone();
+
+			if(returnscore==Integer.MIN_VALUE && depth==1) moveFinder.choice = t.clone();
 		}
-		
+
 		if(isLive) return Collections.max(score);
 		else  return Collections.min(score);
 
-	} 
+	}
 
 
 	@Override
 	public void run() {
-		minimax(originalBoard,originalBoard.validMoves,keystones,false,0,this);
+		alphaBeta(originalBoard,originalBoard.validMoves,keystones,false,0,this);
 	}
 
 
@@ -70,9 +70,9 @@ public class Minimaxer  implements Runnable{
 	 	if(keystonelist.isEmpty()) return true;
 	 	return false;
 	}
-	  
+
     public static void print(Object o){
         System.out.println(o);
     }
-   
+
 }

@@ -2,7 +2,7 @@ package Go.SlickGo;
 
 import java.util.ArrayList;
 
-public class Minimaxer  implements Runnable{
+public class MoveFinder  implements Runnable{
 	 Board originalBoard ;
 	 ArrayList<Tuple> keystones;
 	 static Stone keystonecolour;
@@ -13,8 +13,10 @@ public class Minimaxer  implements Runnable{
 	 int line = 0;
 	 boolean exit;
 	 boolean def;
+	 
+	 ArrayList<String> searched = new ArrayList<String>();
 
-	 Minimaxer(Board originalBoard, ArrayList<Tuple> keystones) {
+	 MoveFinder(Board originalBoard, ArrayList<Tuple> keystones) {
 		 this.originalBoard = originalBoard;
 		 this.keystones = keystones;
 		 this.choice = null;
@@ -22,7 +24,7 @@ public class Minimaxer  implements Runnable{
 	 }
 	 
 
-	 int minimax(Board currentBoard , ArrayList<Tuple> keystonelist , boolean isLive , int depth, int alpha,int beta, ArrayList<Tuple> soFar) {
+	 int alphaBeta(Board currentBoard , ArrayList<Tuple> keystonelist , boolean isLive , int depth, int alpha,int beta, ArrayList<Tuple> soFar) {
 		if (this.exit) return 0;
 	 	ArrayList<Tuple> validMoves = currentBoard.validMoves;
 	 	long s = System.nanoTime();
@@ -71,9 +73,10 @@ public class Minimaxer  implements Runnable{
 			return retval;
 		}
 		
-		
-		
-		
+        if(searched.contains(currentBoard.boardString) && !goodMoves.isEmpty()) goodMoves.add(goodMoves.remove(0));
+        else if(!searched.contains(currentBoard.boardString)) searched.add(currentBoard.boardString);
+        	
+        
 		
 		
 		if(isLive) {
@@ -81,22 +84,19 @@ public class Minimaxer  implements Runnable{
 
 			
 			for (Tuple t : goodMoves) {
-//				print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " + t);
+				print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " + t);
 
 				Board b = Board.cloneBoard(currentBoard);
 
 		    	long ttstart = System.nanoTime();
 				b.takeTurn(t.a,t.b,false,true);
 		        long ttend = System.nanoTime();
-		        Board.takeTurnTime += (ttend - ttstart );
-		        
+		        Board.takeTurnTime += (ttend - ttstart );  
 				if(depth==1)System.out.print(t.clone()+ " :");
 		    	ArrayList<Tuple> newSofar = Board.tupleArrayClone(soFar);
 		    	newSofar.add(t);
 //				print(newSofar);
-				
-				int returnscore =minimax(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta,newSofar);
-			 	
+				int returnscore =alphaBeta(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta,newSofar);	
 		        if(returnscore > best && depth==1 ) {
 		        	this.choice = t.clone();
 		        	if (returnscore == max)print("Living");
@@ -115,15 +115,15 @@ public class Minimaxer  implements Runnable{
 		        alpha = Math.max(alpha, best);
 		        
 //		        if(best == max && depth==1 ) {
-//		        	minimaxer.choice = t.clone();
+//		        	moveFinder.choice = t.clone();
 //		        	print(returnscore);
 //		        }
 //		        else if(depth==1){ 
 //		        	b.passing = true;
-//		        	returnscore =minimax(b,keyStoneRemaining(b,keystonelist),!isLive,depth,minimaxer,alpha,beta);
-//			        if(returnscore == max)  {minimaxer.choice = t.clone();print(depth + " " + t.clone());}
+//		        	returnscore =alphaBeta(b,keyStoneRemaining(b,keystonelist),!isLive,depth,moveFinder,alpha,beta);
+//			        if(returnscore == max)  {moveFinder.choice = t.clone();print(depth + " " + t.clone());}
 //		        }
-				if (beta < alpha) break;
+				if (beta <= alpha) break;
 			}
 			
 			return best;}
@@ -131,7 +131,7 @@ public class Minimaxer  implements Runnable{
 			int best = max;
 	        
 			for (Tuple t : goodMoves) {
-//				print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " + t);
+				print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " + t);
 				Board b = Board.cloneBoard(currentBoard);
 		    	long ttstart = System.nanoTime();
 				b.takeTurn(t.a,t.b,false,true);
@@ -141,7 +141,7 @@ public class Minimaxer  implements Runnable{
 		    	ArrayList<Tuple> newSofar = Board.tupleArrayClone(soFar);
 		    	newSofar.add(t);
 //				print(newSofar);
-				int returnscore =minimax(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta,newSofar);
+				int returnscore =alphaBeta(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta,newSofar);
 		        if(returnscore < best && depth==1 ) {
 		        	this.choice = t.clone();
 		        	if (returnscore == max)print("Living");
@@ -160,14 +160,14 @@ public class Minimaxer  implements Runnable{
 		        beta = Math.min(beta, best);	
 		        
 //		        if(best == min && depth==1 ) {
-//		        	minimaxer.choice = t.clone();
+//		        	moveFinder.choice = t.clone();
 //		        }
 //		        else if(depth==1){       
 //		        	b.passing = true;
-//		        	returnscore =minimax(b,keyStoneRemaining(b,keystonelist),!isLive,depth,minimaxer,alpha,beta);
-//		            if(returnscore == max)  {minimaxer.choice = t.clone();print(depth + " " + t.clone());}
+//		        	returnscore =alphaBeta(b,keyStoneRemaining(b,keystonelist),!isLive,depth,moveFinder,alpha,beta);
+//		            if(returnscore == max)  {moveFinder.choice = t.clone();print(depth + " " + t.clone());}
 //		        }
-		        if (beta < alpha)break;
+		        if (beta <= alpha)break;
 		    }
 			
 			return best;}
@@ -201,8 +201,8 @@ public class Minimaxer  implements Runnable{
 			else 	def= originalBoard.capToWin;
 	    	
 			if (originalBoard.blackFirst && originalBoard.turn == Stone.WHITE || !originalBoard.blackFirst && originalBoard.turn == Stone.BLACK ) 
-					minimax(originalBoard,keystones,originalBoard.capToWin,0,min,max,sofar);
-			else 	minimax(originalBoard,keystones,!originalBoard.capToWin,0,min,max,sofar);
+					alphaBeta(originalBoard,keystones,originalBoard.capToWin,0,min,max,sofar);
+			else 	alphaBeta(originalBoard,keystones,!originalBoard.capToWin,0,min,max,sofar);
 			
 			
 	        long end = System.nanoTime();

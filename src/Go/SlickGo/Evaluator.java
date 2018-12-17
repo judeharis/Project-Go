@@ -10,7 +10,7 @@ public class Evaluator {
 	Tuple oBCounts;
 	String vB = "";
 	String hB = "";
-	public Stone kscolour = Minimaxer.keystonecolour.getSC();
+	public Stone kscolour = MoveFinder.keystonecolour.getSC();
 	public Stone enemycolour = kscolour.getEC();
 
 	public Evaluator(Board cB, Board oB, Tuple oBCounts) {
@@ -53,7 +53,7 @@ public class Evaluator {
 
 				if (cB.checkStringSafetyv2(cBsstring, kscolour))return Integer.MAX_VALUE;
 
-				ArrayList<Tuple> cBneedList = cB.getNeedList(cBsstring, kscolour.getEC());
+				ArrayList<Tuple> cBneedList = cB.getNeedList(cBsstring, kscolour.getEC(),true);
 				retval += cBneedList.size() * 20;
 				for (Tuple k : cBneedList) {
 					if (cB.stones[k.a][k.b] == Stone.INVALID)
@@ -90,7 +90,7 @@ public class Evaluator {
 
 
 				if (cB.checkStringSafetyv2(cBsstring, kscolour))return Integer.MAX_VALUE;
-				ArrayList<Tuple> cBneedList = cB.getNeedList(cBsstring, kscolour.getEC());
+				ArrayList<Tuple> cBneedList = cB.getNeedList(cBsstring, kscolour.getEC(),true);
 				for (Tuple k : cBneedList)if (cB.stones[k.a][k.b] == Stone.INVALID)return Integer.MAX_VALUE;
 				
 
@@ -364,7 +364,7 @@ public class Evaluator {
 		int retval =0;
 		for (ArrayList<Tuple> sstring :colourStrings ) {
 			if (sstring.size()>1) {
-				ArrayList<Tuple> needList = cB.getNeedList(sstring, enemycolour);
+				ArrayList<Tuple> needList = cB.getNeedList(sstring, enemycolour,true);
 				for (Tuple k : needList) {
 					if (cB.stones[k.a][k.b] == Stone.INVALID) {
 						retval += 20;

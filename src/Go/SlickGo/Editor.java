@@ -112,8 +112,8 @@ public class Editor extends BasicGameState {
 			if (SlickGo.withinBounds(bx,by)) {		
 				board.takeTurn(bx,by , true,false);
 				//ArrayList<Tuple> e = new ArrayList<Tuple>();
-				if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))Minimaxer.keystonecolour = Stone.WHITE;
-	    		else Minimaxer.keystonecolour = Stone.BLACK;
+				if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))MoveFinder.keystonecolour = Stone.WHITE;
+	    		else MoveFinder.keystonecolour = Stone.BLACK;
 				Evaluator evaluator = new Evaluator(board);
 				print(evaluator. evaluateCurrentBoard());
 				
@@ -167,8 +167,8 @@ public class Editor extends BasicGameState {
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +620,200,50,gc))SlickGo.saveFile(board);
 			
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +680,200,50,gc)) {
-				if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))Minimaxer.keystonecolour = Stone.WHITE;
-	    		else Minimaxer.keystonecolour = Stone.BLACK;
+				if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))MoveFinder.keystonecolour = Stone.WHITE;
+	    		else MoveFinder.keystonecolour = Stone.BLACK;
 				board.turn = (board.blackFirst)? Stone.BLACK:Stone.WHITE;
 				board.placing = board.turn;					
 				SlickGo.mainBoard = Board.cloneBoard(board);

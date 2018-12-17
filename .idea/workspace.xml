@@ -63,17 +63,17 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Go/Minimaxer.java">
+        <entry file="file://$PROJECT_DIR$/src/Go/MoveFinder.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="262">
               <caret line="43" column="31" lean-forward="true" selection-start-line="43" selection-start-column="31" selection-end-line="43" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="method#Minimaxer#0;class#Minimaxer#0" expanded="true" />
-                <element signature="method#run#0;class#Minimaxer#0" expanded="true" />
-                <element signature="method#keyStoneRemaining#0;class#Minimaxer#0" expanded="true" />
+                <element signature="method#MoveFinder#0;class#MoveFinder#0" expanded="true" />
+                <element signature="method#run#0;class#MoveFinder#0" expanded="true" />
+                <element signature="method#keyStoneRemaining#0;class#MoveFinder#0" expanded="true" />
                 <element signature="e#1555#1562#0" expanded="true" />
-                <element signature="method#keystoneLives#0;class#Minimaxer#0" expanded="true" />
+                <element signature="method#keystoneLives#0;class#MoveFinder#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -135,7 +135,7 @@
         <option value="$PROJECT_DIR$/src/main.java" />
         <option value="$PROJECT_DIR$/src/Board.java" />
         <option value="$PROJECT_DIR$/src/Go/GoProject.java" />
-        <option value="$PROJECT_DIR$/src/Go/Minimaxer.java" />
+        <option value="$PROJECT_DIR$/src/Go/MoveFinder.java" />
         <option value="$PROJECT_DIR$/src/Go/Board.java" />
       </list>
     </option>
@@ -337,17 +337,17 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Board.java" />
-    <entry file="file://$PROJECT_DIR$/src/Go/Minimaxer.java">
+    <entry file="file://$PROJECT_DIR$/src/Go/MoveFinder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="262">
           <caret line="43" column="31" lean-forward="true" selection-start-line="43" selection-start-column="31" selection-end-line="43" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#Minimaxer#0;class#Minimaxer#0" expanded="true" />
-            <element signature="method#run#0;class#Minimaxer#0" expanded="true" />
-            <element signature="method#keyStoneRemaining#0;class#Minimaxer#0" expanded="true" />
+            <element signature="method#MoveFinder#0;class#MoveFinder#0" expanded="true" />
+            <element signature="method#run#0;class#MoveFinder#0" expanded="true" />
+            <element signature="method#keyStoneRemaining#0;class#MoveFinder#0" expanded="true" />
             <element signature="e#1555#1562#0" expanded="true" />
-            <element signature="method#keystoneLives#0;class#Minimaxer#0" expanded="true" />
+            <element signature="method#keystoneLives#0;class#MoveFinder#0" expanded="true" />
           </folding>
         </state>
       </provider>

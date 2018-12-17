@@ -187,8 +187,8 @@ public class Board extends Canvas implements MouseMotionListener{
             validMoves =getAllValidMoves();
             GoProject.updateGUI();}
         if (computer) {
-        	Minimaxer k = new Minimaxer(this,keystones);
-        	Minimaxer.human=Stones.getEnemyColour(turn);
+        	MoveFinder k = new MoveFinder(this,keystones);
+        	MoveFinder.human=Stones.getEnemyColour(turn);
         	k.run();
         	takeTurn(k.choice.a,k.choice.b);
         }
@@ -225,7 +225,7 @@ public class Board extends Canvas implements MouseMotionListener{
                     sstring= tupleArrayMerger(sstring,libsStringres.list);}}
         }
         
-        for (Tuple t :getCaptureStringFor(sstring)) {
+        for (Tuple t :getLibs(sstring)) {
             if(Stones.getStoneColour(stones[t.a][t.b])!= Stones.getStoneColour(colour)){
                 return false;}
         }
@@ -243,7 +243,7 @@ public class Board extends Canvas implements MouseMotionListener{
     }
 
 
-    private ArrayList<Tuple> getCaptureStringFor(ArrayList<Tuple> sstring) {
+    private ArrayList<Tuple> getLibs(ArrayList<Tuple> sstring) {
 
         ArrayList<Tuple> capstring = new ArrayList<Tuple>();
         for (Tuple t : sstring){
@@ -262,7 +262,7 @@ public class Board extends Canvas implements MouseMotionListener{
         capString.clear();
         boolean anyCap = false;
         for (ArrayList<Tuple> tlist : stoneStrings){
-            ArrayList<Tuple> capList = getCaptureStringFor(tlist);
+            ArrayList<Tuple> capList = getLibs(tlist);
             ArrayList<Tuple> needList = new ArrayList<Tuple>();
             for (Tuple t : capList){
                 if (Stones.getStoneColour(stones[t.a][t.b])!=Stones.getStoneColour(colour)) needList.add(t);

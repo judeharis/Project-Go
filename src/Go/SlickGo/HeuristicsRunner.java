@@ -7,7 +7,7 @@ public class HeuristicsRunner {
 	
 	Board cB;
 	Evaluator e;
-	Stone kscolour = Minimaxer.keystonecolour.getSC();
+	Stone kscolour = MoveFinder.keystonecolour.getSC();
 	Stone enemycolour = kscolour.getEC();
 	ArrayList<Tuple> sstring;
 	
@@ -35,10 +35,6 @@ public class HeuristicsRunner {
 		retval += lineTwoSideEscape.evaluate(sstring);
 		
 		
-//		SixDiesEightLives sixDiesEightLives= new SixDiesEightLives(e);
-//		retval += sixDiesEightLives.evaluate(sstring);
-		
-		
 		
 		SideOneGap sideOneGap= new SideOneGap(e);
 		retval += sideOneGap.evaluate(sstring);
@@ -57,6 +53,9 @@ public class HeuristicsRunner {
 		
 		SideSixGap sideSixGap= new SideSixGap(e);
 		retval += sideSixGap.evaluate(sstring);
+		
+		Liberties liberties= new Liberties(e);
+		retval += liberties.evaluate(sstring);
 		
 		
 		return retval;

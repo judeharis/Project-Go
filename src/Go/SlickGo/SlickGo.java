@@ -168,8 +168,8 @@ public class SlickGo extends StateBasedGame {
             board.checkForCaps(board.turn.getEC(),false);
             board.validMoves = board.getAllValidMoves();
             board.resetboard =Board.cloneBoard(board);
-        	if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))Minimaxer.keystonecolour = Stone.WHITE;
-    		else Minimaxer.keystonecolour = Stone.BLACK;
+        	if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))MoveFinder.keystonecolour = Stone.WHITE;
+    		else MoveFinder.keystonecolour = Stone.BLACK;
            
 
         }

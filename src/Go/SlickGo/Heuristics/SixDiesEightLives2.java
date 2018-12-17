@@ -254,7 +254,7 @@ public class SixDiesEightLives2 implements HeuristicI {
 				
 				if(e.isEnemy(Sn1)) {
 					ArrayList<Tuple> estring = e.cB.checkForStrings(Sn1.a,Sn1.b, e.enemycolour.getSStrings(e.cB));
-					if (e.cB.getNeedList(estring, e.kscolour).size() < 2 ) retval+=150;
+					if (e.cB.getNeedList(estring, e.kscolour,true).size() < 2 ) retval+=150;
 					else retval-=250
 							;}
 				else if(e.ecapped(Sn1))retval+=400; 
@@ -302,7 +302,7 @@ public class SixDiesEightLives2 implements HeuristicI {
 				
 				if(e.isEnemy(S8)) {
 					ArrayList<Tuple> estring = e.cB.checkForStrings(S8.a,S8.b, e.enemycolour.getSStrings(e.cB));
-					if (e.cB.getNeedList(estring, e.kscolour).size() < 2) retval+=150;
+					if (e.cB.getNeedList(estring, e.kscolour,true).size() < 2) retval+=150;
 					else retval-=150;}
 				else if(e.ecapped(S8))retval+=400; 
 				
