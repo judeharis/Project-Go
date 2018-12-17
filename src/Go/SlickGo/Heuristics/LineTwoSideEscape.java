@@ -51,19 +51,19 @@ public class LineTwoSideEscape implements HeuristicI {
 			if (e.isTheres(S3)) {
 				retval+=100;
 				Tuple t = S3;
-				while (e.isThere(t.side(side.diag(diagSide))) && !ps.isCorner(t.side(side.diag(diagSide)))) {
+				Tuple k = B4;
+				while (e.isThere(t.side(side.diag(diagSide))) && e.isEnemy(k) && !ps.isCorner(t.side(side.diag(diagSide)))) {
 					retval+=100;
 					t = t.side(side.diag(diagSide));
+					k = k.side(side.diag(diagSide));
 				}
+				if(e.isThere(k)) retval+=50;
 			}
 
-
-			
-			return retval;
 		}
 		
 		
-		pattern = Pattern.sToPv2("xrxrozdxr-dS", Stone.BLACK);
+		pattern = Pattern.sToPv2("xrxrozdrxdS", Stone.BLACK);
 		pString =ps.stringMatch(sstring, pattern);
 		
 		if (!pString.isEmpty()) {
@@ -89,15 +89,15 @@ public class LineTwoSideEscape implements HeuristicI {
 			if (e.isTheres(S3)) {
 				retval+=100;
 				Tuple t = S3;
-				while (e.isThere(t.side(side.diag(diagSide))) && !ps.isCorner(t.side(side.diag(diagSide)))) {
+				Tuple k = B4;
+				while (e.isThere(t.side(side.diag(diagSide))) && e.isEnemy(k) && !ps.isCorner(t.side(side.diag(diagSide)))) {
 					retval+=100;
 					t = t.side(side.diag(diagSide));
+					k = k.side(side.diag(diagSide));
 				}
+				if(e.isThere(k)) retval+=50;
 			}
 
-
-			
-			return retval;
 		}
 		
 

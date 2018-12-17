@@ -28,6 +28,9 @@ public class HeuristicsRunner {
 		SevenUnsettled sevenUnsettled= new SevenUnsettled(e);
 		retval += sevenUnsettled.evaluate(sstring);
 		
+		EightLive eightLive= new EightLive(e);
+		retval += eightLive.evaluate(sstring);
+		
 		LineTwoSideEscape lineTwoSideEscape= new LineTwoSideEscape(e);
 		retval += lineTwoSideEscape.evaluate(sstring);
 		
@@ -51,6 +54,9 @@ public class HeuristicsRunner {
 		
 		SideFiveGap sideFiveGap= new SideFiveGap(e);
 		retval += sideFiveGap.evaluate(sstring);
+		
+		SideSixGap sideSixGap= new SideSixGap(e);
+		retval += sideSixGap.evaluate(sstring);
 		
 		
 		return retval;

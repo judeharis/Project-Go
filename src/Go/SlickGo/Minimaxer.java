@@ -12,6 +12,7 @@ public class Minimaxer  implements Runnable{
 	 Tuple obCounts;
 	 int line = 0;
 	 boolean exit;
+	 boolean def;
 
 	 Minimaxer(Board originalBoard, ArrayList<Tuple> keystones) {
 		 this.originalBoard = originalBoard;
@@ -107,7 +108,9 @@ public class Minimaxer  implements Runnable{
 		        	else print(returnscore);
 		        }
 		        
-		        
+
+				
+				
 		        best = Math.max(best, returnscore); 
 		        alpha = Math.max(alpha, best);
 		        
@@ -151,6 +154,8 @@ public class Minimaxer  implements Runnable{
 		        }
 		        
 		        
+
+		        
 		        best = Math.min(best, returnscore); 
 		        beta = Math.min(beta, best);	
 		        
@@ -190,6 +195,10 @@ public class Minimaxer  implements Runnable{
 	    	ArrayList<Tuple> sofar = new ArrayList<Tuple>();
 
 
+	    	
+			if (originalBoard.blackFirst && originalBoard.turn == Stone.WHITE || !originalBoard.blackFirst && originalBoard.turn == Stone.BLACK ) 
+				def=!originalBoard.capToWin;
+			else 	def= originalBoard.capToWin;
 	    	
 			if (originalBoard.blackFirst && originalBoard.turn == Stone.WHITE || !originalBoard.blackFirst && originalBoard.turn == Stone.BLACK ) 
 					minimax(originalBoard,keystones,originalBoard.capToWin,0,min,max,sofar);

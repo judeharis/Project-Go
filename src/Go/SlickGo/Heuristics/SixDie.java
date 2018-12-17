@@ -232,20 +232,20 @@ public class SixDie implements HeuristicI {
 //					if (e.isEnemies(S6,S0) && e.isThere(Sn1)) retval-=100;
 					
 
-					if (e.isEnemies(BS8) && e.isThere(S7)) retval-=100;
-					if (e.isEnemies(BSn1) && e.isThere(S0)) retval-=100;
-					
-					if (e.isEnemies(BS8,S8) && e.isThere(S7)) retval-=100;
-					if (e.isEnemies(BSn1,Sn1) && e.isThere(S0)) retval-=100;
+//					if (e.isEnemies(BS8) && e.isThere(S7)) retval-=100;
+//					if (e.isEnemies(BSn1) && e.isThere(S0)) retval-=100;
+//					
+//					if (e.isEnemies(BS8,S8) && e.isThere(S7)) retval-=100;
+//					if (e.isEnemies(BSn1,Sn1) && e.isThere(S0)) retval-=100;
 			
-					if (e.isEnemies(BS8,S9) && e.isTheres(S7,S8) &&!e.isThere(S6)) retval-=100;
-					if (e.isEnemies(BSn1,Sn2) && e.isTheres(S0,Sn1) && !e.isThere(S1)) retval-=100;
+//					if (e.isEnemies(BS8,S9) && e.isTheres(S7,S8) &&!e.isThere(S6)) retval-=100;
+//					if (e.isEnemies(BSn1,Sn2) && e.isTheres(S0,Sn1) && !e.isThere(S1)) retval-=100;
 					
-					if (e.isEnemies(S9,S8) && e.isTheres(BS9,S10)) retval-=100;
-					if (e.isEnemies(Sn2,Sn1) && e.isTheres(BSn2,Sn3)) retval-=100;
+//					if (e.isEnemies(S9,S8) && e.isTheres(BS9,S10)) retval-=100;
+//					if (e.isEnemies(Sn2,Sn1) && e.isTheres(BSn2,Sn3)) retval-=100;
 					
-					if (e.isEnemies(S9,S6) && e.capped(S7)&& e.capped(S8) && e.isTheres(BS9,S10)) retval-=100;
-					if (e.isEnemies(Sn2,S1) && e.capped(S0)&& e.capped(Sn1) && e.isTheres(BSn2,Sn3)) retval-=100;
+//					if (e.isEnemies(S9,S6) && e.capped(S7)&& e.capped(S8) && e.isTheres(BS9,S10)) retval-=100;
+//					if (e.isEnemies(Sn2,S1) && e.capped(S0)&& e.capped(Sn1) && e.isTheres(BSn2,Sn3)) retval-=100;
 					
 
 //					if (e.isEnemies(BS8)&& e.isTheres(S7)) {
@@ -285,27 +285,28 @@ public class SixDie implements HeuristicI {
 					if (e.isTheres(S1,S5) && !e.isEnemies(S3)) retval+=100;
 
 					
-					if (e.isEnemies(S1) && e.isTheres(S6,S2)) retval+=100;
-					if (e.isEnemies(S6) && e.isTheres(S1,S5)) retval+=100;
+//					if (e.isEnemies(S1) && e.isTheres(S6,S2)) retval+=100;
+//					if (e.isEnemies(S6) && e.isTheres(S1,S5)) retval+=100;
 
 //					if (e.isEnemies(S1,S7) && e.isTheres(S6,S2)) retval+=100;
 //					if (e.isEnemies(S6,S0) && e.isTheres(S1,S5)) retval+=100;
 					
 				
 					
-					if (e.isTheres(S6,S7)) retval+=100;
-					if (e.isTheres(S1,S0)) retval+=100;
+//					if (e.isTheres(S6,S7)) retval+=100;
+//					if (e.isTheres(S1,S0)) retval+=100;
 					
 
 					
-					if (e.isEnemies(BSn1) && e.isTheres(S0,Sn1)) retval+=300;
-					if (e.isEnemies(BS8) && e.isTheres(S7,S8)) retval+=300;
+//					if (e.isEnemies(BSn1) && e.isTheres(S0,Sn1)) retval+=300;
+//					if (e.isEnemies(BS8) && e.isTheres(S7,S8)) retval+=300;
+//					
+//					if (e.isEnemies(BSn1,Sn2) && e.isTheres(S0,Sn1,BSn2)) retval+=100;
+//					if (e.isEnemies(BS8,S9) && e.isTheres(S7,S8,BS9)) retval+=100;
+//					
+//					if (e.isEnemies(S4) && e.ecapped(S1) && e.isTheres(S2,S0)) retval+=100;
+//					if (e.isEnemies(S3) && e.ecapped(S6) && e.isTheres(S5,S7)) retval+=100;
 					
-					if (e.isEnemies(BSn1,Sn2) && e.isTheres(S0,Sn1,BSn2)) retval+=100;
-					if (e.isEnemies(BS8,S9) && e.isTheres(S7,S8,BS9)) retval+=100;
-					
-					if (e.isEnemies(S4) && e.ecapped(S1) && e.isTheres(S2,S0)) retval+=100;
-					if (e.isEnemies(S3) && e.ecapped(S6) && e.isTheres(S5,S7)) retval+=100;
 					
 //					if (e.isEnemies(BS8)&& e.isTheres(S7,S8)) {
 //						retval+=110;
