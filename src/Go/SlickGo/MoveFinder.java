@@ -84,7 +84,7 @@ public class MoveFinder  implements Runnable{
 
 			
 			for (Tuple t : goodMoves) {
-				print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " + t);
+//				print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " + t);
 
 				Board b = Board.cloneBoard(currentBoard);
 
@@ -131,7 +131,7 @@ public class MoveFinder  implements Runnable{
 			int best = max;
 	        
 			for (Tuple t : goodMoves) {
-				print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " + t);
+//				print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " + t);
 				Board b = Board.cloneBoard(currentBoard);
 		    	long ttstart = System.nanoTime();
 				b.takeTurn(t.a,t.b,false,true);

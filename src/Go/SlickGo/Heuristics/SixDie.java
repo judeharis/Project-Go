@@ -3,14 +3,13 @@ package Go.SlickGo.Heuristics;
 import java.util.ArrayList;
 
 import Go.SlickGo.Evaluator;
-import Go.SlickGo.HeuristicI;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Stone;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-public class SixDie implements HeuristicI {
+public class SixDie {
 	Evaluator e;
 	PatternSearcher ps;
 
@@ -20,7 +19,7 @@ public class SixDie implements HeuristicI {
 
 
 	
-	@Override
+
 	public int evaluate(ArrayList<Tuple> sstring) {
 		int retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);
@@ -209,8 +208,8 @@ public class SixDie implements HeuristicI {
 					if (e.isEnemies(S1,S7,S0)) retval-=100;
 					if (e.isEnemies(S6,S0,S1))retval-=100;
 
-					if (e.isEnemies(S1,S7) && (e.isThere(S6) || e.isThere(S8))  && !e.isThere(S0)) retval-=100;
-					if (e.isEnemies(S6,S0) && (e.isThere(S1) || e.isThere(Sn1)) && !e.isThere(S7)) retval-=100;
+					if (e.isEnemies(S1,S7) && (e.isThere(S6) || e.isThere(S8))  && !e.isThere(S0)) retval-=200;
+					if (e.isEnemies(S6,S0) && (e.isThere(S1) || e.isThere(Sn1)) && !e.isThere(S7)) retval-=200;
 
 
 					

@@ -104,7 +104,14 @@ public class Editor extends BasicGameState {
 		}
 		
 		if (input.isMousePressed(1)) {
-			if (SlickGo.withinBounds(bx,by)) print(bx+","+by);
+			if (SlickGo.withinBounds(bx,by)) {
+				print(bx+","+by);
+				Stone colour = board.stones[bx][by].getSC();
+				ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
+				print(board.checkStringSafetyv2(sstring,colour));
+			}
+			
+			
 		}
 		
 		

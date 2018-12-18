@@ -45,7 +45,7 @@ public class Evaluator {
 
 		retval += cbCounts.a * 5;
 		retval += cbCounts.b * -5;
-
+		HeuristicsRunner hrunner= new HeuristicsRunner(cB , this);
 		for (Tuple t : cB.keystones) {
 			ArrayList<Tuple> cBsstring = cB.checkForStrings(t.a, t.b, kscolour.getSStrings(cB));
 			if (!cBsstring.isEmpty()) {
@@ -60,9 +60,7 @@ public class Evaluator {
 						return Integer.MAX_VALUE;
 				}
 
-				HeuristicsRunner hrunner= new HeuristicsRunner(cB , this,cBsstring);
-				retval += hrunner.runHeuristics();
-
+				retval += hrunner.runKeyStringHeuristics(cBsstring);
 			}
 		}
 
@@ -83,7 +81,7 @@ public class Evaluator {
 
 
 		if (cB.ko != null)retval += 500;
-
+		HeuristicsRunner hrunner= new HeuristicsRunner(cB , this);
 		for (Tuple t : cB.keystones) {
 			ArrayList<Tuple> cBsstring = cB.checkForStrings(t.a, t.b, kscolour.getSStrings(cB));
 			if (!cBsstring.isEmpty()) {
@@ -94,11 +92,16 @@ public class Evaluator {
 				for (Tuple k : cBneedList)if (cB.stones[k.a][k.b] == Stone.INVALID)return Integer.MAX_VALUE;
 				
 
-				HeuristicsRunner hrunner= new HeuristicsRunner(cB , this,cBsstring);
-				retval += hrunner.runHeuristics();
+				retval += hrunner.runKeyStringHeuristics(cBsstring);
 
 			}
 		}
+		
+		
+		for (ArrayList<Tuple>  slist : kscolour.getSStrings(cB)) {
+			for (Tuple  t : slist) retval += hrunner.runStoneHeuristics(t);	
+		}
+		
 
 		return retval;
 	}

@@ -3,18 +3,17 @@ package Go.SlickGo.Heuristics;
 import java.util.ArrayList;
 
 import Go.SlickGo.Evaluator;
-import Go.SlickGo.HeuristicI;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-public class SixDiesEightLives2 implements HeuristicI {
+public class SixDiesEightLives2 {
 	Evaluator e;
 
 	public SixDiesEightLives2 (Evaluator e){
 		this.e=e;
 	}
 
-	@Override
+	
 	public int evaluate(ArrayList<Tuple> sstring) {
 		int retval = 0;
 		ArrayList<Tuple> bar6 = e.checkStringForBar(sstring, 6,1);

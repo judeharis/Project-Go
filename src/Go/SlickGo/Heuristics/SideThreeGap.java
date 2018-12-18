@@ -4,14 +4,13 @@ import java.util.ArrayList;
 
 
 import Go.SlickGo.Evaluator;
-import Go.SlickGo.HeuristicI;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Stone;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-public class SideThreeGap implements HeuristicI {
+public class SideThreeGap  {
 	Evaluator e;
 	PatternSearcher ps;
 
@@ -37,9 +36,9 @@ public class SideThreeGap implements HeuristicI {
 			Tuple S4 = S3.side(side.diag(diagSide));
 
 
-			if (e.isEnemy(S3))retval -= 100;
+			if (e.isEnemy(S3))retval -= 200;
 			
-			if (!e.isThere(S2) && !e.isThere(S4))retval += 100;
+			if (!e.isThere(S2) && !e.isThere(S4))retval += 200;
 
 			
 			return retval;

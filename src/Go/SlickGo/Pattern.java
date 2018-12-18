@@ -96,7 +96,7 @@ public class Pattern {
 		for (char c : string.toCharArray()) {
 			
 
-			boolean isCorner=(c=='O'|| c=='X'|| c=='_'|| c=='E');
+			boolean isCorner=(c=='O'|| c=='X'|| c=='_'|| c=='E'|| c=='#');
 			boolean isNot =(c=='-' || c=='_' || c=='e' || c=='E');
 			boolean wildCard =(c=='*' || c=='#');
 			boolean isSide =(c=='S');

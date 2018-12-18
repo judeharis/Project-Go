@@ -3,14 +3,13 @@ package Go.SlickGo.Heuristics;
 import java.util.ArrayList;
 
 import Go.SlickGo.Evaluator;
-import Go.SlickGo.HeuristicI;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Stone;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-public class SevenUnsettled implements HeuristicI {
+public class SevenUnsettled  {
 	Evaluator e;
 	PatternSearcher ps;
 
@@ -155,7 +154,7 @@ public class SevenUnsettled implements HeuristicI {
 	}
 
 
-	@Override
+	
 	public int evaluate(ArrayList<Tuple> sstring) {
 		int retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);

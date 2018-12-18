@@ -3,14 +3,13 @@ package Go.SlickGo.Heuristics;
 import java.util.ArrayList;
 
 import Go.SlickGo.Evaluator;
-import Go.SlickGo.HeuristicI;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Stone;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-public class SideFiveGap implements HeuristicI {
+public class SideFiveGap {
 	Evaluator e;
 	PatternSearcher ps;
 
@@ -49,7 +48,7 @@ public class SideFiveGap implements HeuristicI {
 //		return retval;
 //	}
 	
-	@Override
+
 	public int evaluate(ArrayList<Tuple> sstring) {
 		int retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);

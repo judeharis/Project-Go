@@ -9,15 +9,13 @@ public class HeuristicsRunner {
 	Evaluator e;
 	Stone kscolour = MoveFinder.keystonecolour.getSC();
 	Stone enemycolour = kscolour.getEC();
-	ArrayList<Tuple> sstring;
-	
-	public HeuristicsRunner(Board cB,Evaluator e,ArrayList<Tuple> sstring) {
+
+	public HeuristicsRunner(Board cB,Evaluator e) {
 		this.cB= cB;
 		this.e= e;
-		this.sstring = sstring;
 	}
 
-	public int runHeuristics(){
+	public int runKeyStringHeuristics(ArrayList<Tuple> sstring){
 		int retval =0;
 		
 		
@@ -33,7 +31,6 @@ public class HeuristicsRunner {
 		
 		LineTwoSideEscape lineTwoSideEscape= new LineTwoSideEscape(e);
 		retval += lineTwoSideEscape.evaluate(sstring);
-		
 		
 		
 		SideOneGap sideOneGap= new SideOneGap(e);
@@ -57,6 +54,21 @@ public class HeuristicsRunner {
 		Liberties liberties= new Liberties(e);
 		retval += liberties.evaluate(sstring);
 		
+		
+		CornerEyeShapes cornerEyeShapes= new CornerEyeShapes(e);
+		retval += cornerEyeShapes.evaluate(sstring);
+		
+		
+		return retval;
+		
+	}
+	
+	public int runStoneHeuristics(Tuple t){
+
+		int retval =0;
+		
+		ConnectStones connectStones= new ConnectStones(e);
+		retval += connectStones.evaluate(t);
 		
 		return retval;
 		

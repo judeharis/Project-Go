@@ -4,14 +4,13 @@ import java.util.ArrayList;
 
 
 import Go.SlickGo.Evaluator;
-import Go.SlickGo.HeuristicI;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Stone;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-public class LineTwoSideEscape implements HeuristicI {
+public class LineTwoSideEscape  {
 	Evaluator e;
 	PatternSearcher ps;
 

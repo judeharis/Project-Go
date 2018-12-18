@@ -3,18 +3,16 @@ package Go.SlickGo.Heuristics;
 import java.util.ArrayList;
 
 import Go.SlickGo.Evaluator;
-import Go.SlickGo.HeuristicI;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-public class SideTwoGap implements HeuristicI {
+public class SideTwoGap {
 	Evaluator e;
 
 	public SideTwoGap (Evaluator e){
 		this.e=e;
 	}
 
-	@Override
 	public int evaluate(ArrayList<Tuple> sstring) {
 		int retval = 0;
 

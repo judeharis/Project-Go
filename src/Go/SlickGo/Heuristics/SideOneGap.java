@@ -3,18 +3,17 @@ package Go.SlickGo.Heuristics;
 import java.util.ArrayList;
 
 import Go.SlickGo.Evaluator;
-import Go.SlickGo.HeuristicI;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-public class SideOneGap implements HeuristicI {
+public class SideOneGap  {
 	Evaluator e;
 
 	public SideOneGap (Evaluator e){
 		this.e=e;
 	}
 
-	@Override
+	
 	public int evaluate(ArrayList<Tuple> sstring) {
 		int retval = 0;
 		ArrayList<Tuple> bar3 = e.checkStringForBar(sstring, 3,1);

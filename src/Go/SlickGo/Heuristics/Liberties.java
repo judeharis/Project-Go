@@ -4,10 +4,9 @@ import java.util.ArrayList;
 
 
 import Go.SlickGo.Evaluator;
-import Go.SlickGo.HeuristicI;
 import Go.SlickGo.Tuple;
 
-public class Liberties implements HeuristicI {
+public class Liberties  {
 	Evaluator e;
 
 	public Liberties (Evaluator e){
@@ -22,11 +21,6 @@ public class Liberties implements HeuristicI {
 		ArrayList<Tuple> liberties = e.cB.getLibs(sstring,false);
 		
 		retval += ((double)nlist.size()/(double)liberties.size()) * 100;
-		
-
-
-		
-		
 
 		return retval;
 	}

@@ -660,19 +660,18 @@ public class Board{
 		Board checkBoard = cloneBoard(this);
 		checkBoard.turn = colour.getEC();
 		ArrayList<Tuple> vMoves = checkBoard.getAllValidMoves();
+		ArrayList<Tuple> lastVMoves = new ArrayList<Tuple>();
 		checkBoard.removeKo();
 		while (!vMoves.isEmpty()) {
-			for (Tuple t: vMoves) {
-				checkBoard.stones[t.a][t.b]= colour.getEC();
-				
-			}
-
+			if(lastVMoves.equals(vMoves)) {vMoves.remove(0);}
+			for (Tuple t: vMoves) checkBoard.stones[t.a][t.b]= colour.getEC();
 			checkBoard.updateStringsFull();
 			checkBoard.checkForCaps(colour.getEC(), false);
 			checkBoard.checkForCaps(colour,false);
 			checkBoard.removeKo();
-
+			lastVMoves =vMoves;
 			vMoves = checkBoard.getAllValidMoves();
+			
 		}
 		
 		if(colour.getSStrings(checkBoard).contains(list)) return true;
