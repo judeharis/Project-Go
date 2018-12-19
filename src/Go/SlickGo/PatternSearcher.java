@@ -154,11 +154,7 @@ public class PatternSearcher {
 		}
 		
 		
-		for(ArrayList<Tuple> mlist :matches) {
-//			for(Tuple t :mlist) {
-//				if(b.withinBounds(t)&&b.stones[t.a][t.b].getSC() == colour)ret.add(t);
-//			}
-//			
+		for(ArrayList<Tuple> mlist :matches) {		
 			Iterator<Tuple> itr = mlist.iterator(); 
 	        while (itr.hasNext()){ 
 	            Tuple t = itr.next(); 

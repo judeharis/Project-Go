@@ -241,6 +241,7 @@ public class Board{
         return anyCap;
 
     }
+    
 
     public void updateStringsFull(){
         for(int i=0; i<stones.length; i++) {
@@ -664,10 +665,21 @@ public class Board{
 		checkBoard.removeKo();
 		while (!vMoves.isEmpty()) {
 			if(lastVMoves.equals(vMoves)) {vMoves.remove(0);}
+			Board nCB= cloneBoard(checkBoard);
 			for (Tuple t: vMoves) checkBoard.stones[t.a][t.b]= colour.getEC();
 			checkBoard.updateStringsFull();
 			checkBoard.checkForCaps(colour.getEC(), false);
 			checkBoard.checkForCaps(colour,false);
+			ArrayList<Tuple> cappedStrings = (colour== Stone.WHITE ? checkBoard.bCappedStrings: checkBoard.wCappedStrings);
+			if(!cappedStrings.isEmpty()) {
+				checkBoard=nCB;
+				for(Tuple t:cappedStrings) {
+					if(vMoves.remove(t))break;
+				}
+				continue;
+			}
+			
+			checkBoard.boardString = checkBoard.boardToString();
 			checkBoard.removeKo();
 			lastVMoves =vMoves;
 			vMoves = checkBoard.getAllValidMoves();

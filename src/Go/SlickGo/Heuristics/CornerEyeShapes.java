@@ -34,7 +34,6 @@ public class CornerEyeShapes {
 					UDLR side = ps.dirNumToDir(counter);
 					Tuple S0 = tlist.get(0).side(side);
 					Tuple S1 = S0.side(side.diag(diagSide));
-					Tuple S2 = S1.side(side.diag(diagSide));
 					if(e.isThere(S1)) retval+=1000;
 					if(e.isEnemy(S1)) retval-=500;
 				}

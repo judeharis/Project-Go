@@ -31,11 +31,6 @@ public class ConnectStones {
 		ps.tupleMatch(t, pattern);
 		retval +=ps.getFoundCount() * 5;
 		
-
-
-		
-		
-
 		return retval;
 	}
 

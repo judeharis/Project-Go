@@ -37,7 +37,7 @@ public class Evaluator {
 			retval += cbAtariList.size() * (cbAtariList.size() / numberOfStrings) * (-300);
 
 
-		if (cB.ko != null)retval += 500;
+		if (cB.ko != null)retval += 100;
 
 		retval -= invalidInNeedList(enemycolour.getSStrings(cB),kscolour);
 		retval += invalidInNeedList(kscolour.getSStrings(cB),enemycolour);
@@ -80,7 +80,7 @@ public class Evaluator {
 		int retval = 0;
 
 
-		if (cB.ko != null)retval += 500;
+		if (cB.ko != null)retval += 50;
 		HeuristicsRunner hrunner= new HeuristicsRunner(cB , this);
 		for (Tuple t : cB.keystones) {
 			ArrayList<Tuple> cBsstring = cB.checkForStrings(t.a, t.b, kscolour.getSStrings(cB));
