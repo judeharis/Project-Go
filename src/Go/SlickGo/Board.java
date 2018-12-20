@@ -116,6 +116,11 @@ public class Board{
 
     }
 
+    public Stone[][] getStones(){
+    	return this.stones;
+    }
+    
+    
     public String boardToString() {
     	StringBuilder s = new StringBuilder();
         for(int i=0; i<stones.length; i++) {

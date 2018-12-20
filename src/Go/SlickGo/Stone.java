@@ -32,6 +32,22 @@ public enum Stone {
 
 	}
 	
+	public boolean isStone() {
+		  switch (this) {
+        case BLACK: return true;
+        case WHITE: return true;
+        case KEYBLACKSTONE: return true;
+        case KEYWHITESTONE: return true;
+        case VALID: return false;
+        case INVALID: return false;
+        case KO: return false;
+        case EMPTY: return false;
+        }
+		return false;
+
+	}
+	
+	
     public static Stone toStone(String stone){
         if (stone.toUpperCase().equals("BLACK")) return Stone.BLACK;
         return Stone.WHITE;

@@ -109,6 +109,10 @@ public class Editor extends BasicGameState {
 				Stone colour = board.stones[bx][by].getSC();
 				ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
 				print(board.checkStringSafetyv2(sstring,colour));
+				Grouping g = new Grouping(board);
+				g.allocateGrouping();
+				print(g.bGroups);
+				print(g.wGroups);
 			}
 			
 			
@@ -123,25 +127,6 @@ public class Editor extends BasicGameState {
 	    		else MoveFinder.keystonecolour = Stone.BLACK;
 				Evaluator evaluator = new Evaluator(board);
 				print(evaluator. evaluateCurrentBoard());
-				
-				PatternSearcher ps = new PatternSearcher(board,Stone.BLACK);
-				
-
-
-				ArrayList<Pattern> pattern2 = Pattern.stringToPattern("-o/-xxx-", Stone.BLACK);
-				ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxrozlo", Stone.BLACK);
-
-				for (ArrayList<Tuple> sstring : Stone.BLACK.getSStrings(board)) {
-					if (!sstring.isEmpty()) {
-
-						ps.stringMatch(sstring, pattern);
-						ps.stringMatch(sstring, pattern2);
-
-					}
-				}
-
-
-				
 			}
 		
 
