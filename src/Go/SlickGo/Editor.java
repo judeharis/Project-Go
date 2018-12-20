@@ -21,12 +21,14 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class Editor extends BasicGameState {
 	Board board;
+	Grouping grouping;
 	Image bg;
 	Font font;
 	TextField desc;
 	
 	public Editor(int state ,int gcsize  ) {
 		this.board = Board.cloneBoard(SlickGo.mainBoard);
+		grouping = new Grouping(board);
 	}
 
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
@@ -53,7 +55,7 @@ public class Editor extends BasicGameState {
         if(withinBounds(bx,by)) {
         	board.drawoval(g,(bx+1)*board.TileSize,(by+1)*board.TileSize,board.placing.stoneToColor(),board.placing.isKey());}
         
-        
+        grouping.draw(g);
 
 		SlickGo.drawRButton(board.boardSize , board.TileSize +40 , "Place Black Stones", g, board.placing == Stone.BLACK||board.placing == Stone.KEYBLACKSTONE);
 		SlickGo.drawRButton(board.boardSize , board.TileSize +80, "Place White Stones", g,board.placing == Stone.WHITE||board.placing == Stone.KEYWHITESTONE);
@@ -75,6 +77,11 @@ public class Editor extends BasicGameState {
 		SlickGo.drawButton(board.boardSize +330,board.TileSize +680,90,50,"Redo", g ,SlickGo.regionChecker(board.boardSize +330 ,board.TileSize +680,90,50,gc));
 		SlickGo.drawButton(board.boardSize +220,board.TileSize +620,90,50,"Rotate", g ,SlickGo.regionChecker(board.boardSize +220 ,board.TileSize +620,90,50,gc));
 		SlickGo.drawButton(board.boardSize +330,board.TileSize +620,90,50,"Flip", g ,SlickGo.regionChecker(board.boardSize +330 ,board.TileSize +620,90,50,gc));
+		
+		
+		SlickGo.drawButton(board.boardSize  ,board.TileSize,20,20,"D", g,grouping.draw);
+		SlickGo.drawButton(board.boardSize +30,board.TileSize,20,20,"W", g,grouping.drawW);
+		SlickGo.drawButton(board.boardSize +60,board.TileSize,20,20,"B", g,grouping.drawB);
 
 
 
@@ -107,12 +114,16 @@ public class Editor extends BasicGameState {
 			if (SlickGo.withinBounds(bx,by)) {
 				print(bx+","+by);
 				Stone colour = board.stones[bx][by].getSC();
-				ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
-				print(board.checkStringSafetyv2(sstring,colour));
-				Grouping g = new Grouping(board);
-				g.allocateGrouping();
-				print(g.bGroups);
-				print(g.wGroups);
+				if(colour.isStone()) {
+					ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
+					print(board.checkStringSafetyv2(sstring,colour));
+				}
+				grouping= new Grouping(board);
+				grouping.allocateGrouping();
+				grouping.allocateControl();
+				print(grouping.bGroups1);
+				print(grouping.wGroups1);
+				print(grouping.stonesControl[bx][by]);
 			}
 			
 			
@@ -129,7 +140,9 @@ public class Editor extends BasicGameState {
 				print(evaluator. evaluateCurrentBoard());
 			}
 		
-
+			if (SlickGo.regionChecker(board.boardSize ,board.TileSize,20,20,gc)) {grouping.draw = !grouping.draw;}
+			if (SlickGo.regionChecker(board.boardSize +30 ,board.TileSize,20,20,gc)) {grouping.drawW = !grouping.drawW;}
+			if (SlickGo.regionChecker(board.boardSize +60 ,board.TileSize,20,20,gc)) {grouping.drawB = !grouping.drawB;}
 			
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +40,200,40,gc)) {board.placing = Stone.BLACK;}
 			
