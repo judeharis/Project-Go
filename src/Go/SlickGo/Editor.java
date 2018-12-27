@@ -82,6 +82,7 @@ public class Editor extends BasicGameState {
 		SlickGo.drawButton(board.boardSize  ,board.TileSize,20,20,"D", g,grouping.draw);
 		SlickGo.drawButton(board.boardSize +30,board.TileSize,20,20,"W", g,grouping.drawW);
 		SlickGo.drawButton(board.boardSize +60,board.TileSize,20,20,"B", g,grouping.drawB);
+		SlickGo.drawButton(board.boardSize +90,board.TileSize,20,20,"C", g,grouping.drawC);
 
 
 
@@ -118,7 +119,7 @@ public class Editor extends BasicGameState {
 					ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
 					print(board.checkStringSafetyv2(sstring,colour));
 				}
-				grouping= new Grouping(board);
+				grouping = new Grouping(board,grouping.draw,grouping.drawW,grouping.drawB,grouping.drawC);
 				grouping.allocateGrouping();
 				grouping.allocateControl();
 				print(grouping.bGroups1);
@@ -143,6 +144,7 @@ public class Editor extends BasicGameState {
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize,20,20,gc)) {grouping.draw = !grouping.draw;}
 			if (SlickGo.regionChecker(board.boardSize +30 ,board.TileSize,20,20,gc)) {grouping.drawW = !grouping.drawW;}
 			if (SlickGo.regionChecker(board.boardSize +60 ,board.TileSize,20,20,gc)) {grouping.drawB = !grouping.drawB;}
+			if (SlickGo.regionChecker(board.boardSize +90 ,board.TileSize,20,20,gc)) {grouping.drawC = !grouping.drawC;}
 			
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +40,200,40,gc)) {board.placing = Stone.BLACK;}
 			

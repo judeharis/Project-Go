@@ -4,7 +4,10 @@
 \usepackage{listings}
 \usepackage{color,soul}
 \usepackage{xcolor}
-
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\graphicspath{ {images/} }
 
 
 
@@ -18,6 +21,7 @@
 
 \chapter{Introduction}
 \pagenumbering{arabic}
+
 
 The ancient game of Go is regarded as the oldest board game still being played in the modern day. The origins of Go are not completely known but it is said to be invented in China 3000-4000 years ago. The game is formed by very simple rules that is played out most commonly in a 19x19 board. Each player takes turns placing a black or white stone on the intersections of the grid lines on the board. The board size is very crucial for the project. Due to increased board size compared to most western board games, a computer will take significantly more time to process through each possible move in every turn of the game to determine the final outcome. On the other side the basic principles of the game are much simpler to program and execute in software. Some complicated rules such as self-capture, and ko rule do exist. While implementing these rules can be simple,the effect of them being implemented correctly is great. For instance without implementing the ko rule it would be impossible to make progress in the game search tree in certain situations where moves could be played so that a never ending battle for the same point on the board takes place. Brute force methods to solve board positions would get stuck in these situation and loop infinitely.
 
@@ -47,18 +51,69 @@ To understand Go as normal player would was crucial in the progress of the proje
 
 \section{Go Rules}
 
-There are many varied rulesets for Go. When these rules sets are broken into rules used during play and rules used at the end of play. The rules during play changes slightly and in most cases, they don’t change at all. Any changes of these rules do not affect the strategy of the game at all. Rules used at the end of play refers to scoring and determining the winner of the game, while differences in these rules can be important in normal play, when subjected to the aim of this project they become irrelevant due to dead or alive nature of life and death problems. For these reasons the rules used during play are defined within the project but rules for the end of the game are left out, instead rules to decide if a problem is solved are defined. The basic rules according to Japanese Rules of Go set by Nihon Kiin translated by James Davies [1] are as follows along with the variations made to suit the problem-solving nature of the project.
+There are many varied rulesets for Go. When these rules sets are broken into rules used during play and rules used at the end of play. The rules during play changes slightly and in most cases, they don’t change at all. Any changes of these rules do not affect the strategy of the game at all. Rules used at the end of play refers to scoring and determining the winner of the game, while differences in these rules can be important in normal play, when subjected to the aim of this project they become irrelevant due to dead or alive nature of life and death problems. For these reasons the rules used during play are defined within the project but rules for the end of the game are left out, instead rules to decide if a problem is solved are defined. The basic rules according to Japanese Rules of Go set by Nihon Kiin translated by James Davies [1] were used to define the ruleset used within the project and some variations were made to suit the problem-solving nature of the project rather than playing of Go.  They are as follows:
 
-1.	The board starting state can be set up as needed by the user to define a life and death problem.
-2.	Each player takes turns placing stones
+
+\begin{enumerate}
+  \item The board starting state can be set up as needed by the user to define a life and death problem.
+  \item 	Players takes turn alternately placing the colour of their team. One player places black stones only while the other places white stones.
+  \item The board contains 19x19 gridline pattern with 361 intersections. For purpose of limiting life and death problems boundaries are used to limit area of play.
+  \item Each turn consists of few parts as follows:
+  	\begin{enumerate}[label={(\alph*)}]
+		\item Current player is to place stone of their colour on any empty intersection within the boundaries set for the problem.
+		\item Then any of the opponent’s stones that does not have a liberty is removed from the board. See example 1.
+		\item A move is invalid if it will cause one or more stone of the current player’s colour to be captured – this is to prevent self-capturing moves. See example 2.
+		\item Removal of opponent’s stones take precedence over self-capture check. This allows for moves which captures opponent’s stones but is suicide if the opponent’s stones are not removed first. See example 3.
+	\end{enumerate}
+  \item Ko rule – Player is not allowed to place a stone on point A if it captures one stone which was placed on point B during the opponent’s previous turn which captured one stone on point A. This is to prevent infinite repetition of the same few moves. See example 4.
+  \item The problem is solved when attacking player has no valid moves to play and the keystones are still on the board. Otherwise the problem is solved if all the keystones are captured.
+
+
+\end{enumerate}
+
+
 
 
 \section{Go Terminology}
 
+\noindent Keystones – Set of predetermined stones which are used as the objective of the problems. These stones are to be captured by the attacking player and kept alive by the defending player.
+
+\noindent Attacking player – In terms of life and death problems, the attacking player is the one which is trying to capture the keystones on the board.
+
+\noindent Boundaries – Set of predetermined intersections that are removed from play for the given the problem, stones cannot be placed in them.
+
+\noindent Liberty -  Liberty of a stone is any adjacent empty intersection of the stone or any empty intersection of any stone connected to the original stone. See example 5.
+
+\noindent Connected - Two stones are connected if they are of the same colour and is adjacent to each other or there is a set of stones of the same colour which are connected to both stones. See example 6.
+
+\noindent String – Set of stones that are connected.
+
 \section{Life and Death Problems}
 
-\section{Alpha Go}
+\section{Examples}
 
+
+
+\begin{figure}[!h]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{ex/Ex1-0.png}
+        \caption{Synthetic image, black on white.}
+        \label{fig:ex1-0}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{ex/Ex1-1.png}
+        \caption{Synthetic image, white on black.}
+        \label{fig:ex1-1}
+    \end{subfigure}
+    \caption{Example 1:The black stone is “captured” as the top white stone is placed because the black stone has no liberty left.}
+    \label{fig:ex1}
+\end{figure}
+
+
+
+
+\section{Alpha Go}
 
 
 

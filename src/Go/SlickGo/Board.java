@@ -383,7 +383,9 @@ public class Board{
                     case WHITE:  drawoval(g,(i+1)*TileSize,(j+1)*TileSize , Color.white, false);
                         break;
 
-                    case VALID:  if (editormode)drawoval(g,(i+1)*TileSize,(j+1)*TileSize,new Color(0f,1f,0f,.0f ),false);
+                    case VALID: // if (editormode)drawoval(g,(i+1)*TileSize,(j+1)*TileSize,new Color(0f,1f,0f,.0f ),false);
+                    	if(!validMoves.contains(new Tuple(i,j)))drawoval( g,(i+1)*TileSize,(j+1)*TileSize ,new Color(1f,0f,0f,.1f),false);
+                    	//else if (editormode)drawoval(g,(i+1)*TileSize,(j+1)*TileSize,new Color(0f,1f,0f,.0f ),false);
                         break;
 
                     case INVALID:  //drawoval( g,(i+1)*TileSize,(j+1)*TileSize ,new Color(1f,0f,0f,.1f),false);
@@ -405,13 +407,12 @@ public class Board{
                     case EMPTY:
                         break;
                 }
-                
             }
         }
         
         if(!editormode) {
 	        for (Tuple t :validMoves){
-	        	drawoval(g,(t.a+1)*TileSize,(t.b+1)*TileSize,new Color(0f,1f,0f,.0f ),false);
+	        	//drawoval(g,(t.a+1)*TileSize,(t.b+1)*TileSize,new Color(0f,1f,0f,.0f ),false);
 	        }
     	}
     	
