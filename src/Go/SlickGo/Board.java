@@ -412,7 +412,7 @@ public class Board{
         
         if(!editormode) {
 	        for (Tuple t :validMoves){
-	        	//drawoval(g,(t.a+1)*TileSize,(t.b+1)*TileSize,new Color(0f,1f,0f,.0f ),false);
+	        	drawoval(g,(t.a+1)*TileSize,(t.b+1)*TileSize,new Color(0f,1f,0f,.0f ),false);
 	        }
     	}
     	
@@ -514,14 +514,14 @@ public class Board{
     
     
     
-	public int getSafeStringsCount(Stone colour,ArrayList<Tuple> eyelist) {
-		int retval = 0;
-		ArrayList<ArrayList<Tuple>> stoneStrings =  (colour== Stone.WHITE ? wStoneStrings:  bStoneStrings);;
-		for (ArrayList<Tuple> list :stoneStrings) {
-			retval += checkStringSafety(list, colour,eyelist);
-		}
-		return retval;
-	}
+//	public int getSafeStringsCount(Stone colour,ArrayList<Tuple> eyelist) {
+//		int retval = 0;
+//		ArrayList<ArrayList<Tuple>> stoneStrings =  (colour== Stone.WHITE ? wStoneStrings:  bStoneStrings);;
+//		for (ArrayList<Tuple> list :stoneStrings) {
+//			retval += checkStringSafety(list, colour,eyelist);
+//		}
+//		return retval;
+//	}
 	
 	
 	public boolean checkEnemySurronding(Tuple e , Tuple t, Stone colour, ArrayList<Tuple> checkedList, boolean alreadyDiag ) {
@@ -586,80 +586,80 @@ public class Board{
 	
 
 	//Not 100%
-	public int checkStringSafety(ArrayList<Tuple> list,Stone colour,ArrayList<Tuple> eyelist) {
-		if (colour.getSC() !=Stone.BLACK && colour.getSC() !=Stone.WHITE) return 0;
-		ArrayList<Tuple> needList = getNeedList(list,colour.getEC(),true);
-		ArrayList<Tuple> tempEyeList  = new ArrayList<Tuple>();
-		if (needList.size() >= 2) {
-			int eyes = 0;
-    		for (Tuple t : needList ) {
-    			if (eyelist.contains(t)) {
-    				eyes++;
-    				continue;
-    			}
-    			ArrayList<Tuple> sur = getSurrounding(t.a,t.b);
-    			ArrayList<Tuple> adj = getAdjacent(t.a,t.b);
-    			ArrayList<Tuple> diag = getDiag(t.a,t.b);
-    			ArrayList<Tuple> usedDiag = new ArrayList<Tuple>();
-    			int surrondingNumber = sur.size();
-    			
-    			for (Tuple l : sur) {
-    				if (adj.contains(l) && stones[l.a][l.b].getSC() != Stone.BLACK && stones[l.a][l.b].getSC() != Stone.WHITE) surrondingNumber=0;
-    				else if (stones[l.a][l.b].getSC() != Stone.BLACK && stones[l.a][l.b].getSC() != Stone.WHITE) {
-    					usedDiag.add(l);
-    					surrondingNumber--;
-    				}
-    				
-    				
-    				else if(stones[l.a][l.b].getSC() == colour.getEC()){
-    					ArrayList<Tuple> sstring  = checkForStrings(l.a,l.b,colour.getEC().getSStrings(this));
-    					if (!sstring.isEmpty()) {
-    						ArrayList<Tuple> eNeedList = getNeedList(sstring,colour,true);
-    						if (eNeedList.size()!=1 ||  (eNeedList.size()==1 && !eNeedList.get(0).equals(t)) ||  (!checkEnemySurronding(l,t,colour,new ArrayList<Tuple>(),false))) {
-    							if(diag.contains(l)) {
-    								usedDiag.add(l);
-    								surrondingNumber--;
-    							}
-    							else surrondingNumber=0;}
-    						}
-    					}
-    			}
-
-    			if ((usedDiag.size() >1) || (usedDiag.size() > 0 && sur.size() == 5)) {
-    				ArrayList<Tuple> checkThese = getCheckForSafetyList(usedDiag, t);
-
-    				int safes = 0;
-    				for (Tuple l : checkThese) {
-    					ArrayList<Tuple> sstring  = checkForStrings(l.a,l.b,colour.getSStrings(this));
-    					if (!sstring.isEmpty()) {
-    						 ArrayList<Tuple> newEyeList  =tupleArrayClone(eyelist);
-    						 newEyeList.add(t);
-    						 safes +=checkStringSafety(sstring,colour,newEyeList);
-    					}
-    				}
-    				if (safes == checkThese.size()) surrondingNumber+=safes;
-    				
-    			} 
-    			
-    			if (sur.size() == 3 && surrondingNumber >1 ) {
-    				tempEyeList.add(t);
-    				eyes++;}
-    			else if(sur.size() == 5 && surrondingNumber ==5) {
-    				tempEyeList.add(t);
-    				eyes++;}
-    			else if(sur.size() == 8 && surrondingNumber >6) {
-    				tempEyeList.add(t);
-    				eyes++;}
-    			
-    		}
-    		if (eyes>=2) {
-    			eyelist.addAll(tempEyeList);
-    			return 1;
-    		}
-    	}
-		return 0;
-		
-	}
+//	public int checkStringSafety(ArrayList<Tuple> list,Stone colour,ArrayList<Tuple> eyelist) {
+//		if (colour.getSC() !=Stone.BLACK && colour.getSC() !=Stone.WHITE) return 0;
+//		ArrayList<Tuple> needList = getNeedList(list,colour.getEC(),true);
+//		ArrayList<Tuple> tempEyeList  = new ArrayList<Tuple>();
+//		if (needList.size() >= 2) {
+//			int eyes = 0;
+//    		for (Tuple t : needList ) {
+//    			if (eyelist.contains(t)) {
+//    				eyes++;
+//    				continue;
+//    			}
+//    			ArrayList<Tuple> sur = getSurrounding(t.a,t.b);
+//    			ArrayList<Tuple> adj = getAdjacent(t.a,t.b);
+//    			ArrayList<Tuple> diag = getDiag(t.a,t.b);
+//    			ArrayList<Tuple> usedDiag = new ArrayList<Tuple>();
+//    			int surrondingNumber = sur.size();
+//    			
+//    			for (Tuple l : sur) {
+//    				if (adj.contains(l) && stones[l.a][l.b].getSC() != Stone.BLACK && stones[l.a][l.b].getSC() != Stone.WHITE) surrondingNumber=0;
+//    				else if (stones[l.a][l.b].getSC() != Stone.BLACK && stones[l.a][l.b].getSC() != Stone.WHITE) {
+//    					usedDiag.add(l);
+//    					surrondingNumber--;
+//    				}
+//    				
+//    				
+//    				else if(stones[l.a][l.b].getSC() == colour.getEC()){
+//    					ArrayList<Tuple> sstring  = checkForStrings(l.a,l.b,colour.getEC().getSStrings(this));
+//    					if (!sstring.isEmpty()) {
+//    						ArrayList<Tuple> eNeedList = getNeedList(sstring,colour,true);
+//    						if (eNeedList.size()!=1 ||  (eNeedList.size()==1 && !eNeedList.get(0).equals(t)) ||  (!checkEnemySurronding(l,t,colour,new ArrayList<Tuple>(),false))) {
+//    							if(diag.contains(l)) {
+//    								usedDiag.add(l);
+//    								surrondingNumber--;
+//    							}
+//    							else surrondingNumber=0;}
+//    						}
+//    					}
+//    			}
+//
+//    			if ((usedDiag.size() >1) || (usedDiag.size() > 0 && sur.size() == 5)) {
+//    				ArrayList<Tuple> checkThese = getCheckForSafetyList(usedDiag, t);
+//
+//    				int safes = 0;
+//    				for (Tuple l : checkThese) {
+//    					ArrayList<Tuple> sstring  = checkForStrings(l.a,l.b,colour.getSStrings(this));
+//    					if (!sstring.isEmpty()) {
+//    						 ArrayList<Tuple> newEyeList  =tupleArrayClone(eyelist);
+//    						 newEyeList.add(t);
+//    						 safes +=checkStringSafety(sstring,colour,newEyeList);
+//    					}
+//    				}
+//    				if (safes == checkThese.size()) surrondingNumber+=safes;
+//    				
+//    			} 
+//    			
+//    			if (sur.size() == 3 && surrondingNumber >1 ) {
+//    				tempEyeList.add(t);
+//    				eyes++;}
+//    			else if(sur.size() == 5 && surrondingNumber ==5) {
+//    				tempEyeList.add(t);
+//    				eyes++;}
+//    			else if(sur.size() == 8 && surrondingNumber >6) {
+//    				tempEyeList.add(t);
+//    				eyes++;}
+//    			
+//    		}
+//    		if (eyes>=2) {
+//    			eyelist.addAll(tempEyeList);
+//    			return 1;
+//    		}
+//    	}
+//		return 0;
+//		
+//	}
 
 	
 	
