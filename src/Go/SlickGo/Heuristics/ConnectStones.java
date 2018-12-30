@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import Go.SlickGo.Evaluator;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
-import Go.SlickGo.Stone;
 import Go.SlickGo.Tuple;
 
 public class ConnectStones {
@@ -23,11 +22,11 @@ public class ConnectStones {
 		
 		ps = new PatternSearcher(e.cB,e.kscolour);
 		
-		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxzd-rx", Stone.BLACK);
+		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxzd-rx", e.kscolour);
 		ps.tupleMatch(t, pattern);
 		retval +=ps.getFoundCount() * 10;
 		
-		pattern = Pattern.sToPv2("xrxrxr", Stone.BLACK);
+		pattern = Pattern.sToPv2("xrxrxr", e.kscolour);
 		ps.tupleMatch(t, pattern);
 		retval +=ps.getFoundCount() * 5;
 		

@@ -6,7 +6,6 @@ import java.util.Collections;
 import Go.SlickGo.Evaluator;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
-import Go.SlickGo.Stone;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
@@ -32,7 +31,7 @@ public class SixDiesEightLives {
 		
 		
 		
-		ArrayList<Pattern> pattern7 = Pattern.sToPv2("xrxrxrxrxrxrxrozloddS", Stone.BLACK);
+		ArrayList<Pattern> pattern7 = Pattern.sToPv2("xrxrxrxrxrxrxrozloddS", e.kscolour);
 		ArrayList<Tuple> bar7 =ps.stringMatch(sstring, pattern7);	
 		if (!bar7.isEmpty())retval += barEval7(bar7, sstring, 7);
 		

@@ -12,7 +12,7 @@ public class Group {
     ArrayList<Tuple> region = new ArrayList<Tuple>();
     ArrayList<Tuple> r1 = new ArrayList<Tuple>();
     ArrayList<Tuple> r2 = new ArrayList<Tuple>();
-    float strength =0;
+    double strength =0;
 	Board b;
 	
 	int gcsize = 1000;
@@ -28,7 +28,41 @@ public class Group {
 	}
 	
 
-
+    public 	double[][] updateControl(double[][] stonesControl , boolean nega){
+    	double spread = 1.0f;
+    	
+    	ArrayList<Tuple> updated = new ArrayList<>();
+    	updated.addAll(group);
+    	ArrayList<Tuple> adj = new ArrayList<>();
+		for(Tuple t :group) {
+    		if (nega)stonesControl[t.a][t.b] -= strength;
+    		else stonesControl[t.a][t.b] += strength;
+    			
+			ArrayList<Tuple>  newAdj = getStoneRegion(t,false);
+			adj.removeAll(newAdj);
+			adj.addAll(newAdj);
+		}
+		adj.removeAll(updated);
+    	while(!adj.isEmpty()) {
+    		updated.addAll(adj);
+    		if (nega)for(Tuple t: adj) stonesControl[t.a][t.b] -=  strength * (1.0/(3.0*spread));
+    		else for(Tuple t: adj) stonesControl[t.a][t.b] += strength * (1.0/(3.0*spread));
+    			
+    		
+    		ArrayList<Tuple> tempAdj= Board.tupleArrayClone(adj);
+    		for(Tuple t :adj) {
+    			ArrayList<Tuple>  newAdj = getStoneRegion(t,false);
+    			tempAdj.removeAll(newAdj);
+    			tempAdj.addAll(newAdj);
+    		}
+    		adj =tempAdj;
+    		adj.removeAll(updated);
+    		spread++;
+    	}
+    	return stonesControl;
+    }
+    
+    
 	
 
 
@@ -85,24 +119,24 @@ public class Group {
     }
     
 
-    
-    public void draw(Graphics g, Color color) {
-    	for (Tuple t : region) drawsquare(g,t,color);	
-    }
+
+
+	
 
     
     
     
     
-	
+    public void draw(Graphics g, Color color) {
+    	for (Tuple t : region) drawsquare(g,t,color);	
+    }
+
     public void drawsquare(Graphics g,  Tuple t , Color c) {
     	int x = (t.a+1) *TileSize;
     	int y = (t.b+1) *TileSize;
         g.setColor(c);
         g.fillRect(x-(stoneSize/2), y-(stoneSize/2), stoneSize, stoneSize);
     }
-    
-    
     
     public String toString() {
     	String s= "\n"+ this.group.toString();

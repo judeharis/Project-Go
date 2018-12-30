@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import Go.SlickGo.Evaluator;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
-import Go.SlickGo.Stone;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
@@ -24,7 +23,7 @@ public class SixDie {
 		int retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);
 		
-		ArrayList<Pattern> pattern6 = Pattern.sToPv2("xrxrxrxrxrxrozloddS", Stone.BLACK);
+		ArrayList<Pattern> pattern6 = Pattern.sToPv2("xrxrxrxrxrxrozloddS", e.kscolour);
 		ArrayList<Tuple> pString =ps.stringMatch(sstring, pattern6);	
 		
 

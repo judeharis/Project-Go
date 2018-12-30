@@ -158,7 +158,8 @@ public class PatternSearcher {
 			Iterator<Tuple> itr = mlist.iterator(); 
 	        while (itr.hasNext()){ 
 	            Tuple t = itr.next(); 
-	            if(b.withinBounds(t)&&b.stones[t.a][t.b].getSC() != colour)itr.remove();} 
+	            if(b.withinBounds(t)&&b.stones[t.a][t.b].getSC() != colour)itr.remove();
+	            else if(!b.withinBounds(t))itr.remove();} 
 			}
 
 		

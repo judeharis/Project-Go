@@ -1,7 +1,6 @@
 package Go.SlickGo;
 
 import java.util.ArrayList;
-import static Go.SlickGo.UDLR.*;
 
 public class Evaluator {
 	public Board cB;
@@ -195,9 +194,9 @@ public class Evaluator {
 		return true;
 	}
 
-	public boolean ecapped(Tuple t) {
-		return enemycolour.getCappedList(cB).contains(t);
-	}
+//	public boolean ecapped(Tuple t) {
+//		return enemycolour.getCappedList(cB).contains(t);
+//	}
 
 	public void getStringMap(Stone colour, Stone[][] stones, boolean keepEnemy){
 		for (int i = 0; i < stones.length; i++) {

@@ -96,8 +96,10 @@ public class Play extends BasicGameState {
 		if (input.isMousePressed(1)) {
 			if (SlickGo.withinBounds(bx,by)) print(bx+","+by);
 			Stone colour = board.stones[bx][by].getSC();
-			ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
-			print(board.checkStringSafetyv2(sstring,colour));
+			if(colour.isStone()) {
+				ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
+				print(board.checkStringSafetyv2(sstring,colour));
+			}
 		}
 		
 		if (input.isMousePressed(0)) {

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import Go.SlickGo.Evaluator;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
-import Go.SlickGo.Stone;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
@@ -28,7 +27,7 @@ public class LineTwoSideEscape  {
 		
 		
 		
-		pattern = Pattern.sToPv2("xrouodddS", Stone.BLACK);
+		pattern = Pattern.sToPv2("xrouodddS", e.kscolour);
 		pMatches =ps.allStringMatch(sstring, pattern);
 		
 		if(!pMatches.isEmpty()) {

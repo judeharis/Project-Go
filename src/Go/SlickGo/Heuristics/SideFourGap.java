@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import Go.SlickGo.Evaluator;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
-import Go.SlickGo.Stone;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
@@ -21,7 +20,7 @@ public class SideFourGap  {
 		int retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);
 		
-		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxdxzdxdS", Stone.BLACK);
+		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxdxzdxdS", e.kscolour);
 		ArrayList<Tuple> bar6 =ps.stringMatch(sstring, pattern);
 		
 
@@ -50,7 +49,7 @@ public class SideFourGap  {
 			return retval;
 		}
 		
-		pattern = Pattern.sToPv2("xrxrxrxrxrxzdxdS", Stone.BLACK);
+		pattern = Pattern.sToPv2("xrxrxrxrxrxzdxdS",e.kscolour);
 		bar6 =ps.stringMatch(sstring, pattern);
 		
 		if (!bar6.isEmpty()) {
@@ -79,7 +78,7 @@ public class SideFourGap  {
 		}
 		
 		
-		pattern = Pattern.sToPv2("xrxrxdxurxrxrxddS", Stone.BLACK);
+		pattern = Pattern.sToPv2("xrxrxdxurxrxrxddS", e.kscolour);
 		bar6 =ps.stringMatch(sstring, pattern);
 		
 		if (!bar6.isEmpty()) {

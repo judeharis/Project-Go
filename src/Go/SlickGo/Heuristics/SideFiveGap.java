@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import Go.SlickGo.Evaluator;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
-import Go.SlickGo.Stone;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
@@ -53,7 +52,7 @@ public class SideFiveGap {
 		int retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);
 		
-		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxrxdxzdxdS", Stone.BLACK);
+		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxrxdxzdxdS", e.kscolour);
 		ArrayList<Tuple> bar7 =ps.stringMatch(sstring, pattern);
 		
 
@@ -81,33 +80,33 @@ public class SideFiveGap {
 			return retval;
 		}
 		
-		pattern = Pattern.sToPv2("xrxrxrxrxrxrxzdxdS", Stone.BLACK);
-		bar7 =ps.stringMatch(sstring, pattern);
-		
-		if (!bar7.isEmpty()) {
-			boolean diagSide= ps.dirSideToBool();
-			UDLR side = ps.dirNumToDir();
-			Tuple S1 = bar7.get(0).side(side);
-			Tuple S2 = S1.side(side.diag(diagSide));
-			Tuple S3 = S2.side(side.diag(diagSide));
-			Tuple S4 = S3.side(side.diag(diagSide));
-			Tuple S5 = S4.side(side.diag(diagSide));
-			Tuple S6 = S5.side(side.diag(diagSide));
-			Tuple S7 = S6.side(side.diag(diagSide));
-			Tuple S8 = S7.side(side.diag(diagSide));
-
-			if (e.isThere(S7)) return 0;
-			if (e.isThere(S6)) return 0;
-			
-			if (e.isEnemy(S8))retval -=100;
-
-
-			
-			
-
-			
-			return retval;
-		}
+//		pattern = Pattern.sToPv2("xrxrxrxrxrxrxzdxdS", e.kscolour);
+//		bar7 =ps.stringMatch(sstring, pattern);
+//		
+//		if (!bar7.isEmpty()) {
+//			boolean diagSide= ps.dirSideToBool();
+//			UDLR side = ps.dirNumToDir();
+//			Tuple S1 = bar7.get(0).side(side);
+//			Tuple S2 = S1.side(side.diag(diagSide));
+//			Tuple S3 = S2.side(side.diag(diagSide));
+//			Tuple S4 = S3.side(side.diag(diagSide));
+//			Tuple S5 = S4.side(side.diag(diagSide));
+//			Tuple S6 = S5.side(side.diag(diagSide));
+//			Tuple S7 = S6.side(side.diag(diagSide));
+//			Tuple S8 = S7.side(side.diag(diagSide));
+//
+//			if (e.isThere(S7)) return 0;
+//			if (e.isThere(S6)) return 0;
+//			
+//			if (e.isEnemy(S8))retval -=100;
+//
+//
+//			
+//			
+//
+//			
+//			return retval;
+//		}
 		
 		return retval;
 

@@ -61,11 +61,11 @@ There are many varied rulesets for Go. When these rules sets are broken into rul
   \item Each turn consists of few parts as follows:
   	\begin{enumerate}[label={(\alph*)}]
 		\item Current player is to place stone of their colour on any empty intersection within the boundaries set for the problem.
-		\item Then any of the opponent’s stones that does not have a liberty is removed from the board. See example 1.
-		\item A move is invalid if it will cause one or more stone of the current player’s colour to be captured – this is to prevent self-capturing moves. See example 2.
-		\item Removal of opponent’s stones take precedence over self-capture check. This allows for moves which captures opponent’s stones but is suicide if the opponent’s stones are not removed first. See example 3.
+		\item Then any of the opponent’s stones that does not have a liberty is removed from the board. See example 1 at ~\autoref{fig:ex1}.
+		\item A move is invalid if it will cause one or more stone of the current player’s colour to be captured – this is to prevent self-capturing moves. See example 2 at ~\autoref{fig:ex2}.
+		\item Removal of opponent’s stones take precedence over self-capture check. This allows for moves which captures opponent’s stones but is suicide if the opponent’s stones are not removed first. See example 3 at ~\autoref{fig:ex3}.
 	\end{enumerate}
-  \item Ko rule – Player is not allowed to place a stone on point A if it captures one stone which was placed on point B during the opponent’s previous turn which captured one stone on point A. This is to prevent infinite repetition of the same few moves. See example 4.
+  \item Ko rule – Player is not allowed to place a stone on point A if it captures one stone which was placed on point B during the opponent’s previous turn which captured one stone on point A. This is to prevent infinite repetition of the same few moves. See example 4 at ~\autoref{fig:ex4}.
   \item The problem is solved when attacking player has no valid moves to play and the keystones are still on the board. Otherwise the problem is solved if all the keystones are captured.
 
 
@@ -82,11 +82,11 @@ There are many varied rulesets for Go. When these rules sets are broken into rul
 
 \noindent Boundaries – Set of predetermined intersections that are removed from play for the given the problem, stones cannot be placed in them.
 
-\noindent Liberty -  Liberty of a stone is any adjacent empty intersection of the stone or any empty intersection of any stone connected to the original stone. See example 5.
+\noindent Liberty -  Liberty of a stone is any adjacent empty intersection of the stone or any empty intersection of any stone connected to the original stone. See example 5 at ~\autoref{fig:ex5}.
 
-\noindent Connected - Two stones are connected if they are of the same colour and is adjacent to each other or there is a set of stones of the same colour which are connected to both stones. See example 6.
+\noindent Connected - Two stones are connected if they are of the same colour and is adjacent to each other or there is a set of stones of the same colour which are connected to both stones. See example 6 at ~\autoref{fig:ex6}.
 
-\noindent String – Set of stones that are connected.
+\noindent String – Set of stones that are connected of the same colour.
 
 \section{Life and Death Problems}
 
@@ -95,22 +95,105 @@ There are many varied rulesets for Go. When these rules sets are broken into rul
 
 
 \begin{figure}[!h]
-    \centering
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{ex/Ex1-0.png}
-        \caption{Synthetic image, black on white.}
-        \label{fig:ex1-0}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{ex/Ex1-1.png}
-        \caption{Synthetic image, white on black.}
-        \label{fig:ex1-1}
-    \end{subfigure}
-    \caption{Example 1:The black stone is “captured” as the top white stone is placed because the black stone has no liberty left.}
-    \label{fig:ex1}
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\includegraphics[width=\textwidth]{ex/Ex1-0.png}
+\caption{Before Move}
+\label{fig:ex1-0}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\textwidth}
+\includegraphics[width=\textwidth]{ex/Ex1-1.png}
+\caption{After Move}
+\label{fig:ex1-1}
+\end{subfigure}
+\caption{Example 1: The black stone is “captured” as the top white stone is placed because the black stone has no liberty left.}
+\label{fig:ex1}
 \end{figure}
 
 
+\begin{figure}[!h]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\includegraphics[width=\textwidth]{ex/Ex2-0.png}
+\caption{Middle point is invalid}
+\label{fig:ex2-0}
+\end{subfigure}
+\caption{Example 2: A black stone cannot be placed in the middle of the four white stones because this would lead to self-capture.}
+\label{fig:ex2}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\includegraphics[width=\textwidth]{ex/Ex3-0.png}
+\caption{Before Move}
+\label{fig:ex3-0}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\textwidth}
+\includegraphics[width=\textwidth]{ex/Ex3-1.png}
+\caption{After Move}
+\label{fig:ex3-1}
+\end{subfigure}
+\caption{Example 3: A black stone can be placed in the middle of the four white stones because 1 and 2 will be immediately captured before the self-capture rule is applied. }
+\label{fig:ex3}
+\end{figure}
+
+
+\begin{figure}[!h]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{ex/Ex4-0.png}
+\caption{Before Move}
+\label{fig:ex4-0}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{ex/Ex4-1.png}
+\caption{After Move - Blue Square to represent KO}
+\label{fig:ex4-1}
+\end{subfigure}
+\caption{Example 4: Once a white stone is placed at a to capture the black stone at b , black stone cannot be played at b next turn by the opponent to capture the white stone placed at a.}
+\label{fig:ex4}
+\end{figure}
+
+
+\begin{figure}[!h]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=0.666\textwidth]{ex/Ex5-0.png}
+\caption{A black stone and its liberties}
+\label{fig:ex5-0}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{ex/Ex5-1.png}
+\caption{A black stone string and its liberties}
+\label{fig:ex5-1}
+\end{subfigure}
+\caption{Example 5: The liberties of a stone or a string of stone are the empty adjacent intersections.  In ~\autoref{fig:ex5-0} intersections a,b,c and d are the liberties of the black stone.
+In ~\autoref{fig:ex5-1} intersections a to g are the liberties of the black stone string but h is not a liberty due to the white stone that occupies it.}
+\label{fig:ex5}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{ex/Ex6-0.png}
+\caption{Before Move}
+\label{fig:ex6-0}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{ex/Ex6-1.png}
+\caption{After Move}
+\label{fig:ex6-1}
+\end{subfigure}
+\caption{Example 6: The black stones a and b are connected but d is not connected to either a or b. If a black stone is placed at c then a,b,c and d are all said to be connected to each other.}
+\label{fig:ex6}
+\end{figure}
 
 
 \section{Alpha Go}

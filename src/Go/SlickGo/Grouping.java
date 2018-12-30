@@ -11,7 +11,7 @@ import Go.SlickGo.Tuple;
 
 public class Grouping {
 	Stone[][] stones;
-	float[][] stonesControl;
+	double[][] stonesControl;
 	Board b;
 	
 	int gcsize = 1000;
@@ -20,8 +20,16 @@ public class Grouping {
 	int stoneSize = TileSize;
     
 
-    ArrayList<Group> bGroups1 = new ArrayList<Group>();
-    ArrayList<Group> wGroups1 = new ArrayList<Group>();
+    ArrayList<Group> bGroups = new ArrayList<Group>();
+    ArrayList<Group> wGroups = new ArrayList<Group>();
+    
+    
+    ArrayList<Tuple> bControls = new ArrayList<Tuple>();
+    ArrayList<Tuple> wControls = new ArrayList<Tuple>();
+    double totalw = 0;
+    double totalb = 0;
+    double totalc = 0;
+    
     boolean draw = true;
     boolean drawW = false;
     boolean drawB = false;
@@ -29,14 +37,14 @@ public class Grouping {
 	public Grouping (Board b){
 		this.b =b;
 		this.stones=b.getStones();
-		this.stonesControl= floatIntegerArray();
+		this.stonesControl= doubleIntegerArray();
 	}
 	
 	
 	public Grouping (Board b,boolean draw,boolean drawW,boolean drawB,boolean drawC){
 		this.b =b;
 		this.stones=b.getStones();
-		this.stonesControl= floatIntegerArray();
+		this.stonesControl= doubleIntegerArray();
 		this.draw= draw;
 		this.drawW= drawW;
 		this.drawB= drawB;
@@ -45,30 +53,30 @@ public class Grouping {
 
 
 	
-	public float[][] floatIntegerArray() {
-		float[][] floatArray= new float[19][19];
+	public double[][] doubleIntegerArray() {
+		double[][] doubleArray= new double[19][19];
 		for(int i=0; i<stones.length; i++) {
             for(int j=0; j<stones[i].length; j++) {
-            	floatArray[i][j]=0;
+            	doubleArray[i][j]=0;
             	
             }
         }
-		return floatArray;
+		return doubleArray;
 		
 	}
 
 
 
 	public void allocateGrouping(){
-	    bGroups1 = new ArrayList<Group>();
-	    wGroups1 = new ArrayList<Group>();
+	    bGroups = new ArrayList<Group>();
+	    wGroups = new ArrayList<Group>();
 		
     	for(int i=0; i<stones.length; i++) {
             for(int j=0; j<stones[i].length; j++) {
             	if (stones[i][j].isStone()) {
 	            	Tuple t = new Tuple(i,j);
 	            	Stone colour = stones[i][j].getSC();
-	            	ArrayList<Group> groups = colour==Stone.BLACK? bGroups1:wGroups1;
+	            	ArrayList<Group> groups = colour==Stone.BLACK? bGroups:wGroups;
 	            	Group g = inGroupv2(t,colour);
 	            	if(g.group.isEmpty()) {
 	            		findGroupStonesv2(t,g,colour);
@@ -81,8 +89,8 @@ public class Grouping {
 		
 	}
 	
-	public void allocateControl(){
-		stonesControl= floatIntegerArray();
+	public void allocateControlold(){
+		stonesControl= doubleIntegerArray();
 		for(int i=0; i<stonesControl.length; i++) {
             for(int j=0; j<stonesControl[i].length; j++) {
 	            	Tuple t = new Tuple(i,j);
@@ -107,18 +115,48 @@ public class Grouping {
     	}
 		
 	}
+	
+
+	public void allocateControl(){
+		stonesControl= doubleIntegerArray();
+		for (Group g : wGroups) g.updateControl(stonesControl, true);
+		
+	
+		for (Group g : bGroups) g.updateControl(stonesControl, false);
+		
+		
+		for(int i=0; i<stonesControl.length; i++) {
+            for(int j=0; j<stonesControl[i].length; j++) {
+            	if(stonesControl[i][j] > 0)bControls.add(new Tuple(i,j));
+            	else wControls.add(new Tuple(i,j));
+            }
+    	}
+		
+//		for (Group g : wGroups) wControls.removeAll(g.group);
+//		for (Group g : bGroups) bControls.removeAll(g.group);
+		
+		
+		for(Tuple t: bControls) totalb+=stonesControl[t.a][t.b];
+		for(Tuple t: wControls) totalw-=stonesControl[t.a][t.b];
+		
+		totalc = totalb-totalw;
+		
+		
+		
+	}
+	
 
 	
 	
 	public Group inGroupv2(Tuple t, Stone colour) {
-		ArrayList<Group> groups = colour==Stone.BLACK? bGroups1:wGroups1;
+		ArrayList<Group> groups = colour==Stone.BLACK? bGroups:wGroups;
         for (Group g : groups ) if (g.group.contains(t)) return g;
         return new Group(b);
 	}
 	
 	
 	public ArrayList<Group> inRegionv2(Tuple t, Stone colour, boolean r1) {
-		ArrayList<Group> groups = colour==Stone.BLACK? bGroups1:wGroups1;
+		ArrayList<Group> groups = colour==Stone.BLACK? bGroups:wGroups;
 		ArrayList<Group> regions = new ArrayList<Group>();
         for (Group g : groups ) {
         	if (r1 && g.r1.contains(t))regions.add(g);
@@ -167,18 +205,18 @@ public class Grouping {
     	
 
     	if(draw) {
-	        if(drawB)for(Group group : bGroups1) group.draw(g,new Color(1f,0f,0f,.3f));
-	        if(drawW)for(Group group : wGroups1) group.draw(g,new Color(0f,.0f,1f,.3f));
+	        if(drawB)for(Group group : bGroups) group.draw(g,new Color(1f,0f,0f,.3f));
+	        if(drawW)for(Group group : wGroups) group.draw(g,new Color(0f,.0f,1f,.3f));
 	        if(drawC) {
 		        for(int i=0; i<stones.length; i++) {
 		            for(int j=0; j<stones[i].length; j++) {
 		            	Tuple t = new Tuple(i,j);
-		            	float c= stonesControl[i][j];
+		            	double c= stonesControl[i][j];
 		            	if (c==0)continue;
-		            	float b= (float) (.0f + (c/100.0));
+		            	float b = (float) (.0f + (c/100.0));
 		            	float w = (float) (.0f - (c/100.0));
-		            	drawsquare(g,t,new Color(b,.0f,w,0.3f));	
-			            	
+		            	if(w>b) drawsquare(g,t,new Color(0,0,w*40,0.1f + (w/20)));	
+		            	else drawsquare(g,t,new Color(b*40,0,0,0.1f + (b/20)));	
 		            	
 		            }
 		    	}

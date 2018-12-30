@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import Go.SlickGo.Evaluator;
 import Go.SlickGo.Tuple;
-import Go.SlickGo.UDLR;
 
 public class SixDiesEightLives2 {
 	Evaluator e;

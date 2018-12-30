@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import Go.SlickGo.Evaluator;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
-import Go.SlickGo.Stone;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
@@ -23,7 +22,7 @@ public class SevenUnsettled  {
 		int retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);
 		
-		ArrayList<Pattern> pattern7 = Pattern.sToPv2("xrxrxrxrxrxrxrozloddS", Stone.BLACK);
+		ArrayList<Pattern> pattern7 = Pattern.sToPv2("xrxrxrxrxrxrxrozloddS",e.kscolour);
 		ArrayList<Tuple> pString =ps.stringMatch(sstring, pattern7);	
 		
 
@@ -70,8 +69,8 @@ public class SevenUnsettled  {
 					
 //					if(e.isEnemies(S1,S7) && e.isTheres(S2,S6))retval+=100;
 					
-					if(e.ecapped(S1) && e.isTheres(S2,S6,S0))retval+=100;
-					if(e.ecapped(S7) && e.isTheres(S2,S6,S8))retval+=100;
+//					if(e.ecapped(S1) && e.isTheres(S2,S6,S0))retval+=100;
+//					if(e.ecapped(S7) && e.isTheres(S2,S6,S8))retval+=100;
 					
 					
 					if(e.isTheres(S1,S0) || e.isTheres(S2,S0))retval+=100;
@@ -159,7 +158,7 @@ public class SevenUnsettled  {
 		int retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);
 		
-		ArrayList<Pattern> pattern7 = Pattern.sToPv2("xrxrxrxrxrxrxrozloddS", Stone.BLACK);
+		ArrayList<Pattern> pattern7 = Pattern.sToPv2("xrxrxrxrxrxrxrozloddS",e.kscolour);
 		ArrayList<Tuple> pString =ps.stringMatch(sstring, pattern7);	
 		
 
