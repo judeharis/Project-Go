@@ -137,7 +137,6 @@ public class Editor extends BasicGameState {
 		if (input.isMousePressed(0)) {
 			if (SlickGo.withinBounds(bx,by)) {		
 				board.takeTurn(bx,by , true,false);
-				//ArrayList<Tuple> e = new ArrayList<Tuple>();
 				if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))MoveFinder.keystonecolour = Stone.WHITE;
 	    		else MoveFinder.keystonecolour = Stone.BLACK;
 				Evaluator evaluator = new Evaluator(board);

@@ -60,58 +60,53 @@ public class Board{
 
     	boolean moveMade = false;
 
-    	if (withinBounds(i,j) && !passing) {
-            if (stones[i][j]== Stone.KO){
-                print("Can't Place On KO");}
-            else if (selfCap(i,j,placing.getEC())){
-                print("Can't Self Capture");}
-            else{
-                if (editormode){
-            	    undoBoard = cloneBoard(this);
-            	    redoBoard = null;
-                    stones[i][j] = placing;
-                    removeKo();
-                    if (placing== Stone.KEYBLACKSTONE || placing == Stone.KEYWHITESTONE){
-                        keystones.add(new Tuple(i,j));
-                        for (Tuple k:keystones) stones[k.a][k.b]=placing;
-                        placing = placing.getSC();}
-                    else{
-                        keystones.removeIf( new Tuple(i,j)::equals);}}
-                else if (stones[i][j] == Stone.EMPTY || stones[i][j] == Stone.VALID) {     
-						boardString = boardToString();
-						undoString.push(boardString);    	
-                        stones[i][j] = turn;
-                        moveMade=true;
-                        removeKo();
-                        turn = turn.getEC();}
-                else if(!check) print("Invalid Move");
-                updateStringsSingle(i,j);}}
-        else if (passing) {
-        	passing=false;
-        	moveMade=true;
-        	if (!check) {
-        		print(turn + " passed");    
-                boardString = boardToString();
-                undoString.push(boardString);
-                
-        	}
-        	removeKo();
-        	turn = turn.getEC();
-        	}
-        else print("Out of bound");
+		if (withinBounds(i,j) && !passing) {
+			if (stones[i][j]== Stone.KO)print("Can't Place On KO"); 
+			else if (selfCap(i,j,placing.getEC()))print("Can't Self Capture"); 
+			else if (editormode){
+				undoBoard = cloneBoard(this);
+				redoBoard = null;
+				stones[i][j] = placing;
+				removeKo();
+				if (placing== Stone.KEYBLACKSTONE || placing == Stone.KEYWHITESTONE){
+					keystones.add(new Tuple(i,j));
+					for (Tuple k:keystones) stones[k.a][k.b]=placing;
+					placing = placing.getSC();
+				}else keystones.removeIf( new Tuple(i,j)::equals);
+			         
+			}else if (stones[i][j] == Stone.EMPTY || stones[i][j] == Stone.VALID) {     
+				boardString = boardToString();
+				undoString.push(boardString);    	
+				stones[i][j] = turn;
+				moveMade=true;
+				removeKo();
+				turn = turn.getEC();
+			}else if(!check) print("Invalid Move");
+			updateStringsSingle(i,j);
+		}else if (passing) {
+			passing=false;
+			moveMade=true;
+			if (!check) {
+				print(turn + " passed");    
+				boardString = boardToString();
+				undoString.push(boardString);
+			}
+			removeKo();
+			turn = turn.getEC();
+		}else print("Out of bound");
 
 
-        updateStringsFull();
-        maybeko = null;  
-        checkForCaps(placing,editormode);
-        checkForCaps(placing.getEC(),editormode);
-        if (ko !=null) stones[ko.a][ko.b] = Stone.KO;
-        if (!editormode)placing =turn;
-        validMoves =getAllValidMoves();
-        boardString = boardToString();
-
-
-        return moveMade;
+		updateStringsFull();
+		maybeko = null;  
+		checkForCaps(placing,editormode);
+		checkForCaps(placing.getEC(),editormode);
+		if (ko !=null) stones[ko.a][ko.b] = Stone.KO;
+		if (!editormode)placing =turn;
+		validMoves =getAllValidMoves();
+		boardString = boardToString();
+		
+		
+		return moveMade;
 
     }
 
@@ -120,105 +115,6 @@ public class Board{
     }
     
     
-    public String boardToString() {
-    	StringBuilder s = new StringBuilder();
-        for(int i=0; i<stones.length; i++) {
-            for(int j=0; j<stones[i].length; j++) {
-                switch (stones[j][i]) {
-                    case BLACK: s.append("| x ") ;break;
-                    case WHITE:  s.append("| o ") ;break;
-                    case VALID:  s.append("| + ") ;break;
-                    case INVALID:   s.append("| - ") ;break;
-                    case KEYBLACKSTONE: s.append("| X ") ;  break;
-                    case KEYWHITESTONE:  s.append("| O ") ; break;
-                    case KO: s.append("| K ") ;break;
-                    case EMPTY: break;
-                }
-            }
-            s.append("|\r\n") ;
-
-        }
-        return s.toString();
-    	
-    }
-    
-    public Stone[][] stringToBoard(String s){
-    	 Stone[][] newstones = new Stone[19][19];
-    	 int i = 0;
-    	 int j = 0;
-
-		 for(char c: s.toCharArray()) {
-	         switch (c){
-		         case 'x': newstones[i][j] = Stone.BLACK;i++; break;
-		         case 'X': newstones[i][j] = Stone.KEYBLACKSTONE;i++; break;
-		         case 'o': newstones[i][j] = Stone.WHITE;i++; break;
-		         case 'O': newstones[i][j] = Stone.KEYWHITESTONE;i++; break;
-		         case 'K': newstones[i][j] = Stone.KO;i++; break;
-		         case '+': newstones[i][j] = Stone.VALID;i++; break;
-		         case '-': newstones[i][j] = Stone.INVALID;i++; break;
-		         case ' ': break;
-		         case '|': break;
-		         case '\r': break;
-		         case '\n': j++;i=0; break;
-	         }
-		 }  	 
-    	 return newstones;
-    	 
-    }
-    
-    
-    public void initBoard(boolean editormode){
-        for(int i=0; i<stones.length; i++) {
-            for(int j=0; j<stones[i].length; j++) {
-                stones[i][j] = Stone.EMPTY;
-                if (editormode) stones[i][j] = Stone.INVALID;
-            }
-        }
-
-        keystone = Stone.KEYBLACKSTONE;
-        placing = Stone.BLACK;
-        blackFirst = true;
-        capToWin = true;
-        keystones.clear();
-        bStoneStrings.clear();
-        wStoneStrings.clear();
-        bCapStrings.clear();
-        wCapStrings.clear();
-        bCappedStrings.clear();
-        wCappedStrings.clear();
-        validMoves =getAllValidMoves();
-        passing=false;
-        ko = null;
-        resetboard =cloneBoard(this);
-        //undoBoard =cloneBoard(this);
-    }
-    
-    public static Board cloneBoard(Board oB) {
-    	Board nB = new Board();
-    	nB.capToWin = oB.capToWin;
-    	nB.boardSize = oB.boardSize;
-    	nB.placing = oB.placing;
-    	nB.turn = oB.turn;
-    	nB.keystone = oB.keystone;
-    	nB.stones = cloneBoardStones(oB.stones);
-    	if(oB.ko!=null)nB.ko = oB.ko.clone();
-    	
-    	nB.keystones = tupleArrayClone(oB.keystones);
-    	nB.validMoves = tupleArrayClone(oB.validMoves);
-    	nB.bCapStrings = tupleArrayClone(oB.bCapStrings);
-    	nB.wCapStrings = tupleArrayClone(oB.wCapStrings);
-    	nB.bCappedStrings = tupleArrayClone(oB.bCappedStrings);
-    	nB.wCappedStrings = tupleArrayClone(oB.wCappedStrings);
-    	nB.bStoneStrings = twoDTupleArrayClone(oB.bStoneStrings);
-    	nB.wStoneStrings = twoDTupleArrayClone(oB.wStoneStrings);
-    	nB.passing = oB.passing;
-    	nB.blackFirst = oB.blackFirst;
-    	nB.desc = oB.desc;
-    	nB.resetboard = oB.resetboard;
-    	nB.undoBoard = oB.undoBoard;
-      	nB.redoBoard = oB.redoBoard;
-    	return nB;
-    } 
 
     public boolean checkForCaps( Stone colour,boolean editormode) {
     	
@@ -256,15 +152,6 @@ public class Board{
 
     }
     
-
-    public void updateStringsFull(){
-        for(int i=0; i<stones.length; i++) {
-            for(int j=0; j<stones[i].length; j++) {
-                 updateStringsSingle(i,j);
-            }
-        }
-    }
-
     public ArrayList<Tuple> getAllValidMoves() {
     	ArrayList<Tuple>  validMoves = new ArrayList<Tuple>();
     	for(int i=0; i<stones.length; i++) {
@@ -275,60 +162,6 @@ public class Board{
     	return validMoves;
     }
 
-//    public ArrayList<Tuple> removeBadMoves() {
-//        ArrayList<ArrayList<Tuple>> stoneStrings = turn.getSC()==Stone.BLACK ? bStoneStrings:wStoneStrings;
-//        ArrayList<Tuple> capString =  (turn.getSC()== Stone.WHITE ? bCapStrings:  wCapStrings);
-//        ArrayList<Tuple> goodMoves = tupleArrayClone(validMoves);
-//        for (ArrayList<Tuple> tlist : stoneStrings){
-//        	ArrayList<Tuple> needList = getNeedList(tlist,turn.getEC());
-//        	if (needList.size() == 2) {
-//        		for (Tuple t : needList ) {
-//        			Board k = Board.cloneBoard(this);
-//        			if (stones[t.a][t.b]!= Stone.INVALID) {
-//	        			k.takeTurn(t.a, t.b, false, true);
-//	        			if(turn.getSC()== Stone.WHITE && k.wCapStrings.size() > wCapStrings.size() && !capString.contains(t)){
-//	        				goodMoves.remove(t);}
-//	        			if(turn.getSC()== Stone.BLACK && k.bCapStrings.size() > bCapStrings.size() && !capString.contains(t)){
-//	        				goodMoves.remove(t);}}}}
-//        }
-//        return goodMoves;
-//    }
-    
-//    
-
-    
-	
-//    public ArrayList<Tuple> removeBadMovessnewer() {
-//        ArrayList<ArrayList<Tuple>> stoneStrings = turn.getSC()==Stone.BLACK ? bStoneStrings:wStoneStrings;
-//        ArrayList<Tuple> capString =  turn.getSC()== Stone.BLACK ? wCapStrings: bCapStrings;
-//        ArrayList<Tuple> goodMoves = tupleArrayClone(validMoves);
-//        for (ArrayList<Tuple> tlist : stoneStrings){
-//        	ArrayList<Tuple> needList = getNeedList(tlist,turn.getEC(),true);
-//        	if (needList.size() == 2) {
-//        		for (Tuple t : needList ) {
-//        			boolean toBreak = false;
-//        			if (capString.contains(t)) continue;
-//        			ArrayList<Tuple> adj=  getAdjacent(t.a, t.b);
-//        			for (Tuple l : adj) {
-//        				if (stones[l.a][l.b].getSC() != Stone.WHITE && stones[l.a][l.b].getSC() != Stone.BLACK && !needList.contains(l)) {
-//        					toBreak = true;
-//        					break;
-//        				}else if(stones[l.a][l.b].getSC() == turn ){
-//        					ArrayList<Tuple> sstring = checkForStrings( l.a ,  l.b, stoneStrings);
-//                   		 	if (!sstring.isEmpty() && getNeedList(sstring, turn.getEC(),true).size() >2)  {
-//                   		 		toBreak = true;
-//                   		 		break;}}
-//        			}
-//        			if(!toBreak)goodMoves.remove(t);
-//        			
-//        		}
-//        	}
-//        }
-//        return goodMoves;
-//    }
-    
-    
-    
     public ArrayList<Tuple> removeBadMovess() {
         ArrayList<ArrayList<Tuple>> stoneStrings = turn.getSC().getSStrings(this);
         ArrayList<Tuple> capString =  turn.getEC().getCapList(this);
@@ -400,6 +233,537 @@ public class Board{
 
     }
 
+//	public boolean checkStringSafetyv2(ArrayList<Tuple> list,Stone colour) {
+//		
+//		Board checkBoard = cloneBoard(this);
+//		
+//		checkBoard.turn = colour.getEC();
+//		ArrayList<Tuple> vMoves = checkBoard.getAllValidMoves();
+//		ArrayList<Tuple> libs = getLibs(list,true);
+//		checkBoard.removeKo();
+//		while (!vMoves.isEmpty()) {
+//			checkBoard.boardString = checkBoard.boardToString();	
+//			ArrayList<ArrayList<Tuple>> empty = getConnected(vMoves);
+//			ArrayList<Tuple> newVmoves = new ArrayList<Tuple>();
+//			for(ArrayList<Tuple> tlist : empty) {
+//				if(tlist.size()> 1) {
+//					boolean removed = false;
+//					for(Tuple t : tlist) {
+//						if (!libs.contains(t)) {
+//							removed = true;
+//							tlist.remove(t);
+//							break;
+//						}
+//					}
+//					if(!removed)tlist.remove(0);
+//				}
+//				newVmoves.addAll(tlist);
+//				break;
+//			}
+//			vMoves = newVmoves;
+//			Board nCB= cloneBoard(checkBoard);
+//			for (Tuple t: vMoves) checkBoard.stones[t.a][t.b]= colour.getEC();
+//			checkBoard.updateStringsFull();
+//			checkBoard.checkForCaps(colour.getEC(), false);
+//			checkBoard.checkForCaps(colour,false);
+//			checkBoard.boardString = checkBoard.boardToString();	
+//			ArrayList<Tuple> cappedStrings = (colour== Stone.WHITE ? checkBoard.bCappedStrings: checkBoard.wCappedStrings);
+//			if(!cappedStrings.isEmpty()) {
+//				checkBoard=nCB;	
+//				checkBoard.boardString = checkBoard.boardToString();	
+//				for(Tuple t:cappedStrings) if(vMoves.remove(t))break;
+//				continue;
+//			}
+//
+//			checkBoard.boardString = checkBoard.boardToString();	
+//			checkBoard.removeKo();
+//			vMoves = checkBoard.getAllValidMoves();
+//			
+//		}
+//
+//		
+//		if(colour.getSStrings(checkBoard).contains(list)) return true;
+//		
+//		return false;
+//	}
+	
+	public boolean checkStringSafetyv2(ArrayList<Tuple> list,Stone colour) {
+		
+		Board checkBoard = cloneBoard(this);
+		Board newBoard;
+		boolean noDead = false;
+		while(!noDead) {
+			ArrayList<Tuple> toRemove = new ArrayList<Tuple>();
+			noDead=true;
+			for(ArrayList<Tuple> blist :colour.getSStrings(checkBoard)) {
+				if(blist.containsAll(list))continue;
+				newBoard = cloneBoard(checkBoard);
+				if(!checkSingleStringForSafety(blist,colour,newBoard)) {
+					toRemove.addAll(blist);
+					noDead=false;
+					break;
+				}
+			}
+			checkBoard.removeStonesOnBoard(toRemove, false);
+			checkBoard.updateStringsFull();
+			checkBoard.checkForCaps(colour.getEC(), false);
+			checkBoard.checkForCaps(colour,false);
+		}
+		
+		return checkSingleStringForSafety(list,colour,checkBoard);
+	}
+	
+	
+	public boolean checkSingleStringForSafety(ArrayList<Tuple> list,Stone colour,Board b) {
+		
+		Board checkBoard = b;
+		checkBoard.turn = colour.getEC();
+		ArrayList<Tuple> vMoves = checkBoard.getAllValidMoves();
+		ArrayList<Tuple> libs = getLibs(list,true);
+		checkBoard.removeKo();
+		while (!vMoves.isEmpty()) {	
+			ArrayList<Tuple> preValidMoves =tupleArrayClone(vMoves);
+			vMoves.retainAll(libs);
+			if(vMoves.isEmpty()) {
+				vMoves = preValidMoves;
+				ArrayList<ArrayList<Tuple>> empty = getConnected(vMoves);
+				ArrayList<Tuple> newVmoves = new ArrayList<Tuple>();
+				for(ArrayList<Tuple> tlist : empty) {
+					if(tlist.size()> 1) {
+						boolean removed = false;
+						for(Tuple t : tlist) {
+							if (!libs.contains(t)) {
+								removed = true;
+								tlist.remove(t);
+								break;
+							}
+						}
+						if(!removed)tlist.remove(0);
+					}
+					newVmoves.addAll(tlist);
+					break;
+				}
+				vMoves = newVmoves;
+			}
+			Board nCB= cloneBoard(checkBoard);
+			for (Tuple t: vMoves) checkBoard.stones[t.a][t.b]= colour.getEC();
+			checkBoard.updateStringsFull();
+			checkBoard.checkForCaps(colour.getEC(), false);
+			checkBoard.checkForCaps(colour,false);
+			checkBoard.boardString = checkBoard.boardToString();	
+			ArrayList<Tuple> cappedStrings = (colour== Stone.WHITE ? checkBoard.bCappedStrings: checkBoard.wCappedStrings);
+			if(!cappedStrings.isEmpty()) {
+				checkBoard=nCB;		
+				for(Tuple t:cappedStrings) if(vMoves.remove(t))break;
+				continue;
+			}
+
+			checkBoard.boardString = checkBoard.boardToString();	
+			checkBoard.removeKo();
+			vMoves = checkBoard.getAllValidMoves();
+			if(!colour.getSStrings(checkBoard).contains(list)) return false;
+		}
+
+		
+		if(colour.getSStrings(checkBoard).contains(list)) return true;
+		
+		return false;
+	}
+	
+	
+    private boolean selfCap(int i , int j, Stone enemycolour ){
+
+        if (enemycolour != Stone.BLACK && enemycolour != Stone.WHITE) return false;
+        
+        ArrayList<Tuple> enemyCapString =  (enemycolour== Stone.WHITE ? wCapStrings:  bCapStrings);
+        ArrayList<Tuple> currentCapString =  (enemycolour== Stone.WHITE ? bCapStrings:  wCapStrings);
+        ArrayList<ArrayList<Tuple>> stoneStrings =  (enemycolour== Stone.WHITE ? bStoneStrings:  wStoneStrings);
+        
+
+        if (enemyCapString.contains(new Tuple(i, j))) return false;
+        
+        ArrayList<Tuple> adj = getAdjacent(i, j);
+        if (currentCapString.contains(new Tuple(i, j))) {
+            for (Tuple t :adj) {
+            	if (stones[t.a][t.b].getSC() == enemycolour.getEC()){
+            		 ArrayList<Tuple> sstring = checkForStrings( t.a ,  t.b, stoneStrings);
+            		 if (!sstring.isEmpty() && getNeedList(sstring, enemycolour,true).size() >1)  return false;}
+            	else if (stones[t.a][t.b].getSC() != Stone.BLACK && stones[t.a][t.b].getSC() != Stone.WHITE)return false;
+            }
+        	return true;}  
+        
+        
+        for (Tuple t :adj) {
+		      if(stones[t.a][t.b].getSC()!=enemycolour.getSC()) return false;
+		}
+
+        return true;
+    }
+ 
+    public void updateStringsFull(){
+        for(int i=0; i<stones.length; i++) {
+            for(int j=0; j<stones[i].length; j++) {
+                 updateStringsSingle(i,j);
+            }
+        }
+    }
+   
+    private void updateStringsSingle(int i , int j){
+        if (stones[i][j].getSC()==Stone.BLACK || stones[i][j].getSC() == Stone.WHITE){
+            removeOldStoneFromString(i,j,stones[i][j].getSC()==Stone.BLACK ? wStoneStrings:bStoneStrings);
+            ArrayList<ArrayList<Tuple>> stoneStrings = stones[i][j].getSC()==Stone.BLACK ? bStoneStrings:wStoneStrings;
+            ArrayList<Tuple> stringed = checkForStrings(i, j,stoneStrings);
+            if (stringed.isEmpty()){
+                ArrayList<Tuple> adj =  getAdjacent(i,j);
+                ArrayList<Tuple> sstring= new ArrayList<Tuple>();
+                sstring.add(new Tuple(i,j));
+                for(Tuple t :adj ){
+                    if (stones[t.a][t.b].getSC() == stones[i][j].getSC()){
+                    	 ArrayList<Tuple>  libsStringres = checkForStrings(t.a,t.b,stoneStrings);
+                        if(!libsStringres.isEmpty()){
+                        	//This part combines string of liberty stone with string of current stone
+                        	if (libsStringres != sstring) {
+	                            stoneStrings.remove(libsStringres);
+	                            stoneStrings.remove(sstring);
+	                            sstring = tupleArrayMerger(sstring,libsStringres);
+	                            stoneStrings.add(sstring);}}}
+                }
+                if (sstring.size()==1){stoneStrings.add(sstring);}}
+            stoneStrings.removeIf(item -> item.isEmpty());}
+        else{
+        	if (stones[i][j]==Stone.KO && ko==null)ko = new Tuple(i,j);
+        		
+            removeOldStoneFromString(i,j,bStoneStrings);
+            removeOldStoneFromString(i,j,wStoneStrings);}
+    }
+    
+    public ArrayList<Tuple> getLibs(ArrayList<Tuple> sstring,boolean unique) {
+
+        ArrayList<Tuple> capstring = new ArrayList<Tuple>();
+        for (Tuple t : sstring){
+            if(unique)capstring.removeAll(getAdjacent(t.a, t.b));
+            capstring.addAll(getAdjacent(t.a, t.b));
+        }
+        ArrayList<Tuple> l = tupleArrayClone(sstring);
+        capstring.removeAll(l);
+        return capstring;
+    }
+    
+    public ArrayList<Tuple> getNeedList(ArrayList<Tuple> sstring,Stone enemycolour,boolean unique) {
+    	ArrayList<Tuple> needList = new ArrayList<Tuple>();
+        ArrayList<Tuple> capList = getLibs(sstring,unique);
+        for (Tuple t : capList){
+            if (stones[t.a][t.b].getSC()!=enemycolour.getSC()) needList.add(t);
+        }
+        return needList;
+    }
+
+    private void removeStonesOnBoard(ArrayList<Tuple> tlist, boolean editormode){
+        for(Tuple t : tlist){
+            stones[t.a][t.b] = Stone.VALID;
+            if (editormode && keystones.contains(t)) keystones.remove(t);
+        }
+    }
+   
+    private void removeOldStoneFromString(int  i , int j , ArrayList<ArrayList<Tuple>> stoneStrings ){
+    	ArrayList<Tuple> stringed = checkForStrings( i ,  j, stoneStrings);
+        if (!stringed.isEmpty()){
+            stoneStrings.remove(stringed);
+            updateStringsFull();
+        }
+
+    }
+    
+    private void removeKo(){
+        if (ko != null){
+            stones[ko.a][ko.b] =Stone.VALID;
+            ko = null;}
+    }
+    
+    public ArrayList<Tuple> checkForStrings(int i , int j , ArrayList<ArrayList<Tuple>> stoneStrings){
+        Tuple k = new Tuple(i, j);
+        for (ArrayList<Tuple> bStrings : stoneStrings ){
+            if (bStrings.contains(k)) return tupleArrayClone(bStrings);
+        }
+        return   new ArrayList<Tuple>();
+    }
+    
+	public ArrayList<ArrayList<Tuple>> getConnected(ArrayList<Tuple> sstring){
+		ArrayList<ArrayList<Tuple>> ret = new ArrayList<ArrayList<Tuple>>();
+		ArrayList<Tuple> nsstring = tupleArrayClone(sstring);
+
+		while(!nsstring.isEmpty()) {
+			Tuple t = nsstring.get(0);
+			ArrayList<Tuple> connected = new ArrayList<Tuple>();
+			ArrayList<Tuple> adj = getAdjacent(t.a,t.b);
+			connected.add(t);
+			nsstring.remove(0);
+			while(!adj.isEmpty()) {
+				Tuple k = adj.get(0);
+				if (nsstring.contains(k)) {
+					connected.add(k);
+					nsstring.remove(k);
+					adj.addAll(getAdjacent(k.a,k.b));
+				}
+				 adj.remove(0);
+				
+			}
+			ret.add(connected);
+		}
+		
+		
+		return ret;
+		
+		
+	}
+
+    public ArrayList<Tuple> getAdjacent(int i , int j){
+        ArrayList<Tuple> adj = new ArrayList<Tuple>();
+        if (i>=1) adj.add(new Tuple(i-1,j));
+        if (i<=17) adj.add(new Tuple(i+1,j));
+        if (j>=1)adj.add(new Tuple(i,j-1));
+        if (j<=17) adj.add(new Tuple(i,j+1));
+        return adj;
+    }
+
+    public ArrayList<Tuple>  getDiag(int i , int j) {
+        ArrayList<Tuple> diag = new ArrayList<Tuple>();
+        if (i>=1 && j>=1) diag.add(new Tuple(i-1,j-1));
+        if (i<=17 && j<=17) diag.add(new Tuple(i+1,j+1));
+        if (i<=17 && j>=1)diag.add(new Tuple(i+1,j-1));
+        if (i>=1 && j<=17) diag.add(new Tuple(i-1,j+1));
+        return diag;
+    }
+    
+    
+    
+    
+    public void initBoard(boolean editormode){
+        for(int i=0; i<stones.length; i++) {
+            for(int j=0; j<stones[i].length; j++) {
+                stones[i][j] = Stone.EMPTY;
+                if (editormode) stones[i][j] = Stone.VALID;
+            }
+        }
+
+        keystone = Stone.KEYBLACKSTONE;
+        placing = Stone.BLACK;
+        blackFirst = true;
+        capToWin = true;
+        keystones.clear();
+        bStoneStrings.clear();
+        wStoneStrings.clear();
+        bCapStrings.clear();
+        wCapStrings.clear();
+        bCappedStrings.clear();
+        wCappedStrings.clear();
+        validMoves =getAllValidMoves();
+        passing=false;
+        ko = null;
+        resetboard =cloneBoard(this);
+        //undoBoard =cloneBoard(this);
+    }
+    
+    public static Board cloneBoard(Board oB) {
+    	Board nB = new Board();
+    	nB.capToWin = oB.capToWin;
+    	nB.boardSize = oB.boardSize;
+    	nB.placing = oB.placing;
+    	nB.turn = oB.turn;
+    	nB.keystone = oB.keystone;
+    	nB.stones = cloneBoardStones(oB.stones);
+    	if(oB.ko!=null)nB.ko = oB.ko.clone();
+    	
+    	nB.keystones = tupleArrayClone(oB.keystones);
+    	nB.validMoves = tupleArrayClone(oB.validMoves);
+    	nB.bCapStrings = tupleArrayClone(oB.bCapStrings);
+    	nB.wCapStrings = tupleArrayClone(oB.wCapStrings);
+    	nB.bCappedStrings = tupleArrayClone(oB.bCappedStrings);
+    	nB.wCappedStrings = tupleArrayClone(oB.wCappedStrings);
+    	nB.bStoneStrings = twoDTupleArrayClone(oB.bStoneStrings);
+    	nB.wStoneStrings = twoDTupleArrayClone(oB.wStoneStrings);
+    	nB.passing = oB.passing;
+    	nB.blackFirst = oB.blackFirst;
+    	nB.desc = oB.desc;
+    	nB.resetboard = oB.resetboard;
+    	nB.undoBoard = oB.undoBoard;
+      	nB.redoBoard = oB.redoBoard;
+    	return nB;
+    } 
+    
+    public String boardToString() {
+    	StringBuilder s = new StringBuilder();
+        for(int i=0; i<stones.length; i++) {
+            for(int j=0; j<stones[i].length; j++) {
+                switch (stones[j][i]) {
+                    case BLACK: s.append("| x ") ;break;
+                    case WHITE:  s.append("| o ") ;break;
+                    case VALID:  s.append("| + ") ;break;
+                    case INVALID:   s.append("| - ") ;break;
+                    case KEYBLACKSTONE: s.append("| X ") ;  break;
+                    case KEYWHITESTONE:  s.append("| O ") ; break;
+                    case KO: s.append("| K ") ;break;
+                    case EMPTY: break;
+                }
+            }
+            s.append("|\r\n") ;
+
+        }
+        return s.toString();
+    	
+    }
+    
+    public Stone[][] stringToBoard(String s){
+    	 Stone[][] newstones = new Stone[19][19];
+    	 int i = 0;
+    	 int j = 0;
+
+		 for(char c: s.toCharArray()) {
+	         switch (c){
+		         case 'x': newstones[i][j] = Stone.BLACK;i++; break;
+		         case 'X': newstones[i][j] = Stone.KEYBLACKSTONE;i++; break;
+		         case 'o': newstones[i][j] = Stone.WHITE;i++; break;
+		         case 'O': newstones[i][j] = Stone.KEYWHITESTONE;i++; break;
+		         case 'K': newstones[i][j] = Stone.KO;i++; break;
+		         case '+': newstones[i][j] = Stone.VALID;i++; break;
+		         case '-': newstones[i][j] = Stone.INVALID;i++; break;
+		         case ' ': break;
+		         case '|': break;
+		         case '\r': break;
+		         case '\n': j++;i=0; break;
+	         }
+		 }  	 
+    	 return newstones;
+    	 
+    }
+    
+    public void refreshBoard() {
+        updateStringsFull();
+        checkForCaps(turn,false);
+        checkForCaps(turn.getEC(),false);
+        this.validMoves=getAllValidMoves();
+    }
+    
+    public void undoMove(boolean saveUndo){
+    	if(!undoString.isEmpty()) {
+	    	String s = undoString.pop();
+	    	if(saveUndo)redoString.push(boardToString());
+	    	removeKo();
+	    	stones = stringToBoard(s);
+	    	turn = turn.getEC();
+	    	placing = turn;
+	    	refreshBoard();
+    	}
+
+    }
+
+    public void redoMove(){
+    	if(!redoString.isEmpty()) {
+	    	String s = redoString.pop();
+	    	undoString.push(boardToString());
+	    	removeKo();
+	    	stones = stringToBoard(s);
+	    	turn = turn.getEC();
+	    	placing = turn;
+	    	refreshBoard();
+    	}
+    }
+   
+    public void flip() {
+	    undoBoard = cloneBoard(this);
+	    redoBoard = null;
+    	Board nB = cloneBoard(this);
+        for(int i=0; i<stones.length; i++) {
+            for(int j=0; j<stones[i].length; j++) {
+            	nB.stones[j][18-i]= this.stones[j][i];
+            }
+        }
+        ArrayList<Tuple> nkeystones = new ArrayList<Tuple>();
+        for(Tuple t:keystones) {
+        	nkeystones.add(new Tuple(t.a,18-t.b));
+        }
+        keystones = nkeystones;
+        if(ko!=null)ko= new Tuple(ko.a,18-ko.b);
+        stones = nB.stones;
+        updateStringsFull();
+        checkForCaps(turn.getSC(),true);
+        checkForCaps(turn.getEC(),true);
+        validMoves =getAllValidMoves();
+    }
+    
+    public void rotate() {
+	    undoBoard = cloneBoard(this);
+	    redoBoard = null;
+    	Board nB = cloneBoard(this);
+        for(int i=0; i<stones.length; i++) {
+            for(int j=0; j<stones[i].length; j++) {
+            	nB.stones[i][18-j]= this.stones[j][i];
+            }
+        }
+        ArrayList<Tuple> nkeystones = new ArrayList<Tuple>();
+        for(Tuple t:keystones) {
+        	nkeystones.add(new Tuple(t.b,18-t.a));
+        }
+        keystones = nkeystones;
+        if(ko!=null)ko= new Tuple(ko.b,18-ko.a);
+        stones = nB.stones;
+        updateStringsFull();
+        checkForCaps(turn.getSC(),true);
+        checkForCaps(turn.getEC(),true);
+        validMoves =getAllValidMoves();
+    }
+  
+    public boolean withinBounds(int x, int y){
+    	if(x <= 18 && x>=0 && y <= 18 && y>=0) return true;
+    	return false;
+    	
+    }
+    
+    public boolean withinBounds(Tuple t){
+    	if(t.a <= 18 && t.a>=0 && t.b <= 18 && t.b>=0) return true;
+    	return false;
+    	
+    }
+ 
+
+    public static ArrayList<Tuple> tupleArrayClone(ArrayList<Tuple> s){
+        ArrayList<Tuple> l = new ArrayList<Tuple>();
+        for(Tuple o : s) {
+            l.add(new Tuple(o.a,o.b));
+        }
+        return l;
+    }
+    
+    private static Stone[][] cloneBoardStones(Stone[][] oS){
+    	Stone[][] nS = new Stone[19][19];
+    	  for(int i=0; i<oS.length; i++) {
+              for(int j=0; j<oS[i].length; j++) {
+            	  nS[i][j] =  oS[i][j];      
+              }
+          }
+    	return nS;
+    }
+    
+    private static ArrayList<ArrayList<Tuple>> twoDTupleArrayClone(ArrayList<ArrayList<Tuple>> ol){
+    	ArrayList<ArrayList<Tuple>> nl = new  ArrayList<ArrayList<Tuple>>() ;
+    	 for(ArrayList<Tuple> l : ol) {
+             nl.add(tupleArrayClone(l));
+         }
+    	return nl;
+    }
+    
+    private ArrayList<Tuple> tupleArrayMerger(ArrayList<Tuple> a,ArrayList<Tuple> b){
+    	ArrayList<Tuple> l = new ArrayList<Tuple>();
+    	l.addAll(a);
+    	for (Tuple t : b ) {
+    		if (!l.contains(t)) l.add(t);
+    	}
+		return l;
+    	
+    }
+    
+
+    
     public void draw(Graphics g,boolean editormode) {
     	
 		g.setBackground(Color.lightGray);
@@ -498,549 +862,8 @@ public class Board{
     	else return -1;
     }
 
-    public boolean withinBounds(int x, int y){
-    	if(x <= 18 && x>=0 && y <= 18 && y>=0) return true;
-    	return false;
-    	
-    }
-    
-    public boolean withinBounds(Tuple t){
-    	if(t.a <= 18 && t.a>=0 && t.b <= 18 && t.b>=0) return true;
-    	return false;
-    	
-    }
- 
-    
 
-//OG working one
-    
-//    private boolean selfCap(int i , int j, Stone enemycolour ){
-//        long start = System.nanoTime();
-//
-//        if (enemycolour != Stone.BLACK && enemycolour != Stone.WHITE) {
-//            long end = System.nanoTime();
-//            fullTime += (end - start );
-//            return false;
-//        }
-//        ArrayList<Tuple> capString =  (enemycolour== Stone.WHITE ? wCapStrings:  bCapStrings);
-//        ArrayList<ArrayList<Tuple>> stoneStrings =  (enemycolour== Stone.WHITE ? bStoneStrings:  wStoneStrings);
-//        ArrayList<Tuple> adj = getAdjacent(i, j);
-//        if (capString.contains(new Tuple(i, j))) {
-//            long end = System.nanoTime();
-//            fullTime += (end - start );
-//        	return false;
-//        }
-//        
-//    	
-//
-//        ArrayList<Tuple> sstring= new ArrayList<Tuple>();
-//        sstring.add(new Tuple(i,j));
-//        for(Tuple t :adj ){
-//            if (stones[t.a][t.b].getSC() == enemycolour.getEC()){
-//                StoneStringResponse libsStringres = checkForStrings( t.a ,  t.b, stoneStrings);
-//                if(!libsStringres.state){
-//                    sstring.add(t);}
-//                else{
-//                	//This tupleArrayMerger combines string of liberty stone with string of current stone
-//                    sstring= tupleArrayMerger(sstring,libsStringres.list);}}
-//        }
-// 
-//        
-//        for (Tuple t :getLibs(sstring)) {
-//            if(stones[t.a][t.b].getSC()!=enemycolour.getSC()){
-//                long end = System.nanoTime();
-//                fullTime += (end - start );
-//                return false;}
-//        }
-//        long end = System.nanoTime();
-//        fullTime += (end - start );
-//        return true;
-//    }
-    
-    
-    
-//	public int getSafeStringsCount(Stone colour,ArrayList<Tuple> eyelist) {
-//		int retval = 0;
-//		ArrayList<ArrayList<Tuple>> stoneStrings =  (colour== Stone.WHITE ? wStoneStrings:  bStoneStrings);;
-//		for (ArrayList<Tuple> list :stoneStrings) {
-//			retval += checkStringSafety(list, colour,eyelist);
-//		}
-//		return retval;
-//	}
-	
-	
-//	public boolean checkEnemySurronding(Tuple e , Tuple t, Stone colour, ArrayList<Tuple> checkedList, boolean alreadyDiag ) {
-//		
-//		ArrayList<Tuple> surE = getSurrounding(e.a,e.b); 
-//		ArrayList<Tuple> diagE = getDiag(e.a,e.b); 
-//		ArrayList<Tuple> furtherChecking = new ArrayList<Tuple>();
-//		int safeNeed = surE.size();
-//		int safeNum = 0; 
-//		if (safeNeed < 8)alreadyDiag = true;
-//		for(Tuple k : surE) {
-//			if (k.equals(t) || (stones[k.a][k.b].getSC() == colour.getSC()) ) {
-//				safeNum++;
-//				continue;}
-//			else if (stones[k.a][k.b].getSC() == colour.getEC()) {
-//				if (checkedList.contains(k)) safeNum++;
-//				else furtherChecking.add(k);
-//				continue;
-//			}else if (diagE.contains(k) && !alreadyDiag) {
-//				alreadyDiag=true;
-//				safeNum++;
-//				continue;
-//			}
-//			return false;
-//		}
-//		
-//		ArrayList<Tuple> newCheckedList = tupleArrayClone(checkedList);
-//		newCheckedList.add(e);
-//		if ((safeNum+ furtherChecking.size())>= safeNeed) {
-//			for (Tuple k : furtherChecking) {
-//				if  (checkEnemySurronding(k,t,colour,newCheckedList,alreadyDiag))safeNum++;
-//				else if(!alreadyDiag) {
-//					alreadyDiag=true;
-//					safeNum++;
-//				}
-//			}
-//		}
-//		return (safeNum >= safeNeed);
-//		
-//	}
-//	
 
-//	public ArrayList<Tuple> getCheckForSafetyList(ArrayList<Tuple> usedDiag,Tuple t) {
-//		ArrayList<Tuple> returnList = new ArrayList<Tuple>();
-//		ArrayList<Tuple> tlibs = getAdjacent(t.a,t.b);
-//		int finalsize = usedDiag.size();
-//		for (Tuple u : usedDiag) {
-//			ArrayList<Tuple> ulibs = getAdjacent(u.a,u.b);
-//			for (Tuple k :tlibs) {
-//				if (returnList.size() <finalsize && ulibs.contains(k) && !returnList.contains(k)) returnList.add(k);
-//			}
-//		}
-//		
-//		
-//		return returnList;
-//	}
-	
-
-	//Not 100%
-//	public int checkStringSafety(ArrayList<Tuple> list,Stone colour,ArrayList<Tuple> eyelist) {
-//		if (colour.getSC() !=Stone.BLACK && colour.getSC() !=Stone.WHITE) return 0;
-//		ArrayList<Tuple> needList = getNeedList(list,colour.getEC(),true);
-//		ArrayList<Tuple> tempEyeList  = new ArrayList<Tuple>();
-//		if (needList.size() >= 2) {
-//			int eyes = 0;
-//    		for (Tuple t : needList ) {
-//    			if (eyelist.contains(t)) {
-//    				eyes++;
-//    				continue;
-//    			}
-//    			ArrayList<Tuple> sur = getSurrounding(t.a,t.b);
-//    			ArrayList<Tuple> adj = getAdjacent(t.a,t.b);
-//    			ArrayList<Tuple> diag = getDiag(t.a,t.b);
-//    			ArrayList<Tuple> usedDiag = new ArrayList<Tuple>();
-//    			int surrondingNumber = sur.size();
-//    			
-//    			for (Tuple l : sur) {
-//    				if (adj.contains(l) && stones[l.a][l.b].getSC() != Stone.BLACK && stones[l.a][l.b].getSC() != Stone.WHITE) surrondingNumber=0;
-//    				else if (stones[l.a][l.b].getSC() != Stone.BLACK && stones[l.a][l.b].getSC() != Stone.WHITE) {
-//    					usedDiag.add(l);
-//    					surrondingNumber--;
-//    				}
-//    				
-//    				
-//    				else if(stones[l.a][l.b].getSC() == colour.getEC()){
-//    					ArrayList<Tuple> sstring  = checkForStrings(l.a,l.b,colour.getEC().getSStrings(this));
-//    					if (!sstring.isEmpty()) {
-//    						ArrayList<Tuple> eNeedList = getNeedList(sstring,colour,true);
-//    						if (eNeedList.size()!=1 ||  (eNeedList.size()==1 && !eNeedList.get(0).equals(t)) ||  (!checkEnemySurronding(l,t,colour,new ArrayList<Tuple>(),false))) {
-//    							if(diag.contains(l)) {
-//    								usedDiag.add(l);
-//    								surrondingNumber--;
-//    							}
-//    							else surrondingNumber=0;}
-//    						}
-//    					}
-//    			}
-//
-//    			if ((usedDiag.size() >1) || (usedDiag.size() > 0 && sur.size() == 5)) {
-//    				ArrayList<Tuple> checkThese = getCheckForSafetyList(usedDiag, t);
-//
-//    				int safes = 0;
-//    				for (Tuple l : checkThese) {
-//    					ArrayList<Tuple> sstring  = checkForStrings(l.a,l.b,colour.getSStrings(this));
-//    					if (!sstring.isEmpty()) {
-//    						 ArrayList<Tuple> newEyeList  =tupleArrayClone(eyelist);
-//    						 newEyeList.add(t);
-//    						 safes +=checkStringSafety(sstring,colour,newEyeList);
-//    					}
-//    				}
-//    				if (safes == checkThese.size()) surrondingNumber+=safes;
-//    				
-//    			} 
-//    			
-//    			if (sur.size() == 3 && surrondingNumber >1 ) {
-//    				tempEyeList.add(t);
-//    				eyes++;}
-//    			else if(sur.size() == 5 && surrondingNumber ==5) {
-//    				tempEyeList.add(t);
-//    				eyes++;}
-//    			else if(sur.size() == 8 && surrondingNumber >6) {
-//    				tempEyeList.add(t);
-//    				eyes++;}
-//    			
-//    		}
-//    		if (eyes>=2) {
-//    			eyelist.addAll(tempEyeList);
-//    			return 1;
-//    		}
-//    	}
-//		return 0;
-//		
-//	}
-
-	
-	
-	
-	public boolean checkStringSafetyv2(ArrayList<Tuple> list,Stone colour) {
-		Board checkBoard = cloneBoard(this);
-		checkBoard.turn = colour.getEC();
-		ArrayList<Tuple> vMoves = checkBoard.getAllValidMoves();
-		ArrayList<Tuple> libs = getLibs(list,true);
-		
-		checkBoard.removeKo();
-		while (!vMoves.isEmpty()) {
-
-			ArrayList<ArrayList<Tuple>> empty = getConnected(vMoves);
-			ArrayList<Tuple> newVmoves = new ArrayList<Tuple>();
-			for(ArrayList<Tuple> tlist : empty) {
-				if(tlist.size()> 1) {
-					boolean removed = false;
-					for(Tuple t : tlist) {
-						if (!libs.contains(t)) {
-							removed = true;
-							tlist.remove(t);
-							break;}
-					}
-					if(!removed)tlist.remove(0);}
-				newVmoves.addAll(tlist);
-			}
-			vMoves = newVmoves;
-			
-			for (Tuple t: vMoves) checkBoard.stones[t.a][t.b]= colour.getEC();
-			checkBoard.updateStringsFull();
-			checkBoard.checkForCaps(colour.getEC(), false);
-			checkBoard.checkForCaps(colour,false);
-			
-			checkBoard.removeKo();
-			vMoves = checkBoard.getAllValidMoves();
-			
-		}
-		
-		if(colour.getSStrings(checkBoard).contains(list)) return true;
-		
-		return false;
-	}
-	
-	
-	
-	public ArrayList<ArrayList<Tuple>> getConnected(ArrayList<Tuple> sstring){
-		ArrayList<ArrayList<Tuple>> ret = new ArrayList<ArrayList<Tuple>>();
-		ArrayList<Tuple> nsstring = tupleArrayClone(sstring);
-
-		while(!nsstring.isEmpty()) {
-			Tuple t = nsstring.get(0);
-			ArrayList<Tuple> connected = new ArrayList<Tuple>();
-			ArrayList<Tuple> adj = getAdjacent(t.a,t.b);
-			connected.add(t);
-			nsstring.remove(0);
-			while(!adj.isEmpty()) {
-				Tuple k = adj.get(0);
-				if (nsstring.contains(k)) {
-					connected.add(k);
-					nsstring.remove(k);
-					adj.addAll(getAdjacent(k.a,k.b));
-				}
-				 adj.remove(0);
-				
-			}
-			ret.add(connected);
-		}
-		
-		
-		return ret;
-		
-		
-	}
-	
-	
-//	public boolean isAdjacentAll(Tuple t,Stone colour) {
-//		ArrayList<Tuple> adj = getAdjacent(t.a,t.b);
-//		for(Tuple l : adj) {
-//			if (stones[l.a][l.b] != colour)return false;
-//		}
-//		return true;
-//		
-//	}
-    
-    private boolean selfCap(int i , int j, Stone enemycolour ){
-
-        if (enemycolour != Stone.BLACK && enemycolour != Stone.WHITE) return false;
-        
-        ArrayList<Tuple> enemyCapString =  (enemycolour== Stone.WHITE ? wCapStrings:  bCapStrings);
-        ArrayList<Tuple> currentCapString =  (enemycolour== Stone.WHITE ? bCapStrings:  wCapStrings);
-        ArrayList<ArrayList<Tuple>> stoneStrings =  (enemycolour== Stone.WHITE ? bStoneStrings:  wStoneStrings);
-        
-
-        if (enemyCapString.contains(new Tuple(i, j))) return false;
-        
-        ArrayList<Tuple> adj = getAdjacent(i, j);
-        if (currentCapString.contains(new Tuple(i, j))) {
-            for (Tuple t :adj) {
-            	if (stones[t.a][t.b].getSC() == enemycolour.getEC()){
-            		 ArrayList<Tuple> sstring = checkForStrings( t.a ,  t.b, stoneStrings);
-            		 if (!sstring.isEmpty() && getNeedList(sstring, enemycolour,true).size() >1)  return false;}
-            	else if (stones[t.a][t.b].getSC() != Stone.BLACK && stones[t.a][t.b].getSC() != Stone.WHITE)return false;
-            }
-        	return true;}  
-        
-        
-        for (Tuple t :adj) {
-		      if(stones[t.a][t.b].getSC()!=enemycolour.getSC()) return false;
-		}
-
-        return true;
-    }
- 
-    private void removeKo(){
-        if (ko != null){
-            stones[ko.a][ko.b] =Stone.VALID;
-            ko = null;}
-    }
-    
-    private void updateStringsSingle(int i , int j){
-        if (stones[i][j].getSC()==Stone.BLACK || stones[i][j].getSC() == Stone.WHITE){
-            removeOldStoneFromString(i,j,stones[i][j].getSC()==Stone.BLACK ? wStoneStrings:bStoneStrings);
-            ArrayList<ArrayList<Tuple>> stoneStrings = stones[i][j].getSC()==Stone.BLACK ? bStoneStrings:wStoneStrings;
-            ArrayList<Tuple> stringed = checkForStrings(i, j,stoneStrings);
-            if (stringed.isEmpty()){
-                ArrayList<Tuple> adj =  getAdjacent(i,j);
-                ArrayList<Tuple> sstring= new ArrayList<Tuple>();
-                sstring.add(new Tuple(i,j));
-                for(Tuple t :adj ){
-                    if (stones[t.a][t.b].getSC() == stones[i][j].getSC()){
-                    	 ArrayList<Tuple>  libsStringres = checkForStrings(t.a,t.b,stoneStrings);
-                        if(!libsStringres.isEmpty()){
-                        	//This part combines string of liberty stone with string of current stone
-                        	if (libsStringres != sstring) {
-	                            stoneStrings.remove(libsStringres);
-	                            stoneStrings.remove(sstring);
-	                            sstring = tupleArrayMerger(sstring,libsStringres);
-	                            stoneStrings.add(sstring);}}}
-                }
-                if (sstring.size()==1){stoneStrings.add(sstring);}}
-            stoneStrings.removeIf(item -> item.isEmpty());}
-        else{
-        	if (stones[i][j]==Stone.KO && ko==null)ko = new Tuple(i,j);
-        		
-            removeOldStoneFromString(i,j,bStoneStrings);
-            removeOldStoneFromString(i,j,wStoneStrings);}
-    }
-    
-    public ArrayList<Tuple> getLibs(ArrayList<Tuple> sstring,boolean unique) {
-
-        ArrayList<Tuple> capstring = new ArrayList<Tuple>();
-        for (Tuple t : sstring){
-            if(unique)capstring.removeAll(getAdjacent(t.a, t.b));
-            capstring.addAll(getAdjacent(t.a, t.b));
-        }
-        ArrayList<Tuple> l = tupleArrayClone(sstring);
-        capstring.removeAll(l);
-        return capstring;
-    }
-    
-    
-    public void flip() {
-	    undoBoard = cloneBoard(this);
-	    redoBoard = null;
-    	Board nB = cloneBoard(this);
-        for(int i=0; i<stones.length; i++) {
-            for(int j=0; j<stones[i].length; j++) {
-            	nB.stones[j][18-i]= this.stones[j][i];
-            }
-        }
-        ArrayList<Tuple> nkeystones = new ArrayList<Tuple>();
-        for(Tuple t:keystones) {
-        	nkeystones.add(new Tuple(t.a,18-t.b));
-        }
-        keystones = nkeystones;
-        if(ko!=null)ko= new Tuple(ko.a,18-ko.b);
-        stones = nB.stones;
-        updateStringsFull();
-        checkForCaps(turn.getSC(),true);
-        checkForCaps(turn.getEC(),true);
-        validMoves =getAllValidMoves();
-    }
-    
-    public void rotate() {
-	    undoBoard = cloneBoard(this);
-	    redoBoard = null;
-    	Board nB = cloneBoard(this);
-        for(int i=0; i<stones.length; i++) {
-            for(int j=0; j<stones[i].length; j++) {
-            	nB.stones[i][18-j]= this.stones[j][i];
-            }
-        }
-        ArrayList<Tuple> nkeystones = new ArrayList<Tuple>();
-        for(Tuple t:keystones) {
-        	nkeystones.add(new Tuple(t.b,18-t.a));
-        }
-        keystones = nkeystones;
-        if(ko!=null)ko= new Tuple(ko.b,18-ko.a);
-        stones = nB.stones;
-        updateStringsFull();
-        checkForCaps(turn.getSC(),true);
-        checkForCaps(turn.getEC(),true);
-        validMoves =getAllValidMoves();
-    }
-    
-    
-    public ArrayList<Tuple> getNeedList(ArrayList<Tuple> sstring,Stone enemycolour,boolean unique) {
-    	ArrayList<Tuple> needList = new ArrayList<Tuple>();
-        ArrayList<Tuple> capList = getLibs(sstring,unique);
-        for (Tuple t : capList){
-            if (stones[t.a][t.b].getSC()!=enemycolour.getSC()) needList.add(t);
-        }
-        return needList;
-    }
-    
-    
-    
-    private ArrayList<Tuple> tupleArrayMerger(ArrayList<Tuple> a,ArrayList<Tuple> b){
-    	ArrayList<Tuple> l = new ArrayList<Tuple>();
-    	l.addAll(a);
-    	for (Tuple t : b ) {
-    		if (!l.contains(t)) l.add(t);
-    	}
-		return l;
-    	
-    }
-    
-    private void removeStonesOnBoard(ArrayList<Tuple> tlist, boolean editormode){
-        for(Tuple t : tlist){
-            stones[t.a][t.b] = Stone.VALID;
-            if (editormode && keystones.contains(t)) keystones.remove(t);
-        }
-    }
-   
-    private static ArrayList<ArrayList<Tuple>> twoDTupleArrayClone(ArrayList<ArrayList<Tuple>> ol){
-    	ArrayList<ArrayList<Tuple>> nl = new  ArrayList<ArrayList<Tuple>>() ;
-    	 for(ArrayList<Tuple> l : ol) {
-             nl.add(tupleArrayClone(l));
-         }
-    	return nl;
-    }
-    
-    public static ArrayList<Tuple> tupleArrayClone(ArrayList<Tuple> s){
-        ArrayList<Tuple> l = new ArrayList<Tuple>();
-        for(Tuple o : s) {
-            l.add(new Tuple(o.a,o.b));
-        }
-        return l;
-    }
-    
-    private static Stone[][] cloneBoardStones(Stone[][] oS){
-    	Stone[][] nS = new Stone[19][19];
-    	  for(int i=0; i<oS.length; i++) {
-              for(int j=0; j<oS[i].length; j++) {
-            	  nS[i][j] =  oS[i][j];      
-              }
-          }
-    	return nS;
-    }
-    
-    private void removeOldStoneFromString(int  i , int j , ArrayList<ArrayList<Tuple>> stoneStrings ){
-    	ArrayList<Tuple> stringed = checkForStrings( i ,  j, stoneStrings);
-        if (!stringed.isEmpty()){
-            stoneStrings.remove(stringed);
-            updateStringsFull();
-        }
-
-    }
-    
-    public ArrayList<Tuple> getAdjacent(int i , int j){
-        ArrayList<Tuple> adj = new ArrayList<Tuple>();
-        if (i>=1) adj.add(new Tuple(i-1,j));
-        if (i<=17) adj.add(new Tuple(i+1,j));
-        if (j>=1)adj.add(new Tuple(i,j-1));
-        if (j<=17) adj.add(new Tuple(i,j+1));
-        return adj;
-    }
-    
-    
-    public ArrayList<Tuple>  getDiag(int i , int j) {
-        ArrayList<Tuple> diag = new ArrayList<Tuple>();
-        if (i>=1 && j>=1) diag.add(new Tuple(i-1,j-1));
-        if (i<=17 && j<=17) diag.add(new Tuple(i+1,j+1));
-        if (i<=17 && j>=1)diag.add(new Tuple(i+1,j-1));
-        if (i>=1 && j<=17) diag.add(new Tuple(i-1,j+1));
-        return diag;
-    }
-    
-//    private ArrayList<Tuple> getSurrounding(int i , int j){
-//        ArrayList<Tuple> sur = getAdjacent(i,j);
-//        sur.addAll(getDiag(i,j));
-//        return sur;
-//    }
-
-    
-    public ArrayList<Tuple> checkForStrings(int i , int j , ArrayList<ArrayList<Tuple>> stoneStrings){
-        Tuple k = new Tuple(i, j);
-        for (ArrayList<Tuple> bStrings : stoneStrings ){
-            if (bStrings.contains(k)) return tupleArrayClone(bStrings);
-        }
-        return   new ArrayList<Tuple>();
-    }
-    
-    
-    public void refreshBoard() {
-        updateStringsFull();
-        checkForCaps(turn,false);
-        checkForCaps(turn.getEC(),false);
-        this.validMoves=getAllValidMoves();
-    }
-    
-    public void undoMove(boolean saveUndo){
-    	if(!undoString.isEmpty()) {
-	    	String s = undoString.pop();
-	    	if(saveUndo)redoString.push(boardToString());
-	    	removeKo();
-	    	stones = stringToBoard(s);
-	    	turn = turn.getEC();
-	    	placing = turn;
-	    	refreshBoard();
-	        print(ko);
-    	}
-
-    }
-
-    
-    public void redoMove(){
-    	if(!redoString.isEmpty()) {
-	    	String s = redoString.pop();
-	    	undoString.push(boardToString());
-	    	removeKo();
-	    	stones = stringToBoard(s);
-	    	turn = turn.getEC();
-	    	placing = turn;
-	    	refreshBoard();
-	        print(ko);
-    	}
-    }
-   
-   
     
 }
 
