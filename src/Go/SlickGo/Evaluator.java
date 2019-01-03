@@ -16,6 +16,11 @@ public class Evaluator {
 		this.oB = oB;
 		this.oBCounts = oBCounts;
 	}
+	
+	public Evaluator(Board cB, Board oB ) {
+		this.cB = cB;
+		this.oB = oB;
+	}
 
 	public Evaluator(Board cB) {
 		this.cB = cB;
@@ -81,22 +86,22 @@ public class Evaluator {
 		for (Tuple t : cB.keystones) {
 			ArrayList<Tuple> cBsstring = cB.checkForStrings(t.a, t.b, kscolour.getSStrings(cB));
 			if (!cBsstring.isEmpty()) {
-
-
 				if (cB.checkStringSafetyv2(cBsstring, kscolour))return Integer.MAX_VALUE;
 				ArrayList<Tuple> cBneedList = cB.getNeedList(cBsstring, kscolour.getEC(),true);
 				for (Tuple k : cBneedList)if (cB.stones[k.a][k.b] == Stone.INVALID)return Integer.MAX_VALUE;
-				
-
-				retval += hrunner.runKeyStringHeuristics(cBsstring);
-
-			}
+				retval += hrunner.runKeyStringHeuristics(cBsstring);}
 		}
 		
 		
 		for (ArrayList<Tuple>  slist : kscolour.getSStrings(cB)) {
 			for (Tuple  t : slist) retval += hrunner.runStoneHeuristics(t);	
 		}
+		
+//		Grouping grouping = new Grouping(cB,true,false,false,true);
+//		grouping.allocateGrouping();
+//		grouping.allocateControl();
+//		if(kscolour==Stone.BLACK)retval+= grouping.totalb;
+//		else retval+= grouping.totalw;
 		
 
 		return retval;
@@ -175,10 +180,6 @@ public class Evaluator {
 		return cB.stones[t.a][t.b].getSC() == kscolour.getEC();
 	}
 
-	public boolean capped(Tuple t) {
-		return kscolour.getCappedList(cB).contains(t);
-	}
-
 
 	public boolean isEnemies(Tuple...ts) {
 		for (Tuple t :ts){
@@ -193,10 +194,12 @@ public class Evaluator {
 		}
 		return true;
 	}
+	
+	public boolean isInvalid(Tuple t) {
+		if(!cB.withinBounds(t)) return false;
+		return cB.stones[t.a][t.b].getSC() == Stone.INVALID;
+	}
 
-//	public boolean ecapped(Tuple t) {
-//		return enemycolour.getCappedList(cB).contains(t);
-//	}
 
 	public void getStringMap(Stone colour, Stone[][] stones, boolean keepEnemy){
 		for (int i = 0; i < stones.length; i++) {

@@ -61,6 +61,10 @@ public class Play extends BasicGameState {
 
 		
 		//SlickGo.drawButton(board.boardSize+200 ,board.TileSize,150,40,board.placing.toString(), g,false);
+		SlickGo.drawButton(board.boardSize ,board.TileSize +300,50,50,"-", g,SlickGo.regionChecker(board.boardSize ,board.TileSize +300,50,50,gc));
+		SlickGo.drawButton(board.boardSize+60 ,board.TileSize +300,50,50,"+", g,SlickGo.regionChecker(board.boardSize+60 ,board.TileSize +300,50,50,gc));
+		SlickGo.drawButton(board.boardSize+120 ,board.TileSize +300,50,50,Integer.toString(MoveFinder.cutoff), g,false);
+		
 		SlickGo.drawButton(board.boardSize ,board.TileSize +440,200,50,"AI " +(turnOffComputer?"Disabled":"Enabled"), g ,!turnOffComputer,Color.green);
 		SlickGo.drawButton(board.boardSize +220,board.TileSize +440,200,50,"Heuristics " +(!heuristic?"Off":"On"), g ,heuristic,Color.green);
 		SlickGo.drawButton(board.boardSize +220,board.TileSize +680,90,50,"Undo", g ,SlickGo.regionChecker(board.boardSize +220 ,board.TileSize +680,90,50,gc));
@@ -93,8 +97,8 @@ public class Play extends BasicGameState {
 			gameMsg= "Ai Started";
 			makeComputerMove();}
 		
-		if (input.isMousePressed(1)) {
-			if (SlickGo.withinBounds(bx,by)) print(bx+","+by);
+		if (input.isMousePressed(1) && SlickGo.withinBounds(bx,by)) {
+			print(bx+","+by);
 			Stone colour = board.stones[bx][by].getSC();
 			if(colour.isStone()) {
 				ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
@@ -103,6 +107,11 @@ public class Play extends BasicGameState {
 		}
 		
 		if (input.isMousePressed(0)) {
+			
+
+			if (SlickGo.regionChecker(board.boardSize,board.TileSize +300,50,50,gc)&& MoveFinder.cutoff >1) MoveFinder.cutoff--;
+			if (SlickGo.regionChecker(board.boardSize+60 ,board.TileSize +300,50,50,gc)) MoveFinder.cutoff++;
+			
 			//Place Stone
 			if (SlickGo.withinBounds(bx,by) && !aiStarted && !gameOver) {
 				board.passing = false;

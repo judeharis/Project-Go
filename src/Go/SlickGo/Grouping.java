@@ -132,8 +132,8 @@ public class Grouping {
             }
     	}
 		
-//		for (Group g : wGroups) wControls.removeAll(g.group);
-//		for (Group g : bGroups) bControls.removeAll(g.group);
+		for (Group g : wGroups) wControls.removeAll(g.group);
+		for (Group g : bGroups) bControls.removeAll(g.group);
 		
 		
 		for(Tuple t: bControls) totalb+=stonesControl[t.a][t.b];

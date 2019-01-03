@@ -58,7 +58,7 @@ public class Tuple implements Comparable<Tuple>{
     	return new Tuple(this.a, this.b);
    }
     
-    public Tuple dubSide(UDLR side,UDLR side2) {
+    public Tuple side2(UDLR side,UDLR side2) {
     	return this.side(side).side(side2);
    }
     

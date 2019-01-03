@@ -289,9 +289,40 @@ public class Board{
 
     
 	
+//    public ArrayList<Tuple> removeBadMovessnewer() {
+//        ArrayList<ArrayList<Tuple>> stoneStrings = turn.getSC()==Stone.BLACK ? bStoneStrings:wStoneStrings;
+//        ArrayList<Tuple> capString =  turn.getSC()== Stone.BLACK ? wCapStrings: bCapStrings;
+//        ArrayList<Tuple> goodMoves = tupleArrayClone(validMoves);
+//        for (ArrayList<Tuple> tlist : stoneStrings){
+//        	ArrayList<Tuple> needList = getNeedList(tlist,turn.getEC(),true);
+//        	if (needList.size() == 2) {
+//        		for (Tuple t : needList ) {
+//        			boolean toBreak = false;
+//        			if (capString.contains(t)) continue;
+//        			ArrayList<Tuple> adj=  getAdjacent(t.a, t.b);
+//        			for (Tuple l : adj) {
+//        				if (stones[l.a][l.b].getSC() != Stone.WHITE && stones[l.a][l.b].getSC() != Stone.BLACK && !needList.contains(l)) {
+//        					toBreak = true;
+//        					break;
+//        				}else if(stones[l.a][l.b].getSC() == turn ){
+//        					ArrayList<Tuple> sstring = checkForStrings( l.a ,  l.b, stoneStrings);
+//                   		 	if (!sstring.isEmpty() && getNeedList(sstring, turn.getEC(),true).size() >2)  {
+//                   		 		toBreak = true;
+//                   		 		break;}}
+//        			}
+//        			if(!toBreak)goodMoves.remove(t);
+//        			
+//        		}
+//        	}
+//        }
+//        return goodMoves;
+//    }
+    
+    
+    
     public ArrayList<Tuple> removeBadMovess() {
-        ArrayList<ArrayList<Tuple>> stoneStrings = turn.getSC()==Stone.BLACK ? bStoneStrings:wStoneStrings;
-        ArrayList<Tuple> capString =  turn.getSC()== Stone.BLACK ? wCapStrings: bCapStrings;
+        ArrayList<ArrayList<Tuple>> stoneStrings = turn.getSC().getSStrings(this);
+        ArrayList<Tuple> capString =  turn.getEC().getCapList(this);
         ArrayList<Tuple> goodMoves = tupleArrayClone(validMoves);
         for (ArrayList<Tuple> tlist : stoneStrings){
         	ArrayList<Tuple> needList = getNeedList(tlist,turn.getEC(),true);
@@ -301,14 +332,17 @@ public class Board{
         			if (capString.contains(t)) continue;
         			ArrayList<Tuple> adj=  getAdjacent(t.a, t.b);
         			for (Tuple l : adj) {
-        				if (stones[l.a][l.b].getSC() != Stone.WHITE && stones[l.a][l.b].getSC() != Stone.BLACK && !needList.contains(l)) {
+        				if (!stones[l.a][l.b].isStone() && !needList.contains(l)) {
         					toBreak = true;
         					break;
-        				}else if(stones[l.a][l.b].getSC() == turn ){
-        					ArrayList<Tuple> sstring = checkForStrings( l.a ,  l.b, stoneStrings);
-                   		 	if (!sstring.isEmpty() && getNeedList(sstring, turn.getEC(),true).size() >2)  {
-                   		 		toBreak = true;
-                   		 		break;}}
+        				}else if(stones[l.a][l.b].getSC() == turn && !tlist.contains(l)){
+        					ArrayList<Tuple> sstring = checkForStrings(l.a,l.b,stoneStrings);
+                   		 	if (!sstring.isEmpty())  {
+                   		 		ArrayList<Tuple> needList2 = getNeedList(sstring,turn.getEC(),true);
+                   		 		if((needList2.size() ==2 && !needList.containsAll(needList2)) ||(needList2.size() >2)) {
+                   		 			toBreak = true;
+                       		 		break;
+                   		 		}}}
         			}
         			if(!toBreak)goodMoves.remove(t);
         			
@@ -330,17 +364,19 @@ public class Board{
         			if (capString.contains(t)) continue;
         			ArrayList<Tuple> adj=  getAdjacent(t.a, t.b);
         			for (Tuple l : adj) {
-        				if (stones[l.a][l.b].getSC() != Stone.WHITE && stones[l.a][l.b].getSC() != Stone.BLACK && !needList.contains(l)) {
+        				if (!stones[l.a][l.b].isStone() && !needList.contains(l)) {
         					toBreak = true;
         					break;
-        				}else if(stones[l.a][l.b].getSC() == colour ){
-        					ArrayList<Tuple> sstring = checkForStrings( l.a ,  l.b, stoneStrings);
-                   		 	if (!sstring.isEmpty() && getNeedList(sstring, colour.getEC(),true).size() >2)  {
-                   		 		toBreak = true;
-                   		 		break;}}
+        				}else if(stones[l.a][l.b].getSC() == turn && !tlist.contains(l)){
+        					ArrayList<Tuple> sstring = checkForStrings(l.a,l.b,stoneStrings);
+                   		 	if (!sstring.isEmpty())  {
+                   		 		ArrayList<Tuple> needList2 = getNeedList(sstring,turn.getEC(),true);
+                   		 		if((needList2.size() ==2 && !needList.containsAll(needList2)) ||(needList2.size() >2)) {
+                   		 			toBreak = true;
+                       		 		break;
+                   		 		}}}
         			}
         			if(!toBreak)goodMoves.remove(t);
-        			
         		}
         	}
         }
@@ -385,7 +421,7 @@ public class Board{
 
                     case VALID: // if (editormode)drawoval(g,(i+1)*TileSize,(j+1)*TileSize,new Color(0f,1f,0f,.0f ),false);
                     	if(!validMoves.contains(new Tuple(i,j)))drawoval( g,(i+1)*TileSize,(j+1)*TileSize ,new Color(1f,0f,0f,.1f),false);
-                    	//else if (editormode)drawoval(g,(i+1)*TileSize,(j+1)*TileSize,new Color(0f,1f,0f,.0f ),false);
+                    	else if (editormode)drawoval(g,(i+1)*TileSize,(j+1)*TileSize,new Color(0f,1f,0f,.0f ),false);
                         break;
 
                     case INVALID:  //drawoval( g,(i+1)*TileSize,(j+1)*TileSize ,new Color(1f,0f,0f,.1f),false);
@@ -569,20 +605,20 @@ public class Board{
 	}
 	
 
-	public ArrayList<Tuple> getCheckForSafetyList(ArrayList<Tuple> usedDiag,Tuple t) {
-		ArrayList<Tuple> returnList = new ArrayList<Tuple>();
-		ArrayList<Tuple> tlibs = getAdjacent(t.a,t.b);
-		int finalsize = usedDiag.size();
-		for (Tuple u : usedDiag) {
-			ArrayList<Tuple> ulibs = getAdjacent(u.a,u.b);
-			for (Tuple k :tlibs) {
-				if (returnList.size() <finalsize && ulibs.contains(k) && !returnList.contains(k)) returnList.add(k);
-			}
-		}
-		
-		
-		return returnList;
-	}
+//	public ArrayList<Tuple> getCheckForSafetyList(ArrayList<Tuple> usedDiag,Tuple t) {
+//		ArrayList<Tuple> returnList = new ArrayList<Tuple>();
+//		ArrayList<Tuple> tlibs = getAdjacent(t.a,t.b);
+//		int finalsize = usedDiag.size();
+//		for (Tuple u : usedDiag) {
+//			ArrayList<Tuple> ulibs = getAdjacent(u.a,u.b);
+//			for (Tuple k :tlibs) {
+//				if (returnList.size() <finalsize && ulibs.contains(k) && !returnList.contains(k)) returnList.add(k);
+//			}
+//		}
+//		
+//		
+//		return returnList;
+//	}
 	
 
 	//Not 100%
@@ -663,31 +699,38 @@ public class Board{
 
 	
 	
+	
 	public boolean checkStringSafetyv2(ArrayList<Tuple> list,Stone colour) {
 		Board checkBoard = cloneBoard(this);
 		checkBoard.turn = colour.getEC();
 		ArrayList<Tuple> vMoves = checkBoard.getAllValidMoves();
-		ArrayList<Tuple> lastVMoves = new ArrayList<Tuple>();
+		ArrayList<Tuple> libs = getLibs(list,true);
+		
 		checkBoard.removeKo();
 		while (!vMoves.isEmpty()) {
-			if(lastVMoves.equals(vMoves)) {vMoves.remove(0);}
-			Board nCB= cloneBoard(checkBoard);
+
+			ArrayList<ArrayList<Tuple>> empty = getConnected(vMoves);
+			ArrayList<Tuple> newVmoves = new ArrayList<Tuple>();
+			for(ArrayList<Tuple> tlist : empty) {
+				if(tlist.size()> 1) {
+					boolean removed = false;
+					for(Tuple t : tlist) {
+						if (!libs.contains(t)) {
+							removed = true;
+							tlist.remove(t);
+							break;}
+					}
+					if(!removed)tlist.remove(0);}
+				newVmoves.addAll(tlist);
+			}
+			vMoves = newVmoves;
+			
 			for (Tuple t: vMoves) checkBoard.stones[t.a][t.b]= colour.getEC();
 			checkBoard.updateStringsFull();
 			checkBoard.checkForCaps(colour.getEC(), false);
 			checkBoard.checkForCaps(colour,false);
-			ArrayList<Tuple> cappedStrings = (colour== Stone.WHITE ? checkBoard.bCappedStrings: checkBoard.wCappedStrings);
-			if(!cappedStrings.isEmpty()) {
-				checkBoard=nCB;
-				for(Tuple t:cappedStrings) {
-					if(vMoves.remove(t))break;
-				}
-				continue;
-			}
 			
-			checkBoard.boardString = checkBoard.boardToString();
 			checkBoard.removeKo();
-			lastVMoves =vMoves;
 			vMoves = checkBoard.getAllValidMoves();
 			
 		}
@@ -695,6 +738,37 @@ public class Board{
 		if(colour.getSStrings(checkBoard).contains(list)) return true;
 		
 		return false;
+	}
+	
+	
+	
+	public ArrayList<ArrayList<Tuple>> getConnected(ArrayList<Tuple> sstring){
+		ArrayList<ArrayList<Tuple>> ret = new ArrayList<ArrayList<Tuple>>();
+		ArrayList<Tuple> nsstring = tupleArrayClone(sstring);
+
+		while(!nsstring.isEmpty()) {
+			Tuple t = nsstring.get(0);
+			ArrayList<Tuple> connected = new ArrayList<Tuple>();
+			ArrayList<Tuple> adj = getAdjacent(t.a,t.b);
+			connected.add(t);
+			nsstring.remove(0);
+			while(!adj.isEmpty()) {
+				Tuple k = adj.get(0);
+				if (nsstring.contains(k)) {
+					connected.add(k);
+					nsstring.remove(k);
+					adj.addAll(getAdjacent(k.a,k.b));
+				}
+				 adj.remove(0);
+				
+			}
+			ret.add(connected);
+		}
+		
+		
+		return ret;
+		
+		
 	}
 	
 	

@@ -61,18 +61,19 @@ public class LineTwoSideEscape  {
 						Tuple t = B2;
 						Tuple u = t.side(side);
 						Tuple k = t.side(r);
-						if(e.isTheres(Sn1,B3)) {
-							if(e.isEnemy(S2))retval-=100;
-						} 
+						if(e.isTheres(Sn1,B3) && e.isEnemy(S2))retval-=100;
+						
 						if(e.isEnemies(B2)) {
-							retval-=100;
-							while (e.isThere(u) && e.isEnemy(k) && !e.isThere(k.side(r))) {
+							retval-=300;
+							while (e.isThere(u) && e.isEnemy(k) && !e.isThere(k.side(r)) && !e.isInvalid(u.side2(r,r))) {
 								retval-=100;
 								t = t.side(r);
 								u = u.side(r);
 								k = k.side(r);
 							}
+							if(e.isEnemy(k.side(side)) && e.isInvalid(u.side2(r,r)))retval-=100;
 							if(e.isEnemy(k.side(side)) && e.isTheres(k.side(r)))retval-=100;
+
 						}
 						if(e.isEnemy(t.side(side))) retval-=50;
 					}

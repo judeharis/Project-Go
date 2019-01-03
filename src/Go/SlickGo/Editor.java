@@ -122,12 +122,12 @@ public class Editor extends BasicGameState {
 				grouping = new Grouping(board,grouping.draw,grouping.drawW,grouping.drawB,grouping.drawC);
 				grouping.allocateGrouping();
 				grouping.allocateControl();
-				print(grouping.bGroups);
-				print(grouping.wGroups);
-				print(grouping.stonesControl[bx][by]);
-				print(grouping.totalb);
-				print(grouping.totalw);
-				print(grouping.totalc);
+//				print(grouping.bGroups);
+//				print(grouping.wGroups);
+//				print(grouping.stonesControl[bx][by]);
+//				print(grouping.totalb);
+//				print(grouping.totalw);
+//				print(grouping.totalc);
 			}
 			
 			

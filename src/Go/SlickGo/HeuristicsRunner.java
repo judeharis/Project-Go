@@ -23,6 +23,8 @@ public class HeuristicsRunner {
 		retval += sixDie.evaluate(sstring);
 		
 		
+
+		
 		SevenUnsettled sevenUnsettled= new SevenUnsettled(e);
 		retval += sevenUnsettled.evaluate(sstring);
 		
@@ -59,7 +61,7 @@ public class HeuristicsRunner {
 		retval += cornerEyeShapes.evaluate(sstring);
 		
 		
-		return retval;
+		return retval * 1;
 		
 	}
 	
@@ -70,7 +72,7 @@ public class HeuristicsRunner {
 		ConnectStones connectStones= new ConnectStones(e);
 		retval += connectStones.evaluate(t);
 		
-		return retval;
+		return retval *0;
 		
 	}
 

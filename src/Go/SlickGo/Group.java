@@ -43,7 +43,7 @@ public class Group {
 			adj.addAll(newAdj);
 		}
 		adj.removeAll(updated);
-    	while(!adj.isEmpty()) {
+    	while(!adj.isEmpty() && spread <5) {
     		updated.addAll(adj);
     		if (nega)for(Tuple t: adj) stonesControl[t.a][t.b] -=  strength * (1.0/(3.0*spread));
     		else for(Tuple t: adj) stonesControl[t.a][t.b] += strength * (1.0/(3.0*spread));
@@ -71,7 +71,11 @@ public class Group {
 		ArrayList<Tuple> libs = b.getLibs(group, true);
 		ArrayList<Tuple> nlist = b.getNeedList(group, colour.getEC(), true);
 		
-		strength= (nlist.size()*100/libs.size()) + group.size()*10;
+
+		
+		strength= (nlist.size()*10) + group.size()*10;
+		strength= nlist.size()*10 +libs.size()*10+  group.size()*5;
+//		strength= (nlist.size()*100/libs.size()) + group.size()*10;
 		region = getRegionCovered(true);
 		r1 = getRegionCovered(false);
 		r2 = Board.tupleArrayClone(region);

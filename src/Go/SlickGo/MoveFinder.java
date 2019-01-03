@@ -2,51 +2,39 @@ package Go.SlickGo;
 
 import java.util.ArrayList;
 
+
 public class MoveFinder  implements Runnable{
 	 Board originalBoard ;
 	 ArrayList<Tuple> keystones;
 	 static Stone keystonecolour;
+	 static int cutoff=1;
 	 Tuple choice;
 	 static int max = Integer.MAX_VALUE;
 	 static int min = Integer.MIN_VALUE;
-	 Tuple obCounts;
 	 int line = 0;
 	 boolean exit;
-	 boolean def;
+
 	 
 	 ArrayList<String> searched = new ArrayList<String>();
+
 
 	 MoveFinder(Board originalBoard, ArrayList<Tuple> keystones) {
 		 this.originalBoard = originalBoard;
 		 this.keystones = keystones;
 		 this.choice = null;
-		 this.obCounts = Evaluator.countStone(originalBoard.turn ,originalBoard.stones);
 	 }
 	 
 
-	 int alphaBeta(Board currentBoard , ArrayList<Tuple> keystonelist , boolean isLive , int depth, int alpha,int beta, ArrayList<Tuple> soFar) {
+	 int alphaBeta(Board currentBoard , ArrayList<Tuple> keystonelist , boolean isLive , int depth, int alpha,int beta ) {
 		if (this.exit) return 0;
 	 	ArrayList<Tuple> validMoves = currentBoard.validMoves;
-	 	long s = System.nanoTime();
 	 	ArrayList<Tuple> goodMoves = currentBoard.removeBadMovess();
-        long e = System.nanoTime();
-        Board.arrayTimes[0] += (e - s );
-        
 		depth++;
-//	 	print(currentBoard.placing+" valid moves:"+validMoves + " good moves: " + currentBoard.goodMoves);
-		if (keystoneLives(keystonelist)) {
-			int retval = min;
-//			print("eval: "+retval);
-//			print(soFar);
-			return retval;
-		}
+		
+		if (!keystoneLives(keystonelist)) return min;
+		
 
-		if (currentBoard.placing != keystonecolour && validMoves.size() == 0) {
-			int retval = max;
-//			print("eval: "+retval);
-//			print(soFar);
-			return retval;
-		}
+		if (currentBoard.placing != keystonecolour && validMoves.size() == 0) return max;		
 		else if (currentBoard.placing == keystonecolour && goodMoves.size() == 0) {
 			currentBoard.passing = true;
 			goodMoves.add(new Tuple(-9,-9));}
@@ -55,118 +43,52 @@ public class MoveFinder  implements Runnable{
 		
 		//Forbidden Third 
 //		for (Tuple t : currentBoard.keystones) {
-//			StoneStringResponse stringRes = currentBoard.checkForStrings(t.a,t.b,keystonecolour.getSStrings(currentBoard)); 
-//			if (stringRes.state&& depth !=1 && currentBoard.checkStringSafety(stringRes.list, keystonecolour,new ArrayList<Tuple>())==1) {
-//				int retval =max;
-////				print("safe: "+retval);
-////				print(soFar);
-//				return retval;
-//			}
+//			ArrayList<Tuple> keystring = currentBoard.checkForStrings(t.a,t.b,keystonecolour.getSStrings(currentBoard)); 
+//			if (!keystring.isEmpty() && depth !=1 && currentBoard.checkStringSafetyv2(keystring, keystonecolour)) return max;	
 //		}
 
-		if (Play.heuristic && depth>1) {
-			Evaluator evaluator = new Evaluator(currentBoard,originalBoard,obCounts);
-
-			int retval =evaluator.evaluateCurrentBoard();
-//			print("eval: "+retval);
-//			print(soFar);
-			return retval;
-		}
+		if (Play.heuristic && depth>cutoff) {
+			Evaluator evaluator = new Evaluator(currentBoard,originalBoard);
+			return evaluator.evaluateCurrentBoard();}
 		
         if(searched.contains(currentBoard.boardString) && !goodMoves.isEmpty()) goodMoves.add(goodMoves.remove(0));
         else if(!searched.contains(currentBoard.boardString)) searched.add(currentBoard.boardString);
         	
         
-		
-		
+
+//        Collections.reverse(goodMoves);
+
+		print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " );
+
 		if(isLive) {
 			int best = min;
-
-			
 			for (Tuple t : goodMoves) {
-//				print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " + t);
-
 				Board b = Board.cloneBoard(currentBoard);
+				b.takeTurn(t.a,t.b,false,true);  
 
-		    	long ttstart = System.nanoTime();
-				b.takeTurn(t.a,t.b,false,true);
-		        long ttend = System.nanoTime();
-		        Board.takeTurnTime += (ttend - ttstart );  
 				if(depth==1)System.out.print(t.clone()+ " :");
-		    	ArrayList<Tuple> newSofar = Board.tupleArrayClone(soFar);
-		    	newSofar.add(t);
-//				print(newSofar);
-				int returnscore =alphaBeta(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta,newSofar);	
-		        if(returnscore > best && depth==1 ) {
-		        	this.choice = t.clone();
-		        	if (returnscore == max)print("Living");
-		        	else if (returnscore == min)print("Dead");
-		        	else print(returnscore);
-		        }else if (depth ==1) {
-		        	if (returnscore == max)print("Living");
-		        	else if (returnscore == min)print("Dead");
-		        	else print(returnscore);
-		        }
-		        
-
-				
-				
+				int	returnscore =alphaBeta(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
+				if(returnscore > best && depth==1 )this.choice = t.clone();
 		        best = Math.max(best, returnscore); 
 		        alpha = Math.max(alpha, best);
+		        if(depth==1) print(returnscore);
 		        
-//		        if(best == max && depth==1 ) {
-//		        	moveFinder.choice = t.clone();
-//		        	print(returnscore);
-//		        }
-//		        else if(depth==1){ 
-//		        	b.passing = true;
-//		        	returnscore =alphaBeta(b,keyStoneRemaining(b,keystonelist),!isLive,depth,moveFinder,alpha,beta);
-//			        if(returnscore == max)  {moveFinder.choice = t.clone();print(depth + " " + t.clone());}
-//		        }
 				if (beta <= alpha) break;
 			}
-			
 			return best;}
 		else {
 			int best = max;
-	        
+ 
 			for (Tuple t : goodMoves) {
-//				print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " + t);
 				Board b = Board.cloneBoard(currentBoard);
-		    	long ttstart = System.nanoTime();
 				b.takeTurn(t.a,t.b,false,true);
-		        long ttend = System.nanoTime();
-		        Board.takeTurnTime += (ttend - ttstart );
 				if(depth==1)System.out.print(t.clone()+ " :");
-		    	ArrayList<Tuple> newSofar = Board.tupleArrayClone(soFar);
-		    	newSofar.add(t);
-//				print(newSofar);
-				int returnscore =alphaBeta(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta,newSofar);
-		        if(returnscore < best && depth==1 ) {
-		        	this.choice = t.clone();
-		        	if (returnscore == max)print("Living");
-		        	else if (returnscore == min)print("Dead");
-		        	else print(returnscore);
-		        }else if (depth ==1) {
-		        	if (returnscore == max)print("Living");
-		        	else if (returnscore == min)print("Dead");
-		        	else print(returnscore);
-		        }
-		        
-		        
-
-		        
+				
+				int returnscore =alphaBeta(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
+				if(returnscore < best && depth==1 )this.choice = t.clone();
 		        best = Math.min(best, returnscore); 
-		        beta = Math.min(beta, best);	
-		        
-//		        if(best == min && depth==1 ) {
-//		        	moveFinder.choice = t.clone();
-//		        }
-//		        else if(depth==1){       
-//		        	b.passing = true;
-//		        	returnscore =alphaBeta(b,keyStoneRemaining(b,keystonelist),!isLive,depth,moveFinder,alpha,beta);
-//		            if(returnscore == max)  {moveFinder.choice = t.clone();print(depth + " " + t.clone());}
-//		        }
+		        beta = Math.min(beta, best);
+		        if(depth==1) print(returnscore);
 		        if (beta <= alpha)break;
 		    }
 			
@@ -177,44 +99,17 @@ public class MoveFinder  implements Runnable{
 	} 
 
 
-
-
-
-	@Override
 	public void run() {
-			print("Ai Running");
-
+			print("Ai Started");
 			if (Play.heuristic) {
-				Evaluator evaluator = new Evaluator(originalBoard,originalBoard,obCounts);
+				Evaluator evaluator = new Evaluator(originalBoard,originalBoard);
 				print("current board :" +evaluator.evaluateCurrentBoard());
 			}
-			
-			int i =1000000;
-	    	long start = System.nanoTime();
-	    	
-	    	ArrayList<Tuple> sofar = new ArrayList<Tuple>();
-
-
 	    	
 			if (originalBoard.blackFirst && originalBoard.turn == Stone.WHITE || !originalBoard.blackFirst && originalBoard.turn == Stone.BLACK ) 
-				def=!originalBoard.capToWin;
-			else 	def= originalBoard.capToWin;
-	    	
-			if (originalBoard.blackFirst && originalBoard.turn == Stone.WHITE || !originalBoard.blackFirst && originalBoard.turn == Stone.BLACK ) 
-					alphaBeta(originalBoard,keystones,originalBoard.capToWin,0,min,max,sofar);
-			else 	alphaBeta(originalBoard,keystones,!originalBoard.capToWin,0,min,max,sofar);
+					alphaBeta(originalBoard,keystones,originalBoard.capToWin,0,min,max);
+			else 	alphaBeta(originalBoard,keystones,!originalBoard.capToWin,0,min,max);
 			
-			
-	        long end = System.nanoTime();
-	        Board.fullTime += (end - start );
-	        print(Board.arrayTimes[0]/i  + " " +Board.arrayTimes[0] );
-			if ( Board.takeTurnTime !=0 &&  Board.fullTime !=0 &&	Board.arrayTimes[0] !=0 )
-				print(Board.takeTurnTime/(i) +" "+Board.fullTime/(i) + " " + (Board.takeTurnTime*100)/Board.fullTime + "% "+
-				Board.arrayTimes[0]/i + " "  + (Board.arrayTimes[0]*100)/Board.fullTime + "% ");
-
-			Board.arrayTimes = new long[10];
-			Board.takeTurnTime = 0;
-			Board.fullTime =0;
 			print(choice);
 			print("Ai Done");
 	}
@@ -229,7 +124,7 @@ public class MoveFinder  implements Runnable{
 	}
 
 	static public boolean keystoneLives(ArrayList<Tuple> keystonelist){
-	 	if(keystonelist.isEmpty()) return true;
+	 	if(!keystonelist.isEmpty()) return true;
 	 	return false;
 	}
 	  
