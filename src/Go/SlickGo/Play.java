@@ -124,19 +124,32 @@ public class Play extends BasicGameState {
 				board.passing = true;
 				makeMove(bx,by);}
 			
+//			//Undo
+//			if (SlickGo.regionChecker(board.boardSize +220,board.TileSize +680,90,50,gc) && board.undoBoard != null) {
+//				resetPlayScreen();
+//				board.undoBoard.redoBoard =  Board.cloneBoard(board);
+//				board = Board.cloneBoard(board.undoBoard);
+//			}
+//			
+//			//Redo
+//			if (SlickGo.regionChecker(board.boardSize +330,board.TileSize +680,90,50,gc)&& board.redoBoard != null) {
+//				resetPlayScreen();
+//				board = Board.cloneBoard(board.redoBoard);
+//			}
+
+			
 			//Undo
-			if (SlickGo.regionChecker(board.boardSize +220,board.TileSize +680,90,50,gc) && board.undoBoard != null) {
+			if (SlickGo.regionChecker(board.boardSize +220,board.TileSize +680,90,50,gc)) {
 				resetPlayScreen();
-				board.undoBoard.redoBoard =  Board.cloneBoard(board);
-				board = Board.cloneBoard(board.undoBoard);
+				board.undoMove(true);
 			}
 			
 			//Redo
-			if (SlickGo.regionChecker(board.boardSize +330,board.TileSize +680,90,50,gc)&& board.redoBoard != null) {
+			if (SlickGo.regionChecker(board.boardSize +330,board.TileSize +680,90,50,gc)) {
 				resetPlayScreen();
-				board = Board.cloneBoard(board.redoBoard);
+				board.redoMove();
 			}
-
+			
 			//Toggle AI
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +440,200,50,gc)) turnOffComputer=!turnOffComputer;
 			

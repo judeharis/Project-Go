@@ -56,18 +56,19 @@ public class MoveFinder  implements Runnable{
         	
         
 
-//        Collections.reverse(goodMoves);
 
-		print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " );
+//		print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " );
 
 		if(isLive) {
 			int best = min;
 			for (Tuple t : goodMoves) {
-				Board b = Board.cloneBoard(currentBoard);
+				Board b = currentBoard;
 				b.takeTurn(t.a,t.b,false,true);  
 
 				if(depth==1)System.out.print(t.clone()+ " :");
 				int	returnscore =alphaBeta(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
+				b.undoMove(false);
+				
 				if(returnscore > best && depth==1 )this.choice = t.clone();
 		        best = Math.max(best, returnscore); 
 		        alpha = Math.max(alpha, best);
@@ -80,11 +81,12 @@ public class MoveFinder  implements Runnable{
 			int best = max;
  
 			for (Tuple t : goodMoves) {
-				Board b = Board.cloneBoard(currentBoard);
+				Board b = currentBoard;
 				b.takeTurn(t.a,t.b,false,true);
 				if(depth==1)System.out.print(t.clone()+ " :");
-				
 				int returnscore =alphaBeta(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
+				b.undoMove(false);
+				
 				if(returnscore < best && depth==1 )this.choice = t.clone();
 		        best = Math.min(best, returnscore); 
 		        beta = Math.min(beta, best);

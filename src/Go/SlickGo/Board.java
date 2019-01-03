@@ -2,6 +2,8 @@ package Go.SlickGo;
 
 
 import java.util.ArrayList;
+import java.util.Stack;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
@@ -35,11 +37,14 @@ public class Board{
     Board resetboard;
     Board undoBoard;
     Board redoBoard;
+   
+    Stack<String> undoString =  new Stack<String>();
+    Stack<String> redoString =  new Stack<String>();
 
     Tuple ko;
     Tuple maybeko;
 
-    ArrayList<Tuple> keystones = new ArrayList<>();
+    ArrayList<Tuple> keystones = new ArrayList<Tuple>();
     ArrayList<Tuple> bCapStrings = new ArrayList<Tuple>();
     ArrayList<Tuple> wCapStrings = new ArrayList<Tuple>();
     
@@ -68,15 +73,13 @@ public class Board{
                     removeKo();
                     if (placing== Stone.KEYBLACKSTONE || placing == Stone.KEYWHITESTONE){
                         keystones.add(new Tuple(i,j));
-                        for (Tuple k:keystones){
-                            stones[k.a][k.b]=placing;
-                        }
+                        for (Tuple k:keystones) stones[k.a][k.b]=placing;
                         placing = placing.getSC();}
                     else{
                         keystones.removeIf( new Tuple(i,j)::equals);}}
-                else if (stones[i][j] == Stone.EMPTY || stones[i][j] == Stone.VALID) {
-                	    undoBoard = cloneBoard(this);
-                	    redoBoard = null;
+                else if (stones[i][j] == Stone.EMPTY || stones[i][j] == Stone.VALID) {     
+						boardString = boardToString();
+						undoString.push(boardString);    	
                         stones[i][j] = turn;
                         moveMade=true;
                         removeKo();
@@ -87,9 +90,10 @@ public class Board{
         	passing=false;
         	moveMade=true;
         	if (!check) {
-        		print(turn + " passed");
-        	    undoBoard = cloneBoard(this);
-        	    redoBoard = null;
+        		print(turn + " passed");    
+                boardString = boardToString();
+                undoString.push(boardString);
+                
         	}
         	removeKo();
         	turn = turn.getEC();
@@ -98,20 +102,15 @@ public class Board{
 
 
         updateStringsFull();
-
-        maybeko = null;
-     
+        maybeko = null;  
         checkForCaps(placing,editormode);
         checkForCaps(placing.getEC(),editormode);
-
-
-
         if (ko !=null) stones[ko.a][ko.b] = Stone.KO;
         if (!editormode)placing =turn;
-
         validMoves =getAllValidMoves();
-//        if (editormode && !validMoves.isEmpty())print(removeBadMovess(placing));
         boardString = boardToString();
+
+
         return moveMade;
 
     }
@@ -126,27 +125,13 @@ public class Board{
         for(int i=0; i<stones.length; i++) {
             for(int j=0; j<stones[i].length; j++) {
                 switch (stones[j][i]) {
-                    case BLACK: s.append("| x ") ;
-                        break;
-
-                    case WHITE:  s.append("| o ") ;
-                        break;
-
-                    case VALID:  s.append("| + ") ;
-                        break;
-
-                    case INVALID:   s.append("| - ") ;
-                        break;
-
-                    case KEYBLACKSTONE: s.append("| X ") ;
-                        break;
-
-                    case KEYWHITESTONE:  s.append("| O ") ;
-                        break;
-
-                    case KO: s.append("| K ") ;
-                        break;
-
+                    case BLACK: s.append("| x ") ;break;
+                    case WHITE:  s.append("| o ") ;break;
+                    case VALID:  s.append("| + ") ;break;
+                    case INVALID:   s.append("| - ") ;break;
+                    case KEYBLACKSTONE: s.append("| X ") ;  break;
+                    case KEYWHITESTONE:  s.append("| O ") ; break;
+                    case KO: s.append("| K ") ;break;
                     case EMPTY: break;
                 }
             }
@@ -155,6 +140,30 @@ public class Board{
         }
         return s.toString();
     	
+    }
+    
+    public Stone[][] stringToBoard(String s){
+    	 Stone[][] newstones = new Stone[19][19];
+    	 int i = 0;
+    	 int j = 0;
+
+		 for(char c: s.toCharArray()) {
+	         switch (c){
+		         case 'x': newstones[i][j] = Stone.BLACK;i++; break;
+		         case 'X': newstones[i][j] = Stone.KEYBLACKSTONE;i++; break;
+		         case 'o': newstones[i][j] = Stone.WHITE;i++; break;
+		         case 'O': newstones[i][j] = Stone.KEYWHITESTONE;i++; break;
+		         case 'K': newstones[i][j] = Stone.KO;i++; break;
+		         case '+': newstones[i][j] = Stone.VALID;i++; break;
+		         case '-': newstones[i][j] = Stone.INVALID;i++; break;
+		         case ' ': break;
+		         case '|': break;
+		         case '\r': break;
+		         case '\n': j++;i=0; break;
+	         }
+		 }  	 
+    	 return newstones;
+    	 
     }
     
     
@@ -560,50 +569,45 @@ public class Board{
 //	}
 	
 	
-	public boolean checkEnemySurronding(Tuple e , Tuple t, Stone colour, ArrayList<Tuple> checkedList, boolean alreadyDiag ) {
-		
-		ArrayList<Tuple> surE = getSurrounding(e.a,e.b); 
-		ArrayList<Tuple> diagE = getDiag(e.a,e.b); 
-		ArrayList<Tuple> furtherChecking = new ArrayList<Tuple>();
-		int safeNeed = surE.size();
-		int safeNum = 0; 
-		if (safeNeed < 8)alreadyDiag = true;
-		for(Tuple k : surE) {
-			if (k.equals(t) || (stones[k.a][k.b].getSC() == colour.getSC()) ) {
-				safeNum++;
-				continue;}
-			else if (stones[k.a][k.b].getSC() == colour.getEC()) {
-				if (checkedList.contains(k)) safeNum++;
-				else furtherChecking.add(k);
-				continue;
-			}else if (diagE.contains(k) && !alreadyDiag) {
-				alreadyDiag=true;
-				safeNum++;
-				continue;
-			}
-			return false;
-		}
-		
-		ArrayList<Tuple> newCheckedList = tupleArrayClone(checkedList);
-		newCheckedList.add(e);
-		if ((safeNum+ furtherChecking.size())>= safeNeed) {
-			for (Tuple k : furtherChecking) {
-				if  (checkEnemySurronding(k,t,colour,newCheckedList,alreadyDiag))safeNum++;
-				else if(!alreadyDiag) {
-					alreadyDiag=true;
-					safeNum++;
-				}
-			}
-		}
-		
-		
-		
-		
-		
-		return (safeNum >= safeNeed);
-		
-	}
-	
+//	public boolean checkEnemySurronding(Tuple e , Tuple t, Stone colour, ArrayList<Tuple> checkedList, boolean alreadyDiag ) {
+//		
+//		ArrayList<Tuple> surE = getSurrounding(e.a,e.b); 
+//		ArrayList<Tuple> diagE = getDiag(e.a,e.b); 
+//		ArrayList<Tuple> furtherChecking = new ArrayList<Tuple>();
+//		int safeNeed = surE.size();
+//		int safeNum = 0; 
+//		if (safeNeed < 8)alreadyDiag = true;
+//		for(Tuple k : surE) {
+//			if (k.equals(t) || (stones[k.a][k.b].getSC() == colour.getSC()) ) {
+//				safeNum++;
+//				continue;}
+//			else if (stones[k.a][k.b].getSC() == colour.getEC()) {
+//				if (checkedList.contains(k)) safeNum++;
+//				else furtherChecking.add(k);
+//				continue;
+//			}else if (diagE.contains(k) && !alreadyDiag) {
+//				alreadyDiag=true;
+//				safeNum++;
+//				continue;
+//			}
+//			return false;
+//		}
+//		
+//		ArrayList<Tuple> newCheckedList = tupleArrayClone(checkedList);
+//		newCheckedList.add(e);
+//		if ((safeNum+ furtherChecking.size())>= safeNeed) {
+//			for (Tuple k : furtherChecking) {
+//				if  (checkEnemySurronding(k,t,colour,newCheckedList,alreadyDiag))safeNum++;
+//				else if(!alreadyDiag) {
+//					alreadyDiag=true;
+//					safeNum++;
+//				}
+//			}
+//		}
+//		return (safeNum >= safeNeed);
+//		
+//	}
+//	
 
 //	public ArrayList<Tuple> getCheckForSafetyList(ArrayList<Tuple> usedDiag,Tuple t) {
 //		ArrayList<Tuple> returnList = new ArrayList<Tuple>();
@@ -772,14 +776,14 @@ public class Board{
 	}
 	
 	
-	public boolean isAdjacentAll(Tuple t,Stone colour) {
-		ArrayList<Tuple> adj = getAdjacent(t.a,t.b);
-		for(Tuple l : adj) {
-			if (stones[l.a][l.b] != colour)return false;
-		}
-		return true;
-		
-	}
+//	public boolean isAdjacentAll(Tuple t,Stone colour) {
+//		ArrayList<Tuple> adj = getAdjacent(t.a,t.b);
+//		for(Tuple l : adj) {
+//			if (stones[l.a][l.b] != colour)return false;
+//		}
+//		return true;
+//		
+//	}
     
     private boolean selfCap(int i , int j, Stone enemycolour ){
 
@@ -839,6 +843,8 @@ public class Board{
                 if (sstring.size()==1){stoneStrings.add(sstring);}}
             stoneStrings.removeIf(item -> item.isEmpty());}
         else{
+        	if (stones[i][j]==Stone.KO && ko==null)ko = new Tuple(i,j);
+        		
             removeOldStoneFromString(i,j,bStoneStrings);
             removeOldStoneFromString(i,j,wStoneStrings);}
     }
@@ -973,18 +979,6 @@ public class Board{
         return adj;
     }
     
-    public Stone findAdjacentColour(Tuple t, boolean updown,boolean leftright) {
-    	Tuple k =null;
-    	if(!updown && !leftright && (t.a != 0)) k = new Tuple(t.a-1,t.b);
-    	else if (updown && !leftright && (t.a != 18)) k = new Tuple(t.a+1,t.b);
-    	else if (!updown && leftright && (t.b != 0)) k = new Tuple(t.a,t.b-1);
-    	else if (updown && leftright && (t.b != 18)) k = new Tuple(t.a,t.b+1);
-    	
-    	if (k==null || (stones[k.a][k.b].getSC() != Stone.BLACK && stones[k.a][k.b].getSC() != Stone.WHITE ))return Stone.EMPTY;
-    
-		return stones[k.a][k.b].getSC();
-    	
-    }
     
     public ArrayList<Tuple>  getDiag(int i , int j) {
         ArrayList<Tuple> diag = new ArrayList<Tuple>();
@@ -995,22 +989,12 @@ public class Board{
         return diag;
     }
     
-    private ArrayList<Tuple> getSurrounding(int i , int j){
-        ArrayList<Tuple> sur = getAdjacent(i,j);
-        sur.addAll(getDiag(i,j));
-        return sur;
-    }
-    
-    //old
-//    public StoneStringResponse checkForStrings(int i , int j , ArrayList<ArrayList<Tuple>> stoneStrings){
-//        Tuple k = new Tuple(i, j);
-//        if (stoneStrings.isEmpty())return new StoneStringResponse(false,null);
-//        for (ArrayList<Tuple> bStrings : stoneStrings ){
-//            if (bStrings.contains(k)) {
-//                return new StoneStringResponse(true,bStrings);};
-//        }
-//        return  new StoneStringResponse(false,null);
+//    private ArrayList<Tuple> getSurrounding(int i , int j){
+//        ArrayList<Tuple> sur = getAdjacent(i,j);
+//        sur.addAll(getDiag(i,j));
+//        return sur;
 //    }
+
     
     public ArrayList<Tuple> checkForStrings(int i , int j , ArrayList<ArrayList<Tuple>> stoneStrings){
         Tuple k = new Tuple(i, j);
@@ -1020,6 +1004,41 @@ public class Board{
         return   new ArrayList<Tuple>();
     }
     
+    
+    public void refreshBoard() {
+        updateStringsFull();
+        checkForCaps(turn,false);
+        checkForCaps(turn.getEC(),false);
+        this.validMoves=getAllValidMoves();
+    }
+    
+    public void undoMove(boolean saveUndo){
+    	if(!undoString.isEmpty()) {
+	    	String s = undoString.pop();
+	    	if(saveUndo)redoString.push(boardToString());
+	    	removeKo();
+	    	stones = stringToBoard(s);
+	    	turn = turn.getEC();
+	    	placing = turn;
+	    	refreshBoard();
+	        print(ko);
+    	}
+
+    }
+
+    
+    public void redoMove(){
+    	if(!redoString.isEmpty()) {
+	    	String s = redoString.pop();
+	    	undoString.push(boardToString());
+	    	removeKo();
+	    	stones = stringToBoard(s);
+	    	turn = turn.getEC();
+	    	placing = turn;
+	    	refreshBoard();
+	        print(ko);
+    	}
+    }
    
    
     
