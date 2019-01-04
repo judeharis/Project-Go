@@ -81,16 +81,14 @@ public class Board{
 				moveMade=true;
 				removeKo();
 				turn = turn.getEC();
-			}else if(!check) print("Invalid Move");
-			updateStringsSingle(i,j);
+			}else if(!false) print("Invalid Move");
+//			updateStringsSingle(i,j);
 		}else if (passing) {
 			passing=false;
 			moveMade=true;
-			if (!check) {
-				print(turn + " passed");    
-				boardString = boardToString();
-				undoString.push(boardString);
-			}
+			if (!check) print(turn + " passed");    
+			boardString = boardToString();
+			undoString.push(boardString);
 			removeKo();
 			turn = turn.getEC();
 		}else print("Out of bound");
@@ -116,41 +114,43 @@ public class Board{
     
     
 
-    public boolean checkForCaps( Stone colour,boolean editormode) {
+    public boolean checkForCaps(Stone colour,boolean editormode) {
     	
-        if (colour.getSC() != Stone.BLACK && colour.getSC() != Stone.WHITE)  {
+        if (!colour.isStone())  {
         	checkForCaps(Stone.BLACK,editormode);
         	checkForCaps(Stone.WHITE,editormode);
         	return false;
-        }else if (colour.getSC() == Stone.WHITE) bCappedStrings.clear();
-        else wCappedStrings.clear();
-   
+        }
+//        else if (colour.getSC() == Stone.WHITE) bCappedStrings.clear();
+//        else wCappedStrings.clear();
+//   
 
-        ArrayList<Tuple> capString =  (colour== Stone.WHITE ? bCapStrings:  wCapStrings);
-        ArrayList<ArrayList<Tuple>> stoneStrings = (colour== Stone.WHITE ? bStoneStrings: wStoneStrings);
-        ArrayList<Tuple> cappedStrings = (colour== Stone.WHITE ? bCappedStrings: wCappedStrings);
+//        ArrayList<Tuple> capString =  (colour== Stone.WHITE ? bCapStrings:  wCapStrings);
+//        ArrayList<ArrayList<Tuple>> stoneStrings = (colour== Stone.WHITE ? bStoneStrings: wStoneStrings);
+//        ArrayList<Tuple> cappedStrings = (colour== Stone.WHITE ? bCappedStrings: wCappedStrings);
+        
+        ArrayList<Tuple> capString = colour.getEC().getCapList(this);
+        ArrayList<Tuple> cappedStrings = colour.getEC().getCappedList(this);
+        ArrayList<ArrayList<Tuple>> stoneStrings =  colour.getEC().getSStrings(this);
         capString.clear();
+        cappedStrings.clear();
         boolean anyCap = false;
         for (ArrayList<Tuple> tlist : stoneStrings){
-            ArrayList<Tuple> capList = getLibs(tlist,true);
-            ArrayList<Tuple> needList = new ArrayList<Tuple>();
-            for (Tuple t : capList){
-                if (stones[t.a][t.b].getSC()!=colour.getSC()) needList.add(t);
-            }
-            
+            ArrayList<Tuple> needList = getNeedList(tlist,colour,true);
             if(needList.size()==1){
                 capString.add(needList.get(0));
-                if (needList.get(0).equals(maybeko) && tlist.size() == 1) ko = maybeko;}
-            else if(needList.size()==0){
+                if (needList.get(0).equals(maybeko) && tlist.size() == 1) ko = maybeko;
+            }else if(needList.size()==0){
                 cappedStrings.addAll(tlist);
                 removeStonesOnBoard(tlist,editormode);
-
                 anyCap=true;
-                if(tlist.size() == 1) maybeko= new Tuple(tlist.get(0).a,tlist.get(0).b);}
+                if(tlist.size() == 1) maybeko= new Tuple(tlist.get(0).a,tlist.get(0).b);
+            }
         }
         return anyCap;
 
     }
+    
     
     public ArrayList<Tuple> getAllValidMoves() {
     	ArrayList<Tuple>  validMoves = new ArrayList<Tuple>();
@@ -400,42 +400,75 @@ public class Board{
         return true;
     }
  
-    public void updateStringsFull(){
-        for(int i=0; i<stones.length; i++) {
+//    public void updateStringsFull(){
+//        for(int i=0; i<stones.length; i++) {
+//            for(int j=0; j<stones[i].length; j++) {
+//                 updateStringsSingle(i,j);
+//            }
+//        }
+//    }
+//   
+//    private void updateStringsSingle(int i , int j){
+//        if (stones[i][j].getSC()==Stone.BLACK || stones[i][j].getSC() == Stone.WHITE){
+//            removeOldStoneFromString(i,j,stones[i][j].getSC()==Stone.BLACK ? wStoneStrings:bStoneStrings);
+//            ArrayList<ArrayList<Tuple>> stoneStrings = stones[i][j].getSC()==Stone.BLACK ? bStoneStrings:wStoneStrings;
+//            ArrayList<Tuple> stringed = checkForStrings(i, j,stoneStrings);
+//            if (stringed.isEmpty()){
+//                ArrayList<Tuple> adj =  getAdjacent(i,j);
+//                ArrayList<Tuple> sstring= new ArrayList<Tuple>();
+//                sstring.add(new Tuple(i,j));
+//                for(Tuple t :adj ){
+//                    if (stones[t.a][t.b].getSC() == stones[i][j].getSC()){
+//                    	 ArrayList<Tuple>  libsStringres = checkForStrings(t.a,t.b,stoneStrings);
+//                        if(!libsStringres.isEmpty()){
+//                        	//This part combines string of liberty stone with string of current stone
+//                        	if (libsStringres != sstring) {
+//	                            stoneStrings.remove(libsStringres);
+//	                            stoneStrings.remove(sstring);
+//	                            sstring = tupleArrayMerger(sstring,libsStringres);
+//	                            stoneStrings.add(sstring);}}}
+//                }
+//                if (sstring.size()==1){stoneStrings.add(sstring);}}
+//            stoneStrings.removeIf(item -> item.isEmpty());}
+//        else{
+//        	if (stones[i][j]==Stone.KO && ko==null)ko = new Tuple(i,j);
+//        		
+//            removeOldStoneFromString(i,j,bStoneStrings);
+//            removeOldStoneFromString(i,j,wStoneStrings);}
+//    }
+
+	public void updateStringsFull(){
+		bStoneStrings = new ArrayList<ArrayList<Tuple>>();
+	    wStoneStrings = new ArrayList<ArrayList<Tuple>>();
+    	for(int i=0; i<stones.length; i++) {
             for(int j=0; j<stones[i].length; j++) {
-                 updateStringsSingle(i,j);
+            	if (stones[i][j].isStone()) {
+	            	Tuple t = new Tuple(i,j);
+	            	Stone colour = stones[i][j].getSC();
+	            	ArrayList<ArrayList<Tuple>> stoneStrings = colour.getSStrings(this);
+	            	ArrayList<Tuple> sstring = inString(t,colour);
+	            	if(sstring.isEmpty()) {
+	            		findStringStones(t,sstring,colour);
+	            		stoneStrings.add(sstring);
+	            	}
+            	}else if (stones[i][j]==Stone.KO && ko==null)ko = new Tuple(i,j);
             }
-        }
-    }
-   
-    private void updateStringsSingle(int i , int j){
-        if (stones[i][j].getSC()==Stone.BLACK || stones[i][j].getSC() == Stone.WHITE){
-            removeOldStoneFromString(i,j,stones[i][j].getSC()==Stone.BLACK ? wStoneStrings:bStoneStrings);
-            ArrayList<ArrayList<Tuple>> stoneStrings = stones[i][j].getSC()==Stone.BLACK ? bStoneStrings:wStoneStrings;
-            ArrayList<Tuple> stringed = checkForStrings(i, j,stoneStrings);
-            if (stringed.isEmpty()){
-                ArrayList<Tuple> adj =  getAdjacent(i,j);
-                ArrayList<Tuple> sstring= new ArrayList<Tuple>();
-                sstring.add(new Tuple(i,j));
-                for(Tuple t :adj ){
-                    if (stones[t.a][t.b].getSC() == stones[i][j].getSC()){
-                    	 ArrayList<Tuple>  libsStringres = checkForStrings(t.a,t.b,stoneStrings);
-                        if(!libsStringres.isEmpty()){
-                        	//This part combines string of liberty stone with string of current stone
-                        	if (libsStringres != sstring) {
-	                            stoneStrings.remove(libsStringres);
-	                            stoneStrings.remove(sstring);
-	                            sstring = tupleArrayMerger(sstring,libsStringres);
-	                            stoneStrings.add(sstring);}}}
-                }
-                if (sstring.size()==1){stoneStrings.add(sstring);}}
-            stoneStrings.removeIf(item -> item.isEmpty());}
-        else{
-        	if (stones[i][j]==Stone.KO && ko==null)ko = new Tuple(i,j);
-        		
-            removeOldStoneFromString(i,j,bStoneStrings);
-            removeOldStoneFromString(i,j,wStoneStrings);}
-    }
+    	}
+	}
+	
+	public void findStringStones(Tuple t,ArrayList<Tuple> sstring  , Stone colour){
+		ArrayList<Tuple> surrounding = getAdjacent(t.a,t.b);
+		sstring.add(t);
+		for(Tuple k: surrounding) if(stones[k.a][k.b].getSC()==colour && !sstring.contains(k))findStringStones(k,sstring,colour);
+		
+	}
+	
+	public ArrayList<Tuple> inString(Tuple t, Stone colour) {
+		ArrayList<ArrayList<Tuple>> stoneStrings = colour.getSStrings(this);
+        for (ArrayList<Tuple> sstring : stoneStrings ) if (sstring.contains(t)) return sstring;
+        return new ArrayList<Tuple>();
+	}
+	
     
     public ArrayList<Tuple> getLibs(ArrayList<Tuple> sstring,boolean unique) {
 
@@ -641,7 +674,7 @@ public class Board{
         updateStringsFull();
         checkForCaps(turn,false);
         checkForCaps(turn.getEC(),false);
-        this.validMoves=getAllValidMoves();
+        validMoves=getAllValidMoves();
     }
     
     public void undoMove(boolean saveUndo){

@@ -1,6 +1,7 @@
 package Go.SlickGo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class MoveFinder  implements Runnable{
@@ -42,10 +43,10 @@ public class MoveFinder  implements Runnable{
 		if (goodMoves.size() == 0) {goodMoves = validMoves;}
 		
 		//Forbidden Third 
-//		for (Tuple t : currentBoard.keystones) {
-//			ArrayList<Tuple> keystring = currentBoard.checkForStrings(t.a,t.b,keystonecolour.getSStrings(currentBoard)); 
-//			if (!keystring.isEmpty() && depth !=1 && currentBoard.checkStringSafetyv2(keystring, keystonecolour)) return max;	
-//		}
+		for (Tuple t : currentBoard.keystones) {
+			ArrayList<Tuple> keystring = currentBoard.checkForStrings(t.a,t.b,keystonecolour.getSStrings(currentBoard)); 
+			if (!keystring.isEmpty() && depth !=1 && currentBoard.checkStringSafetyv2(keystring, keystonecolour)) return max;	
+		}
 
 		if (Play.heuristic && depth>cutoff) {
 			Evaluator evaluator = new Evaluator(currentBoard,originalBoard);
@@ -54,7 +55,6 @@ public class MoveFinder  implements Runnable{
         if(searched.contains(currentBoard.boardString) && !goodMoves.isEmpty()) goodMoves.add(goodMoves.remove(0));
         else if(!searched.contains(currentBoard.boardString)) searched.add(currentBoard.boardString);
         	
-        
 
 
 //		print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " );
@@ -64,11 +64,9 @@ public class MoveFinder  implements Runnable{
 			for (Tuple t : goodMoves) {
 				Board b = currentBoard;
 				b.takeTurn(t.a,t.b,false,true);  
-
 				if(depth==1)System.out.print(t.clone()+ " :");
 				int	returnscore =alphaBeta(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
 				b.undoMove(false);
-				
 				if(returnscore > best && depth==1 )this.choice = t.clone();
 		        best = Math.max(best, returnscore); 
 		        alpha = Math.max(alpha, best);
@@ -86,7 +84,6 @@ public class MoveFinder  implements Runnable{
 				if(depth==1)System.out.print(t.clone()+ " :");
 				int returnscore =alphaBeta(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
 				b.undoMove(false);
-				
 				if(returnscore < best && depth==1 )this.choice = t.clone();
 		        best = Math.min(best, returnscore); 
 		        beta = Math.min(beta, best);
