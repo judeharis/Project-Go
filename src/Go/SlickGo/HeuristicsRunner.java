@@ -22,9 +22,6 @@ public class HeuristicsRunner {
 		SixDie sixDie= new SixDie(e);
 		retval += sixDie.evaluate(sstring);
 		
-		
-
-		
 		SevenUnsettled sevenUnsettled= new SevenUnsettled(e);
 		retval += sevenUnsettled.evaluate(sstring);
 		
@@ -36,7 +33,7 @@ public class HeuristicsRunner {
 		
 		
 		SideOneGap sideOneGap= new SideOneGap(e);
-		retval += sideOneGap.evaluate(sstring);
+		retval += sideOneGap.evaluate(sstring); 
 		
 		SideTwoGap sideTwoGap= new SideTwoGap(e);
 		retval += sideTwoGap.evaluate(sstring);
@@ -53,12 +50,24 @@ public class HeuristicsRunner {
 		SideSixGap sideSixGap= new SideSixGap(e);
 		retval += sideSixGap.evaluate(sstring);
 		
+
+		BentThree bentThree= new BentThree(e);
+		retval += bentThree.evaluate(sstring);
+		
+		
+		ThreeInRowCorner threeInRowCorner= new ThreeInRowCorner(e);
+		retval += threeInRowCorner.evaluate(sstring);
+		
+		ThreeInRow threeInRow= new ThreeInRow(e);
+		retval += threeInRow.evaluate(sstring);
+		
+		
+		SquareFour squareFour= new SquareFour(e);
+		retval += squareFour.evaluate(sstring);
+		
+			
 		Liberties liberties= new Liberties(e);
-		retval += liberties.evaluate(sstring);
-		
-		
-		CornerEyeShapes cornerEyeShapes= new CornerEyeShapes(e);
-		retval += cornerEyeShapes.evaluate(sstring);
+		retval += liberties.evaluate(sstring)*0;
 		
 		
 		return retval * 1;

@@ -25,7 +25,8 @@ public class Editor extends BasicGameState {
 	Image bg;
 	Font font;
 	TextField desc;
-	
+	boolean drawPattern;
+	ArrayList<Pattern> pattern= new ArrayList<Pattern>();
 	public Editor(int state ,int gcsize  ) {
 		this.board = Board.cloneBoard(SlickGo.mainBoard);
 		grouping = new Grouping(board);
@@ -56,6 +57,7 @@ public class Editor extends BasicGameState {
         	board.drawoval(g,(bx+1)*board.TileSize,(by+1)*board.TileSize,board.placing.stoneToColor(),board.placing.isKey());}
         
         grouping.draw(g);
+        if(!pattern.isEmpty() && drawPattern)pattern.get(0).draw(g,pattern);
 
 		SlickGo.drawRButton(board.boardSize , board.TileSize +40 , "Place Black Stones", g, board.placing == Stone.BLACK||board.placing == Stone.KEYBLACKSTONE);
 		SlickGo.drawRButton(board.boardSize , board.TileSize +80, "Place White Stones", g,board.placing == Stone.WHITE||board.placing == Stone.KEYWHITESTONE);
@@ -83,6 +85,7 @@ public class Editor extends BasicGameState {
 		SlickGo.drawButton(board.boardSize +30,board.TileSize,20,20,"W", g,grouping.drawW);
 		SlickGo.drawButton(board.boardSize +60,board.TileSize,20,20,"B", g,grouping.drawB);
 		SlickGo.drawButton(board.boardSize +90,board.TileSize,20,20,"C", g,grouping.drawC);
+		SlickGo.drawButton(board.boardSize +120,board.TileSize,20,20,"P", g,drawPattern);
 
 
 
@@ -133,7 +136,7 @@ public class Editor extends BasicGameState {
 			
 		}
 		
-		
+		pattern = Pattern.sToPv2("xrxrxrxdxdxdxlxlxlxuxux", Stone.BLACK);
 		if (input.isMousePressed(0)) {
 			if (SlickGo.withinBounds(bx,by)) {		
 				board.takeTurn(bx,by , true,false);
@@ -147,6 +150,8 @@ public class Editor extends BasicGameState {
 			if (SlickGo.regionChecker(board.boardSize +30 ,board.TileSize,20,20,gc)) {grouping.drawW = !grouping.drawW;}
 			if (SlickGo.regionChecker(board.boardSize +60 ,board.TileSize,20,20,gc)) {grouping.drawB = !grouping.drawB;}
 			if (SlickGo.regionChecker(board.boardSize +90 ,board.TileSize,20,20,gc)) {grouping.drawC = !grouping.drawC;}
+			if (SlickGo.regionChecker(board.boardSize +120 ,board.TileSize,20,20,gc)) {drawPattern = !drawPattern;}
+			
 			
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +40,200,40,gc)) {board.placing = Stone.BLACK;}
 			

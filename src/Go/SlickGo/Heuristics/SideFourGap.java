@@ -39,9 +39,9 @@ public class SideFourGap  {
 			if(e.isThere(S2) || e.isThere(S5)) return 0;
 			
 			if (e.isThere(S3) && e.isThere(S4))retval += 500;
-			else if (e.isThere(S3) || e.isThere(S4))retval += 200;
+			else if (e.isThere(S3) || e.isThere(S4))retval += 500;
 			
-			if (e.isEnemy(S3) || e.isEnemy(S4))retval -= 200;
+			if (e.isEnemy(S3) || e.isEnemy(S4))retval -= 400;
 			if (e.isEnemy(S3) && e.isEnemy(S4))retval -= 500;
 			
 			

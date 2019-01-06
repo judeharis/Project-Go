@@ -2,6 +2,9 @@ package Go.SlickGo;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+
 public class Pattern {
 	int x;
 	int y;
@@ -12,7 +15,10 @@ public class Pattern {
 	boolean isSide;
 	
 
-
+	int gcsize = 1000;
+	int boardSize = gcsize * 4 /5;
+	int TileSize = boardSize/20;
+	int stoneSize = TileSize;
 
 
 
@@ -129,10 +135,46 @@ public class Pattern {
 		return ret;
 		
 	}
+	
+
 
 	
 	
-	
+    public void draw(Graphics g, ArrayList<Pattern> pattern ) {
+    	int i=0;
+    	int j=0;
+    	for (Pattern p : pattern) {
+    		i=10+p.x;
+    		j=10+p.y;
+    		drawPattern(g,i,j,p);	
+    	}
+    }
+
+    public void drawPattern(Graphics g,  int x, int y ,Pattern p) {
+    	int r = (stoneSize/2);
+    	int k = (r/2);
+    	x = (x+1)*TileSize;
+    	y = (y+1)*TileSize;
+    	x = x - r;
+    	y = y - r;
+    	
+    	
+    	if (p.colour == Stone.BLACK)g.setColor(new Color(Color.black));
+    	else g.setColor(new Color(Color.white));
+    	
+    	if (p.wildCard)g.setColor(Color.green);
+    	if(p.isSide)g.setColor(Color.yellow);
+        g.fillOval(x, y, stoneSize, stoneSize);
+        g.setColor(Color.red);
+        
+        if (p.isCorner)g.drawString("C",x+(k*3/2),y+k);
+        else if(p.isSide)g.drawString("S",x+(k*3/2),y+k);
+        
+        if(p.isNot)  g.drawString("X",x+(k*3/2),y+k);
+        
+        g.setColor(Color.black);
+        g.drawOval(x, y, stoneSize, stoneSize);
+    }
 	
 
 }

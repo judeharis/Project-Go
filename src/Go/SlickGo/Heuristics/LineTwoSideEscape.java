@@ -51,6 +51,47 @@ public class LineTwoSideEscape  {
 					Tuple B3 = S3.side(side.opp());
 					
 					
+//					if(e.isTheres(Sn1,B3)) {
+//						if(e.isEnemies(S2,S0) && e.isTheres(B2))retval-=100;
+//						if(e.isEnemies(S2,S0,S1) && e.isTheres(B2))retval-=100;
+//					} 
+//					
+//
+//					if (e.isTheres(S1)){			
+//						Tuple t = B2;
+//						Tuple u = t.side(side);
+//						Tuple k = t.side(r);
+//						if(e.isTheres(Sn1,B3) && e.isEnemy(S2))retval-=100;
+//						
+//						if(e.isEnemies(B2)) {
+//							retval-=300;
+//							while (e.isThere(u) && e.isEnemy(k) && !e.isThere(k.side(r)) && !e.isInvalid(u.side2(r,r))) {
+//								retval-=100;
+//								t = t.side(r);
+//								u = u.side(r);
+//								k = k.side(r);
+//							}
+//							if(e.isEnemy(k.side(side)) && e.isInvalid(u.side2(r,r)))retval-=100;
+//							if(e.isEnemy(k.side(side)) && e.isTheres(k.side(r)))retval-=100;
+//
+//						}
+//						if(e.isEnemy(t.side(side))) retval-=50;
+//					}
+//					
+//					if (e.isTheres(S1)) {
+//						retval+=100;
+//						Tuple t = S1;
+//						Tuple k = B2;
+//						while (e.isThere(t.side(r)) && e.isEnemy(k) && !ps.isCorner(t.side(r))) {
+//							retval+=100;
+//							t = t.side(r);
+//							k = k.side(r);
+//						}
+//						if(e.isThere(k)) retval+=50;
+//					}
+					
+					
+					
 					if(e.isTheres(Sn1,B3)) {
 						if(e.isEnemies(S2,S0) && e.isTheres(B2))retval-=100;
 						if(e.isEnemies(S2,S0,S1) && e.isTheres(B2))retval-=100;
@@ -77,6 +118,7 @@ public class LineTwoSideEscape  {
 						}
 						if(e.isEnemy(t.side(side))) retval-=50;
 					}
+					if (e.isEnemy(S1) && e.isThere(S0)) retval-=50;
 					
 					if (e.isTheres(S1)) {
 						retval+=100;

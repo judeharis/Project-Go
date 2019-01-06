@@ -8,11 +8,11 @@ import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-public class CornerEyeShapes {
+public class SquareFour {
 	Evaluator e;
 	PatternSearcher ps;
 
-	public CornerEyeShapes (Evaluator e){
+	public SquareFour (Evaluator e){
 		this.e=e;
 	}
 
@@ -22,7 +22,7 @@ public class CornerEyeShapes {
 		int retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);
 		
-		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxdxzd#", e.kscolour);
+		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxdxdxdxlxlxlxuxux", e.kscolour);
 		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatch(sstring, pattern);
 		
 		if(!pMatches.isEmpty()) {
@@ -31,10 +31,19 @@ public class CornerEyeShapes {
 				if(!tlist.isEmpty()) {
 					boolean diagSide= ps.dirSideToBool(counter);
 					UDLR side = ps.dirNumToDir(counter);
-					Tuple S0 = tlist.get(0).side(side);
-					Tuple S1 = S0.side(side.diag(diagSide));
-					if(e.isThere(S1)) retval+=1000;
-					if(e.isEnemy(S1)) retval-=500;
+					UDLR r = side.diag(diagSide);
+					Tuple S0 = tlist.get(0).side2(side,r);
+					Tuple S1 = S0.side(r);
+					Tuple D0 = S0.side(side);
+					Tuple D1 = D0.side(r);
+					
+
+					if(e.isThere(S0)||e.isThere(S1)||e.isThere(D0)||e.isThere(D1)) continue;
+					
+					retval-=400;
+					if(e.isEnemy(S0)||e.isEnemy(S1)||e.isEnemy(D0)||e.isEnemy(D1)) retval-=500;
+					break;
+//					if(e.isEnemies(S0,D1)||e.isEnemies(S1,D0)) retval+=500;
 				}
 				counter++;
 			}

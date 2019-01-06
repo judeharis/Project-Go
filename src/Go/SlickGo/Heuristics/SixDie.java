@@ -199,11 +199,24 @@ public class SixDie {
 				
 				if(!e.isTheres(S1,S6) && e.isEnemy(BS0) && e.isEnemy(BS7)) {
 					
+					//positive
+					
+					
+					
+					if (e.isThere(S1) || e.isThere(S6)) retval+=100;
+					if (e.isThere(S1)) retval+=100;
+					if (e.isThere(S6)) retval+=100;
+					
+					if (e.isEnemy(S1) && e.isThere(S6)) retval+=100;
+					if (e.isEnemy(S6) && e.isThere(S1)) retval+=100;
+					
+					
+					if (e.isTheres(S6,S2) && !e.isEnemies(S4)) retval+=100;
+					if (e.isTheres(S1,S5) && !e.isEnemies(S3)) retval+=100;
+					
 					//negative
 					if (e.isEnemy(S1) || e.isEnemy(S6)) retval-=100;
-				
 
-					
 					if (e.isEnemies(S1,S7,S0)) retval-=100;
 					if (e.isEnemies(S6,S0,S1))retval-=100;
 
@@ -212,18 +225,7 @@ public class SixDie {
 
 
 					
-					//positive
-					
-					
-				
-					if (e.isThere(S1) || e.isThere(S6)) retval+=100;
 
-					if (e.isEnemy(S1) && e.isThere(S6)) retval+=100;
-					if (e.isEnemy(S6) && e.isThere(S1)) retval+=100;
-					
-					
-					if (e.isTheres(S6,S2) && !e.isEnemies(S4)) retval+=100;
-					if (e.isTheres(S1,S5) && !e.isEnemies(S3)) retval+=100;
 					
 						
 				}

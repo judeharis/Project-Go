@@ -75,6 +75,9 @@ public class SevenUnsettled  {
 							if(e.isEnemy(S1) && e.isThere(S7))retval+=100;
 							if(e.isEnemy(S7) && e.isThere(S1))retval+=100;
 							
+							if(e.isThere(S7))retval+=100;
+							if(e.isThere(S1))retval+=100;
+							
 							if(e.isTheres(S1,S3))retval+=900;
 							if(e.isTheres(S7,S5))retval+=900;
 

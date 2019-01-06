@@ -59,7 +59,7 @@ public class Board{
     public boolean takeTurn(int i, int j, boolean  editormode , boolean check) {
 
     	boolean moveMade = false;
-
+    	if(i==-9 && j ==-9) passing =true;
 		if (withinBounds(i,j) && !passing) {
 			if (stones[i][j]== Stone.KO)print("Can't Place On KO"); 
 			else if (selfCap(i,j,placing.getEC()))print("Can't Self Capture"); 
@@ -121,13 +121,6 @@ public class Board{
         	checkForCaps(Stone.WHITE,editormode);
         	return false;
         }
-//        else if (colour.getSC() == Stone.WHITE) bCappedStrings.clear();
-//        else wCappedStrings.clear();
-//   
-
-//        ArrayList<Tuple> capString =  (colour== Stone.WHITE ? bCapStrings:  wCapStrings);
-//        ArrayList<ArrayList<Tuple>> stoneStrings = (colour== Stone.WHITE ? bStoneStrings: wStoneStrings);
-//        ArrayList<Tuple> cappedStrings = (colour== Stone.WHITE ? bCappedStrings: wCappedStrings);
         
         ArrayList<Tuple> capString = colour.getEC().getCapList(this);
         ArrayList<Tuple> cappedStrings = colour.getEC().getCappedList(this);
@@ -498,14 +491,14 @@ public class Board{
         }
     }
    
-    private void removeOldStoneFromString(int  i , int j , ArrayList<ArrayList<Tuple>> stoneStrings ){
-    	ArrayList<Tuple> stringed = checkForStrings( i ,  j, stoneStrings);
-        if (!stringed.isEmpty()){
-            stoneStrings.remove(stringed);
-            updateStringsFull();
-        }
-
-    }
+//    private void removeOldStoneFromString(int  i , int j , ArrayList<ArrayList<Tuple>> stoneStrings ){
+//    	ArrayList<Tuple> stringed = checkForStrings( i ,  j, stoneStrings);
+//        if (!stringed.isEmpty()){
+//            stoneStrings.remove(stringed);
+//            updateStringsFull();
+//        }
+//
+//    }
     
     private void removeKo(){
         if (ko != null){
@@ -575,7 +568,7 @@ public class Board{
         for(int i=0; i<stones.length; i++) {
             for(int j=0; j<stones[i].length; j++) {
                 stones[i][j] = Stone.EMPTY;
-                if (editormode) stones[i][j] = Stone.VALID;
+                if (editormode) stones[i][j] = Stone.INVALID;
             }
         }
 
@@ -785,15 +778,15 @@ public class Board{
     	return nl;
     }
     
-    private ArrayList<Tuple> tupleArrayMerger(ArrayList<Tuple> a,ArrayList<Tuple> b){
-    	ArrayList<Tuple> l = new ArrayList<Tuple>();
-    	l.addAll(a);
-    	for (Tuple t : b ) {
-    		if (!l.contains(t)) l.add(t);
-    	}
-		return l;
-    	
-    }
+//    private ArrayList<Tuple> tupleArrayMerger(ArrayList<Tuple> a,ArrayList<Tuple> b){
+//    	ArrayList<Tuple> l = new ArrayList<Tuple>();
+//    	l.addAll(a);
+//    	for (Tuple t : b ) {
+//    		if (!l.contains(t)) l.add(t);
+//    	}
+//		return l;
+//    	
+//    }
     
 
     
