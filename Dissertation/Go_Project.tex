@@ -206,7 +206,11 @@ In ~\autoref{fig:ex5-1} intersections a to g are the liberties of the black ston
 \end{figure}
 
 
-\section{Alpha Go}
+\section{Related Works}
+Martin Müller's Explorer [2] was a strong program developed with the intention of playing Go. It captures key aspects of computer Go which can be used along with the minimax algorithm in one program. Explorer can evaluate the board in terms of safe territories for each player and can distinguish between safe stones and safe territories. Safe stones are any stones that are deemed alive but safe territories requires that no opponent stones can live within the safe stones. Explorer also takes into consideration of Semeai positions which are capturing races that occur within a game of Go. The victor of Semeai can be determined early sometimes and hence doing so during the evaluation could save searching further during minimax.
+
+While explorer aims to play the Go, this project aims to create a program to solve life and death situations. To do so, determining safety of keystones within a problem is important.  Safety of strings during the board evaluation can determine whether a correct move is made or not.
+
 
 
 
@@ -255,11 +259,11 @@ These two constraints are closely related to each other, more valid moves the AI
 \section{Design Principles}
 
 \section{Brute Force Search}
-For the computer to play against a human it needs to be able to determine the best move it can make. This can be done by searching through all the possibilities of every move possible and confirming the result of each possible move. Within the program the ability to do this “brute force search” was essential as it is the foundation to which rest of the program’s AI is built upon.
+For the computer to play against a human it needs to be able to determine the best move it can make. Simplest way to do this is by searching through the game tree and determining the end results of each valid move. The game tree consists of every single board position that is possible to occur from the current board position. Every valid move’s board position is explored deeper and deeper in the game tree until the game is over or a condition is met. Within the program the ability to do this “brute force search” was essential as it is the foundation to which rest of the program’s AI is built upon.
 
 \subsection{Alpha-Beta Pruning Search Algorithm}
 
-The basis of finding the correct move within the project is the Alpha-Beta pruning search algorithm. Alpha-Beta is an optimisation of the simple minimax algorithm. Minimax is perfect for searching Go game tree where two players are playing and where one player’s gains are directly linked to the other player’s losses. A simple implementation of minimax will search each possible move for initial position of the board and chooses the move which results in victory even if the opponent plays perfectly if there is such a move. In terms of Go given the computer is black, during the search minimax alternates between playing as black and white until an end goal is reached and then chooses an initial move which leads black to win.
+The basis of finding the correct move within the project is the Alpha-Beta pruning search algorithm. Alpha-Beta is an optimisation of the simple minimax algorithm. Minimax is perfect for searching Go game tree where two players are playing and where one player’s gains are directly linked to the other player’s losses. A simple implementation of minimax will search each valid move of the initial board position and choose a move which results in victory even if the opponent plays perfectly, if there is such a move. In terms of Go given the computer is black, during the search minimax alternates between playing as black and white until an end goal is reached and then chooses an initial move which leads black to win.
 
 Within life and death situation of this project the end goal is easy to determine if the attacking player as no valid moves and the keystones remain on the board then the defending player has won. Alternatively, as soon as all the keystones on the board is captured then the attacking player has won. In a real game of Go, results of end games are not so simple. There might be multiple solutions which results in capture of a string but there might only be one solution which won’t allow for losses in other parts of the board for the attacking player. This is ignored in this program as we are only interested in the result of life and death problems not the outcome of the board. Hence any solution which captures the given keystones are sufficient for the project. An example of minimax algorithm used in a simple number game is show in ~\autoref{fig:MinMaxNumTree}
 
@@ -294,7 +298,7 @@ Within the program, all keystrings with only 2 liberties are checked. During the
     \item Moves which places a stone adjacent to any empty point which is not a liberty of the keystring.
 \end{itemize}
 
-After these checks are done for all keystrings, any moves remaining in the suicidal moves list are removed from the valid moves list and returned as the good moves list.
+After these checks are done for all keystrings, any moves remaining in the suicidal moves list are removed from the valid moves list and returned as the good moves list. The good moves list is used during AB search instead of valid moves list to save time by not searching valid moves which would lead to immediate capture of keystones. If no moves are considered “good” then the defending player is to pass instead of making a bad move during AB search.
 
 
 \section{Heuristic Search}
@@ -361,7 +365,7 @@ After these checks are done for all keystrings, any moves remaining in the suici
 
 \chapter{References}
 1.http://www.cs.cmu.edu/~wjh/go/rules/Japanese.html
-
+2.Müller, M. (2002). POSITION EVALUATION IN COMPUTER GO. ICGA Journal, 25(4), pp.219-228.
 
 
 

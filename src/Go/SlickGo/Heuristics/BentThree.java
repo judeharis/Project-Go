@@ -34,9 +34,16 @@ public class BentThree {
 					UDLR r = side.diag(diagSide);
 					Tuple S0 = tlist.get(0).side2(side,side);
 					Tuple S1 = S0.side(r);
-					retval+=500;
+					Tuple S2 = S1.side(side.opp());
+
 					if(e.isThere(S1)) retval+=500;
+					if(e.isEnemy(S0)&& e.isEnemy(S2)) retval+=500;
+					
+					
 					if(e.isEnemy(S1)) retval-=500;
+					if(e.isTheres(S0,S1,S2)) retval-=500;
+
+
 				}
 				counter++;
 			}

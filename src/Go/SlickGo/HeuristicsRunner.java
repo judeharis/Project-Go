@@ -15,59 +15,67 @@ public class HeuristicsRunner {
 		this.e= e;
 	}
 
-	public int runKeyStringHeuristics(ArrayList<Tuple> sstring){
+	public int runKeyStringHeuristics(Group keygroup,ArrayList<Tuple> keystring){
 		int retval =0;
 		
-		
+
 		SixDie sixDie= new SixDie(e);
-		retval += sixDie.evaluate(sstring);
+		retval += sixDie.evaluate(keygroup.group);
 		
 		SevenUnsettled sevenUnsettled= new SevenUnsettled(e);
-		retval += sevenUnsettled.evaluate(sstring);
+		retval += sevenUnsettled.evaluate(keygroup.group);
 		
 		EightLive eightLive= new EightLive(e);
-		retval += eightLive.evaluate(sstring);
+		retval += eightLive.evaluate(keygroup.group);
 		
 		LineTwoSideEscape lineTwoSideEscape= new LineTwoSideEscape(e);
-		retval += lineTwoSideEscape.evaluate(sstring);
+		retval += lineTwoSideEscape.evaluate(keygroup.group);
 		
 		
 		SideOneGap sideOneGap= new SideOneGap(e);
-		retval += sideOneGap.evaluate(sstring); 
+		retval += sideOneGap.evaluate(keygroup.group); 
 		
 		SideTwoGap sideTwoGap= new SideTwoGap(e);
-		retval += sideTwoGap.evaluate(sstring);
+		retval += sideTwoGap.evaluate(keygroup.group);
 		
 		SideThreeGap sideThreeGap= new SideThreeGap(e);
-		retval += sideThreeGap.evaluate(sstring);
+		retval += sideThreeGap.evaluate(keygroup.group);
 		
 		SideFourGap sideFourGap= new SideFourGap(e);
-		retval += sideFourGap.evaluate(sstring);
+		retval += sideFourGap.evaluate(keygroup.group);
 		
 		SideFiveGap sideFiveGap= new SideFiveGap(e);
-		retval += sideFiveGap.evaluate(sstring);
+		retval += sideFiveGap.evaluate(keygroup.group);
 		
 		SideSixGap sideSixGap= new SideSixGap(e);
-		retval += sideSixGap.evaluate(sstring);
+		retval += sideSixGap.evaluate(keygroup.group);
 		
 
 		BentThree bentThree= new BentThree(e);
-		retval += bentThree.evaluate(sstring);
+		retval += bentThree.evaluate(keygroup.group);
 		
+		
+
 		
 		ThreeInRowCorner threeInRowCorner= new ThreeInRowCorner(e);
-		retval += threeInRowCorner.evaluate(sstring);
+		retval += threeInRowCorner.evaluate(keygroup.group);
 		
 		ThreeInRow threeInRow= new ThreeInRow(e);
-		retval += threeInRow.evaluate(sstring);
+		retval += threeInRow.evaluate(keygroup.group);
 		
 		
 		SquareFour squareFour= new SquareFour(e);
-		retval += squareFour.evaluate(sstring);
+		retval += squareFour.evaluate(keygroup.group);
 		
-			
+		SquareFourCorner squareFourCorner= new SquareFourCorner(e);
+		retval += squareFourCorner.evaluate(keygroup.group);
+		
+		SquareFourSide squareFourSide= new SquareFourSide(e);
+		retval += squareFourSide.evaluate(keygroup.group);
+		
+	
 		Liberties liberties= new Liberties(e);
-		retval += liberties.evaluate(sstring)*0;
+		retval += liberties.evaluate(keystring)*1;
 		
 		
 		return retval * 1;

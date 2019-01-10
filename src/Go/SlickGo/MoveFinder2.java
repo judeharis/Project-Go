@@ -20,7 +20,7 @@ public class MoveFinder2  implements Runnable{
 		 this.originalBoard = originalBoard;
 		 this.keystones = keystones;
 		 this.choice = null;
-		 this.obCounts = Evaluator.countStone(originalBoard.turn ,originalBoard.stones);
+//		 this.obCounts = Evaluator.countStone(originalBoard.turn ,originalBoard.stones);
 	 }
 	 
 

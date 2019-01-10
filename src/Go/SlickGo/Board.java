@@ -449,7 +449,7 @@ public class Board{
     	}
 	}
 	
-	public void findStringStones(Tuple t,ArrayList<Tuple> sstring  , Stone colour){
+	public void findStringStones(Tuple t,ArrayList<Tuple> sstring, Stone colour){
 		ArrayList<Tuple> surrounding = getAdjacent(t.a,t.b);
 		sstring.add(t);
 		for(Tuple k: surrounding) if(stones[k.a][k.b].getSC()==colour && !sstring.contains(k))findStringStones(k,sstring,colour);
@@ -536,11 +536,7 @@ public class Board{
 			}
 			ret.add(connected);
 		}
-		
-		
 		return ret;
-		
-		
 	}
 
     public ArrayList<Tuple> getAdjacent(int i , int j){
@@ -587,7 +583,6 @@ public class Board{
         passing=false;
         ko = null;
         resetboard =cloneBoard(this);
-        //undoBoard =cloneBoard(this);
     }
     
     public static Board cloneBoard(Board oB) {

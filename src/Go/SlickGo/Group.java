@@ -12,6 +12,10 @@ public class Group {
     ArrayList<Tuple> region = new ArrayList<Tuple>();
     ArrayList<Tuple> r1 = new ArrayList<Tuple>();
     ArrayList<Tuple> r2 = new ArrayList<Tuple>();
+    
+    
+    Stone colour;
+    ArrayList<Tuple> connectPoints = new ArrayList<Tuple>();
     double strength =0;
 	Board b;
 	
@@ -28,25 +32,45 @@ public class Group {
 	}
 	
 
-    public 	double[][] updateControl(double[][] stonesControl , boolean nega){
+	public Group (Board b,Stone colour){
+		this.group= new ArrayList<Tuple>();
+		this.b=b;
+		this.colour=colour;
+	}
+	
+	public ArrayList<Tuple> getAllPoints(){
+	    ArrayList<Tuple> allPoints = new ArrayList<Tuple>();
+	    
+        for(int i=0; i<19; i++) {
+            for(int j=0; j<19; j++) {
+            	allPoints.add(new Tuple(i,j));
+            }
+        }
+        return allPoints;
+	}
+	
+    
+
+    public 	double[][] updateControl(double[][] stonesControl){
     	double spread = 1.0f;
     	
     	ArrayList<Tuple> updated = new ArrayList<>();
     	updated.addAll(group);
     	ArrayList<Tuple> adj = new ArrayList<>();
 		for(Tuple t :group) {
-    		if (nega)stonesControl[t.a][t.b] -= strength;
-    		else stonesControl[t.a][t.b] += strength;
+    		if (colour.getSC()==Stone.BLACK)stonesControl[t.a][t.b] += strength;
+    		else stonesControl[t.a][t.b] -= strength;
     			
 			ArrayList<Tuple>  newAdj = getStoneRegion(t,false);
 			adj.removeAll(newAdj);
 			adj.addAll(newAdj);
 		}
 		adj.removeAll(updated);
-    	while(!adj.isEmpty() && spread <5) {
+    	while(!adj.isEmpty() && spread <4) {
     		updated.addAll(adj);
-    		if (nega)for(Tuple t: adj) stonesControl[t.a][t.b] -=  strength * (1.0/(3.0*spread));
-    		else for(Tuple t: adj) stonesControl[t.a][t.b] += strength * (1.0/(3.0*spread));
+    		
+    		if (colour.getSC()==Stone.BLACK)for(Tuple t: adj) stonesControl[t.a][t.b] += strength/(spread*2);
+    		else for(Tuple t: adj) stonesControl[t.a][t.b] -= strength/(spread*2);
     			
     		
     		ArrayList<Tuple> tempAdj= Board.tupleArrayClone(adj);
@@ -59,23 +83,60 @@ public class Group {
     		adj.removeAll(updated);
     		spread++;
     	}
+
+    	erosionControl(stonesControl,updated);
     	return stonesControl;
     }
     
+
     
-	
+    public double[][] erosionControl(double[][] stonesControl ,ArrayList<Tuple> updated){
+    	double spread = 1.0f;
+    	ArrayList<Tuple> adj = new ArrayList<>();
+    	ArrayList<Tuple> allPoints = getAllPoints();
+    	allPoints.removeAll(updated);
+    	updated.clear();
+    	updated.addAll(allPoints);
+  
+    	
+		for(Tuple t :allPoints) {
+			ArrayList<Tuple>  newAdj = getStoneRegion(t,false);
+			adj.removeAll(newAdj);
+			adj.addAll(newAdj);
+		}
+
+		adj.removeAll(updated);
+		
+    	while(!adj.isEmpty() && spread <4) {
+    		updated.addAll(adj);
+    		for(Tuple t: adj) stonesControl[t.a][t.b] -= stonesControl[t.a][t.b];
+    		
+    		ArrayList<Tuple> tempAdj= Board.tupleArrayClone(adj);
+    		for(Tuple t :adj) {
+    			ArrayList<Tuple>  newAdj = getStoneRegion(t,false);
+    			tempAdj.removeAll(newAdj);
+    			tempAdj.addAll(newAdj);
+    		}
+    		adj =tempAdj;
+    		adj.removeAll(updated);
+    		spread++;
+    	}
+		
+    	return stonesControl;
+    }
+    
+
 
 
 	public void score() {
 		Stone colour = b.getStones()[group.get(0).a][group.get(0).b];
-		ArrayList<Tuple> libs = b.getLibs(group, true);
 		ArrayList<Tuple> nlist = b.getNeedList(group, colour.getEC(), true);
-		
+		ArrayList<Tuple> libs = b.getLibs(group, true);
 
 		
-		strength= (nlist.size()*10) + group.size()*10;
-		strength= nlist.size()*10 +libs.size()*10+  group.size()*5;
-//		strength= (nlist.size()*100/libs.size()) + group.size()*10;
+//		strength= (nlist.size()*10) + group.size()*10;
+//		strength= nlist.size()*10 +libs.size()*10+  group.size()*5;
+		strength= (nlist.size()*100/libs.size()) + group.size()*10;
 		region = getRegionCovered(true);
 		r1 = getRegionCovered(false);
 		r2 = Board.tupleArrayClone(region);
@@ -126,7 +187,9 @@ public class Group {
 
 
 	
-
+    public static void print(Object o){
+        System.out.println(o);
+    }
     
     
     

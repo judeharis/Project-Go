@@ -29,67 +29,26 @@ public class Evaluator {
 	}
 
 
-	//old
-	public int evaluateCurrentBoardOld() {
-		int retval = 0;
-
-		ArrayList<Tuple> cbAtariList = kscolour.getCapList(cB);
-		int numberOfStrings = kscolour.getSStrings(cB).size();
-		Tuple cbCounts = countStone(kscolour, cB.stones);
-		if (numberOfStrings != 0 && cbAtariList.size() != 0)
-			retval += cbAtariList.size() * (cbAtariList.size() / numberOfStrings) * (-300);
-
-
-		if (cB.ko != null)retval += 100;
-
-		retval -= invalidInNeedList(enemycolour.getSStrings(cB),kscolour);
-		retval += invalidInNeedList(kscolour.getSStrings(cB),enemycolour);
-
-
-		retval += cbCounts.a * 5;
-		retval += cbCounts.b * -5;
-		HeuristicsRunner hrunner= new HeuristicsRunner(cB , this);
-		for (Tuple t : cB.keystones) {
-			ArrayList<Tuple> cBsstring = cB.checkForStrings(t.a, t.b, kscolour.getSStrings(cB));
-			if (!cBsstring.isEmpty()) {
-
-
-				if (cB.checkStringSafetyv2(cBsstring, kscolour))return Integer.MAX_VALUE;
-
-				ArrayList<Tuple> cBneedList = cB.getNeedList(cBsstring, kscolour.getEC(),true);
-				retval += cBneedList.size() * 20;
-				for (Tuple k : cBneedList) {
-					if (cB.stones[k.a][k.b] == Stone.INVALID)
-						return Integer.MAX_VALUE;
-				}
-
-				retval += hrunner.runKeyStringHeuristics(cBsstring);
-			}
-		}
-
-
-		getStringMap(kscolour, cB.stones, true);
-
-
-		return retval;
-
-	}
 
 
 
 	public  int evaluateCurrentBoard() {
 		int retval = 0;
 
-
+		Grouping grouping = new Grouping(cB,false,false,false,false);
+		grouping.allocateGrouping();
+		
 		if (cB.ko != null)retval += 50;
 		HeuristicsRunner hrunner= new HeuristicsRunner(cB , this);
 		for (Tuple t : cB.keystones) {
-			ArrayList<Tuple> cBsstring = cB.checkForStrings(t.a, t.b, kscolour.getSStrings(cB));
-			if (!cBsstring.isEmpty()) {
-				if (cB.checkStringSafetyv2(cBsstring, kscolour))return Integer.MAX_VALUE;
-				ArrayList<Tuple> cBneedList = cB.getNeedList(cBsstring, kscolour.getEC(),true);
+			ArrayList<Tuple> keystring = cB.checkForStrings(t.a, t.b, kscolour.getSStrings(cB));
+			Group keygroup = grouping.inGroup(t, kscolour);
+			if (!keystring.isEmpty()) {
+				if (cB.checkStringSafetyv2(keystring, kscolour))return Integer.MAX_VALUE;
+				ArrayList<Tuple> cBneedList = cB.getNeedList(keystring, kscolour.getEC(),true);
 				for (Tuple k : cBneedList)if (cB.stones[k.a][k.b] == Stone.INVALID)return Integer.MAX_VALUE;
-				retval += hrunner.runKeyStringHeuristics(cBsstring);}
+				retval += hrunner.runKeyStringHeuristics(keygroup,keystring);
+			}
 		}
 		
 		
@@ -97,8 +56,7 @@ public class Evaluator {
 			for (Tuple  t : slist) retval += hrunner.runStoneHeuristics(t);	
 		}
 		
-//		Grouping grouping = new Grouping(cB,true,false,false,true);
-//		grouping.allocateGrouping();
+
 //		grouping.allocateControl();
 //		if(kscolour==Stone.BLACK)retval+= grouping.totalb;
 //		else retval+= grouping.totalw;
@@ -112,22 +70,22 @@ public class Evaluator {
 
 
 
-	public static Tuple countStone(Stone colour, Stone[][] stones) {
-
-		int stoneCount = 0;
-		int enemyStoneCount = 0;
-		for (int i = 0; i < stones.length; i++) {
-			for (int j = 0; j < stones[i].length; j++) {
-				if (stones[i][j].getSC() == colour)
-					stoneCount++;
-				else if (stones[i][j].getSC() == colour.getEC())
-					enemyStoneCount++;
-
-			}
-		}
-		Tuple counts = new Tuple(stoneCount, enemyStoneCount);
-		return counts;
-	}
+//	public static Tuple countStone(Stone colour, Stone[][] stones) {
+//
+//		int stoneCount = 0;
+//		int enemyStoneCount = 0;
+//		for (int i = 0; i < stones.length; i++) {
+//			for (int j = 0; j < stones[i].length; j++) {
+//				if (stones[i][j].getSC() == colour)
+//					stoneCount++;
+//				else if (stones[i][j].getSC() == colour.getEC())
+//					enemyStoneCount++;
+//
+//			}
+//		}
+//		Tuple counts = new Tuple(stoneCount, enemyStoneCount);
+//		return counts;
+//	}
 
 //	public UDLR distFromSide(ArrayList<Tuple> sstring, int d) {
 //		boolean vert = (barOrien(sstring)==VERT);
@@ -169,6 +127,21 @@ public class Evaluator {
 //		}
 //		return ret;
 //	}
+	
+//	public int invalidInNeedList(ArrayList<ArrayList<Tuple>> colourStrings, Stone enemycolour) {
+//	int retval =0;
+//	for (ArrayList<Tuple> sstring :colourStrings ) {
+//		if (sstring.size()>1) {
+//			ArrayList<Tuple> needList = cB.getNeedList(sstring, enemycolour,true);
+//			for (Tuple k : needList) {
+//				if (cB.stones[k.a][k.b] == Stone.INVALID) {
+//					retval += 20;
+//					break;}
+//			}}
+//	}
+//	return retval;
+//}
+
 
 	public boolean isThere(Tuple t){
 		if(!cB.withinBounds(t)) return false;
@@ -201,45 +174,9 @@ public class Evaluator {
 	}
 
 
-	public void getStringMap(Stone colour, Stone[][] stones, boolean keepEnemy){
-		for (int i = 0; i < stones.length; i++) {
-			for (int j = 0; j < stones[i].length; j++) {
-				if (stones[i][j].getSC() == colour)
-					this.vB += "x";
-				else if (stones[i][j].getSC() == colour.getEC() && keepEnemy)
-					this.vB += "+";
-				else
-					this.vB += "-";
-
-				if (stones[j][i].getSC() == colour)
-					this.hB += "x";
-				else if (stones[j][i].getSC() == colour.getEC() && keepEnemy)
-					this.hB += "+";
-				else
-					this.hB += "-";
-
-			}
-			this.vB += "*";
-			this.hB += "*";
-		}
-	}
-
 	public void print(Object o) {
 		System.out.println(o);
 	}
 
-	public int invalidInNeedList(ArrayList<ArrayList<Tuple>> colourStrings, Stone enemycolour) {
-		int retval =0;
-		for (ArrayList<Tuple> sstring :colourStrings ) {
-			if (sstring.size()>1) {
-				ArrayList<Tuple> needList = cB.getNeedList(sstring, enemycolour,true);
-				for (Tuple k : needList) {
-					if (cB.stones[k.a][k.b] == Stone.INVALID) {
-						retval += 20;
-						break;}
-				}}
-		}
-		return retval;
-	}
 
 }
