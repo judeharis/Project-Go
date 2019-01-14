@@ -22,8 +22,8 @@ public class BentThree {
 		int retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);
 		
-		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxdxdxdxlxlxlxuxuxrx", e.kscolour);
-		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatch(sstring, pattern);
+		ArrayList<Pattern> pattern = Pattern.sToPv2("xrdxdxdlxlxluxurx", e.kscolour);
+		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
 		
 		if(!pMatches.isEmpty()) {
 			int counter=0;
@@ -31,10 +31,10 @@ public class BentThree {
 				if(!tlist.isEmpty()) {
 					boolean diagSide= ps.dirSideToBool(counter);
 					UDLR side = ps.dirNumToDir(counter);
-					UDLR r = side.diag(diagSide);
-					Tuple S0 = tlist.get(0).side2(side,side);
-					Tuple S1 = S0.side(r);
-					Tuple S2 = S1.side(side.opp());
+					UDLR l = side.diag(!diagSide);
+					Tuple S2 = tlist.get(0).side(side);
+					Tuple S1 = S2.side(side);
+					Tuple S0 = S1.side(l);
 
 					if(e.isThere(S1)) retval+=500;
 					if(e.isEnemy(S0)&& e.isEnemy(S2)) retval+=500;
@@ -49,6 +49,8 @@ public class BentThree {
 			}
 			
 		}
+		
+
 
 		
 		return retval;

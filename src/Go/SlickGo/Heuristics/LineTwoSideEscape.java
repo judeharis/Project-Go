@@ -35,9 +35,8 @@ public class LineTwoSideEscape  {
 			for(ArrayList<Tuple> tlist: pMatches) {
 				if(!tlist.isEmpty()) {
 					boolean diagSide= ps.dirSideToBool(counter);
-					
 					UDLR side = ps.dirNumToDir(counter);
-					
+					counter++;
 					UDLR l = side.diag(!diagSide);
 					UDLR r = side.diag(diagSide);
 					
@@ -134,7 +133,7 @@ public class LineTwoSideEscape  {
 
 					
 				}
-				counter++;
+
 			}
 			
 		}

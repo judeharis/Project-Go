@@ -45,15 +45,16 @@ public class MoveFinder  implements Runnable{
 		if (goodMoves.size() == 0 || currentBoard.placing != keystonecolour ) {goodMoves = validMoves;}
 		
 		//Forbidden Third 
-		for (Tuple t : currentBoard.keystones) {
-			ArrayList<Tuple> keystring = currentBoard.checkForStrings(t.a,t.b,keystonecolour.getSStrings(currentBoard)); 
-			if (!keystring.isEmpty() && depth !=1 && currentBoard.checkStringSafetyv2(keystring, keystonecolour)) return max;	
-		}
+//		for (Tuple t : currentBoard.keystones) {
+//			ArrayList<Tuple> keystring = currentBoard.checkForStrings(t.a,t.b,keystonecolour.getSStrings(currentBoard)); 
+//			if (!keystring.isEmpty() && depth !=1 && currentBoard.checkStringSafetyv2(keystring, keystonecolour)) return max;	
+//		}
 		
 		int currentscore = 0;
-		if (Play.heuristic) {
-			Evaluator evaluator = new Evaluator(currentBoard,originalBoard);
-			currentscore= evaluator.evaluateCurrentBoard();}
+//		if (Play.heuristic) {
+//			Evaluator evaluator = new Evaluator(currentBoard,originalBoard);
+//			currentscore= evaluator.evaluateCurrentBoard();}
+		
 		if (Play.heuristic && depth>cutoff) {
 			Evaluator evaluator = new Evaluator(currentBoard,originalBoard);
 			return evaluator.evaluateCurrentBoard();}

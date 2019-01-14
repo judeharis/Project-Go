@@ -140,14 +140,40 @@ public class Pattern {
 
 	
 	
-    public void draw(Graphics g, ArrayList<Pattern> pattern ) {
-    	int i=0;
-    	int j=0;
-    	for (Pattern p : pattern) {
-    		i=10+p.x;
-    		j=10+p.y;
-    		drawPattern(g,i,j,p);	
+    public void draw(Graphics g, ArrayList<Pattern> pattern, Board b) {
+
+    	boolean fullDraw=false;
+    	PatternSearcher ps = new PatternSearcher(b,Stone.BLACK);
+    	
+    	for(int i =0;i<19;i++) {
+        	for(int j =0;j<19;j++) {
+        		int okcount= 0;
+            	for (Pattern p : pattern) {
+            		int x = i+p.x;
+            		int y = j+p.y;
+            		Tuple k = new Tuple(x,y);
+                		
+            		if(p.isSide && !b.withinBounds(k)) okcount++;	
+    				else if(!p.isSide && b.withinBounds(k)) {
+    					boolean colourCheck = true;
+    					boolean cornerCheck = p.isCorner? ps.isCorner(k):true;
+    					if(colourCheck && cornerCheck)okcount++;
+    				}		
+                }
+                	
+                if (okcount == pattern.size()) {	
+                	for (Pattern p : pattern) {
+                		int x = i+p.x;
+                		int y = j+p.y;
+                		drawPattern(g,x,y,p);
+                    }
+                	fullDraw = true;
+            	}
+                if(fullDraw)break;
+        	}
+        	if(fullDraw)break;
     	}
+
     }
 
     public void drawPattern(Graphics g,  int x, int y ,Pattern p) {
@@ -176,5 +202,6 @@ public class Pattern {
         g.drawOval(x, y, stoneSize, stoneSize);
     }
 	
+    
 
 }

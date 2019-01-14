@@ -21,9 +21,8 @@ public class SquareFour {
 	public int evaluate(ArrayList<Tuple> sstring) {
 		int retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);
-		
-		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxdxdxdxlxlxlxuxux", e.kscolour);
-		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatch(sstring, pattern);
+		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrdxdxdlxlxluxux", e.kscolour);
+		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
 		
 		if(!pMatches.isEmpty()) {
 			int counter=0;
@@ -34,7 +33,7 @@ public class SquareFour {
 					counter++;
 					
 					UDLR r = side.diag(diagSide);
-					Tuple S0 = tlist.get(0).side2(side,r);
+					Tuple S0 = tlist.get(0).side(side);
 					Tuple S1 = S0.side(r);
 					Tuple D0 = S0.side(side);
 					Tuple D1 = D0.side(r);

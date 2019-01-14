@@ -20,7 +20,6 @@ public class PatternSearcher {
 		this.colour = colour;
 	}
 	
-	
 	public ArrayList<Tuple> stringMatch(ArrayList<Tuple> sstring, ArrayList<Pattern> pattern) {
 		boolean found = false;
 		foundNum =0;
@@ -146,7 +145,8 @@ public class PatternSearcher {
 			for (ArrayList<Tuple> slist :matchTries) {
 				if(slist.size() == pattern.size()) {
 					matches.add(slist);
-					matchesDirNums.add(dirNum);}
+					matchesDirNums.add(dirNum);
+				}
 				dirNum++;
 			}
 			
@@ -165,12 +165,91 @@ public class PatternSearcher {
 		return matches;
 	}
 	
-	
-	
-	
+	public ArrayList<ArrayList<Tuple>> allStringMatchv2(ArrayList<Tuple> sstring, ArrayList<Pattern> pattern) {
+		ArrayList<ArrayList<Tuple>> matches = new ArrayList<ArrayList<Tuple>>();
+	    matchesDirNums = new ArrayList<Integer>();
+
+		for(Tuple t : sstring) {
+			Tuple u,d,l,r,nu,nd,nl,nr;
+			ArrayList<ArrayList<Tuple>> matchTries = new ArrayList<ArrayList<Tuple>>();
+			boolean[] toSkip = new boolean[8];
+			
+
+			for(int n=0 ; n<8;n++) matchTries.add(new ArrayList<Tuple>());
+			
+			for(Pattern p : pattern) {
+			   if(areAllTrue(toSkip))break;
+				ArrayList<Tuple> allRot = new ArrayList<Tuple>(); 
+
+				u = new Tuple(t.a+p.x,t.b+p.y);
+				nu = new Tuple(t.a-p.x,t.b-p.y);
+				d = new Tuple(t.a-p.x,t.b+p.y);
+				nd = new Tuple(t.a+p.x,t.b-p.y);
+				l = new Tuple(t.a+p.y,t.b+p.x);
+				nl = new Tuple(t.a-p.y,t.b-p.x);
+				r = new Tuple(t.a-p.y,t.b+p.x);
+				nr = new Tuple(t.a+p.y,t.b-p.x);
+				
+				allRot.add(u);
+				allRot.add(nu);
+				allRot.add(d);
+				allRot.add(nd);
+				allRot.add(l);
+				allRot.add(nl);
+				allRot.add(r);
+				allRot.add(nr);
+				
+				int counter=0;
+				for (Tuple k : allRot) {
+					if(toSkip[counter]) {counter++;continue;}
+					if(p.isSide && !b.withinBounds(k)) matchTries.get(counter).add(k);
+					else if(!p.isSide && b.withinBounds(k)) {
+						boolean colourCheck = ((b.stones[k.a][k.b].getSC() == p.colour)!=p.isNot) || p.wildCard;
+						boolean cornerCheck = p.isCorner? isCorner(k):true;
+						if(colourCheck && cornerCheck)matchTries.get(counter).add(k);
+						else toSkip[counter]=true;
+					}else toSkip[counter]=true;
+					counter++;
+				}
+			}
+			
+			int dirNum=0;
+			for (ArrayList<Tuple> slist :matchTries) {
+				boolean skip = false;
+				if(slist.size() == pattern.size()) {
+					Iterator<Tuple> itr = slist.iterator(); 
+			        while (itr.hasNext()){ 
+			            Tuple k = itr.next(); 
+			            if(b.withinBounds(k)&&b.stones[k.a][k.b].getSC() != colour)itr.remove();
+			            else if(!b.withinBounds(k))itr.remove();
+			        } 
+			        
+					for(ArrayList<Tuple> m: matches) if(m.containsAll(slist)) {skip=true;break;}
+					if(!skip) {
+						matches.add(slist);
+						matchesDirNums.add(dirNum);
+					}
+				}
+				dirNum++;
+			}
+			
+		}
+		
+		
+//		for(ArrayList<Tuple> mlist :matches) {		
+//			Iterator<Tuple> itr = mlist.iterator(); 
+//	        while (itr.hasNext()){ 
+//	            Tuple t = itr.next(); 
+//	            if(b.withinBounds(t)&&b.stones[t.a][t.b].getSC() != colour)itr.remove();
+//	            else if(!b.withinBounds(t))itr.remove();
+//	        } 
+//			
+//		}
 
 
-
+		return matches;
+	}
+	
 	public ArrayList<Tuple> tupleMatch(Tuple t, ArrayList<Pattern> pattern){
 		ArrayList<Tuple> match= new ArrayList<Tuple>(); 
 		
@@ -261,7 +340,6 @@ public class PatternSearcher {
 		return NODIR;
 	}
 	
-	
 	public boolean dirSideToBool() {
 		if(this.foundNum ==0 || this.foundNum ==3 || this.foundNum ==6 || this.foundNum ==4 ) return false;
 		if(this.foundNum ==2 || this.foundNum ==1 || this.foundNum ==5 || this.foundNum ==7 ) return true;
@@ -282,7 +360,6 @@ public class PatternSearcher {
 	    return true;
 	}
 	
-
 	public boolean isCorner(Tuple t) {
 	    if(t.a == 0 && t.b==0) return true;
 	    if(t.a == 18 && t.b==0) return true;
@@ -290,7 +367,6 @@ public class PatternSearcher {
 	    if(t.a == 18 && t.b==18) return true;
 	    return false;
 	}
-
 	
 	public void print(Object o) {
 		System.out.println(o);

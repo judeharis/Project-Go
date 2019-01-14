@@ -23,7 +23,7 @@ public class SquareFourSide {
 		ps = new PatternSearcher(e.cB,e.kscolour);
 		
 		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrdxdxzdlxdxdS", e.kscolour);
-		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatch(sstring, pattern);
+		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
 		
 		if(!pMatches.isEmpty()) {
 			int counter=0;

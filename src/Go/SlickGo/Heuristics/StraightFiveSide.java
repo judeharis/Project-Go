@@ -8,11 +8,11 @@ import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-public class SideFiveGap {
+public class StraightFiveSide {
 	Evaluator e;
 	PatternSearcher ps;
 
-	public SideFiveGap (Evaluator e){
+	public StraightFiveSide (Evaluator e){
 		this.e=e;
 	}
 
@@ -52,37 +52,10 @@ public class SideFiveGap {
 		int retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);
 		
-		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxrxdxzdxdS", e.kscolour);
-		ArrayList<Tuple> bar7 =ps.stringMatch(sstring, pattern);
-		
-
-		if (!bar7.isEmpty()) {
-			boolean diagSide= ps.dirSideToBool();
-			UDLR side = ps.dirNumToDir();
-			Tuple S1 = bar7.get(0).side(side);
-			Tuple S2 = S1.side(side.diag(diagSide));
-			Tuple S3 = S2.side(side.diag(diagSide));
-			Tuple S4 = S3.side(side.diag(diagSide));
-			Tuple S5 = S4.side(side.diag(diagSide));
-			Tuple S6 = S5.side(side.diag(diagSide));
-
-
-
-
-
-			retval += 1500;
-			if(e.isThere(S2) || e.isThere(S6)) return 0;
-			if(e.isThere(S3))retval += 500;
-			if(e.isThere(S4))retval += 1000;
-			if(e.isThere(S5))retval += 500;
-
-			
-			return retval;
-		}
-		
-//		pattern = Pattern.sToPv2("xrxrxrxrxrxrxzdxdS", e.kscolour);
-//		bar7 =ps.stringMatch(sstring, pattern);
+//		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxrxdxzdxdS", e.kscolour);
+//		ArrayList<Tuple> bar7 =ps.stringMatch(sstring, pattern);
 //		
+//
 //		if (!bar7.isEmpty()) {
 //			boolean diagSide= ps.dirSideToBool();
 //			UDLR side = ps.dirNumToDir();
@@ -92,26 +65,60 @@ public class SideFiveGap {
 //			Tuple S4 = S3.side(side.diag(diagSide));
 //			Tuple S5 = S4.side(side.diag(diagSide));
 //			Tuple S6 = S5.side(side.diag(diagSide));
-//			Tuple S7 = S6.side(side.diag(diagSide));
-//			Tuple S8 = S7.side(side.diag(diagSide));
-//
-//			if (e.isThere(S7)) return 0;
-//			if (e.isThere(S6)) return 0;
-//			
-//			if (e.isEnemy(S8))retval -=100;
 //
 //
-//			
-//			
+//
+//
+//
+//			retval += 1500;
+//			if(e.isThere(S2) || e.isThere(S6)) return 0;
+//			if(e.isThere(S3))retval += 500;
+//			if(e.isThere(S4))retval += 1000;
+//			if(e.isThere(S5))retval += 500;
 //
 //			
 //			return retval;
 //		}
+//		
+//		
+//		return retval;
 		
+
+		
+		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxrxdxzdxdS", e.kscolour);
+		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
+		
+		if(!pMatches.isEmpty()) {
+				int counter=0;
+				for(ArrayList<Tuple> tlist: pMatches) {
+					if(!tlist.isEmpty()) {
+						boolean diagSide= ps.dirSideToBool(counter);
+						UDLR side = ps.dirNumToDir(counter);
+						counter++;
+						
+						UDLR r = side.diag(diagSide);
+						
+						Tuple S1 = tlist.get(0).side(side);
+						Tuple S2 = S1.side(r);
+						Tuple S3 = S2.side(r);
+						Tuple S4 = S3.side(r);
+						Tuple S5 = S4.side(r);
+						Tuple S6 = S5.side(r);
+		
+
+						if(e.isThere(S2) || e.isThere(S6)) continue;
+						retval += 1500;
+						if(e.isThere(S3))retval += 500;
+						if(e.isThere(S4))retval += 1000;
+						if(e.isThere(S5))retval += 500;
+					
+				}
+				
+			}
+		
+		}
 		return retval;
 
 	}
-
-	
 	
 }

@@ -8,11 +8,11 @@ import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-public class ThreeInRowCorner {
+public class StraightThreeCorner {
 	Evaluator e;
 	PatternSearcher ps;
 
-	public ThreeInRowCorner (Evaluator e){
+	public StraightThreeCorner (Evaluator e){
 		this.e=e;
 	}
 
@@ -23,7 +23,7 @@ public class ThreeInRowCorner {
 		ps = new PatternSearcher(e.cB,e.kscolour);
 		
 		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxdxzd#", e.kscolour);
-		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatch(sstring, pattern);
+		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
 		
 		if(!pMatches.isEmpty()) {
 			int counter=0;

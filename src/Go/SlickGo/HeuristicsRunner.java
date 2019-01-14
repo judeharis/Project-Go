@@ -32,36 +32,34 @@ public class HeuristicsRunner {
 		retval += lineTwoSideEscape.evaluate(keygroup.group);
 		
 		
-		SideOneGap sideOneGap= new SideOneGap(e);
-		retval += sideOneGap.evaluate(keygroup.group); 
+		StraightOneSide straightOneSide= new StraightOneSide(e);
+		retval += straightOneSide.evaluate(keygroup.group); 
 		
-		SideTwoGap sideTwoGap= new SideTwoGap(e);
-		retval += sideTwoGap.evaluate(keygroup.group);
+		StraightTwoSide straightTwoSide= new StraightTwoSide(e);
+		retval += straightTwoSide.evaluate(keygroup.group);
 		
-		SideThreeGap sideThreeGap= new SideThreeGap(e);
-		retval += sideThreeGap.evaluate(keygroup.group);
+		StraightThreeSide straightThreeSide= new StraightThreeSide(e);
+		retval += straightThreeSide.evaluate(keygroup.group);
 		
-		SideFourGap sideFourGap= new SideFourGap(e);
-		retval += sideFourGap.evaluate(keygroup.group);
+		StraightFourSide straightFourSide= new StraightFourSide(e);
+		retval += straightFourSide.evaluate(keygroup.group);
 		
-		SideFiveGap sideFiveGap= new SideFiveGap(e);
-		retval += sideFiveGap.evaluate(keygroup.group);
+		StraightFiveSide straightFiveSide= new StraightFiveSide(e);
+		retval += straightFiveSide.evaluate(keygroup.group);
 		
-		SideSixGap sideSixGap= new SideSixGap(e);
-		retval += sideSixGap.evaluate(keygroup.group);
+		StraightSixSide straightSixSide= new StraightSixSide(e);
+		retval += straightSixSide.evaluate(keygroup.group);
 		
 
 		BentThree bentThree= new BentThree(e);
 		retval += bentThree.evaluate(keygroup.group);
-		
-		
 
 		
-		ThreeInRowCorner threeInRowCorner= new ThreeInRowCorner(e);
-		retval += threeInRowCorner.evaluate(keygroup.group);
+		StraightThreeCorner straightThreeCorner= new StraightThreeCorner(e);
+		retval += straightThreeCorner.evaluate(keygroup.group);
 		
-		ThreeInRow threeInRow= new ThreeInRow(e);
-		retval += threeInRow.evaluate(keygroup.group);
+		StraightThree straightThree= new StraightThree(e);
+		retval += straightThree.evaluate(keygroup.group);
 		
 		
 		SquareFour squareFour= new SquareFour(e);
@@ -73,9 +71,18 @@ public class HeuristicsRunner {
 		SquareFourSide squareFourSide= new SquareFourSide(e);
 		retval += squareFourSide.evaluate(keygroup.group);
 		
-	
+		PyramidFour pyramidFour= new PyramidFour(e);
+		retval += pyramidFour.evaluate(keygroup.group);
+		
+		PyramidFourSide pyramidFourSide= new PyramidFourSide(e);
+		retval += pyramidFourSide.evaluate(keygroup.group);
+		
+		
+		SingleEye singleEye= new SingleEye(e);
+		retval += singleEye.evaluate(keygroup.group)*1;
+		
 		Liberties liberties= new Liberties(e);
-		retval += liberties.evaluate(keystring)*1;
+		retval += liberties.evaluate(keystring)*0.5;
 		
 		
 		return retval * 1;
@@ -86,8 +93,7 @@ public class HeuristicsRunner {
 
 		int retval =0;
 		
-		ConnectStones connectStones= new ConnectStones(e);
-		retval += connectStones.evaluate(t);
+
 		
 		return retval *0;
 		

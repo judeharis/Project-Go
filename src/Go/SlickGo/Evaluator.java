@@ -44,7 +44,7 @@ public class Evaluator {
 			ArrayList<Tuple> keystring = cB.checkForStrings(t.a, t.b, kscolour.getSStrings(cB));
 			Group keygroup = grouping.inGroup(t, kscolour);
 			if (!keystring.isEmpty()) {
-				if (cB.checkStringSafetyv2(keystring, kscolour))return Integer.MAX_VALUE;
+//				if (cB.checkStringSafetyv2(keystring, kscolour))return Integer.MAX_VALUE;
 				ArrayList<Tuple> cBneedList = cB.getNeedList(keystring, kscolour.getEC(),true);
 				for (Tuple k : cBneedList)if (cB.stones[k.a][k.b] == Stone.INVALID)return Integer.MAX_VALUE;
 				retval += hrunner.runKeyStringHeuristics(keygroup,keystring);

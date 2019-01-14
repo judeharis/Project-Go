@@ -8,7 +8,7 @@ import org.newdawn.slick.Graphics;
 import Go.SlickGo.Board;
 import Go.SlickGo.Stone;
 import Go.SlickGo.Tuple;
-import static  Go.SlickGo.UDLR.*;
+
 
 
 public class Grouping {

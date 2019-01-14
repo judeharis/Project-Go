@@ -57,7 +57,7 @@ public class Editor extends BasicGameState {
         	board.drawoval(g,(bx+1)*board.TileSize,(by+1)*board.TileSize,board.placing.stoneToColor(),board.placing.isKey());}
         
         grouping.draw(g);
-        if(!pattern.isEmpty() && drawPattern)pattern.get(0).draw(g,pattern);
+        if(!pattern.isEmpty() && drawPattern)pattern.get(0).draw(g,pattern,board);
 
 		SlickGo.drawRButton(board.boardSize , board.TileSize +40 , "Place Black Stones", g, board.placing == Stone.BLACK||board.placing == Stone.KEYBLACKSTONE);
 		SlickGo.drawRButton(board.boardSize , board.TileSize +80, "Place White Stones", g,board.placing == Stone.WHITE||board.placing == Stone.KEYWHITESTONE);
@@ -136,8 +136,9 @@ public class Editor extends BasicGameState {
 			
 			
 		}
+
 		
-		pattern = Pattern.sToPv2("xrxrdxdxzdlxdxdS", Stone.BLACK);
+		pattern = Pattern.sToPv2("xrdxzldxdS", Stone.BLACK);
 		if (input.isMousePressed(0)) {
 			if (SlickGo.withinBounds(bx,by)) {		
 				board.takeTurn(bx,by , true,false);
