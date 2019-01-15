@@ -53,6 +53,14 @@ public class HeuristicsRunner {
 
 		BentThree bentThree= new BentThree(e);
 		retval += bentThree.evaluate(keygroup.group);
+		
+		
+		BentThreeSide bentThreeSide= new BentThreeSide(e);
+		retval += bentThreeSide.evaluate(keygroup.group);
+		
+		BentThreeCorner bentThreeCorner= new BentThreeCorner(e);
+		retval += bentThreeCorner.evaluate(keygroup.group);
+
 
 		
 		StraightThreeCorner straightThreeCorner= new StraightThreeCorner(e);
@@ -76,6 +84,15 @@ public class HeuristicsRunner {
 		
 		PyramidFourSide pyramidFourSide= new PyramidFourSide(e);
 		retval += pyramidFourSide.evaluate(keygroup.group);
+		
+		PyramidFourCorner pyramidFourCorner= new PyramidFourCorner(e);
+		retval += pyramidFourCorner.evaluate(keygroup.group);
+		
+		
+		CrossedFive crossedFive= new CrossedFive(e);
+		retval += crossedFive.evaluate(keygroup.group);
+		
+		
 		
 		
 		SingleEye singleEye= new SingleEye(e);

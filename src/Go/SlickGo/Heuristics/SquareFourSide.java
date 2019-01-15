@@ -40,14 +40,21 @@ public class SquareFourSide {
 					Tuple D0 = S0.side(side);
 					Tuple D1 = D0.side(r);
 
-
-					if(e.isThere(S0)||e.isThere(S1)||e.isThere(D0)||e.isThere(D1)) retval+=500;
-					if(e.isThere(S0)||e.isThere(S1)) retval+=50;
 					
-					if(e.isThere(S0) && e.isEnemy(D1)) retval -=500;
-					if(e.isThere(S1) && e.isEnemy(D0)) retval -=500;
-					if(e.isThere(D0) && e.isEnemy(S1)) retval -=500;
-					if(e.isThere(D1) && e.isEnemy(S0)) retval -=500;
+					if(e.isThere(S0)||e.isThere(S1)||e.isThere(D0)||e.isThere(D1)) continue;
+					
+					retval-=50;
+					if(e.isEnemy(S0)||e.isEnemy(S1)||e.isEnemy(D0)||e.isEnemy(D1)) retval-=50;
+					if(e.isEnemies(S0,D1)||e.isEnemies(S1,D0)) retval+=50;
+					
+					
+//					if(e.isThere(S0)||e.isThere(S1)||e.isThere(D0)||e.isThere(D1)) retval+=500;
+//					if(e.isThere(S0)||e.isThere(S1)) retval+=50;
+//					
+//					if(e.isThere(S0) && e.isEnemy(D1)) retval -=500;
+//					if(e.isThere(S1) && e.isEnemy(D0)) retval -=500;
+//					if(e.isThere(D0) && e.isEnemy(S1)) retval -=500;
+//					if(e.isThere(D1) && e.isEnemy(S0)) retval -=500;
 				}
 				
 			}

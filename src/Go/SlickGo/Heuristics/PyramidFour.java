@@ -34,10 +34,27 @@ public class PyramidFour {
 					counter++;
 					
 					UDLR r = side.diag(diagSide);
+					UDLR l = side.diag(!diagSide);
 					Tuple S0 = tlist.get(0).side(side);
 					Tuple S1 = S0.side(r);
 					Tuple S2 = S1.side(r);
 					Tuple D0 = S1.side(side);
+					
+					
+					Tuple A1 = tlist.get(0).side(l);
+					Tuple A2 = A1.side2(side,side);
+					Tuple B1 = A2.side2(side,r);
+					Tuple B2 = B1.side2(r,r);
+					Tuple C1 = B2.side2(r,side.opp());
+					Tuple C2 = C1.side2(side.opp(),side.opp());
+					
+					
+
+					if(e.isEnemies(A1,A2))continue;
+					if(e.isEnemies(B1,B2))continue;
+					if(e.isEnemies(C1,C2))continue;
+					
+
 
 
 					if(e.isThere(S0)||e.isThere(S2)||e.isThere(D0)) continue;

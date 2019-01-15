@@ -37,11 +37,21 @@ public class SingleEye {
 					Tuple TR = tlist.get(0).side(r);
 					Tuple BL = TL.side2(side,side);
 					Tuple BR = TR.side2(side,side);
+					
+					Tuple T = tlist.get(0).side(side.opp());
+					Tuple L = TL.side2(side,l);
+					Tuple R = TR.side2(side,r);
+					Tuple B = BL.side2(side,r);
+					
+					
 					Tuple C = tlist.get(0).side(side);
 
 
 					retval+=100;
-					if(e.isThere(C)) retval-=500;
+					
+					
+					if(!(e.isEnemies(T,TL,TR) || e.isEnemies(L,TL,BL) || e.isEnemies(B,BL,BR) || e.isEnemies(R,TR,BR)) && e.isThere(C))retval-=500;
+//					if(e.isThere(C)) retval-=500;
 					
 					
 					if(e.isThere(TL)) retval+=20;
@@ -51,18 +61,18 @@ public class SingleEye {
 					
 
 					
-					int k  = 20;
-					if(e.isEnemy(TL) && e.isThere(TR)) retval+=k;
-					if(e.isEnemy(TL) && e.isThere(BL)) retval+=k;
 
-					if(e.isEnemy(TR) && e.isThere(TL)) retval+=k;
-					if(e.isEnemy(TR) && e.isThere(BR)) retval+=k;
+					if(e.isEnemy(TL) && e.isThere(TR)) retval+=20;
+					if(e.isEnemy(TL) && e.isThere(BL)) retval+=20;
+
+					if(e.isEnemy(TR) && e.isThere(TL)) retval+=20;
+					if(e.isEnemy(TR) && e.isThere(BR)) retval+=20;
 					
-					if(e.isEnemy(BL) && e.isThere(TL)) retval+=k;
-					if(e.isEnemy(BL) && e.isThere(BR)) retval+=k;
+					if(e.isEnemy(BL) && e.isThere(TL)) retval+=20;
+					if(e.isEnemy(BL) && e.isThere(BR)) retval+=20;
 					
-					if(e.isEnemy(BR) && e.isThere(TR)) retval+=k;
-					if(e.isEnemy(BR) && e.isThere(BL)) retval+=k;
+					if(e.isEnemy(BR) && e.isThere(TR)) retval+=20;
+					if(e.isEnemy(BR) && e.isThere(BL)) retval+=20;
 					
 					
 					

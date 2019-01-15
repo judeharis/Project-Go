@@ -138,7 +138,7 @@ public class Editor extends BasicGameState {
 		}
 
 		
-		pattern = Pattern.sToPv2("xrdxzldxdS", Stone.BLACK);
+		pattern = Pattern.sToPv2("xrdxdxdlxlxluxurx", Stone.BLACK);
 		if (input.isMousePressed(0)) {
 			if (SlickGo.withinBounds(bx,by)) {		
 				board.takeTurn(bx,by , true,false);
