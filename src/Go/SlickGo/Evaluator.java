@@ -64,6 +64,42 @@ public class Evaluator {
 
 		return retval;
 	}
+	
+	public  int evaluateCurrentBoard(boolean editormode) {
+		int retval = 0;
+
+		Grouping grouping = new Grouping(cB,false,false,false,false);
+		grouping.allocateGrouping();
+		
+		if (cB.ko != null)retval += 50;
+		HeuristicsRunner hrunner= new HeuristicsRunner(cB , this);
+		
+		if (editormode) {
+			for (Group g : grouping.allGroups) {
+				if(g.colour == kscolour)
+				retval += hrunner.runKeyStringHeuristics(g,g.group);
+			}
+		}else {
+			for (Tuple t : cB.keystones) {
+				ArrayList<Tuple> keystring = cB.checkForStrings(t.a, t.b, kscolour.getSStrings(cB));
+				Group keygroup = grouping.inGroup(t, kscolour);
+				if (!keystring.isEmpty()) {
+//					if (cB.checkStringSafetyv2(keystring, kscolour))return Integer.MAX_VALUE;
+					ArrayList<Tuple> cBneedList = cB.getNeedList(keystring, kscolour.getEC(),true);
+					for (Tuple k : cBneedList)if (cB.stones[k.a][k.b] == Stone.INVALID)return Integer.MAX_VALUE;
+					retval += hrunner.runKeyStringHeuristics(keygroup,keystring);
+				}
+			}
+			
+			
+			for (ArrayList<Tuple>  slist : kscolour.getSStrings(cB)) {
+				for (Tuple  t : slist) retval += hrunner.runStoneHeuristics(t);	
+			}
+		
+		}
+
+		return retval;
+	}
 
 
 

@@ -571,7 +571,9 @@ public class Board{
         keystone = Stone.KEYBLACKSTONE;
         placing = Stone.BLACK;
         blackFirst = true;
-        capToWin = true;
+        if(editormode)capToWin = false;
+        else capToWin = true;
+        
         keystones.clear();
         bStoneStrings.clear();
         wStoneStrings.clear();

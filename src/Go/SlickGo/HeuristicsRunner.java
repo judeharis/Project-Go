@@ -2,6 +2,8 @@ package Go.SlickGo;
 import java.util.ArrayList;
 
 import Go.SlickGo.Heuristics.*;
+import PatternHeuristics.*;
+
 
 public class HeuristicsRunner {
 	
@@ -92,7 +94,8 @@ public class HeuristicsRunner {
 		CrossedFive crossedFive= new CrossedFive(e);
 		retval += crossedFive.evaluate(keygroup.group);
 		
-		
+		BulkyFive bulkyFive= new BulkyFive(e);
+		retval += bulkyFive.evaluate(keygroup.group);
 		
 		
 		SingleEye singleEye= new SingleEye(e);
@@ -101,6 +104,48 @@ public class HeuristicsRunner {
 		Liberties liberties= new Liberties(e);
 		retval += liberties.evaluate(keystring)*0.5;
 		
+		
+
+//		retval=0;
+//		Eye eye= new Eye(e);
+//		retval += eye.evaluate(keygroup.group)*1;
+//		
+//		EyeSide eyeSide= new EyeSide(e);
+//		retval += eyeSide.evaluate(keygroup.group)*1;
+//		
+//		EyeCorner eyeCorner= new EyeCorner(e);
+//		retval += eyeCorner.evaluate(keygroup.group)*1;
+//		
+//		StraightTwo straightTwo= new StraightTwo(e);
+//		retval += straightTwo.evaluate(keygroup.group)*1;
+//		
+//		
+//		StraightTwoSidev2 straightTwoSideNew= new StraightTwoSidev2(e);
+//		retval += straightTwoSideNew.evaluate(keygroup.group)*1;
+//		
+//		
+//		StraightTwoCorner straightTwoCorner= new StraightTwoCorner(e);
+//		retval += straightTwoCorner.evaluate(keygroup.group)*1;
+//	
+//		
+//		StraightThreev2 straightThreev2= new StraightThreev2(e);
+//		retval += straightThreev2.evaluate(keygroup.group);
+//		
+//
+//		
+//		
+//		StraightThreeSidev2 straightThreeSidev2= new StraightThreeSidev2(e);
+//		retval += straightThreeSidev2.evaluate(keygroup.group);
+		
+
+		
+//		int new1 = straightThreev2.evaluate(keygroup.group);
+//		
+//		LearningStraightTwo LearningStraightTwo= new LearningStraightTwo(e);
+//		int old1 = LearningStraightTwo.evaluate(keygroup.group);
+//		
+//		System.out.println("Compare: " + (old1==new1) + " " + old1 +" : " + new1);
+	
 		
 		return retval * 1;
 		

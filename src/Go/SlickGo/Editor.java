@@ -138,14 +138,14 @@ public class Editor extends BasicGameState {
 		}
 
 		
-		pattern = Pattern.sToPv2("xrdxdxdlxlxluxurx", Stone.BLACK);
+		pattern = Pattern.sToPv2("xrxrdxrdxdlxlxlxulxux", Stone.BLACK);
 		if (input.isMousePressed(0)) {
 			if (SlickGo.withinBounds(bx,by)) {		
 				board.takeTurn(bx,by , true,false);
 				if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))MoveFinder.keystonecolour = Stone.WHITE;
 	    		else MoveFinder.keystonecolour = Stone.BLACK;
 				Evaluator evaluator = new Evaluator(board);
-				print(evaluator. evaluateCurrentBoard());
+				print(evaluator. evaluateCurrentBoard(true));
 			}
 		
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize,20,20,gc)) {grouping.draw = !grouping.draw;}

@@ -3,6 +3,7 @@ package Go.SlickGo;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 
@@ -121,6 +122,7 @@ public class MoveFinder  implements Runnable{
 		}
     	
 		Board cloneBoard = Board.cloneBoard(originalBoard);
+//		cloneBoard = originalBoard;
 		
 		if (cloneBoard.blackFirst && cloneBoard.turn == Stone.WHITE || !cloneBoard.blackFirst && cloneBoard.turn == Stone.BLACK ) 
 				alphaBeta(cloneBoard,keystones,cloneBoard.capToWin,0,min,max);
