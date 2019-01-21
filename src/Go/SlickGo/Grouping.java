@@ -1,6 +1,7 @@
 package Go.SlickGo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -108,6 +109,7 @@ public class Grouping {
 	            	Group g = inGroup(t,colour);
 	            	if(g.group.isEmpty()) {
 	            		findGroupStones(t,g);
+	            		Collections.sort(g.group);
 	            		allGroups.add(g);
 	            	}
 	            	

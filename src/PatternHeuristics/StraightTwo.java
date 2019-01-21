@@ -7,6 +7,7 @@ import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
+import static PatternHeuristics.States.*;
 
 public class StraightTwo {
 	Evaluator e;
@@ -48,74 +49,679 @@ public class StraightTwo {
 
 
 					
+
+					
 					if (e.isThere(S1) || e.isThere(S2))continue;
 					
-					retval += 100;	
+	
 					
-					if(e.isEnemy(TL) || e.isEnemy(TR) || e.isEnemy(BL) || e.isEnemy(BR)) {
-						if(e.isEnemies(BL,BR,TL) || e.isEnemies(TR,BR,BL) || e.isEnemies(TL,BL,TR) || e.isEnemies(TL,TR,BR)) {
-							retval-=100;
-							if(e.isEnemies(TL,BL,S1) || e.isEnemies(TR,BR,S2))retval-=0;
-							else if(e.isEnemies(TL,BL,S2) || e.isEnemies(TR,BR,S1))retval+=100; 
-							else if(e.isThere(TL) || e.isThere(TR) || e.isThere(BL) || e.isThere(BR)) retval+=50;	
-						}else if(e.isEnemies(TL,BL) || e.isEnemies(TR,BR)) {
-							retval-=50;
-							if(e.isEnemies(TL,BL,S1) || e.isEnemies(TR,BR,S2))retval-=50; 
-							if(e.isEnemies(TL,BL,S2) || e.isEnemies(TR,BR,S1))retval+=50; 
-						}else if(e.isEnemies(BL,BR) || e.isEnemies(TL,TR)) {
-							retval-=50;
-							if(e.isThere(TL) || e.isThere(TR) || e.isThere(BL) || e.isThere(BR)) retval+=50;	
-						}else if(e.isEnemies(TL,BR) || e.isEnemies(TR,BL)) {
-							retval-=50;
-							if(e.isEnemies(TL,BR) && (e.isThere(TR) || e.isThere(BL))) retval+=75;
-							
-							if(e.isEnemies(TR,BL) && (e.isThere(TL) || e.isThere(BR))) retval+=75;
-							
-							
-							if(e.isEnemies(TL,BR) && e.isTheres(TR,BL)) retval+=25;
-							
-							if(e.isEnemies(TR,BL) && e.isTheres(TL,BR)) retval+=25;
-						}else {
+					ArrayList<States> states = States.addStates(e,TL,TR,BL,BR,S1,S2);
+					States[] k;
+					if (e.isThere(TL)) {
+						k = new States[]{A,N,N,N,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
 
-							if(e.isEnemy(TL) && (e.isThere(TR) || e.isThere(BL))) retval+=25;
-											
-							if(e.isEnemy(TR) && (e.isThere(TL) || e.isThere(BR))) retval+=25;
-							
-							if(e.isEnemy(BL) && (e.isThere(TL) || e.isThere(BR))) retval+=25;
-							
-							if(e.isEnemy(BR) && (e.isThere(TR) || e.isThere(BL))) retval+=25;
-							
-							
-							if(e.isEnemy(TL) && e.isTheres(TR,BL)) retval+=50;
-							else if(e.isEnemy(TL) && (e.isTheres(BR,BL) || e.isTheres(BR,TR))) retval+=25;
-											
-							if(e.isEnemy(TR) && e.isTheres(TL,BR)) retval+=50;
-							else if(e.isEnemy(TR) && (e.isTheres(BL,BR) || e.isTheres(BL,TL))) retval+=25;
-							
-							if(e.isEnemy(BL) && e.isTheres(TL,BR)) retval+=50;
-							else if(e.isEnemy(BL) && (e.isTheres(TR,BR) || e.isTheres(TR,TL))) retval+=25;
-							
-							if(e.isEnemy(BR) && e.isTheres(TR,BL)) retval+=50;
-							else if(e.isEnemy(BR) && (e.isTheres(TL,BL) || e.isTheres(TL,TR))) retval+=25;
-							
-							
-							if(e.isEnemy(TL) && e.isTheres(TR,BL,BR)) retval+=25;
-							
-							if(e.isEnemy(TR) && e.isTheres(TL,BR,BL)) retval+=25;
-							
-							if(e.isEnemy(BL) && e.isTheres(TL,BR,TR)) retval+=25;
-							
-							if(e.isEnemy(BR) && e.isTheres(TR,BL,TL)) retval+=25;
-							
-						}			
+						k = new States[]{A,N,E,N,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,A,E,N,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,A,E,N,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,A,E,A,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,A,E,E,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,A,E,N,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,A,E,A,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,A,E,E,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,A,E,E,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,A,E,A,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,N,E,A,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,N,E,A,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,E,E,A,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,N,E,A,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,E,E,A,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,E,E,A,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,N,E,N,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,E,E,N,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,E,E,E,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,N,E,E,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,N,E,N,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,E,E,N,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{A,N,E,E,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{A,E,E,N,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,E,E,E,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{A,N,E,E,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,N,N,N,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,N,A,N,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,E,A,N,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,E,A,A,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,E,A,E,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,N,A,E,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,A,A,E,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,A,A,N,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,A,A,A,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,N,A,A,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,A,N,N,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,A,N,E,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,A,N,A,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,N,N,A,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,E,N,A,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,E,N,N,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,E,N,E,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,N,N,E,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,N,N,N,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,N,A,N,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,E,A,N,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,E,A,A,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,N,A,E,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,A,A,E,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,A,A,N,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,A,A,A,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,N,A,A,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,A,N,N,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,A,N,E,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,A,N,A,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,N,N,A,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,E,N,A,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,E,N,N,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{A,N,N,E,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{A,E,N,N,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,E,A,N,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,E,A,E,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{A,E,A,A,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,E,N,A,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,E,N,E,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{A,N,N,E,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,N,A,E,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,A,A,E,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,A,N,E,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,N,A,N,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,A,A,N,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,A,A,A,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,N,A,A,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,A,N,N,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,A,N,A,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,N,N,A,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+					}else if(e.isEnemy(TL)){
+						k = new States[]{E,N,A,N,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,A,A,N,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{E,A,A,N,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{E,A,A,A,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{E,A,A,E,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,A,A,N,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{E,A,A,A,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{E,A,A,E,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,A,A,E,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,A,A,A,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{E,N,A,A,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{E,N,A,A,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{E,E,A,A,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,N,A,A,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{E,E,A,A,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,E,A,A,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,N,A,N,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,E,A,N,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,E,A,E,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,N,A,E,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,N,A,N,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,E,A,N,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,N,A,E,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,E,A,N,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,E,A,E,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,N,A,E,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,A,N,N,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,A,N,A,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{E,A,E,A,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,A,E,A,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,A,N,A,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,A,N,A,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{E,A,E,N,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,A,E,N,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,A,E,E,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,A,E,E,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,A,N,N,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,A,N,E,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,A,N,N,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,A,N,E,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,A,N,E,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,N,N,A,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,N,E,A,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,N,E,A,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,E,E,A,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,E,E,A,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,N,N,A,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,E,N,A,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,N,N,A,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,E,N,A,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,E,N,A,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,N,N,N,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,N,E,N,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,N,E,N,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,E,E,N,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,N,E,E,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,N,N,N,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,E,N,N,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,E,N,E,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,N,N,E,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,N,N,N,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,E,N,N,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,N,N,E,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,E,N,N,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,N,N,E,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
 					}else {
-						if(e.isThere(TL) || e.isThere(TR) || e.isThere(BL) || e.isThere(BR)) retval+=50;
-						
-						if(e.isTheres(BL,BR) || e.isTheres(TL,TR) || e.isTheres(TL,BL)) retval+=50;
-						else if(e.isTheres(TR,BR) || e.isTheres(TL,BR) || e.isTheres(BL,TR)) retval+=50;
-						
-						
+						k = new States[]{N,N,N,N,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,N,A,N,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,N,A,N,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,A,A,N,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{N,A,A,E,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,A,A,A,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{N,N,A,A,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{N,E,A,A,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,E,A,N,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,E,A,E,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,N,A,E,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,N,A,N,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,A,A,N,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{N,A,A,E,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,A,A,A,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{N,N,A,A,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{N,E,A,A,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,E,A,N,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,N,A,E,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,E,A,N,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,E,A,A,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,E,A,E,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,N,A,E,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,A,A,E,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,A,A,N,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{N,A,A,A,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{N,N,A,A,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{N,A,N,N,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,A,E,N,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,A,E,A,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,A,E,A,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,A,E,A,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,A,E,N,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,A,E,E,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,A,E,N,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,A,E,E,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,A,E,E,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,A,N,N,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,A,N,A,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{N,A,N,E,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,A,N,N,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,A,N,A,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{N,A,N,E,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,A,N,E,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,A,N,A,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{N,N,N,A,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,N,E,A,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,N,E,A,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,E,E,A,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,N,E,A,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,E,E,A,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,E,E,A,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,N,N,A,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,E,N,A,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,N,N,A,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,E,N,A,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,E,N,A,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,N,E,N,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,N,E,N,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,E,E,N,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,E,E,E,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,N,E,E,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,N,E,N,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,E,E,N,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,N,E,E,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,E,E,N,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,N,E,E,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,N,N,N,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,E,N,N,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,E,N,E,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,N,N,E,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,N,N,N,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,E,N,N,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,N,N,E,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,E,N,N,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,E,N,E,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,N,N,E,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
 					}
+				
 						
 					
 				}

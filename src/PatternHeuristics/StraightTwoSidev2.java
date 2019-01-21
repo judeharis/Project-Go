@@ -8,6 +8,8 @@ import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
+import static PatternHeuristics.States.*;
+
 public class StraightTwoSidev2 {
 	Evaluator e;
 	PatternSearcher ps;
@@ -49,19 +51,96 @@ public class StraightTwoSidev2 {
 					
 					if (e.isThere(S1) || e.isThere(S2))continue;
 					
-					retval += 50;	
 					
-					if (e.isEnemy(TL) || e.isEnemy(TR)) {
-						retval-=50;
-						if (e.isEnemies(TL,S1) || e.isEnemies(TR,S2) || e.isEnemies(TL,TR))retval-=0;
-						else if (e.isEnemies(TL,S2) || e.isEnemies(TR,S1)) {
-							retval+=50;
-							if (e.isThere(TL) || e.isThere(TR)) retval+=50;
-						}else if (e.isThere(TL) || e.isThere(TR)) retval+=50;
+					ArrayList<States> states = States.addStates(e,TL,TR,S1,S2);
+					States[] k;
+					if (e.isThere(TL)) {
+						k = new States[]{A,N,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,N,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{A,A,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,E,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,N,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{A,A,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,E,N,E};
+						if(States.stateCheck(states,k)){retval+=0;continue;}
+
+						k = new States[]{A,E,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{A,A,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+					}else if(e.isEnemy(TL)){
+						k = new States[]{E,A,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,A,E,N};
+						if(States.stateCheck(states,k)){retval+=0;continue;}
+
+						k = new States[]{E,A,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{E,N,N,N};
+						if(States.stateCheck(states,k)){retval+=0;continue;}
+
+						k = new States[]{E,N,E,N};
+						if(States.stateCheck(states,k)){retval+=0;continue;}
+
+						k = new States[]{E,E,E,N};
+						if(States.stateCheck(states,k)){retval+=0;continue;}
+
+						k = new States[]{E,N,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,E,N,E};
+						if(States.stateCheck(states,k)){retval+=0;continue;}
+
+						k = new States[]{E,E,N,N};
+						if(States.stateCheck(states,k)){retval+=0;continue;}
+
 					}else {
-						if (e.isThere(TL) || e.isThere(TR)) retval+=100;
-						if (e.isThere(TL) && e.isThere(TR)) retval+=50;
+						k = new States[]{N,N,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,A,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,A,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,A,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,N,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,E,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,N,N,E};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{N,E,N,E};
+						if(States.stateCheck(states,k)){retval+=0;continue;}
+
+						k = new States[]{N,E,N,N};
+						if(States.stateCheck(states,k)){retval+=0;continue;}
+
 					}
+
+
 					
 					
 				}
@@ -94,21 +173,97 @@ public class StraightTwoSidev2 {
 					
 					if (e.isThere(S1) || e.isThere(S2))continue;
 					
-					retval += 100;	
 					
-					if (e.isEnemy(TL) || e.isEnemy(TR)) {
+					
+					ArrayList<States> states = States.addStates(e,TL,TR,S1,S2);
+					States[] k;
+					if (e.isThere(TL)) {
+						k = new States[]{A,N,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+	
+						k = new States[]{A,N,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+	
+						k = new States[]{A,A,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+	
+						k = new States[]{A,E,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+	
+						k = new States[]{A,N,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+	
+						k = new States[]{A,A,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+	
+						k = new States[]{A,E,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+	
+						k = new States[]{A,E,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+	
+						k = new States[]{A,A,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+					}else if(e.isEnemy(TL)){
 
-						if (e.isEnemies(TL,TR,S1))retval-=100;
-						else if (e.isEnemies(TL,TR,S2)) retval+=0;
-						else if (e.isEnemies(TL,TR) || e.isEnemies(TL,S1) || e.isEnemies(TR,S1)) {
-							retval-=50;
-							if (e.isThere(TL) || e.isThere(TR)) retval+=50;
-						}else if (e.isEnemies(TL,S2) || e.isEnemies(TR,S2)) retval+=0;
+						k = new States[]{E,A,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+	
+						k = new States[]{E,A,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+	
+						k = new States[]{E,A,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+	
+						k = new States[]{E,N,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+	
+						k = new States[]{E,N,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+	
+						k = new States[]{E,E,E,N};
+						if(States.stateCheck(states,k)){retval+=0;continue;}
+	
+						k = new States[]{E,N,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+	
+						k = new States[]{E,E,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+	
+						k = new States[]{E,E,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+					}else {
 						
-					} else {
-						if (e.isThere(TL) || e.isThere(TR)) retval+=50;
-						if (e.isTheres(TL,TR)) retval+=50;
+						
+						k = new States[]{N,N,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+	
+						k = new States[]{N,A,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+	
+						k = new States[]{N,A,E,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+	
+						k = new States[]{N,A,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+	
+						k = new States[]{N,N,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+	
+						k = new States[]{N,E,E,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+	
+						k = new States[]{N,N,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+	
+						k = new States[]{N,E,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+	
+						k = new States[]{N,E,N,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
 					}
+
 					
 					
 				}

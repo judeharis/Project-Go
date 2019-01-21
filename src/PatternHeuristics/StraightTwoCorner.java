@@ -7,7 +7,7 @@ import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
-
+import static PatternHeuristics.States.*;
 public class StraightTwoCorner {
 	Evaluator e;
 	PatternSearcher ps;
@@ -44,18 +44,38 @@ public class StraightTwoCorner {
 					
 					if (e.isThere(S1) || e.isThere(S2))continue;
 					
-					retval += 150;	
+					ArrayList<States> states = States.addStates(e,TL,S1,S2);
 					
-					if (e.isEnemy(TL)) {
-						retval-=100;
-						if(e.isEnemy(S1))retval-=50;
-						else if(e.isEnemy(S2))retval+=50;
-					}else if (e.isEnemy(S1)) {
-						retval-=50;
-						if(e.isThere(TL))retval+=100;
+					States[] k;
+					if (e.isThere(TL)) {
+						k = new States[]{A,N,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,E,N};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+						k = new States[]{A,N,E};
+						if(States.stateCheck(states,k)){retval+=200;continue;}
+
+					}else if(e.isEnemy(TL)){
+						k = new States[]{E,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{E,N,E};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
 					}else {
-						if(e.isThere(TL))retval+=50;
+						k = new States[]{N,N,N};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
+						k = new States[]{N,E,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+						k = new States[]{N,N,E};
+						if(States.stateCheck(states,k)){retval+=150;continue;}
+
 					}
+
 					
 					
 				}

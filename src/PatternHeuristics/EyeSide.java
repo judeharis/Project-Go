@@ -7,7 +7,7 @@ import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
-
+import static PatternHeuristics.States.*;
 public class EyeSide {
 	Evaluator e;
 	PatternSearcher ps;
@@ -43,12 +43,22 @@ public class EyeSide {
 					
 					
 					if(e.isThere(C)) continue;
-					if(e.isEnemy(TL) || e.isEnemy(TR) || e.isThere(C))continue;
-//					if(!(e.isEnemies(T,TL,TR) || e.isEnemies(L,TL,BL) || e.isEnemies(B,BL,BR) || e.isEnemies(R,TR,BR)) && e.isThere(C))retval-=50;
-//					if(e.isThere(C))retval-=50;
-					
-					if(e.isThere(TL) || e.isThere(TR))retval+=50;
-					if(e.isTheres(TL,TR))retval+=50;
+					ArrayList<States> states = States.addStates(e,TL,TR,C);
+					States[] k;
+					if (e.isThere(TL)) {
+						k = new States[]{A,N,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+						k = new States[]{A,A,N};
+						if(States.stateCheck(states,k)){retval+=100;continue;}
+
+					}else if(e.isEnemy(TL)){
+
+					}else {
+						k = new States[]{N,A,N};
+						if(States.stateCheck(states,k)){retval+=50;continue;}
+
+					}
 
 
 

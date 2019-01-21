@@ -122,23 +122,35 @@ public class Editor extends BasicGameState {
 					ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
 					print(board.checkStringSafetyv2(sstring,colour));
 				}
-				grouping = new Grouping(board,grouping.draw,grouping.drawW,grouping.drawB,grouping.drawC);
-				grouping.allocateGrouping();
-				grouping.stonesControl= grouping.doubleIntegerArray();
-				grouping.allocateControl();
-//				print(grouping.bGroups);
-//				print(grouping.wGroups);
-				print(grouping.stonesControl[bx][by]);
-//				print(grouping.totalb);
-//				print(grouping.totalw);
-//				print(grouping.totalc);
+//				grouping = new Grouping(board,grouping.draw,grouping.drawW,grouping.drawB,grouping.drawC);
+//				grouping.allocateGrouping();
+//				grouping.stonesControl= grouping.doubleIntegerArray();
+//				grouping.allocateControl();
+//				print(grouping.stonesControl[bx][by]);
+				
+				Board clone =  Board.cloneBoard(board);
+				VariationFinder vf = new VariationFinder(clone);
+				vf.searched.clear();
+		    	long start = System.nanoTime();
+				vf.getAllVariationv2(clone);
+		    	long end = System.nanoTime();
+		    	print((end-start)/1000000 + " ms");
+				print(vf.count);
+				print(vf.searched.size());
+//				try {
+//					vf.findValues(board);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+
+
 			}
 			
 			
 		}
 
 		
-		pattern = Pattern.sToPv2("xrxrdxrdxdlxlxlxulxux", Stone.BLACK);
+		pattern = Pattern.sToPv2("xrxrdxzdlxdS", Stone.BLACK);
 		if (input.isMousePressed(0)) {
 			if (SlickGo.withinBounds(bx,by)) {		
 				board.takeTurn(bx,by , true,false);

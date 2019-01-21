@@ -235,6 +235,7 @@ public class Play extends BasicGameState {
 		ArrayList<Tuple> liveList = MoveFinder.keyStoneRemaining(board,board.keystones);
 		winMsg="";
         if (!liveList.isEmpty()) {
+        	MoveFinder.editormode=false;
         	k = new MoveFinder(board,board.keystones);
         	t1 = new Thread(k,"t1");
         	t1.start(); 
