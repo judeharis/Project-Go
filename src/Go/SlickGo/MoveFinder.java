@@ -68,15 +68,20 @@ public class MoveFinder  implements Runnable{
 		if(isLive) {
 			int best = min;
 			for (Tuple t : validMoves) {
-				Board b = currentBoard;
+//				Board b = currentBoard;
+				Board b = Board.cloneBoard(currentBoard);
 				b.takeTurn(t.a,t.b,false,true);  
 				//if(depth==1)System.out.print(t.clone()+ " :");
 				int	returnscore =alphaBetaLearner(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
-				b.undoMove(false);
+				if(returnscore==500) {
+					print("");
+				}
+//				b.undoMove(false);
 				if(returnscore > best && returnscore > currentscore && depth==1 )this.choice = t.clone();
 		        best = Math.max(best, returnscore); 
 		        alpha = Math.max(alpha, best);
 		        //if(depth==1) print(returnscore);
+				if(beta <= alpha) break;
 		        
 
 			}
@@ -88,15 +93,20 @@ public class MoveFinder  implements Runnable{
 			int best = max;
  
 			for (Tuple t : validMoves) {
-				Board b = currentBoard;
+//				Board b = currentBoard;
+				Board b = Board.cloneBoard(currentBoard);
 				b.takeTurn(t.a,t.b,false,true);
 				//if(depth==1)System.out.print(t.clone()+ " :");
 				int returnscore =alphaBetaLearner(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
-				b.undoMove(false);
+				if(returnscore==500) {
+					print("");
+				}
+//				b.undoMove(false);
 				if(returnscore < best && depth==1 )this.choice = t.clone();
 		        best = Math.min(best, returnscore); 
 		        beta = Math.min(beta, best);
 		        //if(depth==1) print(returnscore);
+				if(beta <= alpha) break;
 
 		    }
 			

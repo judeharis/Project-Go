@@ -110,12 +110,13 @@ public class HeuristicsRunner {
 		retval=0;
 		
 
-		Eye eye= new Eye(e);
-		retval += eye.evaluate(keygroup.group)*1;
-		
 		
 
 		
+		Eye eye= new Eye(e);
+		retval += eye.evaluate(keygroup.group)*1;
+		
+
 		EyeSide eyeSide= new EyeSide(e);
 		retval += eyeSide.evaluate(keygroup.group)*1;
 		
@@ -139,18 +140,26 @@ public class HeuristicsRunner {
 		StraightTwoCorner straightTwoCorner= new StraightTwoCorner(e);
 		retval += straightTwoCorner.evaluate(keygroup.group)*1;
 	
-		
-		LearningValues learningValues= new LearningValues(e);
-		learningValues.evaluate(keygroup.group,retval);
-		
+
 		StraightThreev2 straightThreev2= new StraightThreev2(e);
 		retval += straightThreev2.evaluate(keygroup.group);
+		
+		
 
+		StraightThreeSidev2 straightThreeSidev2= new StraightThreeSidev2(e);
+		retval += straightThreeSidev2.evaluate(keygroup.group);
+		
+
+		LearningValues learningValues= new LearningValues(e);
+		learningValues.evaluate(keygroup.group,retval);
 		
 
 		
 		StraightThreeCornerv2 straightThreeCornerv2= new StraightThreeCornerv2(e);
 		retval += straightThreeCornerv2.evaluate(keygroup.group);
+		
+
+
 		
 		BentThreev2 bentThreev2= new BentThreev2(e);
 		retval += bentThreev2.evaluate(keygroup.group);
@@ -158,18 +167,17 @@ public class HeuristicsRunner {
 
 
 		
-		StraightThreeSidev2 straightThreeSidev2= new StraightThreeSidev2(e);
-		retval += straightThreeSidev2.evaluate(keygroup.group);
-		
+
 		
 		
 		int old = 0;
 
-		int neww = 0;
+		int neww =  0;
 
 		if(old!=neww) {
 			print(old+":"+neww);
 		}
+		
 		
 		
 

@@ -171,9 +171,10 @@ public class VariationFinder {
 	    String nfirst = "";
 	    String afirst = "";
 	    
-	    String q = "States[] k;\nif (e.isThere(TL)) {\n";
-	    String w = "}else if(e.isEnemy(TL)){\n";
-	    String e = "}else {\n";
+//	    String q = "States[] k;\nif (e.isThere(TL)) {";
+	    String q = "if (e.isThere(TL)) {";
+	    String w = "}else if(e.isEnemy(TL)){";
+	    String e = "}else {";
 	    
 		for(String s :searched) {
 			Board clone = Board.cloneBoard(board);
@@ -200,16 +201,16 @@ public class VariationFinder {
         	
 
         	result+=mf.result;
-        	if(!skip)print(states + ": "+result/2);
+        	//if(!skip)print(states + ": "+result/2);
         	if(!skip) {
         		if(!states.isEmpty() && (((result/2)-tk)!=0)) {
-        			if(states.startsWith("A"))afirst += progstring +((result/2)-tk) + ";continue;}\n\r" ;
-        			if(states.startsWith("E"))efirst += progstring +((result/2)-tk) + ";continue;}\n\r" ;
-        			if(states.startsWith("N"))nfirst += progstring +((result/2)-tk) + ";continue;}\n\r" ;
+        			if(states.startsWith("A"))afirst += progstring +((result/2)-tk) + ";continue;}" ;
+        			if(states.startsWith("E"))efirst += progstring +((result/2)-tk) + ";continue;}" ;
+        			if(states.startsWith("N"))nfirst += progstring +((result/2)-tk) + ";continue;}" ;
         		}
         	}
 		}
-		writer.write(q+ afirst + "\n"+ w+  efirst + "\n" +e+ nfirst +"}") ;
+		writer.write(q+ afirst + "\n"+ w+  efirst + "\n" +e+ nfirst +"\n}") ;
 		writer.close();
 	}
 	

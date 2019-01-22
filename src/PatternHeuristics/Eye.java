@@ -8,8 +8,6 @@ import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-import static PatternHeuristics.States.*;
-
 
 public class Eye {
 	Evaluator e;
@@ -47,104 +45,45 @@ public class Eye {
 					
 					if(e.isThere(C)) continue;
 					
-					ArrayList<States> states = States.addStates(e,TL,TR,BL,BR,C);
-					States[] k;
+
+					
+					String s = States.arrayToString(e,TL,TR,BL,BR,C);
+					
+					
 					if (e.isThere(TL)) {
-						k = new States[]{A,N,N,N,N};
-						if(States.stateCheck(states,k)){retval+=50;continue;}
-
-						k = new States[]{A,E,A,N,N};
-						if(States.stateCheck(states,k)){retval+=50;continue;}
-
-						k = new States[]{A,E,A,A,N};
-						if(States.stateCheck(states,k)){retval+=100;continue;}
-
-						k = new States[]{A,E,N,A,N};
-						if(States.stateCheck(states,k)){retval+=50;continue;}
-
-						k = new States[]{A,A,E,N,N};
-						if(States.stateCheck(states,k)){retval+=50;continue;}
-
-						k = new States[]{A,A,E,A,N};
-						if(States.stateCheck(states,k)){retval+=100;continue;}
-
-						k = new States[]{A,N,E,A,N};
-						if(States.stateCheck(states,k)){retval+=50;continue;}
-
-						k = new States[]{A,A,N,E,N};
-						if(States.stateCheck(states,k)){retval+=50;continue;}
-
-						k = new States[]{A,A,A,E,N};
-						if(States.stateCheck(states,k)){retval+=100;continue;}
-
-						k = new States[]{A,N,A,E,N};
-						if(States.stateCheck(states,k)){retval+=50;continue;}
-
-						k = new States[]{A,A,N,N,N};
-						if(States.stateCheck(states,k)){retval+=100;continue;}
-
-						k = new States[]{A,A,A,N,N};
-						if(States.stateCheck(states,k)){retval+=100;continue;}
-
-						k = new States[]{A,A,A,A,N};
-						if(States.stateCheck(states,k)){retval+=100;continue;}
-
-						k = new States[]{A,A,N,A,N};
-						if(States.stateCheck(states,k)){retval+=100;continue;}
-
-						k = new States[]{A,N,A,N,N};
-						if(States.stateCheck(states,k)){retval+=100;continue;}
-
-						k = new States[]{A,N,A,A,N};
-						if(States.stateCheck(states,k)){retval+=100;continue;}
-
-						k = new States[]{A,N,N,A,N};
-						if(States.stateCheck(states,k)){retval+=100;continue;}
-						
+						if("ANNNN".equals(s)){retval+=50;continue;}
+						if("AANNN".equals(s)){retval+=100;continue;}
+						if("AAENN".equals(s)){retval+=50;continue;}
+						if("AANEN".equals(s)){retval+=50;continue;}
+						if("AAANN".equals(s)){retval+=100;continue;}
+						if("AAAEN".equals(s)){retval+=100;continue;}
+						if("AAAAN".equals(s)){retval+=100;continue;}
+						if("AANAN".equals(s)){retval+=100;continue;}
+						if("AAEAN".equals(s)){retval+=100;continue;}
+						if("ANANN".equals(s)){retval+=100;continue;}
+						if("AEANN".equals(s)){retval+=50;continue;}
+						if("ANAEN".equals(s)){retval+=50;continue;}
+						if("ANAAN".equals(s)){retval+=100;continue;}
+						if("AEAAN".equals(s)){retval+=100;continue;}
+						if("ANNAN".equals(s)){retval+=100;continue;}
+						if("AENAN".equals(s)){retval+=50;continue;}
+						if("ANEAN".equals(s)){retval+=50;continue;}
 					}else if(e.isEnemy(TL)){
-						k = new States[]{E,A,A,N,N};
-						if(States.stateCheck(states,k)){retval+=50;continue;}
-
-						k = new States[]{E,A,A,A,N};
-						if(States.stateCheck(states,k)){retval+=100;continue;}
-
-						k = new States[]{E,A,N,A,N};
-						if(States.stateCheck(states,k)){retval+=50;continue;}
-
-						k = new States[]{E,N,A,A,N};
-						if(States.stateCheck(states,k)){retval+=50;continue;}
-
+						if("EAANN".equals(s)){retval+=50;continue;}
+						if("EAAAN".equals(s)){retval+=100;continue;}
+						if("EANAN".equals(s)){retval+=50;continue;}
+						if("ENAAN".equals(s)){retval+=50;continue;}
 					}else {
-						 k = new States[]{N,A,N,N,N};
-						 if(States.stateCheck(states,k)){retval+=50;continue;}
-
-						 k = new States[]{N,A,E,A,N};
-						 if(States.stateCheck(states,k)){retval+=50;continue;}
-
-						 k = new States[]{N,A,A,E,N};
-						 if(States.stateCheck(states,k)){retval+=50;continue;}
-
-						 k = new States[]{N,A,A,N,N};
-						 if(States.stateCheck(states,k)){retval+=100;continue;}
-
-						 k = new States[]{N,A,A,A,N};
-						 if(States.stateCheck(states,k)){retval+=100;continue;}
-
-						 k = new States[]{N,A,N,A,N};
-						 if(States.stateCheck(states,k)){retval+=100;continue;}
-
-						 k = new States[]{N,N,A,N,N};
-						 if(States.stateCheck(states,k)){retval+=50;continue;}
-
-						 k = new States[]{N,E,A,A,N};
-						 if(States.stateCheck(states,k)){retval+=50;continue;}
-
-						 k = new States[]{N,N,A,A,N};
-						 if(States.stateCheck(states,k)){retval+=100;continue;}
-
-						 k = new States[]{N,N,N,A,N};
-						 if(States.stateCheck(states,k)){retval+=50;continue;}
-
+						if("NANNN".equals(s)){retval+=50;continue;}
+						if("NAANN".equals(s)){retval+=100;continue;}
+						if("NAAEN".equals(s)){retval+=50;continue;}
+						if("NAAAN".equals(s)){retval+=100;continue;}
+						if("NANAN".equals(s)){retval+=100;continue;}
+						if("NAEAN".equals(s)){retval+=50;continue;}
+						if("NNANN".equals(s)){retval+=50;continue;}
+						if("NNAAN".equals(s)){retval+=100;continue;}
+						if("NEAAN".equals(s)){retval+=50;continue;}
+						if("NNNAN".equals(s)){retval+=50;continue;}
 					}
 
 					

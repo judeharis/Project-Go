@@ -31,7 +31,7 @@ public class LearningValues {
 		int retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);
 		
-		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrdxdlxlxlxlux", e.kscolour);
+		ArrayList<Pattern> pattern = Pattern.sToPv2("xldxdxdxr#", e.kscolour);
 		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
 		
 		
@@ -44,49 +44,40 @@ public class LearningValues {
 					UDLR r = side.diag(diagSide);
 					UDLR l = side.diag(!diagSide);
 					counter++;
-					Tuple S0 = tlist.get(0).side(side);
-					Tuple S1 = S0.side(r);
-					Tuple S2 = S1.side(r);
-					
-					
-					
 					Tuple TL = tlist.get(0).side(l);
-					Tuple BL = TL.side2(side,side);
-					Tuple TR = S2.side2(r,side.opp());
-					Tuple BR = TR.side2(side,side);
-
-					
-					
+					Tuple S0 = tlist.get(0).side(side);
+					Tuple S1 = S0.side(side);
+					Tuple S2 = S1.side(side);
 
 
-					if (e.isThere(S0) || e.isThere(S2))continue;
 					
-					
-					
-					ArrayList<States> states = States.addStates(e,TL,TR,BL,BR,S0,S1,S2);
-					
-					
-					
-					
-					
-					
-					
-					
-
-					String prog = "	k = new States[]{";
-					
-					for(int i =0; i < states.size();i++) {
-						if(i+1<states.size())prog+=states.get(i)+",";
-						else prog+=states.get(i);
+					if (e.isThere(S0) || e.isThere(S2)) {
+						//if (initalboard) MoveFinder.learnexit=true;
+						continue;
 					}
 
+
 					
-					prog +="};";
-					prog += "\n	if(States.stateCheck(states,k)){retval+=";
+					String s = States.arrayToString(e,TL,S0,S1,S2);
 					
-					String s = "";
+
+
+//					String prog = "	k = new States[]{";
+//					
+//					for(int i =0; i < states.size();i++) {
+//						if(i+1<states.size())prog+=states.get(i)+",";
+//						else prog+=states.get(i);
+//					}
+//
+//					
+//					prog +="};";
+//					prog += "\n	if(States.stateCheck(states,k)){retval+=";
 					
-					for(int i =0; i < states.size();i++) s+=states.get(i);
+					
+					String prog = "\n	if(\""+s+"\".equals(s)){retval+=";
+					
+					
+
 	
 					
 					if (initalboard) {

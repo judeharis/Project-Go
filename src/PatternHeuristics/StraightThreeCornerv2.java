@@ -45,67 +45,39 @@ public class StraightThreeCornerv2 {
 					
 					if (e.isThere(S0) || e.isThere(S2))continue;
 					
-					retval += 200;	
+					String s = States.arrayToString(e,TL,S0,S1,S2);
 					
+
+
 					
-					if(e.isEnemies(TL)) {
-						retval-=50;
-						if(e.isEnemies(S0)) {
-							retval-=100;
-							if(e.isEnemies(S1)) retval-=50;
-							else if(e.isEnemies(S2)) retval+=50;
-						}else if(e.isEnemies(S1)) {
-							retval-=50;
-							if(e.isEnemies(S2)) retval+=100;
-						}else if(e.isEnemies(S2)) retval-=0;
-						else if(e.isThere(S1))retval-=150;
-					}else if(e.isEnemies(S0)) {
-						retval-=100;
-						if(e.isEnemies(S1)) {
-							if(e.isThere(TL))retval+=100;
-						}else if(e.isEnemies(S2)) {
-							retval+=500;
-							if(e.isThere(TL))retval+=400;
-						}else if(e.isThere(TL))retval+=500;
-					}else if(e.isEnemies(S1)) {
-						if(e.isEnemies(S2)) retval-=0;	
-					}else if(e.isEnemies(S2))retval-=0;
-					else if(e.isThere(S1)) {
-						retval+=200;
-						if(e.isThere(TL))retval+=400;
-					}else if(e.isThere(TL))retval+=400;
-					
-					
-					
-//					if(e.isEnemy(TL) || e.isEnemy(S0) || e.isEnemy(S1) || e.isEnemy(S2)) {
-//						if(e.isEnemies(TL)) {
-//							retval-=50;
-//							if(e.isEnemies(TL,S0)) {
-//								retval-=100;
-//								if(e.isEnemies(TL,S0,S1)) retval-=50;
-//								else if(e.isEnemies(TL,S0,S2)) retval+=50;
-//							}else if(e.isEnemies(TL,S1)) {
-//								retval-=50;
-//								if(e.isEnemies(TL,S1,S2)) retval+=100;
-//							}else if(e.isEnemies(TL,S2)) retval-=0;
-//							else if(e.isThere(S1))retval-=150;
-//						}else if(e.isEnemies(S0)) {
-//							retval-=100;
-//							if(e.isEnemies(S0,S1)) {
-//								if(e.isThere(TL))retval+=100;
-//							}else if(e.isEnemies(S0,S2)) {
-//								retval+=500;
-//								if(e.isThere(TL))retval+=400;
-//							}else if(e.isThere(TL))retval+=500;
-//						}else if(e.isEnemies(S1)) {
-//							if(e.isEnemies(S1,S2)) retval-=0;	
-//						}else if(e.isEnemies(S2))retval-=0;
-//					}else if(e.isThere(S1) || e.isThere(TL)) {
-//						if(e.isThere(S1)) {
-//							retval+=200;
-//							if(e.isThere(TL))retval+=400;
-//						}else if(e.isThere(TL))retval+=400;
-//					}
+					if (e.isThere(TL)) {
+						if("ANNN".equals(s)){retval+=600;continue;}
+						if("AENN".equals(s)){retval+=600;continue;}
+						if("AEEN".equals(s)){retval+=200;continue;}
+						if("AENE".equals(s)){retval+=1000;continue;}
+						if("ANEN".equals(s)){retval+=200;continue;}
+						if("ANEE".equals(s)){retval+=200;continue;}
+						if("ANNE".equals(s)){retval+=600;continue;}
+						if("ANAN".equals(s)){retval+=800;continue;}
+					}else if(e.isEnemy(TL)){
+						if("ENNN".equals(s)){retval+=150;continue;}
+						if("EENN".equals(s)){retval+=50;continue;}
+						if("EENE".equals(s)){retval+=100;continue;}
+						if("ENEN".equals(s)){retval+=100;continue;}
+						if("ENEE".equals(s)){retval+=200;continue;}
+						if("ENNE".equals(s)){retval+=150;continue;}
+					}else {
+						if("NNNN".equals(s)){retval+=200;continue;}
+						if("NENN".equals(s)){retval+=150;continue;}
+						if("NEEN".equals(s)){retval+=100;continue;}
+						if("NENE".equals(s)){retval+=550;continue;}
+						if("NNEN".equals(s)){retval+=200;continue;}
+						if("NNEE".equals(s)){retval+=200;continue;}
+						if("NNNE".equals(s)){retval+=200;continue;}
+						if("NNAN".equals(s)){retval+=400;continue;}
+					}
+
+
 					
 					
 				}

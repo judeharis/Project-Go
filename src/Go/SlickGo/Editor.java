@@ -131,18 +131,19 @@ public class Editor extends BasicGameState {
 				Board clone =  Board.cloneBoard(board);
 				VariationFinder vf = new VariationFinder(clone);
 				vf.searched.clear();
-		    	long start = System.nanoTime();
+		    	
 				vf.getAllVariationv2(clone);
+
+		    	long start = System.nanoTime();
+//				print(vf.count);
+//				print(vf.searched.size());
+				try {
+					vf.findValues(board);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 		    	long end = System.nanoTime();
 		    	print((end-start)/1000000 + " ms");
-				print(vf.count);
-				print(vf.searched.size());
-//				try {
-//					vf.findValues(board);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-
 
 			}
 			
