@@ -32,8 +32,8 @@ public class EyeCorner {
 				if(!tlist.isEmpty()) {
 					boolean diagSide= ps.dirSideToBool(counter);
 					UDLR side = ps.dirNumToDir(counter);
-
 					UDLR l = side.diag(!diagSide);
+					counter++;
 					Tuple TL = tlist.get(0).side(l);
 
 
@@ -58,7 +58,7 @@ public class EyeCorner {
 
 
 				}
-				counter++;
+
 			}
 			
 		}

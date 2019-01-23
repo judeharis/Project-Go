@@ -3,6 +3,9 @@ package Go.SlickGo;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Hashtable;
+
+import PatternHeuristics.LearningValues;
 
 
 
@@ -20,6 +23,11 @@ public class MoveFinder  implements Runnable{
 	 static PrintWriter writer = null;
 	 static boolean editormode = false; 
 	 
+	 boolean useHashTable = false;
+	 
+	 public static Hashtable<String, Integer> good =  new Hashtable<String,Integer>();
+	 public static Hashtable<String, Integer> bad =  new Hashtable<String,Integer>();
+	 
 	 
 	 int result=0;
 	 ArrayList<String> searched = new ArrayList<String>();
@@ -33,84 +41,87 @@ public class MoveFinder  implements Runnable{
 	 
 
 	 int alphaBetaLearner(Board currentBoard , ArrayList<Tuple> keystonelist , boolean isLive , int depth, int alpha,int beta ) {
-		if (learnexit) return 0;
-//	 	ArrayList<Tuple> validMoves = currentBoard.validMoves;
-	 	ArrayList<Tuple> validMoves = currentBoard.getAllValidMoves();
 
+	 	ArrayList<Tuple> validMoves = currentBoard.getAllValidMoves();
 		depth++;
-		int currentscore = 0;
 		
+		int currentscore = 0;
 		Evaluator e1 = new Evaluator(currentBoard,originalBoard);
 		currentscore= e1.evaluateCurrentBoard(true);
 		
-	
-		
 		if (!keystoneLives(keystonelist)) return currentscore;
 		
-
 		if (currentBoard.placing != keystonecolour && validMoves.size() == 0) {
 			validMoves.add(new Tuple(-9,-9));
 			currentBoard.passing = true;
-		}else if (currentBoard.placing == keystonecolour && validMoves.size() == 0) {
-			 return currentscore;
-		}
-		
+		}else if (currentBoard.placing == keystonecolour && validMoves.size() == 0)  return currentscore;
 
-	
-		
         if(searched.contains(currentBoard.boardString) && !validMoves.isEmpty()) validMoves.add(validMoves.remove(0));
         else if(!searched.contains(currentBoard.boardString)) searched.add(currentBoard.boardString);
-        
-        	
-
-        
 
 		if(isLive) {
 			int best = min;
 			for (Tuple t : validMoves) {
-//				Board b = currentBoard;
 				Board b = Board.cloneBoard(currentBoard);
 				b.takeTurn(t.a,t.b,false,true);  
-				//if(depth==1)System.out.print(t.clone()+ " :");
-				int	returnscore =alphaBetaLearner(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
-				if(returnscore==500) {
-					print("");
-				}
-//				b.undoMove(false);
+				
+				Evaluator e2 = new Evaluator(b);
+				int worseCheck= e2.evaluateCurrentBoard(true);
+				if(worseCheck < currentscore)continue;
+		
+				int returnscore = 0;
+				if(useHashTable) {
+				 	String key = b.boardToString();
+					if(good.containsKey(key)) returnscore = good.get(key);
+					else {
+						returnscore =alphaBetaLearner(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
+						good.put(key, returnscore);
+					}
+				}else returnscore =alphaBetaLearner(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
+				
 				if(returnscore > best && returnscore > currentscore && depth==1 )this.choice = t.clone();
 		        best = Math.max(best, returnscore); 
 		        alpha = Math.max(alpha, best);
-		        //if(depth==1) print(returnscore);
-				if(beta <= alpha) break;
+//				if(beta <= alpha) break;
 		        
 
 			}
 			if(depth==1 && this.choice==null )this.choice = new Tuple(-9,-9);
-			if(best<currentscore)best=currentscore;
+			if(best==min)best=currentscore;
 			
-			return best;}
-		else {
+
+			return best;
+		}else {
 			int best = max;
- 
 			for (Tuple t : validMoves) {
-//				Board b = currentBoard;
 				Board b = Board.cloneBoard(currentBoard);
 				b.takeTurn(t.a,t.b,false,true);
-				//if(depth==1)System.out.print(t.clone()+ " :");
-				int returnscore =alphaBetaLearner(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
-				if(returnscore==500) {
-					print("");
-				}
-//				b.undoMove(false);
+				
+				int returnscore = 0;
+				if(useHashTable) {
+				 	String key = b.boardToString();
+					if(bad.containsKey(key)) returnscore = bad.get(key);
+					else {
+						returnscore =alphaBetaLearner(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
+						bad.put(key, returnscore);
+					}
+				}else returnscore =alphaBetaLearner(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
+
+				
 				if(returnscore < best && depth==1 )this.choice = t.clone();
+				
+				
+				
 		        best = Math.min(best, returnscore); 
 		        beta = Math.min(beta, best);
-		        //if(depth==1) print(returnscore);
-				if(beta <= alpha) break;
+//				if(beta <= alpha) break;
 
 		    }
 			
-			return best;}
+
+
+			return best;
+		}
 
 	
 
@@ -206,6 +217,15 @@ public class MoveFinder  implements Runnable{
     	
 		Board cloneBoard = Board.cloneBoard(originalBoard);
 //		cloneBoard = originalBoard;
+		
+		useHashTable= true;
+		Evaluator e1 = new Evaluator(cloneBoard,originalBoard);
+		e1.evaluateCurrentBoard(true);
+		LearningValues.initalboard = false;
+		if (learnexit) {
+			result = 0;
+			return;
+		}
 		
 		if(!editormode) {
 			print("Ai Started");

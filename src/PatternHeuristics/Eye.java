@@ -34,6 +34,7 @@ public class Eye {
 					UDLR side = ps.dirNumToDir(counter);
 					UDLR r = side.diag(diagSide);
 					UDLR l = side.diag(!diagSide);
+					counter++;
 					Tuple TL = tlist.get(0).side(l);
 					Tuple TR = tlist.get(0).side(r);
 					Tuple BL = TL.side2(side,side);
@@ -89,7 +90,7 @@ public class Eye {
 					
 					
 				}
-				counter++;
+
 			}
 			
 		}

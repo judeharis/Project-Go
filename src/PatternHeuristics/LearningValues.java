@@ -6,7 +6,6 @@ import Go.SlickGo.Evaluator;
 import Go.SlickGo.MoveFinder;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
-import Go.SlickGo.Stone;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 import Go.SlickGo.VariationFinder;
@@ -31,7 +30,7 @@ public class LearningValues {
 		int retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);
 		
-		ArrayList<Pattern> pattern = Pattern.sToPv2("xldxdxdxr#", e.kscolour);
+		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxzdlxdxrrX", e.kscolour);
 		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
 		
 		
@@ -45,41 +44,28 @@ public class LearningValues {
 					UDLR l = side.diag(!diagSide);
 					counter++;
 					Tuple TL = tlist.get(0).side(l);
-					Tuple S0 = tlist.get(0).side(side);
-					Tuple S1 = S0.side(side);
-					Tuple S2 = S1.side(side);
-
 
 					
-					if (e.isThere(S0) || e.isThere(S2)) {
-						//if (initalboard) MoveFinder.learnexit=true;
+					Tuple S1 = tlist.get(0).side(side);
+					Tuple S2 = S1.side(r);
+					Tuple S0 = S1.side(side);
+					
+					
+
+					
+					if(e.isThere(S0) || e.isThere(S2) || e.isThere(S1)){
+						if (initalboard) MoveFinder.learnexit=true;
 						continue;
 					}
 
-
-					
+		
 					String s = States.arrayToString(e,TL,S0,S1,S2);
-					
 
-
-//					String prog = "	k = new States[]{";
-//					
-//					for(int i =0; i < states.size();i++) {
-//						if(i+1<states.size())prog+=states.get(i)+",";
-//						else prog+=states.get(i);
-//					}
-//
-//					
-//					prog +="};";
-//					prog += "\n	if(States.stateCheck(states,k)){retval+=";
-					
-					
+//					print(s);
+		
 					String prog = "\n	if(\""+s+"\".equals(s)){retval+=";
 					
-					
-
-	
-					
+		
 					if (initalboard) {
 						VariationFinder.skip=false;
 						VariationFinder.states=s;
@@ -105,14 +91,7 @@ public class LearningValues {
 
 	}
 
-	private boolean stateCheck(ArrayList<States> states, States[] k) {
-		if(states.size() == k.length) {
-			for(int i=0; i<k.length;i++) {
-				if (!(k[i]==states.get(i)))return false;
-			}
-		}
-		return true;
-	}
+
     public static void print(Object o){
         System.out.println(o);
     }

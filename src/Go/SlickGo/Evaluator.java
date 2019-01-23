@@ -71,7 +71,7 @@ public class Evaluator {
 		Grouping grouping = new Grouping(cB,false,false,false,false);
 		grouping.allocateGrouping();
 		
-		if (cB.ko != null)retval += 50;
+//		if (cB.ko != null)retval += 50;
 		HeuristicsRunner hrunner= new HeuristicsRunner(cB , this);
 		
 		if (editormode) {

@@ -5,7 +5,6 @@ package Go.SlickGo;
 
 import java.util.ArrayList;
 
-
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
@@ -130,13 +129,15 @@ public class Editor extends BasicGameState {
 				
 				Board clone =  Board.cloneBoard(board);
 				VariationFinder vf = new VariationFinder(clone);
-				vf.searched.clear();
+				VariationFinder.searched.clear();
 		    	
-				vf.getAllVariationv2(clone);
+				MoveFinder.bad.clear();
+				MoveFinder.good.clear();
 
 		    	long start = System.nanoTime();
-//				print(vf.count);
-//				print(vf.searched.size());
+				vf.getAllVariationv2(clone);
+				print(vf.count);
+				print(VariationFinder.searched.size());
 				try {
 					vf.findValues(board);
 				} catch (InterruptedException e) {
@@ -149,9 +150,10 @@ public class Editor extends BasicGameState {
 			
 			
 		}
+		
 
 		
-		pattern = Pattern.sToPv2("xrxrdxzdlxdS", Stone.BLACK);
+		pattern = Pattern.sToPv2("xrxzdlxdxrrX", Stone.BLACK);
 		if (input.isMousePressed(0)) {
 			if (SlickGo.withinBounds(bx,by)) {		
 				board.takeTurn(bx,by , true,false);

@@ -127,9 +127,6 @@ public class HeuristicsRunner {
 		
 
 		
-
-		
-		
 		StraightTwo straightTwo= new StraightTwo(e);
 		retval += straightTwo.evaluate(keygroup.group)*1;
 		
@@ -150,10 +147,6 @@ public class HeuristicsRunner {
 		retval += straightThreeSidev2.evaluate(keygroup.group);
 		
 
-		LearningValues learningValues= new LearningValues(e);
-		learningValues.evaluate(keygroup.group,retval);
-		
-
 		
 		StraightThreeCornerv2 straightThreeCornerv2= new StraightThreeCornerv2(e);
 		retval += straightThreeCornerv2.evaluate(keygroup.group);
@@ -168,7 +161,27 @@ public class HeuristicsRunner {
 
 		
 
+		BentThreeSidev2 bentThreeSidev2= new BentThreeSidev2(e);
+		retval += bentThreeSidev2.evaluate(keygroup.group);
 		
+
+		
+		
+
+		
+		BentThreeCornerv2New bentThreeCornerv2= new BentThreeCornerv2New(e);
+		retval += bentThreeCornerv2.evaluate(keygroup.group);
+		
+		
+		LearningValues learningValues= new LearningValues(e);
+		learningValues.evaluate(keygroup.group,retval);
+
+		
+//		BentThreeCornerv2 bentThreeCornerv2= new BentThreeCornerv2(e);
+//		int bentval = bentThreeCornerv2.evaluate(keygroup.group);
+//		if(bentval==1000)retval=bentval;
+//		else retval+=bentval;
+
 		
 		int old = 0;
 

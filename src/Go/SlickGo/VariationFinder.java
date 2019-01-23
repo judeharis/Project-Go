@@ -4,14 +4,16 @@ package Go.SlickGo;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 import PatternHeuristics.LearningValues;
-import PatternHeuristics.States;
+
 
 public class VariationFinder {
 	
 	Board board ;
 	static ArrayList<String> searched = new ArrayList<String>();
+	static ArrayList<String> usable = new ArrayList<String>();
 	public static boolean skip = true;
 	public static String states = "";
 	public static String progstring = "";
@@ -56,61 +58,7 @@ public class VariationFinder {
 		
 	}
 	
-	public void getAllVariationv3(Board board) {
-		count++;
-		
- 
 
-		
-		board.placing = (board.placing==Stone.WHITE)?Stone.BLACK:Stone.WHITE;
-		board.turn = (board.turn==Stone.WHITE)?Stone.BLACK:Stone.WHITE;
-		String cstring = board.boardToString();
-		cstring.length();
-		getOnlyEnemyFromNowv3(board);
-		
-     
-		
-		board.placing = (board.placing==Stone.WHITE)?Stone.BLACK:Stone.WHITE;
-		board.turn = (board.turn==Stone.WHITE)?Stone.BLACK:Stone.WHITE;
-		ArrayList<Tuple> validMoves = board.getAllValidMoves();
-		for (Tuple t : validMoves) {
-			Board b = board;
-			b.takeTurn(t.a,t.b,false,true); 
-			b.placing = (b.placing==Stone.WHITE)?Stone.BLACK:Stone.WHITE;
-			b.turn = (b.turn==Stone.WHITE)?Stone.BLACK:Stone.WHITE;
-			getAllVariationv3(b);
-			b.placing = (b.placing==Stone.WHITE)?Stone.BLACK:Stone.WHITE;
-			b.turn = (b.turn==Stone.WHITE)?Stone.BLACK:Stone.WHITE;
-			b.undoMove(false);
-		}
-
-		
-	}
-	
-	public void getOnlyEnemyFromNowv3(Board board) {
-		count++;
-				
-		
-		board.boardString =  board.boardToString();
-        if(!searched.contains(board.boardString)) searched.add(board.boardString);
-        else return;
-        
-        
-
-		ArrayList<Tuple> validMoves = board.getAllValidMoves();
-		for (Tuple t : validMoves) {
-			Board b = board;
-			b.takeTurn(t.a,t.b,false,true); 
-			b.placing = (b.placing==Stone.WHITE)?Stone.BLACK:Stone.WHITE;
-			b.turn = (b.turn==Stone.WHITE)?Stone.BLACK:Stone.WHITE;
-			getOnlyEnemyFromNowv3(b);
-			b.placing = (b.placing==Stone.WHITE)?Stone.BLACK:Stone.WHITE;
-			b.turn = (b.turn==Stone.WHITE)?Stone.BLACK:Stone.WHITE;
-			b.undoMove(false);
-		}
-
-	}
-	
 	public void getAllVariationv2(Board board) {	
      
 		Board clone =  Board.cloneBoard(board);
@@ -145,7 +93,9 @@ public class VariationFinder {
 				
 		
 		board.boardString =  board.boardToString();
+		skip=true;
         if(!searched.contains(board.boardString)) searched.add(board.boardString);
+        
         else return;
         count++;
         
@@ -175,7 +125,8 @@ public class VariationFinder {
 	    String q = "if (e.isThere(TL)) {";
 	    String w = "}else if(e.isEnemy(TL)){";
 	    String e = "}else {";
-	    
+	    List<Integer> possibleResults = List.of(0,100,200,1000);
+	    ArrayList<String> allStates= new ArrayList<String>();
 		for(String s :searched) {
 			Board clone = Board.cloneBoard(board);
 			
@@ -189,21 +140,30 @@ public class VariationFinder {
         	Thread t1 = new Thread(mf,"t1");
         	t1.start(); 
         	t1.join();
-
+        	
+        	if(!possibleResults.contains(mf.result)) {
+        		print("nope");}
+        	
         	int result = mf.result;
-    		clone.placing = (clone.placing==Stone.WHITE)?Stone.BLACK:Stone.WHITE;
-    		clone.turn = (clone.turn==Stone.WHITE)?Stone.BLACK:Stone.WHITE;
+    		clone.placing = clone.placing.getEC();
+    		clone.turn = clone.turn.getEC();
 			
         	mf = new MoveFinder(clone,clone.keystones);
         	t1 = new Thread(mf,"t1");
         	t1.start(); 
         	t1.join();
         	
-
+        	if(!possibleResults.contains(mf.result)) {
+        		print("nope");}
+        	
         	result+=mf.result;
-        	//if(!skip)print(states + ": "+result/2);
+        	if(!skip)print(states + ": "+result/2);
         	if(!skip) {
         		if(!states.isEmpty() && (((result/2)-tk)!=0)) {
+        			if(allStates.contains(states)) {
+        				print("wut");
+        			}
+        			allStates.add(states);
         			if(states.startsWith("A"))afirst += progstring +((result/2)-tk) + ";continue;}" ;
         			if(states.startsWith("E"))efirst += progstring +((result/2)-tk) + ";continue;}" ;
         			if(states.startsWith("N"))nfirst += progstring +((result/2)-tk) + ";continue;}" ;
