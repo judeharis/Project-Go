@@ -129,7 +129,7 @@ public class Editor extends BasicGameState {
 				
 				Board clone =  Board.cloneBoard(board);
 				VariationFinder vf = new VariationFinder(clone);
-				VariationFinder.searched.clear();
+//				VariationFinder.searched.clear();
 		    	
 				MoveFinder.bad.clear();
 				MoveFinder.good.clear();
@@ -143,6 +143,8 @@ public class Editor extends BasicGameState {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				MoveFinder.bad.clear();
+				MoveFinder.good.clear();
 		    	long end = System.nanoTime();
 		    	print((end-start)/1000000 + " ms");
 
@@ -150,10 +152,18 @@ public class Editor extends BasicGameState {
 			
 			
 		}
+		if (input.isMousePressed(2)) {
+			if (SlickGo.withinBounds(bx,by)) {
+				print(bx+","+by);
+			}
+			
+			
+		}
+		
 		
 
 		
-		pattern = Pattern.sToPv2("xrxzdlxdxrrX", Stone.BLACK);
+		pattern = Pattern.sToPv2("xrxrxrdxdlxdlxluxlux", Stone.BLACK);
 		if (input.isMousePressed(0)) {
 			if (SlickGo.withinBounds(bx,by)) {		
 				board.takeTurn(bx,by , true,false);

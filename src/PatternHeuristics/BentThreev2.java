@@ -204,15 +204,15 @@ public class BentThreev2 {
 						if("AAANNNEN".equals(s)){retval+=600;continue;}
 						if("AAANNNEE".equals(s)){retval+=600;continue;}
 						if("AAANNNNE".equals(s)){retval+=600;continue;}
-						if("AAANNANN".equals(s)){retval+=800;continue;}
-						if("AAANNAEN".equals(s)){retval+=850;continue;}
-						if("AAANNAEE".equals(s)){retval+=850;continue;}
-						if("AAANNANE".equals(s)){retval+=800;continue;}
-						if("AAANNAAN".equals(s)){retval+=800;continue;}
-						if("AAANNAAE".equals(s)){retval+=800;continue;}
-						if("AAANNAAA".equals(s)){retval+=800;continue;}
-						if("AAANNANA".equals(s)){retval+=800;continue;}
-						if("AAANNAEA".equals(s)){retval+=850;continue;}
+						if("AAANNANN".equals(s)){retval+=400;continue;}
+						if("AAANNAEN".equals(s)){retval+=425;continue;}
+						if("AAANNAEE".equals(s)){retval+=425;continue;}
+						if("AAANNANE".equals(s)){retval+=400;continue;}
+						if("AAANNAAN".equals(s)){retval+=400;continue;}
+						if("AAANNAAE".equals(s)){retval+=400;continue;}
+						if("AAANNAAA".equals(s)){retval+=400;continue;}
+						if("AAANNANA".equals(s)){retval+=400;continue;}
+						if("AAANNAEA".equals(s)){retval+=425;continue;}
 						if("AAANNNAN".equals(s)){retval+=600;continue;}
 						if("AAAENNAN".equals(s)){retval+=600;continue;}
 						if("AAAEENAN".equals(s)){retval+=1000;continue;}
@@ -382,24 +382,24 @@ public class BentThreev2 {
 						if("ANANNNEN".equals(s)){retval+=600;continue;}
 						if("ANANNNEE".equals(s)){retval+=550;continue;}
 						if("ANANNNNE".equals(s)){retval+=600;continue;}
-						if("ANANNANN".equals(s)){retval+=800;continue;}
-						if("AEANNANN".equals(s)){retval+=850;continue;}
-						if("AEANNAEN".equals(s)){retval+=900;continue;}
-						if("AEANNAEE".equals(s)){retval+=900;continue;}
-						if("AEANNANE".equals(s)){retval+=850;continue;}
-						if("ANANNAEN".equals(s)){retval+=850;continue;}
-						if("ANANNAEE".equals(s)){retval+=850;continue;}
-						if("ANANNANE".equals(s)){retval+=800;continue;}
-						if("ANANNAAN".equals(s)){retval+=800;continue;}
-						if("AEANNAAN".equals(s)){retval+=850;continue;}
-						if("AEANNAAE".equals(s)){retval+=850;continue;}
-						if("ANANNAAE".equals(s)){retval+=800;continue;}
-						if("ANANNAAA".equals(s)){retval+=800;continue;}
-						if("AEANNAAA".equals(s)){retval+=850;continue;}
-						if("ANANNANA".equals(s)){retval+=800;continue;}
-						if("AEANNANA".equals(s)){retval+=850;continue;}
-						if("AEANNAEA".equals(s)){retval+=900;continue;}
-						if("ANANNAEA".equals(s)){retval+=850;continue;}
+						if("ANANNANN".equals(s)){retval+=400;continue;}
+						if("AEANNANN".equals(s)){retval+=425;continue;}
+						if("AEANNAEN".equals(s)){retval+=450;continue;}
+						if("AEANNAEE".equals(s)){retval+=450;continue;}
+						if("AEANNANE".equals(s)){retval+=425;continue;}
+						if("ANANNAEN".equals(s)){retval+=425;continue;}
+						if("ANANNAEE".equals(s)){retval+=425;continue;}
+						if("ANANNANE".equals(s)){retval+=400;continue;}
+						if("ANANNAAN".equals(s)){retval+=400;continue;}
+						if("AEANNAAN".equals(s)){retval+=425;continue;}
+						if("AEANNAAE".equals(s)){retval+=425;continue;}
+						if("ANANNAAE".equals(s)){retval+=400;continue;}
+						if("ANANNAAA".equals(s)){retval+=400;continue;}
+						if("AEANNAAA".equals(s)){retval+=425;continue;}
+						if("ANANNANA".equals(s)){retval+=400;continue;}
+						if("AEANNANA".equals(s)){retval+=425;continue;}
+						if("AEANNAEA".equals(s)){retval+=450;continue;}
+						if("ANANNAEA".equals(s)){retval+=425;continue;}
 						if("ANANNNAN".equals(s)){retval+=600;continue;}
 						if("AEANNNAN".equals(s)){retval+=600;continue;}
 						if("AEAENNAN".equals(s)){retval+=600;continue;}
@@ -630,8 +630,6 @@ public class BentThreev2 {
 						if("ENNNNNNN".equals(s)){retval+=150;continue;}
 						if("ENENNNNN".equals(s)){retval+=100;continue;}
 						if("ENEENNNN".equals(s)){retval+=50;continue;}
-						if("EAENNNNE".equals(s)){retval+=50;continue;}
-						if("ENENNNNE".equals(s)){retval+=50;continue;}
 						if("ENEENENN".equals(s)){retval+=50;continue;}
 						if("ENEENENE".equals(s)){retval+=100;continue;}
 						if("ENEENNNE".equals(s)){retval+=50;continue;}
@@ -672,9 +670,6 @@ public class BentThreev2 {
 						if("EANNNNNN".equals(s)){retval+=600;continue;}
 						if("EAENNNNN".equals(s)){retval+=150;continue;}
 						if("EAEENNNN".equals(s)){retval+=50;continue;}
-						if("EAENNANE".equals(s)){retval+=-50;continue;}
-						if("EAENNNNN".equals(s)){retval+=50;continue;}
-						if("EAENNNNE".equals(s)){retval+=50;continue;}
 						if("EAEENENN".equals(s)){retval+=100;continue;}
 						if("EAEENENE".equals(s)){retval+=100;continue;}
 						if("EAEENNNE".equals(s)){retval+=50;continue;}
@@ -802,9 +797,6 @@ public class BentThreev2 {
 						if("EANNNNAN".equals(s)){retval+=600;continue;}
 						if("EAENNNAN".equals(s)){retval+=600;continue;}
 						if("EAEENNAN".equals(s)){retval+=500;continue;}
-						if("EAENNAAE".equals(s)){retval+=-100;continue;}
-						if("EAENNNAN".equals(s)){retval+=100;continue;}
-						if("EAENNNAE".equals(s)){retval+=50;continue;}
 						if("EAEENEAN".equals(s)){retval+=150;continue;}
 						if("EAEENEAE".equals(s)){retval+=100;continue;}
 						if("EAEENNAE".equals(s)){retval+=500;continue;}
@@ -831,7 +823,6 @@ public class BentThreev2 {
 						if("EANNNNAA".equals(s)){retval+=600;continue;}
 						if("EAENNNAA".equals(s)){retval+=600;continue;}
 						if("EAEENNAA".equals(s)){retval+=500;continue;}
-						if("EAENNNAA".equals(s)){retval+=100;continue;}
 						if("EAEENEAA".equals(s)){retval+=200;continue;}
 						if("EAENENAA".equals(s)){retval+=500;continue;}
 						if("EAENEEAA".equals(s)){retval+=200;continue;}
@@ -845,7 +836,6 @@ public class BentThreev2 {
 						if("EANNNNNA".equals(s)){retval+=600;continue;}
 						if("EAENNNNA".equals(s)){retval+=150;continue;}
 						if("EAEENNNA".equals(s)){retval+=100;continue;}
-						if("EAENNNNA".equals(s)){retval+=50;continue;}
 						if("EAEENENA".equals(s)){retval+=150;continue;}
 						if("EAENENNA".equals(s)){retval+=50;continue;}
 						if("EAENEENA".equals(s)){retval+=100;continue;}
@@ -953,8 +943,6 @@ public class BentThreev2 {
 						if("ENNNNNAN".equals(s)){retval+=150;continue;}
 						if("ENENNNAN".equals(s)){retval+=150;continue;}
 						if("ENEENNAN".equals(s)){retval+=50;continue;}
-						if("EAENNNAE".equals(s)){retval+=50;continue;}
-						if("ENENNNAE".equals(s)){retval+=50;continue;}
 						if("ENEENEAN".equals(s)){retval+=100;continue;}
 						if("ENEENEAE".equals(s)){retval+=50;continue;}
 						if("ENEENNAE".equals(s)){retval+=50;continue;}
@@ -981,7 +969,6 @@ public class BentThreev2 {
 						if("ENNNNNAA".equals(s)){retval+=200;continue;}
 						if("ENENNNAA".equals(s)){retval+=150;continue;}
 						if("ENEENNAA".equals(s)){retval+=50;continue;}
-						if("ENENNNAA".equals(s)){retval+=50;continue;}
 						if("ENEENEAA".equals(s)){retval+=100;continue;}
 						if("ENENENAA".equals(s)){retval+=100;continue;}
 						if("ENENEEAA".equals(s)){retval+=150;continue;}
@@ -995,7 +982,6 @@ public class BentThreev2 {
 						if("ENNNNNNA".equals(s)){retval+=150;continue;}
 						if("ENENNNNA".equals(s)){retval+=100;continue;}
 						if("ENEENNNA".equals(s)){retval+=50;continue;}
-						if("ENENNNNA".equals(s)){retval+=50;continue;}
 						if("ENEENENA".equals(s)){retval+=100;continue;}
 						if("ENENENNA".equals(s)){retval+=50;continue;}
 						if("ENENEENA".equals(s)){retval+=100;continue;}
@@ -1591,8 +1577,6 @@ public class BentThreev2 {
 						if("NNNNNEEA".equals(s)){retval+=200;continue;}
 						if("NNNNNNEA".equals(s)){retval+=200;continue;}
 					}
-					
-					
 
 					
 					

@@ -3,7 +3,6 @@ package PatternHeuristics;
 import java.util.ArrayList;
 
 import Go.SlickGo.Evaluator;
-import Go.SlickGo.MoveFinder;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
@@ -11,30 +10,24 @@ import Go.SlickGo.UDLR;
 import Go.SlickGo.VariationFinder;
 
 
-
-
-import static PatternHeuristics.States.*;
-
-
-public class LearningValues {
+public class TrainingPattern {
 	Evaluator e;
 	PatternSearcher ps;
-	public static boolean initalboard = false;
-	boolean breakAfter = false;
-	
-	public LearningValues (Evaluator e){
+
+	public TrainingPattern (Evaluator e){
 		this.e=e;
 	}
 
 
 
-	public int evaluate(ArrayList<Tuple> sstring ,int tk) {
-		int retval = 0;
+	public int evaluate(ArrayList<Tuple> sstring,int tk) {
+		double retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);
-		
+		int counttrue  = 0;
+
+
 		ArrayList<Pattern> pattern = Pattern.sToPv2("xdrxdrxruxruxuS", e.kscolour);
 		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
-		
 		
 		if(!pMatches.isEmpty()) {
 			int counter=0;
@@ -56,58 +49,39 @@ public class LearningValues {
 					Tuple B2 = B1.side2(r,r);
 					Tuple C1 = B2.side2(side.opp(),r);
 					Tuple C2 = S1.side2(side.opp(),r);
-					
 
 
-					if(e.isThere(S0)||e.isThere(S2)||e.isThere(D0)){if (initalboard) {MoveFinder.learnexit=true;}continue;}
-					String s = States.arrayToString(e,A1,A2,B1,B2,C1,C2,S0,S1,S2,D0);
 
 
-//					print(s);
-		
-					String prog = "\n	if(\""+s+"\".equals(s)){retval+=";
-					
-		
-					if (initalboard) {
-						VariationFinder.skip=false;
-						VariationFinder.states=s;
-						VariationFinder.progstring=prog;
-						VariationFinder.tk=tk;
-						breakAfter=true;
-					}
-
+					if(e.isThere(S0)||e.isThere(S2)||e.isThere(D0)) continue;
 
 					
-
-				
 			
+
+					if(e.isTheres(S1,A2,B1,C1)) {retval+=1500; counttrue++;}
+					else if(e.isTheres(S1,A2,B2,C1)) {retval+=1500; counttrue++;}
+
+					
+
+					
+//					if(e.isTheres(S1,LT,TL)) {retval+=500; counttrue++;}
+//					else if(e.isTheres(S1,LB,TR)) {retval+=1000; counttrue++;}
+//					else if(e.isTheres(S1,LT,TR)) {retval+=1000; counttrue++;}
+//					else if(e.isTheres(S1,LB,TL)) {retval+=1000; counttrue++;}
+					
+
 				}
-				if(breakAfter)break;
-				
+
 			}
 			
 		}
 
-
-		
-		return retval;
+		if(retval > 0)retval = retval-tk;
+		if(LearningValues.initalboard && counttrue >1) VariationFinder.repeated = counttrue;
+		return (int) retval;
 
 	}
 
-
-    public static void print(Object o){
-        System.out.println(o);
-    }
-
-
-	public ArrayList<States> addStates(Evaluator e,Tuple...ts) {
-		ArrayList<States> states = new ArrayList<States>();
-		for (Tuple t :ts){
-			if (e.isThere(t)) states.add(A);
-			else if (e.isEnemy(t))  states.add(E);
-			else states.add(N);
-		}
-		return states;
-	}
+	
 	
 }

@@ -45,6 +45,7 @@ public class MoveFinder  implements Runnable{
 	 	ArrayList<Tuple> validMoves = currentBoard.getAllValidMoves();
 		depth++;
 		
+		String boardstring = currentBoard.boardString;
 		int currentscore = 0;
 		Evaluator e1 = new Evaluator(currentBoard,originalBoard);
 		currentscore= e1.evaluateCurrentBoard(true);
@@ -78,13 +79,10 @@ public class MoveFinder  implements Runnable{
 						good.put(key, returnscore);
 					}
 				}else returnscore =alphaBetaLearner(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
-				
 				if(returnscore > best && returnscore > currentscore && depth==1 )this.choice = t.clone();
 		        best = Math.max(best, returnscore); 
 		        alpha = Math.max(alpha, best);
 //				if(beta <= alpha) break;
-		        
-
 			}
 			if(depth==1 && this.choice==null )this.choice = new Tuple(-9,-9);
 			if(best==min)best=currentscore;
@@ -117,19 +115,13 @@ public class MoveFinder  implements Runnable{
 //				if(beta <= alpha) break;
 
 		    }
-			
-
-
 			return best;
 		}
-
-	
-
 	} 
 	 
 	
 
-	 int alphaBeta(Board currentBoard , ArrayList<Tuple> keystonelist , boolean isLive , int depth, int alpha,int beta ) {
+	int alphaBeta(Board currentBoard , ArrayList<Tuple> keystonelist , boolean isLive , int depth, int alpha,int beta ) {
 		if (this.exit) return 0;
 	 	ArrayList<Tuple> validMoves = currentBoard.validMoves;
 	 	ArrayList<Tuple> goodMoves = currentBoard.removeBadMovess();

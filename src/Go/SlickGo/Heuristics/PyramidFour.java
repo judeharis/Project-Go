@@ -7,6 +7,7 @@ import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
+import PatternHeuristics.States;
 
 public class PyramidFour {
 	Evaluator e;
@@ -50,19 +51,13 @@ public class PyramidFour {
 					
 					
 
-					if(e.isEnemies(A1,A2))continue;
-					if(e.isEnemies(B1,B2))continue;
-					if(e.isEnemies(C1,C2))continue;
-					
-
-
-
 					if(e.isThere(S0)||e.isThere(S2)||e.isThere(D0)) continue;
 					
-					retval+=600;
-					if(e.isThere(S1)) retval+=500;
-					if(e.isEnemy(S1)) retval-=500;
 
+//					if(e.isThere(S0)||e.isThere(S2)||e.isThere(D0) || e.isEnemies(C1,C2) ||e.isEnemies(B1,B2) ||e.isEnemies(A1,A2)) continue;
+					
+					String s = States.arrayToString(e,A1,A2,B1,B2,C1,C2,S0,S1,S2,D0);
+					
 				}
 				
 			}
