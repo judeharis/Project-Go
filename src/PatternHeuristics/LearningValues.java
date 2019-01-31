@@ -17,52 +17,59 @@ import static PatternHeuristics.States.*;
 
 
 public class LearningValues {
-	Evaluator e;
-	PatternSearcher ps;
+
 	public static boolean initalboard = false;
-	boolean breakAfter = false;
-	
-	public LearningValues (Evaluator e){
-		this.e=e;
-	}
 
 
 
-	public int evaluate(ArrayList<Tuple> sstring ,int tk) {
+
+
+	public static int evaluate(ArrayList<Tuple> sstring,Evaluator e ,int tk) {
 		int retval = 0;
-		ps = new PatternSearcher(e.cB,e.kscolour);
+		PatternSearcher ps = new PatternSearcher(e.cB,e.kscolour);
 		
-		ArrayList<Pattern> pattern = Pattern.sToPv2("xdrxdrxruxruxuS", e.kscolour);
-		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
+		ArrayList<Pattern> pattern = Pattern.sToPv2("xrdxrdxldxldxluxluxrux");
+		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern,e.kscolour);
 		
 		
 		if(!pMatches.isEmpty()) {
 			int counter=0;
 			for(ArrayList<Tuple> tlist: pMatches) {
+				boolean breakAfter = false;
 				if(!tlist.isEmpty()) {
 					boolean diagSide= ps.dirSideToBool(counter);
 					UDLR side = ps.dirNumToDir(counter);
 					UDLR r = side.diag(diagSide);
 					UDLR l = side.diag(!diagSide);
+					Tuple S0 = tlist.get(0).side(side);
+					Tuple S2 = S0.side(side);
+					Tuple S1 = S2.side(l);		
+					Tuple S3 = S2.side(r);	
+					Tuple S4 = S2.side(side);	
+					Tuple A1 = tlist.get(0).side(l);
+					Tuple A2 = A1.side2(r,r);
+					Tuple B1 = A2.side2(r,side);
+					Tuple B2 = B1.side2(side,side);
+					Tuple C1 = B2.side2(side,l);
+					Tuple C2 = C1.side2(l,l);
+					Tuple D1 = C2.side2(l,side.opp());
+					Tuple D2 = D1.side2(side.opp(),side.opp());
 					counter++;
-					Tuple S0 = tlist.get(0).side(r);
-					Tuple S1 = S0.side(r);
-					Tuple S2 = S1.side(r);
-					Tuple D0 = S1.side(side);
 					
-					Tuple A1 =  tlist.get(0).side(l);
-					Tuple A2 = A1.side2(side,r);
-					Tuple B1 = A2.side2(side,r);
-					Tuple B2 = B1.side2(r,r);
-					Tuple C1 = B2.side2(side.opp(),r);
-					Tuple C2 = S1.side2(side.opp(),r);
+					
+					if (e.isThere(S0) || e.isThere(S1) || e.isThere(S3) || e.isThere(S4)){if(initalboard){MoveFinder.learnexit=true;continue;}};
+					if(!e.isTheres(A1) && !e.isTheres(A2)) {if(initalboard){MoveFinder.learnexit=true;continue;}};
+					if(!e.isTheres(B1) && !e.isTheres(B2)) {if(initalboard){MoveFinder.learnexit=true;continue;}};
+					if(!e.isTheres(C1) && !e.isTheres(C2)) {if(initalboard){MoveFinder.learnexit=true;continue;}};
+					if(!e.isTheres(D1) && !e.isTheres(D2)) {if(initalboard){MoveFinder.learnexit=true;continue;}};
+					if(!e.isTheres(S2)) {if(initalboard){MoveFinder.learnexit=true;continue;}};
 					
 
-
-					if(e.isThere(S0)||e.isThere(S2)||e.isThere(D0)){if (initalboard) {MoveFinder.learnexit=true;}continue;}
-					String s = States.arrayToString(e,A1,A2,B1,B2,C1,C2,S0,S1,S2,D0);
+					String s = States.arrayToString(e,A1,A2,B1,B1,C1,C2,D1,D2,S0,S1,S2,S3,S4);
 
 
+
+//					{if(initalboard){MoveFinder.learnexit=true;continue;}}
 //					print(s);
 		
 					String prog = "\n	if(\""+s+"\".equals(s)){retval+=";

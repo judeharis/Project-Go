@@ -1,11 +1,11 @@
 package Go.SlickGo;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 import PatternHeuristics.LearningValues;
+
 
 
 
@@ -20,13 +20,21 @@ public class MoveFinder  implements Runnable{
 	 int line = 0;
 	 boolean exit;
 	 public static boolean learnexit = false;
-	 static PrintWriter writer = null;
+
 	 static boolean editormode = false; 
 	 
 	 boolean useHashTable = false;
 	 
-	 public static Hashtable<String, Integer> good =  new Hashtable<String,Integer>();
-	 public static Hashtable<String, Integer> bad =  new Hashtable<String,Integer>();
+	 public static Hashtable<String, Integer> lgood =  new Hashtable<String,Integer>();
+	 public static Hashtable<String, Integer> lbad =  new Hashtable<String,Integer>();
+	 
+	 Hashtable<String, Integer> good =  new Hashtable<String,Integer>();
+	 Hashtable<String, Integer> bad =  new Hashtable<String,Integer>();
+	 
+	 int hitcounter= 0;
+
+	 
+	 Tuple[][] killers =  new Tuple[100][2];
 	 
 	 
 	 int result=0;
@@ -40,30 +48,27 @@ public class MoveFinder  implements Runnable{
 	 }
 	 
 
-	 int alphaBetaLearner(Board currentBoard , ArrayList<Tuple> keystonelist , boolean isLive , int depth, int alpha,int beta ) {
+	 int alphaBetaLearner(Board cB , ArrayList<Tuple> keystonelist , boolean isLive , int depth, int alpha,int beta ) {
 
-	 	ArrayList<Tuple> validMoves = currentBoard.getAllValidMoves();
+	 	ArrayList<Tuple> validMoves = cB.getAllValidMoves();
 		depth++;
 		
-		String boardstring = currentBoard.boardString;
 		int currentscore = 0;
-		Evaluator e1 = new Evaluator(currentBoard,originalBoard);
+		Evaluator e1 = new Evaluator(cB);
 		currentscore= e1.evaluateCurrentBoard(true);
 		
 		if (!keystoneLives(keystonelist)) return currentscore;
 		
-		if (currentBoard.placing != keystonecolour && validMoves.size() == 0) {
-			validMoves.add(new Tuple(-9,-9));
-			currentBoard.passing = true;
-		}else if (currentBoard.placing == keystonecolour && validMoves.size() == 0)  return currentscore;
+		if (cB.placing != keystonecolour && validMoves.size() == 0) validMoves.add(new Tuple(-9,-9));
+		else if (cB.placing == keystonecolour && validMoves.size() == 0)  return currentscore;
 
-        if(searched.contains(currentBoard.boardString) && !validMoves.isEmpty()) validMoves.add(validMoves.remove(0));
-        else if(!searched.contains(currentBoard.boardString)) searched.add(currentBoard.boardString);
+        if(searched.contains(cB.boardString) && !validMoves.isEmpty()) validMoves.add(validMoves.remove(0));
+        else if(!searched.contains(cB.boardString)) searched.add(cB.boardString);
 
 		if(isLive) {
 			int best = min;
 			for (Tuple t : validMoves) {
-				Board b = Board.cloneBoard(currentBoard);
+				Board b = Board.cloneBoard(cB);
 				b.takeTurn(t.a,t.b,false,true);  
 				
 				Evaluator e2 = new Evaluator(b);
@@ -73,12 +78,12 @@ public class MoveFinder  implements Runnable{
 				int returnscore = 0;
 				if(useHashTable) {
 				 	String key = b.boardToString();
-					if(good.containsKey(key)) returnscore = good.get(key);
+					if(lgood.containsKey(key)) returnscore = lgood.get(key);
 					else {
-						returnscore =alphaBetaLearner(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
-						good.put(key, returnscore);
+						returnscore =alphaBetaLearner(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);
+						lgood.put(key, returnscore);
 					}
-				}else returnscore =alphaBetaLearner(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
+				}else returnscore =alphaBetaLearner(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);
 				if(returnscore > best && returnscore > currentscore && depth==1 )this.choice = t.clone();
 		        best = Math.max(best, returnscore); 
 		        alpha = Math.max(alpha, best);
@@ -92,18 +97,18 @@ public class MoveFinder  implements Runnable{
 		}else {
 			int best = max;
 			for (Tuple t : validMoves) {
-				Board b = Board.cloneBoard(currentBoard);
+				Board b = Board.cloneBoard(cB);
 				b.takeTurn(t.a,t.b,false,true);
 				
 				int returnscore = 0;
 				if(useHashTable) {
 				 	String key = b.boardToString();
-					if(bad.containsKey(key)) returnscore = bad.get(key);
+					if(lbad.containsKey(key)) returnscore = lbad.get(key);
 					else {
-						returnscore =alphaBetaLearner(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
-						bad.put(key, returnscore);
+						returnscore =alphaBetaLearner(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);
+						lbad.put(key, returnscore);
 					}
-				}else returnscore =alphaBetaLearner(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
+				}else returnscore =alphaBetaLearner(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);
 
 				
 				if(returnscore < best && depth==1 )this.choice = t.clone();
@@ -121,52 +126,59 @@ public class MoveFinder  implements Runnable{
 	 
 	
 
-	int alphaBeta(Board currentBoard , ArrayList<Tuple> keystonelist , boolean isLive , int depth, int alpha,int beta ) {
-		if (this.exit) return 0;
-	 	ArrayList<Tuple> validMoves = currentBoard.validMoves;
-	 	ArrayList<Tuple> goodMoves = currentBoard.removeBadMovess();
+	int alphaBetaOld(Board cB , ArrayList<Tuple> keystonelist , boolean isLive , int depth, int alpha,int beta ) {
+		if (exit) return 0;
+	 	ArrayList<Tuple> validMoves = cB.validMoves;
+	 	ArrayList<Tuple> goodMoves = cB.validMoves;
 		depth++;
 
+
+		cB.desc = depth+"";
 		
 		if (!keystoneLives(keystonelist)) return min;
-		
+		if(depth>100)return max;
 
-		if (currentBoard.placing != keystonecolour && validMoves.size() == 0) return max;		
-		else if (currentBoard.placing == keystonecolour && goodMoves.size() == 0) {
-			currentBoard.passing = true;
-			goodMoves.add(new Tuple(-9,-9));}
+		if (cB.placing != keystonecolour && validMoves.size() == 0) return max;		
+		else if (cB.placing == keystonecolour && goodMoves.size() == 0) {
+			goodMoves = validMoves;
+//			cB.passing = true;
+//			goodMoves.add(new Tuple(-9,-9));
+		}
 		
-		if (goodMoves.size() == 0 || currentBoard.placing != keystonecolour ) {goodMoves = validMoves;}
+//		if (goodMoves.size() == 0 || cB.placing != keystonecolour ) {goodMoves = validMoves;}
+		
+		if (cB.placing != keystonecolour ) {goodMoves = validMoves;}
 		
 		//Forbidden Third 
-//		for (Tuple t : currentBoard.keystones) {
-//			ArrayList<Tuple> keystring = currentBoard.checkForStrings(t.a,t.b,keystonecolour.getSStrings(currentBoard)); 
-//			if (!keystring.isEmpty() && depth !=1 && currentBoard.checkStringSafetyv2(keystring, keystonecolour)) return max;	
+//		for (Tuple t : cB.keystones) {
+//			ArrayList<Tuple> keystring = cB.checkForStrings(t.a,t.b,keystonecolour.getSStrings(cB)); 
+//			if (!keystring.isEmpty() && depth !=1 && cB.checkStringSafetyv2(keystring, keystonecolour)) return max;	
 //		}
 		
 
-
+		if(depth==15)return 0;
 		if (Play.heuristic && depth>cutoff) {
-			Evaluator evaluator = new Evaluator(currentBoard,originalBoard);
-			return evaluator.evaluateCurrentBoard();
+			Evaluator evaluator = new Evaluator(cB);
+			return evaluator.evaluateCurrentBoard(false);
 		}
 		
-        if(searched.contains(currentBoard.boardString) && !goodMoves.isEmpty()) goodMoves.add(goodMoves.remove(0));
-        else if(!searched.contains(currentBoard.boardString)) searched.add(currentBoard.boardString);
+        if(searched.contains(cB.boardString) && !goodMoves.isEmpty()) goodMoves.add(goodMoves.remove(0));
+        else if(!searched.contains(cB.boardString)) searched.add(cB.boardString);
         
+//      goodMoves = MoveOrdering(depth,goodMoves);
         	
-//        Collections.shuffle(goodMoves);
+//      Collections.shuffle(goodMoves);
 
-//		print("\n\r"+line++ + "."+currentBoard.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " );
+//		print("\n\r"+line++ + "."+cB.placing+" valid moves:"+validMoves + " good moves: " + goodMoves +" \ndepth: " + depth +" step taken: " );
         
 
 		if(isLive) {
 			int best = min;
 			for (Tuple t : goodMoves) {
-				Board b = currentBoard;
+				Board b = cB;
 				b.takeTurn(t.a,t.b,false,true);  
 				if(depth==1)System.out.print(t.clone()+ " :");
-				int	returnscore =alphaBeta(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
+				int	returnscore =alphaBeta(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);
 				b.undoMove(false);
 				if(returnscore > best && depth==1 )this.choice = t.clone();
 		        best = Math.max(best, returnscore); 
@@ -174,16 +186,14 @@ public class MoveFinder  implements Runnable{
 		        if(depth==1) print(returnscore);
 				if(beta <= alpha) break;
 			}
-			return best;
-						
+			return best;		
 		}else{
 			int best = max;
- 
 			for (Tuple t : goodMoves) {
-				Board b = currentBoard;
+				Board b = cB;
 				b.takeTurn(t.a,t.b,false,true);
 				if(depth==1)System.out.print(t.clone()+ " :");
-				int returnscore =alphaBeta(b,keyStoneRemaining(b,keystonelist),!isLive,depth,alpha,beta);
+				int returnscore =alphaBeta(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);
 				b.undoMove(false);
 				if(returnscore < best && depth==1 )this.choice = t.clone();
 		        best = Math.min(best, returnscore); 
@@ -191,54 +201,190 @@ public class MoveFinder  implements Runnable{
 		        if(depth==1) print(returnscore);
 		        if(beta <= alpha)break;
 		    }
-			
 			return best;
 		}
+	} 
+	
+	
+	
+	int alphaBeta(Board cB , ArrayList<Tuple> keystonelist , boolean isLive , int depth, int alpha,int beta ) {
+		if (exit) return 0;
+	 	ArrayList<Tuple> validMoves = cB.validMoves;
+	 	ArrayList<Tuple> goodMoves = cB.removeBadMovess();
+		depth++;
+		cB.desc=depth+":" +hitcounter;
+		
+		if (!keystoneLives(keystonelist)) return min;
+		if(depth>50)return max;
+	
+		if (cB.placing != keystonecolour && validMoves.size() == 0) return max;		
+		else if (cB.placing == keystonecolour && goodMoves.size() == 0) goodMoves.add(new Tuple(-9,-9));
+		
+		
+		
+		if (cB.placing != keystonecolour ) {goodMoves = validMoves;}
+		
+	
+		if (Play.heuristic && depth>cutoff) {
+			Evaluator evaluator = new Evaluator(cB);
+			return evaluator.evaluateCurrentBoard(false);
+		}
+		
+	    if(searched.contains(cB.boardString) && !goodMoves.isEmpty()) goodMoves.add(goodMoves.remove(0));
+	    else if(!searched.contains(cB.boardString)) searched.add(cB.boardString);
+	    goodMoves = moveOrdering(depth,goodMoves);
+	    goodMoves = moveGen(cB,goodMoves);
+	
+	    if(isLive) {
+			int best = min;
+			for (Tuple t : goodMoves) {
+//				Board b = cB;
+				Board b = Board.cloneBoard(cB);
+				b.takeTurn(t.a,t.b,false,true);  
+				if(depth==1)System.out.print(t.clone()+ " :");
+				
+				int returnscore = 0;
+				if(useHashTable) {
+				 	String key = b.boardToString();
+					if(good.containsKey(key)) {returnscore = good.get(key);hitcounter++;}
+					else {
+						returnscore =alphaBeta(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);
+						good.put(key, returnscore);
+					}
+				}else returnscore =alphaBeta(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);	
+//				b.undoMove(false);
+				if(returnscore > best && depth==1 )this.choice = t.clone();
+				best = Math.max(best, returnscore); 
+				alpha = Math.max(alpha, best);
+				if(depth==1) print(returnscore);
+				if(beta <= alpha) {
+					if(killers[depth-1][0]!=null)killers[depth-1][1]= killers[depth-1][0];
+					killers[depth-1][0]=t;
+					break;
+				}
+			}
+			return best;		
+	    }else{
+			int best = max;
+			for (Tuple t : goodMoves) {
+//				Board b = cB;
+				Board b = Board.cloneBoard(cB);
+				b.takeTurn(t.a,t.b,false,true);
+				if(depth==1)System.out.print(t.clone()+ " :");
+				
+				
+				int returnscore = 0;
+				if(useHashTable) {
+				 	String key = b.boardToString();
+					if(bad.containsKey(key))  {returnscore = bad.get(key);hitcounter++;}
+					else {
+						returnscore =alphaBeta(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);
+						bad.put(key, returnscore);
+						
+					}
+				}else returnscore =alphaBeta(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);
+//				b.undoMove(false);
+				if(returnscore < best && depth==1 )this.choice = t.clone();
+				best = Math.min(best, returnscore); 
+				beta = Math.min(beta, best);
+				if(depth==1) print(returnscore);
+				if(beta <= alpha) {
+					if(killers[depth-1][0]!=null)killers[depth-1][1]= killers[depth-1][0];
+					killers[depth-1][0]=t;
+					break;
+				}
+			}
+			return best;
+		}
+	} 
+
+
+	public void run() {
+
+
+		boolean iterativeDeepening =Play.iterativeDeepening;
+		Board cloneBoard = Board.cloneBoard(originalBoard);
+//		cloneBoard = originalBoard;
+		if(!iterativeDeepening || editormode) {
+			useHashTable= true;
+			Evaluator e1 = new Evaluator(cloneBoard);
+			e1.evaluateCurrentBoard(true);
+			LearningValues.initalboard = false;
+			if (learnexit) {
+				result = 0;
+				return;
+			}
+			
+			if(!editormode) {
+				print("Ai Started");
+				print("current board :" +e1.evaluateCurrentBoard(true));
+				if (cloneBoard.blackFirst && cloneBoard.turn == Stone.WHITE || !cloneBoard.blackFirst && cloneBoard.turn == Stone.BLACK ) 
+					result = alphaBeta(cloneBoard,keystones,cloneBoard.capToWin,0,min,max);
+				else 	result = alphaBeta(cloneBoard,keystones,!cloneBoard.capToWin,0,min,max);
+				print(result);
+				print(choice);
+				print("Ai Done");
+			}else {
+				if (cloneBoard.blackFirst && cloneBoard.turn == Stone.WHITE || !cloneBoard.blackFirst && cloneBoard.turn == Stone.BLACK ) 
+					result = alphaBetaLearner(cloneBoard,keystones,cloneBoard.capToWin,0,min,max);
+				else 	result = alphaBetaLearner(cloneBoard,keystones,!cloneBoard.capToWin,0,min,max);
+			}
+		
+		}else {
+		
+			ArrayList<Tuple> iterPath =new ArrayList<Tuple>() ;
+			int iterDepth = 0;
+			
+			while ((Play.heuristic && iterDepth < cutoff) || (!Play.heuristic && true)) {
+				iterDepth++;
+				IterativeDeepening iDeep = new IterativeDeepening(cloneBoard,iterDepth, iterPath,this);
+				Thread t2 = new Thread(iDeep,"t2");
+				t2.start();
+				try {t2.join();} catch (InterruptedException e) {e.printStackTrace();}
+				if(exit) {
+					print(choice + ": " + result +"\n To Depth: " + (iterDepth-1) );
+					return;
+				}
+				iterPath = iDeep.thisIterPath;
+				if(!iterPath.isEmpty())choice = iterPath.get(0);
+				result = iDeep.result;
+				if(result == min || result == max) break;
+				
+			}
+			
+			print(choice + ": " + result +"\n To Depth: " + iterDepth );
+		}
+
+	}
+
+	
+	private ArrayList<Tuple> moveGen(Board cB, ArrayList<Tuple> goodMoves) {
+		Evaluator evaluator = new Evaluator(cB);
+		ArrayList<Tuple> newMoves = evaluator.moveGen(goodMoves);
+		newMoves = goodMoves;
+		return newMoves;
+	}
+	
+	
+	private ArrayList<Tuple> moveOrdering(int depth, ArrayList<Tuple> goodMoves) {
+		ArrayList<Tuple> newOrder = new ArrayList<Tuple>();
+		
+		Tuple k1 = killers[depth-1][0];
+		Tuple k2 = killers[depth-1][1];
+		if(k1!=null && goodMoves.remove(k1)) {
+			newOrder.add(k1);
+		}
+		
+		if(k2!=null && goodMoves.remove(k2)) {
+			newOrder.add(k2);
+		}
+		newOrder.addAll(goodMoves);
+		return newOrder;
+	}
 
 	
 
-	} 
-	 
-	public void run() {
-        try {writer = new PrintWriter("tree.txt");}
-        catch (FileNotFoundException e1) {e1.printStackTrace();}
-
-		Evaluator evaluator = new Evaluator(originalBoard,originalBoard);
-
-
-    	
-		Board cloneBoard = Board.cloneBoard(originalBoard);
-//		cloneBoard = originalBoard;
-		
-		useHashTable= true;
-		Evaluator e1 = new Evaluator(cloneBoard,originalBoard);
-		e1.evaluateCurrentBoard(true);
-		LearningValues.initalboard = false;
-		if (learnexit) {
-			result = 0;
-			return;
-		}
-		
-		if(!editormode) {
-			print("Ai Started");
-			print("current board :" +evaluator.evaluateCurrentBoard(true));
-			if (cloneBoard.blackFirst && cloneBoard.turn == Stone.WHITE || !cloneBoard.blackFirst && cloneBoard.turn == Stone.BLACK ) 
-				result = alphaBeta(cloneBoard,keystones,cloneBoard.capToWin,0,min,max);
-			else 	result = alphaBeta(cloneBoard,keystones,!cloneBoard.capToWin,0,min,max);
-			print(result);
-			print(choice);
-			print("Ai Done");
-		}else {
-			if (cloneBoard.blackFirst && cloneBoard.turn == Stone.WHITE || !cloneBoard.blackFirst && cloneBoard.turn == Stone.BLACK ) 
-				result = alphaBetaLearner(cloneBoard,keystones,cloneBoard.capToWin,0,min,max);
-			else 	result = alphaBetaLearner(cloneBoard,keystones,!cloneBoard.capToWin,0,min,max);
-		}
-
-		writer.close();
-	}
-
-
-	static public ArrayList<Tuple> keyStoneRemaining(Board b,ArrayList<Tuple> keystonelist){
+	static public ArrayList<Tuple> liveKeys(Board b,ArrayList<Tuple> keystonelist){
 	 	ArrayList<Tuple> liveList = new ArrayList<Tuple>();
 		for (Tuple t : keystonelist){
 			if (b.stones[t.a][t.b].getSC() == keystonecolour) liveList.add(new Tuple(t.a,t.b));
@@ -251,15 +397,8 @@ public class MoveFinder  implements Runnable{
 	 	return false;
 	}
 	
-    public static void p(String s){
-    	 writer.write(s) ;
-    }
+
     
-    public String tab(int o) {
-    	String s="";
-    	for(int i = 0; i <o;i++)s+="\t";
-    	return s;
-    }
 	  
     public static void print(Object o){
         System.out.println(o);

@@ -20,7 +20,7 @@ public class PatternSearcher {
 		this.colour = colour;
 	}
 	
-	public ArrayList<Tuple> stringMatch(ArrayList<Tuple> sstring, ArrayList<Pattern> pattern) {
+	public ArrayList<Tuple> stringMatch(ArrayList<Tuple> sstring, ArrayList<Pattern> pattern,Stone def) {
 		boolean found = false;
 		foundNum =0;
 		ArrayList<Tuple> match= new ArrayList<Tuple>(); 
@@ -34,6 +34,7 @@ public class PatternSearcher {
 			
 			for(Pattern p : pattern) {
 			   if(areAllTrue(toSkip))break;
+				Stone pcolour = p.def?def:def.getEC();
 				ArrayList<Tuple> allRot = new ArrayList<Tuple>(); 
 
 				u = new Tuple(t.a+p.x,t.b+p.y);
@@ -59,7 +60,7 @@ public class PatternSearcher {
 					if(toSkip[counter]) {counter++;continue;}
 					if(p.isSide && !b.withinBounds(k)) matchTries.get(counter).add(k);
 					else if(!p.isSide && b.withinBounds(k)) {
-						boolean colourCheck = ((b.stones[k.a][k.b].getSC() == p.colour)!=p.isNot) || p.wildCard;
+						boolean colourCheck = ((b.stones[k.a][k.b].getSC() == pcolour)!=p.isNot) || p.wildCard;
 						boolean cornerCheck = p.isCorner? isCorner(k):true;
 						if(colourCheck && cornerCheck){
 							matchTries.get(counter).add(k);}
@@ -91,7 +92,7 @@ public class PatternSearcher {
 		return ret;
 	}
 	
-	public ArrayList<ArrayList<Tuple>> allStringMatch(ArrayList<Tuple> sstring, ArrayList<Pattern> pattern) {
+	public ArrayList<ArrayList<Tuple>> allStringMatch(ArrayList<Tuple> sstring, ArrayList<Pattern> pattern,Stone def) {
 
 		
 		ArrayList<ArrayList<Tuple>> matches = new ArrayList<ArrayList<Tuple>>();
@@ -107,6 +108,7 @@ public class PatternSearcher {
 			
 			for(Pattern p : pattern) {
 			   if(areAllTrue(toSkip))break;
+				Stone pcolour = p.def?def:def.getEC();
 				ArrayList<Tuple> allRot = new ArrayList<Tuple>(); 
 
 				u = new Tuple(t.a+p.x,t.b+p.y);
@@ -132,7 +134,7 @@ public class PatternSearcher {
 					if(toSkip[counter]) {counter++;continue;}
 					if(p.isSide && !b.withinBounds(k)) matchTries.get(counter).add(k);
 					else if(!p.isSide && b.withinBounds(k)) {
-						boolean colourCheck = ((b.stones[k.a][k.b].getSC() == p.colour)!=p.isNot) || p.wildCard;
+						boolean colourCheck = ((b.stones[k.a][k.b].getSC() == pcolour)!=p.isNot) || p.wildCard;
 						boolean cornerCheck = p.isCorner? isCorner(k):true;
 						if(colourCheck && cornerCheck)matchTries.get(counter).add(k);
 						else toSkip[counter]=true;
@@ -165,7 +167,7 @@ public class PatternSearcher {
 		return matches;
 	}
 	
-	public ArrayList<ArrayList<Tuple>> allStringMatchv2(ArrayList<Tuple> sstring, ArrayList<Pattern> pattern) {
+	public ArrayList<ArrayList<Tuple>> allStringMatchv2(ArrayList<Tuple> sstring, ArrayList<Pattern> pattern,Stone def) {
 		ArrayList<ArrayList<Tuple>> matches = new ArrayList<ArrayList<Tuple>>();
 	    matchesDirNums = new ArrayList<Integer>();
 
@@ -178,7 +180,8 @@ public class PatternSearcher {
 			for(int n=0 ; n<8;n++) matchTries.add(new ArrayList<Tuple>());
 			
 			for(Pattern p : pattern) {
-			   if(areAllTrue(toSkip))break;
+				if(areAllTrue(toSkip))break;
+				Stone pcolour = p.def?def:def.getEC();
 				ArrayList<Tuple> allRot = new ArrayList<Tuple>(); 
 
 				u = new Tuple(t.a+p.x,t.b+p.y);
@@ -204,7 +207,7 @@ public class PatternSearcher {
 					if(toSkip[counter]) {counter++;continue;}
 					if(p.isSide && !b.withinBounds(k)) matchTries.get(counter).add(k);
 					else if(!p.isSide && b.withinBounds(k)) {
-						boolean colourCheck = ((b.stones[k.a][k.b].getSC() == p.colour)!=p.isNot) || p.wildCard;
+						boolean colourCheck = ((b.stones[k.a][k.b].getSC() == pcolour)!=p.isNot) || p.wildCard;
 						boolean cornerCheck = p.isCorner? isCorner(k):true;
 						if(colourCheck && cornerCheck)matchTries.get(counter).add(k);
 						else toSkip[counter]=true;
@@ -250,7 +253,7 @@ public class PatternSearcher {
 		return matches;
 	}
 	
-	public ArrayList<Tuple> tupleMatch(Tuple t, ArrayList<Pattern> pattern){
+	public ArrayList<Tuple> tupleMatch(Tuple t, ArrayList<Pattern> pattern,Stone def){
 		ArrayList<Tuple> match= new ArrayList<Tuple>(); 
 		
 		
@@ -260,7 +263,8 @@ public class PatternSearcher {
 		for(int n=0 ; n<8;n++) matchTries.add(new ArrayList<Tuple>());
 		
 		for(Pattern p : pattern) {
-		   if(areAllTrue(toSkip))break;
+			if(areAllTrue(toSkip))break;
+			Stone pcolour = p.def?def:def.getEC();
 			ArrayList<Tuple> allRot = new ArrayList<Tuple>(); 
 
 			u = new Tuple(t.a+p.x,t.b+p.y);
@@ -286,7 +290,7 @@ public class PatternSearcher {
 				if(toSkip[counter]) {counter++;continue;}
 				if(p.isSide && !b.withinBounds(k)) matchTries.get(counter).add(k);
 				else if(!p.isSide && b.withinBounds(k)) {
-					boolean colourCheck = ((b.stones[k.a][k.b].getSC() == p.colour)!=p.isNot) || p.wildCard;
+					boolean colourCheck = ((b.stones[k.a][k.b].getSC() == pcolour)!=p.isNot) || p.wildCard;
 					boolean cornerCheck = p.isCorner? isCorner(k):true;
 					if(colourCheck && cornerCheck){
 						matchTries.get(counter).add(k);}

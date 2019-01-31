@@ -28,6 +28,7 @@ public class Play extends BasicGameState {
 	boolean aiStarted = false;
 	boolean turnOffComputer = false;
 	static boolean heuristic = true;
+	static boolean iterativeDeepening = false;
 
 
 	public Play(int state ,int gcsize) {
@@ -64,6 +65,7 @@ public class Play extends BasicGameState {
 		SlickGo.drawButton(board.boardSize ,board.TileSize +300,50,50,"-", g,SlickGo.regionChecker(board.boardSize ,board.TileSize +300,50,50,gc));
 		SlickGo.drawButton(board.boardSize+60 ,board.TileSize +300,50,50,"+", g,SlickGo.regionChecker(board.boardSize+60 ,board.TileSize +300,50,50,gc));
 		SlickGo.drawButton(board.boardSize+120 ,board.TileSize +300,50,50,Integer.toString(MoveFinder.cutoff), g,false);
+		SlickGo.drawButton(board.boardSize+180 ,board.TileSize +300,50,50,"ID", g ,iterativeDeepening,Color.green);
 		
 		SlickGo.drawButton(board.boardSize ,board.TileSize +440,200,50,"AI " +(turnOffComputer?"Disabled":"Enabled"), g ,!turnOffComputer,Color.green);
 		SlickGo.drawButton(board.boardSize +220,board.TileSize +440,200,50,"Heuristics " +(!heuristic?"Off":"On"), g ,heuristic,Color.green);
@@ -111,6 +113,8 @@ public class Play extends BasicGameState {
 
 			if (SlickGo.regionChecker(board.boardSize,board.TileSize +300,50,50,gc)&& MoveFinder.cutoff >1) MoveFinder.cutoff--;
 			if (SlickGo.regionChecker(board.boardSize+60 ,board.TileSize +300,50,50,gc)) MoveFinder.cutoff++;
+			if (SlickGo.regionChecker(board.boardSize+180,board.TileSize +300,50,50,gc)) iterativeDeepening = !iterativeDeepening;
+
 			
 			//Place Stone
 			if (SlickGo.withinBounds(bx,by) && !aiStarted && !gameOver) {
@@ -163,10 +167,18 @@ public class Play extends BasicGameState {
 			//Stop AI
 			if (SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +500,200,50,gc) && aiStarted) {
 				if (k != null)k.exit = true;
-				aiStarted = false;
+				try {t1.join();} catch (InterruptedException e) {e.printStackTrace();}
+				
+				if(iterativeDeepening) {
+					aiStarted = false;
+		        	if (k.choice != null) board.takeTurn(k.choice.a,k.choice.b , false,false);
+		        	else winMsg= "AI says " + board.placing.getEC()+" Wins";
+		        	afterMove();
+				}
+	        	gameMsg= "Ai Stopped";
+				
 				t1 =null;
 				k = null;
-				gameMsg= "Ai Stopped";
 			}
 			
 			//Load
@@ -215,9 +227,9 @@ public class Play extends BasicGameState {
 	
 	
 	public void afterMove() {
-		   ArrayList<Tuple> liveList = MoveFinder.keyStoneRemaining(board,board.keystones);
+		   ArrayList<Tuple> liveList = MoveFinder.liveKeys(board,board.keystones);
 	        
-	        liveList = MoveFinder.keyStoneRemaining(board,board.keystones);
+	        liveList = MoveFinder.liveKeys(board,board.keystones);
 		    if ((liveList.isEmpty() && !board.capToWin) || (board.validMoves.isEmpty() &&board.capToWin && board.turn != MoveFinder.keystonecolour)) {
 		    	winMsg= (board.blackFirst?"Black":"White") + " Lost";
 		    	//gameOver=true;
@@ -232,7 +244,7 @@ public class Play extends BasicGameState {
 	}
 	
 	public void makeComputerMove() {
-		ArrayList<Tuple> liveList = MoveFinder.keyStoneRemaining(board,board.keystones);
+		ArrayList<Tuple> liveList = MoveFinder.liveKeys(board,board.keystones);
 		winMsg="";
         if (!liveList.isEmpty()) {
         	MoveFinder.editormode=false;

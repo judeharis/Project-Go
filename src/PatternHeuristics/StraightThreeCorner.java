@@ -7,18 +7,19 @@ import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
-public class EyeCorner {
 
-
-	static ArrayList<Pattern> eyeCornerPattern = Pattern.sToPv2("xd#lx");
+public class StraightThreeCorner {
 	
-	public static int evaluate(ArrayList<Tuple> sstring,Evaluator e) {
+	static ArrayList<Pattern> straightThreeCornerPattern = Pattern.sToPv2("xldxdxdxr#");
+
+	public static int evaluate(ArrayList<Tuple> sstring, Evaluator e) {
 		int retval = 0;
 		PatternSearcher ps = new PatternSearcher(e.cB,e.kscolour);
 		
-
-		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, eyeCornerPattern,e.kscolour);
 		
+
+		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, straightThreeCornerPattern,e.kscolour);
+
 		if(!pMatches.isEmpty()) {
 			int counter=0;
 			for(ArrayList<Tuple> tlist: pMatches) {
@@ -27,29 +28,28 @@ public class EyeCorner {
 					UDLR side = ps.dirNumToDir(counter);
 					UDLR l = side.diag(!diagSide);
 					Tuple TL = tlist.get(0).side(l);
-					Tuple C = tlist.get(0).side(side);
-					counter++;
-					
-					
+					Tuple S0 = tlist.get(0).side(side);
+					Tuple S1 = S0.side(side);
+					Tuple S2 = S1.side(side);
+					counter++;		
 
-
-					if(e.isTheres(C) || e.isEnemies(C)  ) continue;
-					String s = States.arrayToString(e,TL,C);
-					if("AN".equals(s)){retval+=100;continue;}
 
 					
-
-
-				}
-
-			}
+					if (e.isThere(S0) || e.isThere(S2))continue;
+					if (e.isTheres(S1))retval +=700;
+					if (e.isTheres(TL))retval +=300;
 			
+				}
+			}
 		}
+		
+		
 
 		
+		
 		return retval;
-
 	}
+
 
 	
 	

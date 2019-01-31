@@ -1,5 +1,6 @@
 package Go.SlickGo;
 
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -93,6 +94,7 @@ public class SlickGo extends StateBasedGame {
     public static void loadFile(Board board , boolean editormode) {
     	
     	final JFileChooser fc = new JFileChooser();
+        fc.setPreferredSize(new Dimension(800,500));
         File workingDirectory = new File(System.getProperty("user.dir")+"\\Computer Boards");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", "txt", "text");
         fc.setFileFilter(filter);
@@ -181,7 +183,7 @@ public class SlickGo extends StateBasedGame {
 
         final JFileChooser fc = new JFileChooser();
 
-        
+        fc.setPreferredSize(new Dimension(800,500));
         File workingDirectory = new File(System.getProperty("user.dir")+"\\Computer Boards");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", "txt", "text");
         fc.setFileFilter(filter);

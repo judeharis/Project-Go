@@ -18,6 +18,7 @@ public class VariationFinder {
 	public static String progstring = "";
 	public static int tk = 0;
 	public static int repeated = 1;
+	public ArrayList<Tuple> group;
 	int count = 0;
 
 	VariationFinder(Board board ) {
@@ -61,10 +62,6 @@ public class VariationFinder {
 		Board clone =  Board.cloneBoard(board);
 
 		ArrayList<Tuple> validMoves = clone.getAllValidMoves();
-		Evaluator e1 = new Evaluator(clone,clone);
-		if(e1.isThere(new Tuple(8,0)) || e1.isThere(new Tuple(10,0)) || e1.isThere(new Tuple(9,1))) {
-			return;
-		}
 		clone.placing = clone.placing.getEC();
 		clone.turn = clone.turn.getEC();
 		String cstring = clone.boardToString();
@@ -76,6 +73,7 @@ public class VariationFinder {
 		clone.placing = clone.placing.getEC();
 		clone.turn = clone.turn.getEC();
 		validMoves = clone.getAllValidMoves();
+
 		for (Tuple t : validMoves) {
 			Board b = Board.cloneBoard(clone);
 			b.takeTurn(t.a,t.b,false,true); 
@@ -92,11 +90,8 @@ public class VariationFinder {
 		board.boardString =  board.boardToString();
 		skip=true;
 		LearningValues.initalboard=true;
-		Evaluator e1 = new Evaluator(board,board);
-		if(e1.isThere(new Tuple(8,13)) || e1.isThere(new Tuple(10,13)) || e1.isThere(new Tuple(9,14))) {
-			return;
-		}
-		e1.evaluateCurrentBoard(true);
+		Evaluator e1 = new Evaluator(board);
+		LearningValues.evaluate(group,e1,0);
 		if(!skip) {
 	        if(!searched.contains(board.boardString)) searched.add(board.boardString);
 	        else return;
@@ -125,11 +120,11 @@ public class VariationFinder {
 	    String nfirst = "";
 	    String afirst = "";
 	    
-//	    String q = "States[] k;\nif (e.isThere(TL)) {";
+
 	    String q = "if (e.isThere(TL)) {";
 	    String w = "}else if(e.isEnemy(TL)){";
 	    String e = "}else {";
-	    List<Integer> possibleResults = List.of(0,100,200,1000,1500);
+	    List<Integer> possibleResults = List.of(0,100,200,1000,1500,2000);
 	    ArrayList<String> allStates= new ArrayList<String>();
 		for(String s :searched) {
 			Board clone = Board.cloneBoard(board);
@@ -163,9 +158,8 @@ public class VariationFinder {
         		print("nope");}
         	
         	result+=mf.result;
+        	if(repeated >1) print("repeated");
         	if(!skip) print(states + ": "+result/2);
-        	if(repeated >1) {
-        		print("repeated");}
         	if(!skip) {
         		if(!states.isEmpty() && (((result/2)-tk)!=0)) {
         			if(allStates.contains(states)) {

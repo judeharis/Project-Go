@@ -21,8 +21,8 @@ public enum States {
 	static public ArrayList<States> addStates(Evaluator e,Tuple...ts) {
 		ArrayList<States> states = new ArrayList<States>();
 		for (Tuple t :ts){
-			if (e.isThere(t)) states.add(A);
-			else if (e.isEnemy(t))  states.add(E);
+			if (e.isTheres(t)) states.add(A);
+			else if (e.isEnemies(t))  states.add(E);
 			else states.add(N);
 		}
 		return states;
@@ -31,8 +31,8 @@ public enum States {
 	static public String arrayToString(Evaluator e,Tuple...ts) {
 		String states = "";
 		for (Tuple t :ts){
-			if (e.isThere(t)) states+="A";
-			else if (e.isEnemy(t))  states+="E";
+			if (e.isTheres(t)) states+="A";
+			else if (e.isEnemies(t))  states+="E";
 			else  states+="N";
 		}
 		return states;

@@ -4,66 +4,42 @@ import java.util.ArrayList;
 
 public class Evaluator {
 	public Board cB;
-	Board oB;
-	Tuple oBCounts;
-	String vB = "";
-	String hB = "";
 	public Stone kscolour = MoveFinder.keystonecolour.getSC();
 	public Stone enemycolour = kscolour.getEC();
-
-	public Evaluator(Board cB, Board oB, Tuple oBCounts) {
-		this.cB = cB;
-		this.oB = oB;
-		this.oBCounts = oBCounts;
-	}
-	
-	public Evaluator(Board cB, Board oB ) {
-		this.cB = cB;
-		this.oB = oB;
-	}
+	ArrayList<Tuple> checkedPoints = new ArrayList<Tuple>();
 
 	public Evaluator(Board cB) {
 		this.cB = cB;
-		this.oB = null;
-		this.oBCounts = null;
 	}
 
 
 
 
 
-	public  int evaluateCurrentBoard() {
-		int retval = 0;
-
-		Grouping grouping = new Grouping(cB,false,false,false,false);
-		grouping.allocateGrouping();
-		
-		if (cB.ko != null)retval += 50;
-		HeuristicsRunner hrunner= new HeuristicsRunner(cB , this);
-		for (Tuple t : cB.keystones) {
-			ArrayList<Tuple> keystring = cB.checkForStrings(t.a, t.b, kscolour.getSStrings(cB));
-			Group keygroup = grouping.inGroup(t, kscolour);
-			if (!keystring.isEmpty()) {
-//				if (cB.checkStringSafetyv2(keystring, kscolour))return Integer.MAX_VALUE;
-				ArrayList<Tuple> cBneedList = cB.getNeedList(keystring, kscolour.getEC(),true);
-				for (Tuple k : cBneedList)if (cB.stones[k.a][k.b] == Stone.INVALID)return Integer.MAX_VALUE;
-				retval += hrunner.runKeyStringHeuristics(keygroup,keystring);
-			}
-		}
-		
-		
-		for (ArrayList<Tuple>  slist : kscolour.getSStrings(cB)) {
-			for (Tuple  t : slist) retval += hrunner.runStoneHeuristics(t);	
-		}
-		
-
-//		grouping.allocateControl();
-//		if(kscolour==Stone.BLACK)retval+= grouping.totalb;
-//		else retval+= grouping.totalw;
-		
-
-		return retval;
-	}
+//	public  int evaluateCurrentBoard() {
+//		int retval = 0;
+//
+//		Grouping grouping = new Grouping(cB,false,false,false,false);
+//		grouping.allocateGrouping();
+//
+//		HeuristicsRunner hrunner= new HeuristicsRunner(cB , this);
+//		for (Tuple t : cB.keystones) {
+//			ArrayList<Tuple> keystring = cB.checkForStrings(t.a, t.b, kscolour.getSStrings(cB));
+//			Group keygroup = grouping.inGroup(t, kscolour);
+//			if (!keystring.isEmpty()) {
+//				ArrayList<Tuple> cBneedList = cB.getNeedList(keystring, kscolour.getEC(),true);
+//				for (Tuple k : cBneedList)if (cB.stones[k.a][k.b] == Stone.INVALID)return Integer.MAX_VALUE;
+//				retval += hrunner.runKeyStringHeuristics(keygroup,keystring);
+//			}
+//		}
+//		
+//		
+//		for (ArrayList<Tuple>  slist : kscolour.getSStrings(cB)) {
+//			for (Tuple  t : slist) retval += hrunner.runStoneHeuristics(t);	
+//		}
+//		
+//		return retval;
+//	}
 	
 	public  int evaluateCurrentBoard(boolean editormode) {
 		int retval = 0;
@@ -71,23 +47,21 @@ public class Evaluator {
 		Grouping grouping = new Grouping(cB,false,false,false,false);
 		grouping.allocateGrouping();
 		
-//		if (cB.ko != null)retval += 50;
 		HeuristicsRunner hrunner= new HeuristicsRunner(cB , this);
 		
 		if (editormode) {
 			for (Group g : grouping.allGroups) {
 				if(g.colour == kscolour)
-				retval += hrunner.runKeyStringHeuristics(g,g.group);
+				retval += hrunner.runKeyStringHeuristics(g);
 			}
 		}else {
 			for (Tuple t : cB.keystones) {
-				ArrayList<Tuple> keystring = cB.checkForStrings(t.a, t.b, kscolour.getSStrings(cB));
+				ArrayList<Tuple> keystring = cB.checkForStrings(t, kscolour);
 				Group keygroup = grouping.inGroup(t, kscolour);
 				if (!keystring.isEmpty()) {
-//					if (cB.checkStringSafetyv2(keystring, kscolour))return Integer.MAX_VALUE;
 					ArrayList<Tuple> cBneedList = cB.getNeedList(keystring, kscolour.getEC(),true);
 					for (Tuple k : cBneedList)if (cB.stones[k.a][k.b] == Stone.INVALID)return Integer.MAX_VALUE;
-					retval += hrunner.runKeyStringHeuristics(keygroup,keystring);
+					retval += hrunner.runKeyStringHeuristics(keygroup);
 				}
 			}
 			
@@ -102,7 +76,22 @@ public class Evaluator {
 	}
 
 
-
+	public ArrayList<Tuple> moveGen(ArrayList<Tuple> goodMoves) {
+		Grouping grouping = new Grouping(cB,false,false,false,false);
+		grouping.allocateGrouping();
+		ArrayList<Tuple> cutDownList = new ArrayList<Tuple>();
+		for (Group g : grouping.allGroups) {
+			if(g.colour == kscolour) {
+				cutDownList.addAll(g.r2);
+				cutDownList.addAll(g.r1);
+			}
+				
+		}
+		cutDownList.retainAll(goodMoves);
+		///this is wrong
+		return goodMoves;
+		
+	}
 
 
 
@@ -181,27 +170,39 @@ public class Evaluator {
 
 	public boolean isThere(Tuple t){
 		if(!cB.withinBounds(t)) return false;
+		checkedPoints.add(t);
 		return cB.stones[t.a][t.b].getSC() == kscolour;
 	}
 
 	public boolean isEnemy(Tuple t) {
 		if(!cB.withinBounds(t)) return false;
+		checkedPoints.add(t);
 		return cB.stones[t.a][t.b].getSC() == kscolour.getEC();
 	}
 
 
 	public boolean isEnemies(Tuple...ts) {
-		for (Tuple t :ts){
-			if (!isEnemy(t)) return false;
-		}
-		return true;
+		boolean ret = true;
+		for (Tuple t :ts)if(!isEnemy(t))ret=false;
+		return ret;
 	}
 
 	public boolean isTheres(Tuple...ts) {
-		for (Tuple t :ts){
-			if (!isThere(t)) return false;
-		}
-		return true;
+		boolean ret = true;
+		for (Tuple t :ts)if(!isThere(t))ret=false;
+		return ret;
+	}
+	
+	public int countThere(Tuple...ts) {
+		int truecount=0;
+		for (Tuple t :ts)if(isThere(t))truecount++;
+		return truecount;
+	}
+	
+	public int countEnemy(Tuple...ts) {
+		int truecount=0;
+		for (Tuple t :ts)if(isEnemy(t))truecount++;
+		return truecount;
 	}
 	
 	public boolean isInvalid(Tuple t) {

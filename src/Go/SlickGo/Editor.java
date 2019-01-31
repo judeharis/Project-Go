@@ -115,26 +115,29 @@ public class Editor extends BasicGameState {
 		
 		if (input.isMousePressed(1)) {
 			if (SlickGo.withinBounds(bx,by)) {
+		    	long start = System.nanoTime();
 				print(bx+","+by);
 				Stone colour = board.stones[bx][by].getSC();
 				if(colour.isStone()) {
 					ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
 					print(board.checkStringSafetyv2(sstring,colour));
 				}
-//				grouping = new Grouping(board,grouping.draw,grouping.drawW,grouping.drawB,grouping.drawC);
-//				grouping.allocateGrouping();
+				grouping = new Grouping(board,grouping.draw,grouping.drawW,grouping.drawB,grouping.drawC);
+				grouping.allocateGrouping();
+
 //				grouping.stonesControl= grouping.doubleIntegerArray();
 //				grouping.allocateControl();
-//				print(grouping.stonesControl[bx][by]);
+//				print(grouping.allGroups);
 				
 				Board clone =  Board.cloneBoard(board);
 				VariationFinder vf = new VariationFinder(clone);
-//				VariationFinder.searched.clear();
+				if(!grouping.allGroups.isEmpty()) vf.group = grouping.allGroups.get(0).group;
+				VariationFinder.searched.clear();
 		    	
-				MoveFinder.bad.clear();
-				MoveFinder.good.clear();
+				MoveFinder.lbad.clear();
+				MoveFinder.lgood.clear();
 
-		    	long start = System.nanoTime();
+
 				vf.getAllVariationv2(clone);
 				print(vf.count);
 				print(VariationFinder.searched.size());
@@ -143,8 +146,8 @@ public class Editor extends BasicGameState {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				MoveFinder.bad.clear();
-				MoveFinder.good.clear();
+				MoveFinder.lbad.clear();
+				MoveFinder.lgood.clear();
 		    	long end = System.nanoTime();
 		    	print((end-start)/1000000 + " ms");
 
@@ -155,6 +158,11 @@ public class Editor extends BasicGameState {
 		if (input.isMousePressed(2)) {
 			if (SlickGo.withinBounds(bx,by)) {
 				print(bx+","+by);
+				Stone colour = board.stones[bx][by].getSC();
+				if(colour.isStone()) {
+					ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
+					print(board.checkStringSafetyv2(sstring,colour));
+				}
 			}
 			
 			
@@ -163,7 +171,7 @@ public class Editor extends BasicGameState {
 		
 
 		
-		pattern = Pattern.sToPv2("xrxrxrdxdlxdlxluxlux", Stone.BLACK);
+		pattern = Pattern.sToPv2("xldxldxdxrrX");
 		if (input.isMousePressed(0)) {
 			if (SlickGo.withinBounds(bx,by)) {		
 				board.takeTurn(bx,by , true,false);

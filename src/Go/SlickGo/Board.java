@@ -279,10 +279,23 @@ public class Board{
 //		
 //		return false;
 //	}
+    
+    
+	
+	public void iTov() {
+        for(int i=0; i<stones.length; i++) {
+            for(int j=0; j<stones[i].length; j++) {
+            	if(stones[i][j]==Stone.INVALID) stones[i][j]=Stone.VALID;
+            }
+        } 
+	}
+    
+    
 	
 	public boolean checkStringSafetyv2(ArrayList<Tuple> list,Stone colour) {
 		
 		Board checkBoard = cloneBoard(this);
+		checkBoard.iTov();
 		Board newBoard;
 		boolean noDead = false;
 		while(!noDead) {
@@ -439,7 +452,7 @@ public class Board{
 	            	Tuple t = new Tuple(i,j);
 	            	Stone colour = stones[i][j].getSC();
 	            	ArrayList<ArrayList<Tuple>> stoneStrings = colour.getSStrings(this);
-	            	ArrayList<Tuple> sstring = inString(t,colour);
+	            	ArrayList<Tuple> sstring = checkForStrings(t,colour);
 	            	if(sstring.isEmpty()) {
 	            		findStringStones(t,sstring,colour);
 	            		stoneStrings.add(sstring);
@@ -456,13 +469,7 @@ public class Board{
 		
 	}
 	
-	public ArrayList<Tuple> inString(Tuple t, Stone colour) {
-		ArrayList<ArrayList<Tuple>> stoneStrings = colour.getSStrings(this);
-        for (ArrayList<Tuple> sstring : stoneStrings ) if (sstring.contains(t)) return sstring;
-        return new ArrayList<Tuple>();
-	}
-	
-    
+
     public ArrayList<Tuple> getLibs(ArrayList<Tuple> sstring,boolean unique) {
 
         ArrayList<Tuple> capstring = new ArrayList<Tuple>();
@@ -514,6 +521,14 @@ public class Board{
         return   new ArrayList<Tuple>();
     }
     
+	public ArrayList<Tuple> checkForStrings(Tuple t, Stone colour) {
+		ArrayList<ArrayList<Tuple>> stoneStrings = colour.getSStrings(this);
+        for (ArrayList<Tuple> sstring : stoneStrings ) if (sstring.contains(t)) return tupleArrayClone(sstring);
+        return new ArrayList<Tuple>();
+	}
+	
+    
+	
 	public ArrayList<ArrayList<Tuple>> getConnected(ArrayList<Tuple> sstring){
 		ArrayList<ArrayList<Tuple>> ret = new ArrayList<ArrayList<Tuple>>();
 		ArrayList<Tuple> nsstring = tupleArrayClone(sstring);
@@ -843,7 +858,7 @@ public class Board{
         }
         
         if(!editormode) {
-	        for (Tuple t :validMoves){
+	        for (Tuple t :this.getAllValidMoves()){
 	        	drawoval(g,(t.a+1)*TileSize,(t.b+1)*TileSize,new Color(0f,1f,0f,.0f ),false);
 	        }
     	}

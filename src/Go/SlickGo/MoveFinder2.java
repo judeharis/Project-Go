@@ -65,9 +65,9 @@ public class MoveFinder2  implements Runnable{
 //		}
 
 		if (Play.heuristic && depth>4) {
-			Evaluator evaluator = new Evaluator(currentBoard,originalBoard,obCounts);
+			Evaluator evaluator = new Evaluator(currentBoard);
 
-			int retval =evaluator.evaluateCurrentBoard();
+			int retval =evaluator.evaluateCurrentBoard(false);
 //			print("eval: "+retval);
 //			print(soFar);
 			return retval;
@@ -185,8 +185,8 @@ public class MoveFinder2  implements Runnable{
 			print("Ai Started");
 
 			if (Play.heuristic) {
-				Evaluator evaluator = new Evaluator(originalBoard,originalBoard,obCounts);
-				print("current board :" +evaluator.evaluateCurrentBoard());
+				Evaluator evaluator = new Evaluator(originalBoard);
+				print("current board :" +evaluator.evaluateCurrentBoard(false));
 			}
 			
 			int i =1000000;
