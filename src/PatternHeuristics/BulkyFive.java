@@ -104,12 +104,12 @@ public class BulkyFive {
 
 
 
-					retval +=200;
+					retval +=400;
 					float c1 = States.borderSafe(e, 2, TL,TR,RT,BR,BL);
 					float c2 = States.borderSafe(e, 1, S1);
 					float ccap = States.minFinder(c1,c2);
-					if(ccap>0.5) retval+=200;
-					else if(ccap<0.5) retval-=200;
+					if(ccap>0.5) retval+=400;
+					else if(ccap<0.5) retval-=400;
 					
 				}
 				

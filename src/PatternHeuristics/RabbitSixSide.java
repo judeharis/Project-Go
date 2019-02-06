@@ -50,9 +50,46 @@ public class RabbitSixSide {
 					
 					if (e.isThere(A1) || e.isThere(S0) || e.isThere(S2) || e.isThere(B0) || e.isThere(B1))continue;
 					
+					int patval =0;
 					
-					if(e.isTheres(S1)) retval+=1000;
-					if(e.countThere(TL,TR,LT,RT,RB) > 4) retval+=3000;
+					patval +=500;
+					float a1 = States.borderSafe(e, 2 ,S1,S0);
+					float a2 = States.borderSafe(e, 2 ,S1,B1);
+					float a3 = States.borderSafe(e, 4, TL,LT,S0,A1);
+					float a4 = States.borderSafe(e, 4, TR,RT,S2,A1);
+					float a5 = States.borderSafe(e, 3, B1,S2,RB);
+
+					if(!e.isEnemies(S1)) {a1+=0.5;a2+=0.5;};
+					
+					float acap = States.minFinder(a1,a2,a3,a4,a5);
+					if(States.oneCheck(a1,a2) || States.oneCheck(a1,a3)) acap = States.minFinder(acap,0.5f);
+					else if(States.oneCheck(a2,a5) || States.oneCheck(a3,a4)) acap = States.minFinder(acap,0.5f);
+					else if(States.oneCheck(a4,a5)) acap = States.minFinder(acap,0.5f);
+					
+					if(acap>0.5) patval+=500;
+					else if(acap<0.5) patval-=500;
+
+					
+					patval +=400;
+					float b1 = States.borderSafe(e, 1, S1);
+					float b2 = States.borderSafe(e, 2, TL,TR);
+					float b3 = States.borderSafe(e, 2, RT,RB);
+					float bcap = States.minFinder(b1,b2,b3);
+					if(bcap>0.5) patval+=400;
+					else if(bcap<0.5) patval-=400;
+					
+					
+					
+					patval +=200;
+					float c1 = States.borderSafe(e, 1, S1);
+					float c2 = States.borderSafe(e, 1, TL,TR,LT,RT,RB);
+					float ccap = States.minFinder(c1,c2);
+					if(ccap>0.5) patval+=200;
+					else if(ccap<0.5) patval-=200;
+					
+
+					retval+=patval;
+
 
 				}
 				
@@ -90,9 +127,50 @@ public class RabbitSixSide {
 					
 					if (e.isThere(A1) || e.isThere(S0) || e.isThere(S2) || e.isThere(B0) || e.isThere(B1))continue;
 					
-					if(e.isTheres(S1)) retval+=1500;
-					if(e.countThere(TL,TR,RT,BL,BR) > 4) retval+=2500;
+					int patval =0;
 					
+					patval +=500;
+					float a1 = States.borderSafe(e, 2 ,S1,S0);
+					float a2 = States.borderSafe(e, 2 ,S1,B1);
+					float a3 = States.borderSafe(e, 3, BL,S0,A1);
+					float a4 = States.borderSafe(e, 3, A1,S2,BR);
+					float a5 = States.borderSafe(e, 4, TR,B1,S2,RT);
+
+					
+					if(!e.isEnemies(S1)) {a1+=0.5;a2+=0.5;};
+					float acap = States.minFinder(a1,a2,a3,a4,a5);
+					if(States.oneCheck(a1,a2) || States.oneCheck(a1,a3)) acap = States.minFinder(acap,0.5f);
+					else if(States.oneCheck(a2,a5) || States.oneCheck(a3,a4)) acap = States.minFinder(acap,0.5f);
+					else if(States.oneCheck(a4,a5)) acap = States.minFinder(acap,0.5f);
+					
+					if(acap>0.5) patval+=500;
+					else if(acap<0.5) patval-=500;
+
+					
+					
+					
+					patval +=400;
+					float b1 = States.borderSafe(e, 1, S1);
+					float b2 = States.borderSafe(e, 2, RT,BR);
+					float b3 = States.borderSafe(e, 2, BL,TL,TR);
+					float bcap = States.minFinder(b1,b2,b3);
+					if(bcap>0.5) patval+=400;
+					else if(bcap<0.5) patval-=400;
+				
+					
+					patval +=200;
+					float c1 = States.borderSafe(e, 1, S1);
+					float c2 = States.borderSafe(e, 1, TL,BL);
+					float c3 = States.borderSafe(e, 2, TL,TR,BL,BR,RT);
+					
+					if(States.numCheck(0.5, c2,c3)) c3+=0.5;
+					
+					float ccap = States.minFinder(c1,c2,c3);
+					if(ccap>0.5) patval+=200;
+					else if(ccap<0.5) patval-=200;
+					
+
+					retval+=patval;
 
 
 

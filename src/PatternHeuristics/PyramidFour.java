@@ -53,15 +53,15 @@ public class PyramidFour {
 //					String s = States.arrayToString(e,A1,A2,B1,B2,C1,C2,S0,S1,S2,D0);
 					
 					if(e.isThere(S0)||e.isThere(S2)||e.isThere(D0)) continue;
-					retval +=600;
+					retval +=700;
 					float a = States.borderSafe(e, 2, A1,A2);
 					float b = States.borderSafe(e, 2, B1,B2);
 					float c = States.borderSafe(e, 2, C1,C2);
 					float d = States.borderSafe(e, 1, S1);
 					
 					float ncap = States.minFinder(a,b,c,d);
-					if(ncap>0.5) retval+=600;
-					else if(ncap<0.5) retval-=600;
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 
 				}
 				
@@ -69,34 +69,6 @@ public class PyramidFour {
 			
 		}
 		
-//		pattern = Pattern.sToPv2("xrxrxrxrxdxdxlxdxlxlxuxlxux", e.kscolour);
-//		pMatches =ps.allStringMatch(sstring, pattern);
-//		
-//		if(!pMatches.isEmpty()) {
-//			int counter=0;
-//			for(ArrayList<Tuple> tlist: pMatches) {
-//				if(!tlist.isEmpty()) {
-//					boolean diagSide= ps.dirSideToBool(counter);
-//					UDLR side = ps.dirNumToDir(counter);
-//					counter++;
-//					
-//					UDLR r = side.diag(diagSide);
-//					Tuple S0 = tlist.get(0).side2(side,r);
-//					Tuple S1 = S0.side(r);
-//					Tuple S2 = S1.side(r);
-//					Tuple D0 = S1.side(side);
-//
-//
-//					if(e.isThere(S0)||e.isThere(S2)||e.isThere(D0)) continue;
-//					
-//					retval+=500;
-//					if(e.isEnemy(S1)) retval-=500;
-//					if(e.isThere(S1)) retval+=5000;
-//				}
-//				
-//			}
-//			
-//		}
 
 		
 		return retval;

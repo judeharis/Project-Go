@@ -179,8 +179,11 @@ public class IterativeDeepening  implements Runnable{
 
 	
 	private ArrayList<Tuple> moveGen(Board cB, ArrayList<Tuple> goodMoves) {
+		if(!MoveFinder.breadthcut)return goodMoves;
 		Evaluator evaluator = new Evaluator(cB);
-		ArrayList<Tuple> newMoves = evaluator.moveGen(goodMoves);
+		evaluator.evaluateCurrentBoard(false);
+		ArrayList<Tuple> newMoves = evaluator.moveGen(goodMoves,MoveFinder.breathcutoff);
+
 		return newMoves;
 	}
 	

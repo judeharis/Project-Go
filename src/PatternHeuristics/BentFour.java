@@ -71,7 +71,7 @@ public class BentFour {
 
 				
 					if (e.isThere(S0) || e.isThere(S3))continue;
-					retval +=600;
+					retval +=700;
 					float b1 = States.borderSafe(e, 2, TL,LB);
 					float b2 = States.borderSafe(e, 2, BL,BR);
 					float b3 = States.borderSafe(e, 2, S1,S2);
@@ -84,8 +84,8 @@ public class BentFour {
 					if(States.oneCheck(b2,b4) || States.oneCheck(b2,b5) || States.oneCheck(b2,b3)) ncap = States.minFinder(ncap,0.5f);
 					if(States.oneCheck(b3,b4) || States.oneCheck(b3,b5)) ncap = States.minFinder(ncap,0.5f);
 
-					if(ncap>0.5) retval+=600;
-					else if(ncap<0.5) retval-=600;
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 
 
 

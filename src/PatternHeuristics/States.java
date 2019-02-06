@@ -46,15 +46,8 @@ public enum States {
 			else if(e.isThere(t));
 			else nothingcount++;
 		}
-
-
 		enemycount +=(nothingcount/2);
-
-
 		if(enemycount+nothingcount <badlimit)return badlimit;
-
-		
-		
 		return badlimit - enemycount ;
 	}
 

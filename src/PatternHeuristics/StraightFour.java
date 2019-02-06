@@ -40,13 +40,13 @@ public class StraightFour {
 					
 					
 					if (e.isThere(S0) || e.isThere(S3))continue;
-					retval +=600;
+					retval +=700;
 					float a = States.borderSafe(e, 2, TL,BL);
 					float b = States.borderSafe(e, 2, TR,BR);
 					float c = States.borderSafe(e, 2, S1,S2);
 					float ncap = States.minFinder(a,b,c);
-					if(ncap>0.5) retval+=600;
-					else if(ncap<0.5) retval-=600;
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 					
 
 

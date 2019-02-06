@@ -126,7 +126,7 @@ public class BulkyFiveSide {
 					else if(ccap<0.5) retval-=500;
 
 
-					retval +=100;
+					retval +=200;
 					float b1 = States.borderSafe(e, 3, BL,D1,D0);
 					float b2 = States.borderSafe(e, 4, TL,TR,D0,S0);
 					float b3 = States.borderSafe(e, 2, S1,S0);
@@ -138,17 +138,17 @@ public class BulkyFiveSide {
 					else if(States.oneCheck(b1,b5) || States.oneCheck(b2,b3)) bcap = States.minFinder(bcap,0.5f);
 					else if(States.oneCheck(b3,b4) || States.oneCheck(b4,b5)) bcap = States.minFinder(bcap,0.5f);
 					
-					if(bcap>0.5) retval+=100;
-					else if(bcap<0.5) retval-=100;
+					if(bcap>0.5) retval+=200;
+					else if(bcap<0.5) retval-=200;
 
 
-					retval +=100;
+					retval +=200;
 					float a1 = States.borderSafe(e, 1, TL,TR,BL);
 					float a2 = States.borderSafe(e, 1, S1);
 
 					float acap = States.minFinder(a1,a2);
-					if(acap>0.5) retval+=100;
-					else if(acap<0.5) retval-=100;
+					if(acap>0.5) retval+=200;
+					else if(acap<0.5) retval-=200;
 					
 
 
@@ -214,12 +214,12 @@ public class BulkyFiveSide {
 					else if(ccap<0.5) retval-=500;
 
 
-					retval +=200;
+					retval +=400;
 					float a1 = States.borderSafe(e, 1, TL,TR,BR);
 					float a2 = States.borderSafe(e, 1, S1);
 					float acap = States.minFinder(a1,a2);
-					if(acap>0.5) retval+=200;
-					else if(acap<0.5) retval-=200;
+					if(acap>0.5) retval+=400;
+					else if(acap<0.5) retval-=400;
 			
 
 				}
@@ -281,12 +281,12 @@ public class BulkyFiveSide {
 					else if(ccap<0.5) retval-=500;
 
 
-					retval +=200;
+					retval +=400;
 					float a1 = States.borderSafe(e, 1, TL,TR,RT);
 					float a2 = States.borderSafe(e, 1, S1);
 					float acap = States.minFinder(a1,a2);
-					if(acap>0.5) retval+=200;
-					else if(acap<0.5) retval-=200;
+					if(acap>0.5) retval+=400;
+					else if(acap<0.5) retval-=400;
 			
 			
 

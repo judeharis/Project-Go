@@ -59,13 +59,13 @@ public class StraightFive {
 //					}
 					
 					if (e.isThere(S0) || e.isThere(S4))continue;
-					retval +=700;
+					retval +=900;
 					float a = States.borderSafe(e, 2, TL,BL);
 					float b = States.borderSafe(e, 2, TR,BR);
 					float c = States.borderSafe(e, 3, S1,S2,S3);
 					float ncap = States.minFinder(a,b,c);
-					if(ncap>0.5) retval+=700;
-					else if(ncap<0.5) retval-=700;
+					if(ncap>0.5) retval+=900;
+					else if(ncap<0.5) retval-=900;
 					
 					
 

@@ -3,7 +3,7 @@ package PatternHeuristics;
 import java.util.ArrayList;
 
 import Go.SlickGo.Evaluator;
-import Go.SlickGo.MoveFinder;
+//import Go.SlickGo.MoveFinder;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
@@ -56,7 +56,7 @@ public class TrainingPattern {
 					if(!e.isTheres(S2)) continue;
 					
 
-					String s = States.arrayToString(e,A1,A2,B1,B1,C1,C2,D1,D2,S0,S1,S2,S3,S4);
+					//String s = States.arrayToString(e,A1,A2,B1,B1,C1,C2,D1,D2,S0,S1,S2,S3,S4);
 					addToRet+=2000;
 	
 

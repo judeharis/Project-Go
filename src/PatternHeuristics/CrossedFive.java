@@ -59,7 +59,7 @@ public class CrossedFive {
 					
 					
 					if (e.isThere(S0) || e.isThere(S1) || e.isThere(S3) || e.isThere(S4))continue;
-					retval +=700;
+					retval +=900;
 					float b1 = States.borderSafe(e, 2, A1,A2);
 					float b2 = States.borderSafe(e, 2, B1,B2);
 					float b3 = States.borderSafe(e, 2, C1,C2);
@@ -68,8 +68,8 @@ public class CrossedFive {
 					
 
 					float ncap = States.minFinder(b1,b2,b3,b4,b5);
-					if(ncap>0.5) retval+=700;
-					else if(ncap<0.5) retval-=700;
+					if(ncap>0.5) retval+=900;
+					else if(ncap<0.5) retval-=900;
 					
 
 					

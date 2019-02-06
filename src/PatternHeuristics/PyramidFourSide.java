@@ -44,18 +44,18 @@ public class PyramidFourSide {
 
 //					if(e.isThere(S0)||e.isThere(S2)||e.isThere(D0)) continue;
 //					if(e.isTheres(S1)) retval+=1200;
-//					if(e.isTheres(BL,BR))retval+=600;
+//					if(e.isTheres(BL,BR))retval+=700;
 //					if(e.isTheres(B1) || e.isTheres(B2))retval+=200;
 					
 					if(e.isThere(S0)||e.isThere(S2)||e.isThere(D0)) continue;
-					retval +=600;
+					retval +=700;
 					float a = States.borderSafe(e, 1, BL,BR);
 					float b = States.borderSafe(e, 2, B1,B2);
 					float c = States.borderSafe(e, 1, S1);
 					
 					float ncap = States.minFinder(a,b,c);
-					if(ncap>0.5) retval+=600;
-					else if(ncap<0.5) retval-=600;
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 
 				}
 				
@@ -92,14 +92,14 @@ public class PyramidFourSide {
 					
 
 					if(e.isThere(S0)||e.isThere(S2)||e.isThere(D0)) continue;
-					retval +=600;
+					retval +=700;
 					float a = States.borderSafe(e, 2, TL,BL);
 					float b = States.borderSafe(e, 2, TR,BR);
 					float c = States.borderSafe(e, 1, S1);
 					
 					float ncap = States.minFinder(a,b,c);
-					if(ncap>0.5) retval+=600;
-					else if(ncap<0.5) retval-=600;
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 
 
 
@@ -136,14 +136,14 @@ public class PyramidFourSide {
 //					if(!e.isTheres(S1)) continue;
 					
 					if(e.isThere(S0)||e.isThere(S2)||e.isThere(D0)) continue;
-					retval +=600;
+					retval +=700;
 					float a = States.borderSafe(e, 2, TL,BL);
 					float b = States.borderSafe(e, 2, B1,B2);
 					float c = States.borderSafe(e, 1, S1);
 					
 					float ncap = States.minFinder(a,b,c);
-					if(ncap>0.5) retval+=600;
-					else if(ncap<0.5) retval-=600;
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 
 
 

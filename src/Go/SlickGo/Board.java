@@ -818,13 +818,14 @@ public class Board{
         
         for(int i = 4; i<17; i+=6) {
         	g.setColor(Color.blue);
-            g.fillOval(TileSize*i - 3 ,TileSize*4 -3,6,6);
-            g.fillOval(TileSize*i - 3 ,TileSize*10 -3,6,6);
-            g.fillOval(TileSize*i - 3 ,TileSize*16 -3,6,6);
+            g.fillOval(TileSize*i - 3 ,TileSize*4 -3,7,7);
+            g.fillOval(TileSize*i - 3 ,TileSize*10 -3,7,7);
+            g.fillOval(TileSize*i - 3 ,TileSize*16 -3,7,7);
+      
 
         }
         
-        
+        g.setColor(Color.black);
         
         for(int i=0; i<stones.length; i++) {
             for(int j=0; j<stones[i].length; j++) {

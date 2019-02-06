@@ -44,7 +44,7 @@ public class TwistedFourSide {
 //					if (e.isThere(S1) || e.isThere(D1))continue;
 //					if (e.isTheres(S0,D0)){
 //						retval+=1400;
-//						if(e.isTheres(TL) || e.isTheres(TR)) retval+=600;
+//						if(e.isTheres(TL) || e.isTheres(TR)) retval+=700;
 //
 //					}else if (e.isThere(S0)){
 //						retval+=1100;
@@ -58,7 +58,7 @@ public class TwistedFourSide {
 					
 					if (e.isThere(S1) || e.isThere(D1))continue;
 					if (e.isTheres(D0,RB) || e.isTheres(S0,TL,LT))continue;
-					retval +=600;
+					retval +=700;
 					float b1 = States.borderSafe(e, 2, TL,TR);
 					float b2 = States.borderSafe(e, 2, LT,D0);
 					float b3 = States.borderSafe(e, 2, RB,S0);
@@ -69,8 +69,8 @@ public class TwistedFourSide {
 
 					
 					if(States.oneCheck(b2,b4) || States.oneCheck(b3,b4)) ncap = States.minFinder(ncap,0.5f);
-					if(ncap>0.5) retval+=600;
-					else if(ncap<0.5) retval-=600;
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 					
 				}
 				
@@ -124,7 +124,7 @@ public class TwistedFourSide {
 					
 					if (e.isThere(S1) || e.isThere(D1))continue;
 					if (e.isTheres(LT,TL,D0) || e.isTheres(RB,S0))continue;
-					retval +=600;
+					retval +=700;
 					
 					float b1 = States.borderSafe(e, 1, LT);
 					float b2 = States.borderSafe(e, 2, S0,D0);
@@ -135,8 +135,8 @@ public class TwistedFourSide {
 
 					
 					if(States.oneCheck(b2,b3) || States.oneCheck(b2,b4)) ncap = States.minFinder(ncap,0.5f);
-					if(ncap>0.5) retval+=600;
-					else if(ncap<0.5) retval-=600;
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 					
 					
 				}

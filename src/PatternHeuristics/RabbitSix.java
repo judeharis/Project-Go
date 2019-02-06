@@ -56,23 +56,50 @@ public class RabbitSix {
 					
 					
 					if (e.isThere(A1) || e.isThere(S0) || e.isThere(S2) || e.isThere(B0) || e.isThere(B1))continue;
-//					retval+=500;
-//					if(e.isEnemy(S1)) retval-=500;
-//					if(e.isThere(S1)) {
-//						
-//						int ncap=0;
-//						boolean a = (States.borderSafe(e, 2, TL,BL) == 0);
-//						boolean b = (States.borderSafe(e, 2, TR,BR) == 0);
-//						boolean dead = a || b ;
-//						ncap +=(States.borderSafe(e, 2, TL,BL) == 1)?1:0;
-//						ncap += (States.borderSafe(e, 2, TR,BR) ==1)?1:0 ;
-//		
-//
-//						if(ncap<1 && !dead) retval+=500;
-//						else if(ncap>1 && !dead) retval-=500;
-//						else if(dead) retval-=500;
-//						
-//					}
+
+					int patval =0;
+					
+					patval +=500;
+					float a1 = States.borderSafe(e, 2 ,S1,S0);
+					float a2 = States.borderSafe(e, 2 ,S1,B1);
+					float a3 = States.borderSafe(e, 4, TL,LT,S0,A1);
+					float a4 = States.borderSafe(e, 4, TR,RT,S2,A1);
+					float a5 = States.borderSafe(e, 4, B1,BR,S2,RB);
+
+					if(!e.isEnemies(S1) && a1==0.5) a1+=0.5;
+					if(!e.isEnemies(S1) && a2==0.5) a2+=0.5;
+					
+					float acap = States.minFinder(a1,a2,a3,a4,a5);
+					if(States.oneCheck(a1,a2) || States.oneCheck(a1,a3)) acap = States.minFinder(acap,0.5f);
+					else if(States.oneCheck(a2,a5) || States.oneCheck(a3,a4)) acap = States.minFinder(acap,0.5f);
+					else if(States.oneCheck(a4,a5)) acap = States.minFinder(acap,0.5f);
+					
+					if(acap>0.5) patval+=500;
+					else if(acap<0.5) patval-=500;
+
+					
+					patval +=400;
+					float b1 = States.borderSafe(e, 1, S1);
+					float b2 = States.borderSafe(e, 2, TL,TR);
+					float b3 = States.borderSafe(e, 2, RT,RB);
+					float b4 = States.borderSafe(e, 2, LT,BL,BR);
+					float bcap = States.minFinder(b1,b2,b3,b4);
+					if(bcap>0.5) patval+=400;
+					else if(bcap<0.5) patval-=400;
+					
+					
+					
+					patval +=200;
+					float c1 = States.borderSafe(e, 1, S1);
+					float c2 = States.borderSafe(e, 2, TL,TR,LT,RT,RB,BL,BR);
+					float ccap = States.minFinder(c1,c2);
+					if(ccap>0.5) patval+=200;
+					else if(ccap<0.5) patval-=200;
+					
+
+					retval+=patval;
+					
+					
 
 				}
 				

@@ -37,7 +37,7 @@ public class BulkyFiveOLD {
 					counter++;
 					
 					UDLR r = side.diag(diagSide);
-					UDLR l = side.diag(!diagSide);
+//					UDLR l = side.diag(!diagSide);
 					
 					Tuple B0 = tlist.get(0).side(side);
 					Tuple B1 = B0.side(r);

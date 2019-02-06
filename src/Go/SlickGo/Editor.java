@@ -115,7 +115,7 @@ public class Editor extends BasicGameState {
 		
 		if (input.isMousePressed(1)) {
 			if (SlickGo.withinBounds(bx,by)) {
-		    	long start = System.nanoTime();
+
 				print(bx+","+by);
 				Stone colour = board.stones[bx][by].getSC();
 				if(colour.isStone()) {
@@ -129,27 +129,26 @@ public class Editor extends BasicGameState {
 //				grouping.allocateControl();
 //				print(grouping.allGroups);
 				
-				Board clone =  Board.cloneBoard(board);
-				VariationFinder vf = new VariationFinder(clone);
-				if(!grouping.allGroups.isEmpty()) vf.group = grouping.allGroups.get(0).group;
-				VariationFinder.searched.clear();
-		    	
-				MoveFinder.lbad.clear();
-				MoveFinder.lgood.clear();
+//				Board clone =  Board.cloneBoard(board);
+//				VariationFinder vf = new VariationFinder(clone);
+//				if(!grouping.allGroups.isEmpty()) vf.group = grouping.allGroups.get(0).group;
+//				VariationFinder.searched.clear();
+//		    	
+//				MoveFinder.lbad.clear();
+//				MoveFinder.lgood.clear();
+//
+//
+//				vf.getAllVariationv2(clone);
+//				print(vf.count);
+//				print(VariationFinder.searched.size());
+//				try {
+//					vf.findValues(board);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//				MoveFinder.lbad.clear();
+//				MoveFinder.lgood.clear();
 
-
-				vf.getAllVariationv2(clone);
-				print(vf.count);
-				print(VariationFinder.searched.size());
-				try {
-					vf.findValues(board);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				MoveFinder.lbad.clear();
-				MoveFinder.lgood.clear();
-		    	long end = System.nanoTime();
-		    	print((end-start)/1000000 + " ms");
 
 			}
 			
@@ -171,8 +170,8 @@ public class Editor extends BasicGameState {
 		
 		
 
-		
-		pattern = Pattern.sToPv2("xrxrdxddXzldxrdxdx");
+
+		pattern = Pattern.sToPv2("xrdxddXlxzldxldxdx");
 		if (input.isMousePressed(0)) {
 			if (SlickGo.withinBounds(bx,by)) {		
 				board.takeTurn(bx,by , true,false);

@@ -50,7 +50,7 @@ public class TwistedFourCorner {
 //					}else if (e.isThere(S0)){
 //						retval+=1400;
 //
-//						if(e.isTheres(TL,TR)) retval+=600;
+//						if(e.isTheres(TL,TR)) retval+=700;
 //
 //					}else if (e.isThere(D0)){
 //						retval+=800;
@@ -62,7 +62,7 @@ public class TwistedFourCorner {
 					
 					if (e.isThere(S1) || e.isThere(D1))continue;
 					if (e.isTheres(S0,TR) || e.isTheres(D0,BL))continue;
-					retval +=600;
+					retval +=700;
 					float b1 = States.borderSafe(e, 2, TL,TR);
 					float b2 = States.borderSafe(e, 2, S0,D0);
 					float b3 = States.borderSafe(e, 2, S0,BL);
@@ -72,8 +72,8 @@ public class TwistedFourCorner {
 
 					
 					if(States.oneCheck(b2,b3)) ncap = States.minFinder(ncap,0.5f);
-					if(ncap>0.5) retval+=600;
-					else if(ncap<0.5) retval-=600;
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 					
 
 
@@ -110,16 +110,16 @@ public class TwistedFourCorner {
 //						if(e.isTheres(TL)) retval+=300;
 //					}else if (e.isThere(D0)){
 //						retval+=1400;
-//						if(e.isTheres(TL)) retval+=600;
+//						if(e.isTheres(TL)) retval+=700;
 //					}else if (e.isThere(S0)){
 //						retval+=1400;
-//						if(e.isTheres(TL,LT)) retval+=600;
+//						if(e.isTheres(TL,LT)) retval+=700;
 //					}
 					
 					if (e.isThere(S1) || e.isThere(D1))continue;
 					if (e.isTheres(TL,LT,S0) || e.isTheres(D0))continue;
 					
-					retval +=600;
+					retval +=700;
 					float b1 = States.borderSafe(e, 1, TL);
 					float b2 = States.borderSafe(e, 2, LT,D0);
 					float b3 = States.borderSafe(e, 1, S0);
@@ -127,8 +127,8 @@ public class TwistedFourCorner {
 
 					float ncap = States.minFinder(b1,b2,b3);
 
-					if(ncap>0.5) retval+=600;
-					else if(ncap<0.5) retval-=600;
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 					
 
 

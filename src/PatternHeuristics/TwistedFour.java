@@ -57,7 +57,7 @@ public class TwistedFour {
 //					if (e.isTheres(S0,D0)){
 //						retval+=1400;
 //						if(e.isTheres(BL,RB) || e.isTheres(BL,TR)
-//								|| e.isTheres(LT,RB) || e.isTheres(LT,TR))retval+=600;
+//								|| e.isTheres(LT,RB) || e.isTheres(LT,TR))retval+=700;
 //					}else if (e.isThere(S0)){
 //						retval+=1100;
 //						if (e.isTheres(TR,BR,BL) || e.isTheres(TR,BR,LT) 
@@ -72,7 +72,7 @@ public class TwistedFour {
 					
 					if (e.isThere(S1) || e.isThere(D1))continue;
 					if (e.isTheres(S0,BR,RB) || e.isTheres(D0,TL,LT) )continue;
-					retval +=600;
+					retval +=700;
 					float b1 = States.borderSafe(e, 2, LT,BL);
 					float b2 = States.borderSafe(e, 2, TR,RB);
 					float b3 = States.borderSafe(e, 2, S0,D0);
@@ -93,8 +93,8 @@ public class TwistedFour {
 					else if(States.oneCheck(b4,b5) || States.oneCheck(b6,b7)) ncap = States.minFinder(ncap,0.5f);
 					if(States.oneCheck(b4,b5,b6,b7)) ncap = States.minFinder(ncap,0.5f);
 					
-					if(ncap>0.5) retval+=600;
-					else if(ncap<0.5) retval-=600;
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 
 
 

@@ -50,20 +50,20 @@ public class BentFourSide {
 //						if(e.isTheres(TL) || e.isTheres(TR)) retval+=400;
 //					}else if(e.isThere(S1)) {
 //						retval+=1200;
-//						if(e.isTheres(TL,TR)) retval+=600;
+//						if(e.isTheres(TL,TR)) retval+=700;
 //					}
 //					if (e.isThere(LT))retval+=200;
 					
 					if (e.isThere(S0) || e.isThere(S3))continue;
-					retval +=600;
+					retval +=700;
 					float b1 = States.borderSafe(e, 1, LT);
 					float b2 = States.borderSafe(e, 2, S1,S2,TL,TR);
 
 					float ncap = States.minFinder(b1,b2);
 
 
-					if(ncap>0.5) retval+=600;
-					else if(ncap<0.5) retval-=600;
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 					
 				}
 				
@@ -101,11 +101,11 @@ public class BentFourSide {
 //					}else if(e.isThere(RT)) {
 //						retval+=1200;
 //						if(e.isTheres(TL) || e.isTheres(TR)) retval+=200;
-//						if (e.isThere(S2))retval+=600;
+//						if (e.isThere(S2))retval+=700;
 //					}
 					
 					if (e.isThere(S0) || e.isThere(S3))continue;
-					retval +=600;
+					retval +=700;
 					float b1 = States.borderSafe(e, 2, TL,TR);
 					float b2 = States.borderSafe(e, 1, RT);
 					float b3 = States.borderSafe(e, 2, S1,S2);
@@ -113,8 +113,8 @@ public class BentFourSide {
 					float ncap = States.minFinder(b1,b2,b3);
 
 
-					if(ncap>0.5) retval+=600;
-					else if(ncap<0.5) retval-=600;
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 
 					
 
@@ -153,7 +153,7 @@ public class BentFourSide {
 //					if (e.isThere(S0) || e.isThere(S3))continue;
 //					if (e.isThere(S1)) {
 //						retval+=1400;
-//						if(e.isTheres(TL) || e.isTheres(BL))retval+=600;
+//						if(e.isTheres(TL) || e.isTheres(BL))retval+=700;
 //					}else if(e.isThere(S2)) {
 //						retval+=1200;
 //						if(e.isTheres(TL,TR) || (e.isTheres(TL,BL)) || e.isTheres(BL,TR)) retval+=800;
@@ -162,7 +162,7 @@ public class BentFourSide {
 					
 					if (e.isThere(S0) || e.isThere(S3))continue;
 					if (e.isTheres(S1,S2,BL,BB))continue;
-					retval +=600;
+					retval +=700;
 					float b1 = States.borderSafe(e, 2, TL,BL);
 					float b2 = States.borderSafe(e, 2, S1,S2);
 					float b3 = States.borderSafe(e, 3, S1,TR,TL);
@@ -174,8 +174,8 @@ public class BentFourSide {
 
 
 
-					if(ncap>0.5) retval+=600;
-					else if(ncap<0.5) retval-=600;
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 
 
 
@@ -213,7 +213,7 @@ public class BentFourSide {
 //					if (e.isThere(S0) || e.isThere(S3))continue;
 //					if (e.isThere(S2)) {
 //						retval+=1400;
-//						if(e.isTheres(TL) || e.isTheres(BL))retval+=600;
+//						if(e.isTheres(TL) || e.isTheres(BL))retval+=700;
 //					}else if(e.isThere(S1)) {
 //						retval+=1200;
 //						if(e.isTheres(TL,TR) || (e.isTheres(TL,BL)) || e.isTheres(BL,TR)) retval+=800;
@@ -223,7 +223,7 @@ public class BentFourSide {
 					
 					if (e.isThere(S0) || e.isThere(S3))continue;
 					if (e.isTheres(BL,S1,S2))continue;
-					retval +=600;
+					retval +=700;
 					float b1 = States.borderSafe(e, 2, TL,BL);
 					float b2 = States.borderSafe(e, 2, S1,S2);
 					float b3 = States.borderSafe(e, 2, S2,TR);
@@ -235,8 +235,8 @@ public class BentFourSide {
 
 
 
-					if(ncap>0.5) retval+=600;
-					else if(ncap<0.5) retval-=600;
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 
 
 

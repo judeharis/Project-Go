@@ -14,6 +14,8 @@ public class MoveFinder  implements Runnable{
 	 ArrayList<Tuple> keystones;
 	 static Stone keystonecolour;
 	 static int cutoff=1;
+	 static int breathcutoff=20;
+	 static boolean breadthcut = false;
 	 Tuple choice;
 	 static int max = Integer.MAX_VALUE;
 	 static int min = Integer.MIN_VALUE;
@@ -353,9 +355,10 @@ public class MoveFinder  implements Runnable{
 
 	
 	private ArrayList<Tuple> moveGen(Board cB, ArrayList<Tuple> goodMoves) {
+		if(!MoveFinder.breadthcut)return goodMoves;
 		Evaluator evaluator = new Evaluator(cB);
-		ArrayList<Tuple> newMoves = evaluator.moveGen(goodMoves);
-		newMoves = goodMoves;
+		evaluator.evaluateCurrentBoard(false);
+		ArrayList<Tuple> newMoves = evaluator.moveGen(goodMoves,breathcutoff);
 		return newMoves;
 	}
 	

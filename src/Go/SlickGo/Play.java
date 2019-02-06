@@ -62,10 +62,16 @@ public class Play extends BasicGameState {
 
 		
 		//SlickGo.drawButton(board.boardSize+200 ,board.TileSize,150,40,board.placing.toString(), g,false);
+		
+		SlickGo.drawButton(board.boardSize ,board.TileSize +240,50,50,"-", g,SlickGo.regionChecker(board.boardSize ,board.TileSize +240,50,50,gc));
+		SlickGo.drawButton(board.boardSize+60 ,board.TileSize +240,50,50,"+", g,SlickGo.regionChecker(board.boardSize+60 ,board.TileSize +240,50,50,gc));
+		SlickGo.drawButton(board.boardSize+120 ,board.TileSize +240,50,50,Integer.toString(MoveFinder.breathcutoff), g,false);
+		SlickGo.drawButton(board.boardSize+180 ,board.TileSize +240,200,50,"Breadth Cut", g ,MoveFinder.breadthcut,Color.green);
+		
 		SlickGo.drawButton(board.boardSize ,board.TileSize +300,50,50,"-", g,SlickGo.regionChecker(board.boardSize ,board.TileSize +300,50,50,gc));
 		SlickGo.drawButton(board.boardSize+60 ,board.TileSize +300,50,50,"+", g,SlickGo.regionChecker(board.boardSize+60 ,board.TileSize +300,50,50,gc));
 		SlickGo.drawButton(board.boardSize+120 ,board.TileSize +300,50,50,Integer.toString(MoveFinder.cutoff), g,false);
-		SlickGo.drawButton(board.boardSize+180 ,board.TileSize +300,50,50,"ID", g ,iterativeDeepening,Color.green);
+		SlickGo.drawButton(board.boardSize+180 ,board.TileSize +300,200,50,"IterDeepening", g ,iterativeDeepening,Color.green);
 		
 		SlickGo.drawButton(board.boardSize ,board.TileSize +440,200,50,"AI " +(turnOffComputer?"Disabled":"Enabled"), g ,!turnOffComputer,Color.green);
 		SlickGo.drawButton(board.boardSize +220,board.TileSize +440,200,50,"Heuristics " +(!heuristic?"Off":"On"), g ,heuristic,Color.green);
@@ -110,10 +116,17 @@ public class Play extends BasicGameState {
 		
 		if (input.isMousePressed(0)) {
 			
+			
+			if (SlickGo.regionChecker(board.boardSize,board.TileSize +240,50,50,gc)&& MoveFinder.breathcutoff >1) MoveFinder.breathcutoff--;
+			if (SlickGo.regionChecker(board.boardSize+60 ,board.TileSize +240,50,50,gc)) MoveFinder.breathcutoff++;
+			if (SlickGo.regionChecker(board.boardSize+180,board.TileSize +240,200,50,gc)) MoveFinder.breadthcut = !MoveFinder.breadthcut;
+			
 
 			if (SlickGo.regionChecker(board.boardSize,board.TileSize +300,50,50,gc)&& MoveFinder.cutoff >1) MoveFinder.cutoff--;
 			if (SlickGo.regionChecker(board.boardSize+60 ,board.TileSize +300,50,50,gc)) MoveFinder.cutoff++;
-			if (SlickGo.regionChecker(board.boardSize+180,board.TileSize +300,50,50,gc)) iterativeDeepening = !iterativeDeepening;
+			
+
+			if (SlickGo.regionChecker(board.boardSize+180,board.TileSize +300,200,50,gc)) iterativeDeepening = !iterativeDeepening;
 
 			
 			//Place Stone

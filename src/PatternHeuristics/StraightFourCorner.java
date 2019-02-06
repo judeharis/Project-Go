@@ -37,12 +37,12 @@ public class StraightFourCorner {
 					
 					
 					if (e.isThere(S0) || e.isThere(S3))continue;
-					retval +=600;
+					retval +=700;
 					float a = States.borderSafe(e, 1, TL);
 					float b = States.borderSafe(e, 2, S1,S2);
 					float ncap = States.minFinder(a,b);
-					if(ncap>0.5) retval+=600;
-					else if(ncap<0.5) retval-=600;
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 
 					
 

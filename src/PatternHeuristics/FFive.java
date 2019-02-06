@@ -74,7 +74,7 @@ public class FFive {
 					else if(acap<0.5) patval-=500;
 
 					
-					patval +=200;
+					patval +=400;
 					float c1 = States.borderSafe(e, 2, S1,S0);
 					float c2 = States.borderSafe(e, 2, TL,TR);
 					float c3 = States.borderSafe(e, 2, RT,RB);
@@ -88,8 +88,8 @@ public class FFive {
 					else if(States.numCheck(1.5,c5,c6)) ccap = States.minFinder(ccap,0.5f);
 
 					
-					if(ccap>0.5) patval+=200;
-					else if(ccap<0.5) patval-=200;
+					if(ccap>0.5) patval+=400;
+					else if(ccap<0.5) patval-=400;
 					
 					if(e.isTheres(S0,LT)) patval /=2;
 					retval+=patval;
