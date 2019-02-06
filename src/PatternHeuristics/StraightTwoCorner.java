@@ -35,11 +35,14 @@ public class StraightTwoCorner {
 
 
 					
-					if (e.isThere(S1) || e.isThere(S2) || !e.isThere(TL))continue;
-					String s = States.arrayToString(e,TL,S1,S2);
-					if("ANN".equals(s)){retval+=200;continue;}
-					if("AEN".equals(s)){retval+=200;continue;}
-					if("ANE".equals(s)){retval+=200;continue;}
+					if (e.isThere(S1) || e.isThere(S2))continue;
+					retval =75;
+					float a = States.borderSafe(e, 1, TL);
+					float ncap = States.minFinder(a);
+
+					if(ncap>0.5) retval+=75;
+					else if(ncap<0.5) retval-=75;
+					
 					
 					
 				}

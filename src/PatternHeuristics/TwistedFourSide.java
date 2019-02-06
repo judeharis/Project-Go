@@ -40,27 +40,37 @@ public class TwistedFourSide {
 					counter++;
 					
 
-//					if (!e.isThere(S0) && !e.isThere(D0))continue;
-//					if (!e.isTheres(S0,LT,TR) && !e.isTheres(S0,D0,TL) && !e.isTheres(S0,D0,TR))continue;
-//					
+					
 //					if (e.isThere(S1) || e.isThere(D1))continue;
-//					if (!e.isThere(S0) && !e.isThere(D0))continue;
-//					if (!e.isTheres(S0,LT,TR) && !e.isTheres(S0,D0,TL) && !e.isTheres(S0,D0,TR))continue;
+//					if (e.isTheres(S0,D0)){
+//						retval+=1400;
+//						if(e.isTheres(TL) || e.isTheres(TR)) retval+=600;
+//
+//					}else if (e.isThere(S0)){
+//						retval+=1100;
+//						if(e.isTheres(LT,TL) || e.isTheres(LT,TR)) retval+=900;
+//
+//					}else if (e.isThere(D0)){
+//						retval+=1100;
+//						if(e.isTheres(RB,TL) || e.isTheres(RB,TR)) retval+=900;
+//					}
+					
 					
 					if (e.isThere(S1) || e.isThere(D1))continue;
-					if (e.isTheres(S0,D0)){
-						retval+=1400;
-						if(e.isTheres(TL) || e.isTheres(TR)) retval+=600;
+					if (e.isTheres(D0,RB) || e.isTheres(S0,TL,LT))continue;
+					retval +=600;
+					float b1 = States.borderSafe(e, 2, TL,TR);
+					float b2 = States.borderSafe(e, 2, LT,D0);
+					float b3 = States.borderSafe(e, 2, RB,S0);
+					float b4 = States.borderSafe(e, 2, S0,D0);
 
-					}else if (e.isThere(S0)){
-						retval+=1100;
-						if(e.isTheres(LT,TL) || e.isTheres(LT,TR)) retval+=900;
 
-					}else if (e.isThere(D0)){
-						retval+=1100;
-						if(e.isTheres(RB,TL) || e.isTheres(RB,TR)) retval+=900;
+					float ncap = States.minFinder(b1,b2,b3,b4);
 
-					}
+					
+					if(States.oneCheck(b2,b4) || States.oneCheck(b3,b4)) ncap = States.minFinder(ncap,0.5f);
+					if(ncap>0.5) retval+=600;
+					else if(ncap<0.5) retval-=600;
 					
 				}
 				
@@ -93,24 +103,40 @@ public class TwistedFourSide {
 //					if (!e.isThere(TR) && !e.isThere(RB))continue;
 
 					
+//					if (e.isThere(S1) || e.isThere(D1))continue;
+//	
+//					if (e.isTheres(S0,D0)){
+//						retval+=1200;
+//						if(e.isTheres(LT)) retval+=500;
+//						if(e.isTheres(RB) || e.isTheres(TR)) retval+=300;
+//
+//					}else if (e.isThere(S0)){
+//						retval+=1000;
+//						if(e.isTheres(LT)) retval+=700;
+//						if(e.isTheres(RB,TR)) retval+=300;
+//
+//					}else if (e.isThere(D0)){
+//						retval+=800;
+//						if(e.isTheres(LT,TL)) retval+=800;
+//						if(e.isTheres(RB) || e.isThere(TR)) retval+=400;
+//					}
+					
+					
 					if (e.isThere(S1) || e.isThere(D1))continue;
-	
-					if (e.isTheres(S0,D0)){
-						retval+=1200;
-						if(e.isTheres(LT)) retval+=500;
-						if(e.isTheres(RB) || e.isTheres(TR)) retval+=300;
+					if (e.isTheres(LT,TL,D0) || e.isTheres(RB,S0))continue;
+					retval +=600;
+					
+					float b1 = States.borderSafe(e, 1, LT);
+					float b2 = States.borderSafe(e, 2, S0,D0);
+					float b3 = States.borderSafe(e, 2, TL,S0);
+					float b4 = States.borderSafe(e, 2, D0,TR,RB);
 
-					}else if (e.isThere(S0)){
-						retval+=1000;
-						if(e.isTheres(LT)) retval+=700;
-						if(e.isTheres(RB,TR)) retval+=300;
+					float ncap = States.minFinder(b1,b2,b3,b4);
 
-					}else if (e.isThere(D0)){
-						retval+=800;
-						if(e.isTheres(LT,TL)) retval+=800;
-						if(e.isTheres(RB) || e.isThere(TR)) retval+=400;
-
-					}
+					
+					if(States.oneCheck(b2,b3) || States.oneCheck(b2,b4)) ncap = States.minFinder(ncap,0.5f);
+					if(ncap>0.5) retval+=600;
+					else if(ncap<0.5) retval-=600;
 					
 					
 				}

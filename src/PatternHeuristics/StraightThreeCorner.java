@@ -36,8 +36,12 @@ public class StraightThreeCorner {
 
 					
 					if (e.isThere(S0) || e.isThere(S2))continue;
-					if (e.isTheres(S1))retval +=700;
-					if (e.isTheres(TL))retval +=300;
+					retval +=500;
+					float a = States.borderSafe(e, 1, TL);
+					float b = States.borderSafe(e, 1, S1);
+					float ncap = States.minFinder(a,b);
+					if(ncap>0.5) retval+=500;
+					else if(ncap<0.5) retval-=500;
 			
 				}
 			}

@@ -36,8 +36,12 @@ public class StraightThreeSide {
 
 
 					if (e.isThere(S0) || e.isThere(S2))continue;
-					if (e.isTheres(S1))retval+=700;
-					if (e.isTheres(TL,TR))retval+=300;
+					retval +=500;
+					float a = States.borderSafe(e, 1, TL,TR);
+					float b = States.borderSafe(e, 1, S1);
+					float ncap = States.minFinder(a,b);
+					if(ncap>0.5) retval+=500;
+					else if(ncap<0.5) retval-=500;
 
 					
 			
@@ -66,8 +70,12 @@ public class StraightThreeSide {
 					counter++;
 
 					if (e.isThere(S0) || e.isThere(S2))continue;
-					if (e.isThere(S1))retval+=700;
-					if (e.isTheres(TL) || e.isThere(TR))retval+=300;
+					retval +=500;
+					float a = States.borderSafe(e, 2, TL,TR);
+					float b = States.borderSafe(e, 1, S1);
+					float ncap = States.minFinder(a,b);
+					if(ncap>0.5) retval+=500;
+					else if(ncap<0.5) retval-=500;
 
 					
 

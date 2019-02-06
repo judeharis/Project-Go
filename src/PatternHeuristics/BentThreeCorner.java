@@ -37,8 +37,15 @@ public class BentThreeCorner {
 
 					
 					if(e.isThere(S0) || e.isThere(S2)) continue;
-					if (e.isTheres(S1))retval +=700;
-					if (e.isTheres(TL,LT))retval +=300;
+					retval +=500;
+					float a = States.borderSafe(e, 1, TL,LT);
+					float b = States.borderSafe(e, 1, S1);
+					float ncap = States.minFinder(a,b);
+					
+					if(ncap>0.5) retval+=500;
+					else if(ncap<0.5) retval-=500;
+					
+
 					
 
 
@@ -66,8 +73,12 @@ public class BentThreeCorner {
 					counter++;
 					
 					if(e.isThere(S0) || e.isThere(S2) || e.isThere(S1))continue;
-					if (e.isTheres(S1))retval +=1000;
-
+					retval +=500;
+					float a = States.borderSafe(e, 1, S1);
+					float ncap = States.minFinder(a);
+					
+					if(ncap>0.5) retval+=500;
+					else if(ncap<0.5) retval-=500;
 
 				}
 			}
@@ -95,8 +106,15 @@ public class BentThreeCorner {
 					
 					
 					if(e.isThere(S0) || e.isThere(S2))continue;
-					if (e.isTheres(S1))retval +=700;
-					if (e.isTheres(TL) || e.isTheres(BL) )retval +=300;
+					retval +=500;
+					float a = States.borderSafe(e, 2, TL,BL);
+					float b = States.borderSafe(e, 1, S1);
+					float ncap = States.minFinder(a,b);
+					
+					if(ncap>0.5) retval+=500;
+					else if(ncap<0.5) retval-=500;
+					
+					if(e.isTheres(S1,BL))retval-=500;
 
 
 					

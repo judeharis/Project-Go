@@ -40,26 +40,32 @@ public class StraightFive {
 					counter++;
 					
 					
+
 //					if (e.isThere(S0) || e.isThere(S4))continue;
-//					if(!e.isTheres(TL,TR) && !e.isTheres(TL,BR) && !e.isTheres(TR,BL) && !e.isTheres(BL,BR)) continue;
-//					if(!e.isTheres(S1) && !e.isTheres(S2) && !e.isTheres(S3)) continue;
+//
+//					if(e.isTheres(S1) || e.isTheres(S2) || e.isTheres(S3)) retval+=500;
+//	
+//					if(e.isTheres(TL)) {
+//						retval +=1500;
+//						if(e.isThere(TR) || e.isThere(BR))retval +=1000;
+//					}else if(e.isTheres(TR)) {
+//						retval +=1500;
+//						if(e.isThere(BL))retval +=1000;
+//					}else if(e.isTheres(BL)) {
+//						retval +=1500;
+//						if(e.isThere(BR))retval +=1000;
+//					}else if(e.isTheres(BR)) {
+//						retval +=1500;
+//					}
 					
 					if (e.isThere(S0) || e.isThere(S4))continue;
-
-					if(e.isTheres(S1) || e.isTheres(S2) || e.isTheres(S3)) retval+=500;
-	
-					if(e.isTheres(TL)) {
-						retval +=1500;
-						if(e.isThere(TR) || e.isThere(BR))retval +=1000;
-					}else if(e.isTheres(TR)) {
-						retval +=1500;
-						if(e.isThere(BL))retval +=1000;
-					}else if(e.isTheres(BL)) {
-						retval +=1500;
-						if(e.isThere(BR))retval +=1000;
-					}else if(e.isTheres(BR)) {
-						retval +=1500;
-					}
+					retval +=700;
+					float a = States.borderSafe(e, 2, TL,BL);
+					float b = States.borderSafe(e, 2, TR,BR);
+					float c = States.borderSafe(e, 3, S1,S2,S3);
+					float ncap = States.minFinder(a,b,c);
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 					
 					
 

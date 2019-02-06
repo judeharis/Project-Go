@@ -27,18 +27,23 @@ public class SquareFourCorner {
 					boolean diagSide= ps.dirSideToBool(counter);
 					UDLR side = ps.dirNumToDir(counter);
 					UDLR r = side.diag(diagSide);
-//					UDLR l = side.diag(!diagSide);
+					UDLR l = side.diag(!diagSide);
 					Tuple S0 = tlist.get(0).side(side);
 					Tuple S1 = S0.side(r);
 					Tuple D0 = S0.side(side);
 					Tuple D1 = D0.side(r);
-//					Tuple TL = tlist.get(0).side(l);
+					Tuple TL = tlist.get(0).side(l);
 					counter++;
 					
 					
 					if(e.isThere(S0)||e.isThere(S1)||e.isThere(D0)||e.isThere(D1)) continue;
-					retval-=500;
-				
+					retval+=125;
+					float b1 = States.borderSafe(e, 2, TL,S0);
+
+
+					float ncap = States.minFinder(b1);
+					if(ncap>0.5) retval+=25;
+					else if(ncap<0.5) retval-=25;
 				}
 			}
 		}

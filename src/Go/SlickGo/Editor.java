@@ -158,6 +158,7 @@ public class Editor extends BasicGameState {
 		if (input.isMousePressed(2)) {
 			if (SlickGo.withinBounds(bx,by)) {
 				print(bx+","+by);
+				print(board.stones[bx][by]);
 				Stone colour = board.stones[bx][by].getSC();
 				if(colour.isStone()) {
 					ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
@@ -171,7 +172,7 @@ public class Editor extends BasicGameState {
 		
 
 		
-		pattern = Pattern.sToPv2("xldxldxdxrrX");
+		pattern = Pattern.sToPv2("xrxrdxddXzldxrdxdx");
 		if (input.isMousePressed(0)) {
 			if (SlickGo.withinBounds(bx,by)) {		
 				board.takeTurn(bx,by , true,false);

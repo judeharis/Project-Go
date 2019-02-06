@@ -49,11 +49,31 @@ public class RabbitSix {
 					counter++;
 					
 					
+//					if (e.isThere(A1) || e.isThere(S0) || e.isThere(S2) || e.isThere(B0) || e.isThere(B1))continue;
+//					if(e.isTheres(S1)) retval+=1000;
+//					if(e.countThere(TL,TR,LT,RT,RB,BL,BR) > 5) retval+=3000;
+					
+					
+					
 					if (e.isThere(A1) || e.isThere(S0) || e.isThere(S2) || e.isThere(B0) || e.isThere(B1))continue;
-					
-					
-					if(e.isTheres(S1)) retval+=1000;
-					if(e.countThere(TL,TR,LT,RT,RB,BL,BR) > 5) retval+=3000;
+//					retval+=500;
+//					if(e.isEnemy(S1)) retval-=500;
+//					if(e.isThere(S1)) {
+//						
+//						int ncap=0;
+//						boolean a = (States.borderSafe(e, 2, TL,BL) == 0);
+//						boolean b = (States.borderSafe(e, 2, TR,BR) == 0);
+//						boolean dead = a || b ;
+//						ncap +=(States.borderSafe(e, 2, TL,BL) == 1)?1:0;
+//						ncap += (States.borderSafe(e, 2, TR,BR) ==1)?1:0 ;
+//		
+//
+//						if(ncap<1 && !dead) retval+=500;
+//						else if(ncap>1 && !dead) retval-=500;
+//						else if(dead) retval-=500;
+//						
+//					}
+
 				}
 				
 			}

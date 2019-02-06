@@ -238,7 +238,6 @@ public class MoveFinder  implements Runnable{
 	    if(isLive) {
 			int best = min;
 			for (Tuple t : goodMoves) {
-//				Board b = cB;
 				Board b = Board.cloneBoard(cB);
 				b.takeTurn(t.a,t.b,false,true);  
 				if(depth==1)System.out.print(t.clone()+ " :");
@@ -252,7 +251,6 @@ public class MoveFinder  implements Runnable{
 						good.put(key, returnscore);
 					}
 				}else returnscore =alphaBeta(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);	
-//				b.undoMove(false);
 				if(returnscore > best && depth==1 )this.choice = t.clone();
 				best = Math.max(best, returnscore); 
 				alpha = Math.max(alpha, best);
@@ -267,11 +265,9 @@ public class MoveFinder  implements Runnable{
 	    }else{
 			int best = max;
 			for (Tuple t : goodMoves) {
-//				Board b = cB;
 				Board b = Board.cloneBoard(cB);
 				b.takeTurn(t.a,t.b,false,true);
 				if(depth==1)System.out.print(t.clone()+ " :");
-				
 				
 				int returnscore = 0;
 				if(useHashTable) {
@@ -280,10 +276,8 @@ public class MoveFinder  implements Runnable{
 					else {
 						returnscore =alphaBeta(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);
 						bad.put(key, returnscore);
-						
 					}
 				}else returnscore =alphaBeta(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);
-//				b.undoMove(false);
 				if(returnscore < best && depth==1 )this.choice = t.clone();
 				best = Math.min(best, returnscore); 
 				beta = Math.min(beta, best);
@@ -306,7 +300,7 @@ public class MoveFinder  implements Runnable{
 		Board cloneBoard = Board.cloneBoard(originalBoard);
 //		cloneBoard = originalBoard;
 		if(!iterativeDeepening || editormode) {
-			useHashTable= true;
+			useHashTable= false;
 			Evaluator e1 = new Evaluator(cloneBoard);
 			e1.evaluateCurrentBoard(true);
 			LearningValues.initalboard = false;

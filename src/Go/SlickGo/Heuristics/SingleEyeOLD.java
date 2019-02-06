@@ -8,11 +8,11 @@ import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-public class SingleEye {
+public class SingleEyeOLD {
 	Evaluator e;
 	PatternSearcher ps;
 
-	public SingleEye (Evaluator e){
+	public SingleEyeOLD (Evaluator e){
 		this.e=e;
 	}
 
@@ -22,8 +22,11 @@ public class SingleEye {
 		int retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);
 		
-		ArrayList<Pattern> pattern = Pattern.sToPv2("xdlxrrxldx", e.kscolour);
-		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
+//		ArrayList<Pattern> pattern = Pattern.sToPv2("xdlxrrxldx", e.kscolour);
+//		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
+		
+		ArrayList<Pattern> pattern = Pattern.sToPv2("xdlxrrxldx");
+		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern,e.kscolour);
 		
 		if(!pMatches.isEmpty()) {
 			int counter=0;

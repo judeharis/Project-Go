@@ -38,8 +38,14 @@ public class BentThreeSide {
 					counter++;
 					
 					if(e.isThere(S0) || e.isThere(S2)) continue;
-					if(e.isThere(S1)) retval+=700;
-					if (e.isTheres(TL,LT) ||  e.isTheres(TR,LT)) retval+=300;
+					retval +=500;
+					float a = States.borderSafe(e, 2, TL,TR);
+					float b = States.borderSafe(e, 1, LT);
+					float c = States.borderSafe(e, 1, S1);
+					float ncap = States.minFinder(a,b,c);
+					
+					if(ncap>0.5) retval+=500;
+					else if(ncap<0.5) retval-=500;
 					
 
 					
@@ -77,8 +83,17 @@ public class BentThreeSide {
 
 					
 					if(e.isThere(S0) || e.isThere(S2)) continue;
-					if(e.isThere(S1)) retval+=700;
-					if (e.isTheres(TR) || e.isTheres(RB))retval+=300;
+					if(e.isTheres(S1,RB)) continue;
+					retval +=500;
+					float a = States.borderSafe(e, 2, TR,RB);
+					float b = States.borderSafe(e, 1, S1);
+					float ncap = States.minFinder(a,b);
+					
+					if(ncap>0.5) retval+=500;
+					else if(ncap<0.5) retval-=500;
+					
+
+					
 
 
 					

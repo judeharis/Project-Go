@@ -156,9 +156,9 @@ public class IterativeDeepening  implements Runnable{
 
 
 		Board cloneBoard = Board.cloneBoard(originalBoard);
-		cloneBoard = originalBoard;
+//		cloneBoard = originalBoard;
 		
-		useHashTable= true;
+		useHashTable= false;
 		Evaluator e1 = new Evaluator(cloneBoard);
 		e1.evaluateCurrentBoard(false);
 

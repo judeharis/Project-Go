@@ -7,8 +7,8 @@ import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
-public class EyeCorner {
 
+public class EyeCorner {
 
 	static ArrayList<Pattern> eyeCornerPattern = Pattern.sToPv2("xd#lx");
 	
@@ -30,12 +30,17 @@ public class EyeCorner {
 					Tuple C = tlist.get(0).side(side);
 					counter++;
 					
+
+					if(e.isTheres(C)) continue;
+					retval =50;
+					float a = States.borderSafe(e, 1, TL);
+					float ncap = States.minFinder(a);
+
+					if(ncap>0.5) retval+=50;
+					else if(ncap<0.5) retval-=50;
 					
 
 
-					if(e.isTheres(C) || e.isEnemies(C)  ) continue;
-					String s = States.arrayToString(e,TL,C);
-					if("AN".equals(s)){retval+=100;continue;}
 
 					
 

@@ -3,7 +3,6 @@ package PatternHeuristics;
 import java.util.ArrayList;
 
 import Go.SlickGo.Evaluator;
-import Go.SlickGo.MoveFinder;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
@@ -44,21 +43,37 @@ public class TwistedFourCorner {
 //					if (!e.isTheres(S0,D0,TL) && !e.isTheres(S0,D0,TR))continue;
 
 
+//					if (e.isThere(S1) || e.isThere(D1))continue;
+//					if (e.isTheres(S0,D0)){
+//						retval+=1500;
+//						if(e.isTheres(TL) || e.isTheres(TR)) retval+=500;
+//					}else if (e.isThere(S0)){
+//						retval+=1400;
+//
+//						if(e.isTheres(TL,TR)) retval+=600;
+//
+//					}else if (e.isThere(D0)){
+//						retval+=800;
+//						if(e.isTheres(BL)) retval+=800;
+//						if(e.isTheres(TL) || e.isThere(TR)) retval+=400;
+//
+//					}
+					
+					
 					if (e.isThere(S1) || e.isThere(D1))continue;
-					if (e.isTheres(S0,D0)){
-						retval+=1500;
-						if(e.isTheres(TL) || e.isTheres(TR)) retval+=500;
-					}else if (e.isThere(S0)){
-						retval+=1400;
+					if (e.isTheres(S0,TR) || e.isTheres(D0,BL))continue;
+					retval +=600;
+					float b1 = States.borderSafe(e, 2, TL,TR);
+					float b2 = States.borderSafe(e, 2, S0,D0);
+					float b3 = States.borderSafe(e, 2, S0,BL);
 
-						if(e.isTheres(TL,TR)) retval+=600;
 
-					}else if (e.isThere(D0)){
-						retval+=800;
-						if(e.isTheres(BL)) retval+=800;
-						if(e.isTheres(TL) || e.isThere(TR)) retval+=400;
+					float ncap = States.minFinder(b1,b2,b3);
 
-					}
+					
+					if(States.oneCheck(b2,b3)) ncap = States.minFinder(ncap,0.5f);
+					if(ncap>0.5) retval+=600;
+					else if(ncap<0.5) retval-=600;
 					
 
 
@@ -89,17 +104,34 @@ public class TwistedFourCorner {
 					counter++;
 
 					
+//					if (e.isThere(S1) || e.isThere(D1))continue;
+//					if (e.isTheres(S0,D0)){
+//						retval+=1700;
+//						if(e.isTheres(TL)) retval+=300;
+//					}else if (e.isThere(D0)){
+//						retval+=1400;
+//						if(e.isTheres(TL)) retval+=600;
+//					}else if (e.isThere(S0)){
+//						retval+=1400;
+//						if(e.isTheres(TL,LT)) retval+=600;
+//					}
+					
 					if (e.isThere(S1) || e.isThere(D1))continue;
-					if (e.isTheres(S0,D0)){
-						retval+=1700;
-						if(e.isTheres(TL)) retval+=300;
-					}else if (e.isThere(D0)){
-						retval+=1400;
-						if(e.isTheres(TL)) retval+=600;
-					}else if (e.isThere(S0)){
-						retval+=1400;
-						if(e.isTheres(TL,LT)) retval+=600;
-					}
+					if (e.isTheres(TL,LT,S0) || e.isTheres(D0))continue;
+					
+					retval +=600;
+					float b1 = States.borderSafe(e, 1, TL);
+					float b2 = States.borderSafe(e, 2, LT,D0);
+					float b3 = States.borderSafe(e, 1, S0);
+
+
+					float ncap = States.minFinder(b1,b2,b3);
+
+					if(ncap>0.5) retval+=600;
+					else if(ncap<0.5) retval-=600;
+					
+
+
 
 					
 				}

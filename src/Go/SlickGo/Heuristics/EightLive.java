@@ -9,19 +9,13 @@ import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
 public class EightLive{
-	Evaluator e;
-	PatternSearcher ps;
-
-	public EightLive (Evaluator e){
-		this.e=e;
-	}
-
+	static ArrayList<Pattern> eightLivePattern = Pattern.sToPv2("xrxrxrxrxrxrxrxrozloddS");
 
 	
 	
-	public int evaluate(ArrayList<Tuple> sstring) {
+	public static int evaluate(ArrayList<Tuple> sstring , Evaluator e) {
 		int retval = 0;
-		ps = new PatternSearcher(e.cB,e.kscolour);
+		PatternSearcher ps = new PatternSearcher(e.cB,e.kscolour);
 		
 //		ArrayList<Pattern> pattern6 = Pattern.sToPv2("xrxrxrxrxrxrxrxrozloddS", e.kscolour);
 //		ArrayList<Tuple> pString =ps.stringMatch(sstring, pattern6);	
@@ -70,8 +64,11 @@ public class EightLive{
 		
 		
 		
-		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxrxrxrozloddS", e.kscolour);
-		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
+//		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxrxrxrozloddS", e.kscolour);
+//		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
+		
+
+		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, eightLivePattern,e.kscolour);
 		
 		if(!pMatches.isEmpty()) {
 			int counter=0;

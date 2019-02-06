@@ -8,11 +8,11 @@ import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-public class BulkyFive {
+public class BulkyFiveOLD {
 	Evaluator e;
 	PatternSearcher ps;
 
-	public BulkyFive (Evaluator e){
+	public BulkyFiveOLD (Evaluator e){
 		this.e=e;
 	}
 
@@ -22,8 +22,11 @@ public class BulkyFive {
 		int retval = 0;
 		ps = new PatternSearcher(e.cB,e.kscolour);
 		
-		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrdxrdxdlxlxlxulxux", e.kscolour);
-		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
+//		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrdxrdxdlxlxlxulxux", e.kscolour);
+//		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
+		
+		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrdxrdxdlxlxlxulxux");
+		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern,e.kscolour);
 		
 		if(!pMatches.isEmpty()) {
 			int counter=0;

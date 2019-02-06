@@ -2,6 +2,7 @@ package PatternHeuristics;
 
 import java.util.ArrayList;
 
+
 import Go.SlickGo.Evaluator;
 import Go.SlickGo.Pattern;
 import Go.SlickGo.PatternSearcher;
@@ -13,7 +14,7 @@ public class StraightThree {
 
 	static ArrayList<Pattern> straightThreePattern = Pattern.sToPv2("xrxrxrdxdlxlxlxlux");
 
-	public static int evaluate(ArrayList<Tuple> sstring, Evaluator e) {
+	public static int evaluate(ArrayList<Tuple> sstring,Evaluator e) {
 		int retval = 0;
 		PatternSearcher ps = new PatternSearcher(e.cB,e.kscolour);
 		
@@ -38,22 +39,18 @@ public class StraightThree {
 					counter++;
 					
 					
+
+
 					if (e.isThere(S0) || e.isThere(S2))continue;
-					if(e.isThere(S1))retval+=400;
-					if(e.isTheres(TL)) {
-						retval +=300;
-						if(e.isThere(TR) || e.isThere(BR))retval +=300;
-					}else if(e.isTheres(TR)) {
-						retval +=300;
-						if(e.isThere(BL))retval +=300;
-					}else if(e.isTheres(BL)) {
-						retval +=300;
-						if(e.isThere(BR))retval +=300;
-					}else if(e.isTheres(BR)) {
-						retval +=300;
-					}
+		
+					retval +=500;
+					float a = States.borderSafe(e, 2, TL,BL);
+					float b = States.borderSafe(e, 2, TR,BR);
+					float c = States.borderSafe(e, 1, S1);
+					float ncap = States.minFinder(a,b,c);
+					if(ncap>0.5) retval+=500;
+					else if(ncap<0.5) retval-=500;
 					
-				
 
 					
 				}

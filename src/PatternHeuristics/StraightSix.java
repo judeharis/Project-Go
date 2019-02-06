@@ -41,26 +41,32 @@ public class StraightSix {
 					counter++;
 					
 					
+					
 //					if (e.isThere(S0) || e.isThere(S5))continue;
-//					if(!e.isTheres(S1) && !e.isTheres(S2) && !e.isTheres(S3) && !e.isTheres(S4)) continue;
-//					retval+=2500;
+//
+//					if(e.isTheres(S1) || e.isTheres(S2) || e.isTheres(S3)  || e.isTheres(S4)) retval+=500;
+//	
+//					if(e.isTheres(TL)) {
+//						retval +=2000;
+//						if(e.isThere(TR) || e.isThere(BR))retval +=1500;
+//					}else if(e.isTheres(TR)) {
+//						retval +=2000;
+//						if(e.isThere(BL))retval +=1500;
+//					}else if(e.isTheres(BL)) {
+//						retval +=2000;
+//						if(e.isThere(BR))retval +=1500;
+//					}else if(e.isTheres(BR)) {
+//						retval +=2000;
+//					}
 					
 					if (e.isThere(S0) || e.isThere(S5))continue;
-
-					if(e.isTheres(S1) || e.isTheres(S2) || e.isTheres(S3)  || e.isTheres(S4)) retval+=500;
-	
-					if(e.isTheres(TL)) {
-						retval +=2000;
-						if(e.isThere(TR) || e.isThere(BR))retval +=1500;
-					}else if(e.isTheres(TR)) {
-						retval +=2000;
-						if(e.isThere(BL))retval +=1500;
-					}else if(e.isTheres(BL)) {
-						retval +=2000;
-						if(e.isThere(BR))retval +=1500;
-					}else if(e.isTheres(BR)) {
-						retval +=2000;
-					}
+					retval +=800;
+					float a = States.borderSafe(e, 2, TL,BL);
+					float b = States.borderSafe(e, 2, TR,BR);
+					float c = States.borderSafe(e, 4, S1,S2,S3,S4);
+					float ncap = States.minFinder(a,b,c);
+					if(ncap>0.5) retval+=800;
+					else if(ncap<0.5) retval-=800;
 					
 					
 				

@@ -9,22 +9,20 @@ import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
 public class SixDie {
-	Evaluator e;
-	PatternSearcher ps;
-
-	public SixDie (Evaluator e){
-		this.e=e;
-	}
-
+	static ArrayList<Pattern> sixDiePattern = Pattern.sToPv2("xrxrxrxrxrxrozloddS");
 
 	
-
-	public int evaluate(ArrayList<Tuple> sstring) {
+	
+	static public int evaluate(ArrayList<Tuple> sstring , Evaluator e) {
 		int retval = 0;
-		ps = new PatternSearcher(e.cB,e.kscolour);
+		PatternSearcher ps = new PatternSearcher(e.cB,e.kscolour);
 		
-		ArrayList<Pattern> pattern6 = Pattern.sToPv2("xrxrxrxrxrxrozloddS",e.kscolour);	
-		ArrayList<ArrayList<Tuple>>  pMatches =ps.allStringMatchv2(sstring, pattern6);
+//		ArrayList<Pattern> pattern6 = Pattern.sToPv2("xrxrxrxrxrxrozloddS",e.kscolour);	
+//		ArrayList<ArrayList<Tuple>>  pMatches =ps.allStringMatchv2(sstring, pattern6);
+		
+
+		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, sixDiePattern,e.kscolour);
+		
 		if(!pMatches.isEmpty()) {
 			int counter=0;
 			for(ArrayList<Tuple> tlist: pMatches) {

@@ -8,11 +8,11 @@ import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-public class StraightSixSide  {
+public class StraightSixSideOLD  {
 	Evaluator e;
 	PatternSearcher ps;
 
-	public StraightSixSide (Evaluator e){
+	public StraightSixSideOLD (Evaluator e){
 		this.e=e;
 	}
 
@@ -56,8 +56,11 @@ public class StraightSixSide  {
 
 		
 		
-		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxrxrxdxzdxdS", e.kscolour);
-		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
+//		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxrxrxdxzdxdS", e.kscolour);
+//		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
+		
+		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxrxrxdxzdxdS");
+		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern,e.kscolour);
 
 		if(!pMatches.isEmpty()) {
 			int counter=0;

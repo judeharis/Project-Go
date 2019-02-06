@@ -38,16 +38,22 @@ public class StraightFiveSide {
 					Tuple TR = S4.side2(r,side.opp());
 					counter++;
 					
-					
-//					if (e.isThere(S0) || e.isThere(S4))continue;
-//					if(!e.isTheres(TL,TR)) continue;
-//					if(!e.isTheres(S1) && !e.isTheres(S2) && !e.isTheres(S3)) continue;
+
 
 					
+//					if (e.isThere(S0) || e.isThere(S4))continue;
+//					if(e.isTheres(S1) || e.isTheres(S2) || e.isTheres(S3)) retval+=600;
+//					if(e.isTheres(TL)) retval+=1200;
+//					if(e.isTheres(TR)) retval+=1200;
+					
 					if (e.isThere(S0) || e.isThere(S4))continue;
-					if(e.isTheres(S1) || e.isTheres(S2) || e.isTheres(S3)) retval+=600;
-					if(e.isTheres(TL)) retval+=1200;
-					if(e.isTheres(TR)) retval+=1200;
+					retval +=700;
+					float a = States.borderSafe(e, 1, TL,TR);
+					float b = States.borderSafe(e, 3, S1,S2,S3);
+					float ncap = States.minFinder(a,b);
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
+					
 				
 
 					
@@ -76,15 +82,21 @@ public class StraightFiveSide {
 					Tuple TR = tlist.get(0).side(r);
 					counter++;
 					
-					
-//					if (e.isThere(S0) || e.isThere(S4))continue;
-//					if(!e.isTheres(TL,TR)) continue;
-//					if(!e.isTheres(S1) && !e.isTheres(S2) && !e.isTheres(S3)) continue;
+
 					
 
+//					if (e.isThere(S0) || e.isThere(S4))continue;
+//					if(e.isTheres(S1) || e.isTheres(S2) || e.isThere(S3)) retval+=1000;
+//					if (e.isTheres(TL) || e.isThere(TR)) retval+=2000;
+					
 					if (e.isThere(S0) || e.isThere(S4))continue;
-					if(e.isTheres(S1) || e.isTheres(S2) || e.isThere(S3)) retval+=1000;
-					if (e.isTheres(TL) || e.isThere(TR)) retval+=2000;
+					retval +=700;
+					float a = States.borderSafe(e, 2, TL,TR);
+					float b = States.borderSafe(e, 3, S1,S2,S3);
+					float ncap = States.minFinder(a,b);
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
+					
 				
 
 				

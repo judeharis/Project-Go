@@ -41,21 +41,29 @@ public class BentFourSide {
 					counter++;
 					
 					
+
+
+
 //					if (e.isThere(S0) || e.isThere(S3))continue;
-//					if (!e.isThere(LT))continue;
-//					if(!e.isTheres(TL,S2) && !e.isTheres(TR,S2)  
-//							&& !e.isTheres(S1,TL,TR)) continue;
-
-
+//					if (e.isThere(S2)) {
+//						retval+=1400;
+//						if(e.isTheres(TL) || e.isTheres(TR)) retval+=400;
+//					}else if(e.isThere(S1)) {
+//						retval+=1200;
+//						if(e.isTheres(TL,TR)) retval+=600;
+//					}
+//					if (e.isThere(LT))retval+=200;
+					
 					if (e.isThere(S0) || e.isThere(S3))continue;
-					if (e.isThere(S2)) {
-						retval+=1400;
-						if(e.isTheres(TL) || e.isTheres(TR)) retval+=400;
-					}else if(e.isThere(S1)) {
-						retval+=1200;
-						if(e.isTheres(TL,TR)) retval+=600;
-					}
-					if (e.isThere(LT))retval+=200;
+					retval +=600;
+					float b1 = States.borderSafe(e, 1, LT);
+					float b2 = States.borderSafe(e, 2, S1,S2,TL,TR);
+
+					float ncap = States.minFinder(b1,b2);
+
+
+					if(ncap>0.5) retval+=600;
+					else if(ncap<0.5) retval-=600;
 					
 				}
 				
@@ -83,24 +91,30 @@ public class BentFourSide {
 					Tuple RT = S3.side2(side.opp(),r);
 					counter++;
 					
+
 					
 //					if (e.isThere(S0) || e.isThere(S3))continue;
-//					if (!e.isThere(RT))continue;
-//					if(!e.isThere(TL) && !e.isThere(TR)) continue;
-//					if(!e.isTheres(S1) && !e.isTheres(S2))continue;
-
-
+//					if (e.isThere(S1)) {
+//						retval+=1400;
+//						if(e.isTheres(TL) || e.isTheres(TR)) retval+=400;
+//						if (e.isThere(RT))retval+=200;
+//					}else if(e.isThere(RT)) {
+//						retval+=1200;
+//						if(e.isTheres(TL) || e.isTheres(TR)) retval+=200;
+//						if (e.isThere(S2))retval+=600;
+//					}
 					
 					if (e.isThere(S0) || e.isThere(S3))continue;
-					if (e.isThere(S1)) {
-						retval+=1400;
-						if(e.isTheres(TL) || e.isTheres(TR)) retval+=400;
-						if (e.isThere(RT))retval+=200;
-					}else if(e.isThere(RT)) {
-						retval+=1200;
-						if(e.isTheres(TL) || e.isTheres(TR)) retval+=200;
-						if (e.isThere(S2))retval+=600;
-					}
+					retval +=600;
+					float b1 = States.borderSafe(e, 2, TL,TR);
+					float b2 = States.borderSafe(e, 1, RT);
+					float b3 = States.borderSafe(e, 2, S1,S2);
+
+					float ncap = States.minFinder(b1,b2,b3);
+
+
+					if(ncap>0.5) retval+=600;
+					else if(ncap<0.5) retval-=600;
 
 					
 
@@ -130,33 +144,38 @@ public class BentFourSide {
 					Tuple TL = tlist.get(0).side(l);
 					Tuple TR = tlist.get(0).side2(r,r);
 					Tuple BL = TL.side2(side,side);
+					Tuple BB = BL.side(side);
 					counter++;
 					
-					
-					if (e.isThere(S0) || e.isThere(S3))continue;
 
 					
-//					if(e.isThere(S1)) {
-//						if(e.isTheres(TL));
-//						else if(e.isTheres(BL));
-//						else continue;
+					
+//					if (e.isThere(S0) || e.isThere(S3))continue;
+//					if (e.isThere(S1)) {
+//						retval+=1400;
+//						if(e.isTheres(TL) || e.isTheres(BL))retval+=600;
 //					}else if(e.isThere(S2)) {
-//						if(e.isTheres(TL,TR));
-//						else if(e.isTheres(TL,BL));
-//						else if(e.isTheres(BL,TR));
-//						else continue;
-//					} else continue;
-					
+//						retval+=1200;
+//						if(e.isTheres(TL,TR) || (e.isTheres(TL,BL)) || e.isTheres(BL,TR)) retval+=800;
+//
+//					}
 					
 					if (e.isThere(S0) || e.isThere(S3))continue;
-					if (e.isThere(S1)) {
-						retval+=1400;
-						if(e.isTheres(TL) || e.isTheres(BL))retval+=600;
-					}else if(e.isThere(S2)) {
-						retval+=1200;
-						if(e.isTheres(TL,TR) || (e.isTheres(TL,BL)) || e.isTheres(BL,TR)) retval+=800;
+					if (e.isTheres(S1,S2,BL,BB))continue;
+					retval +=600;
+					float b1 = States.borderSafe(e, 2, TL,BL);
+					float b2 = States.borderSafe(e, 2, S1,S2);
+					float b3 = States.borderSafe(e, 3, S1,TR,TL);
+					float b4 = States.borderSafe(e, 3, S1,TR,BL);
 
-					}
+					float ncap = States.minFinder(b1,b2,b3,b4);
+					if(States.oneCheck(b1,b3) || States.oneCheck(b1,b4) || States.oneCheck(b1,b2)) ncap = States.minFinder(ncap,0.5f);
+					if(States.oneCheck(b2,b3) || States.oneCheck(b2,b4)) ncap = States.minFinder(ncap,0.5f);
+
+
+
+					if(ncap>0.5) retval+=600;
+					else if(ncap<0.5) retval-=600;
 
 
 
@@ -190,26 +209,34 @@ public class BentFourSide {
 					
 					
 					
-//					if(e.isThere(S1)) {
-//						if(e.isTheres(TL));
-//						else if(e.isTheres(BL));
-//						else continue;
-//					}else if(e.isThere(S2)) {
-//						if(e.isTheres(TL,TR));
-//						else if(e.isTheres(TL,BL));
-//						else if(e.isTheres(BL,TR));
-//						else continue;
-//					} else continue;
+
+//					if (e.isThere(S0) || e.isThere(S3))continue;
+//					if (e.isThere(S2)) {
+//						retval+=1400;
+//						if(e.isTheres(TL) || e.isTheres(BL))retval+=600;
+//					}else if(e.isThere(S1)) {
+//						retval+=1200;
+//						if(e.isTheres(TL,TR) || (e.isTheres(TL,BL)) || e.isTheres(BL,TR)) retval+=800;
+//
+//					}
+					
 					
 					if (e.isThere(S0) || e.isThere(S3))continue;
-					if (e.isThere(S2)) {
-						retval+=1400;
-						if(e.isTheres(TL) || e.isTheres(BL))retval+=600;
-					}else if(e.isThere(S1)) {
-						retval+=1200;
-						if(e.isTheres(TL,TR) || (e.isTheres(TL,BL)) || e.isTheres(BL,TR)) retval+=800;
+					if (e.isTheres(BL,S1,S2))continue;
+					retval +=600;
+					float b1 = States.borderSafe(e, 2, TL,BL);
+					float b2 = States.borderSafe(e, 2, S1,S2);
+					float b3 = States.borderSafe(e, 2, S2,TR);
 
-					}
+
+					float ncap = States.minFinder(b1,b2,b3);
+					if(States.oneCheck(b2,b3)) ncap = States.minFinder(ncap,0.5f);
+
+
+
+
+					if(ncap>0.5) retval+=600;
+					else if(ncap<0.5) retval-=600;
 
 
 

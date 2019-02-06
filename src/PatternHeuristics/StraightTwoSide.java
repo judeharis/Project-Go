@@ -35,13 +35,15 @@ public class StraightTwoSide {
 
 					
 					if (e.isThere(S1) || e.isThere(S2))continue;
-					if(!e.isTheres(TL,TR)) continue;
+					retval =75;
+					float a = States.borderSafe(e, 1, TL,TR);
+					float ncap = States.minFinder(a);
+
+					if(ncap>0.5) retval+=75;
+					else if(ncap<0.5) retval-=75;
 					
 					
-					String s = States.arrayToString(e,TL,TR,S1,S2);
-					if("AANN".equals(s)){retval+=200;continue;}
-					if("AAEN".equals(s)){retval+=200;continue;}
-					if("AANE".equals(s)){retval+=200;continue;}
+
 
 					
 					
@@ -68,12 +70,13 @@ public class StraightTwoSide {
 
 					
 					if (e.isThere(S1) || e.isThere(S2))continue;
-					if(!e.isTheres(TL,TR)) continue;
+					retval =75;
+					
+					float a = States.borderSafe(e, 1, TL,TR);
+					float ncap = States.minFinder(a);
 
-					String s = States.arrayToString(e,TL,TR,S1,S2);
-					if("AANN".equals(s)){retval+=200;continue;}
-					if("AAEN".equals(s)){retval+=200;continue;}
-					if("AANE".equals(s)){retval+=200;continue;}
+					if(ncap>0.5) retval+=75;
+					else if(ncap<0.5) retval-=75;
 
 
 					

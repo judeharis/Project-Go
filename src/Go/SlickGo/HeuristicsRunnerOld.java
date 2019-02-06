@@ -21,17 +21,17 @@ public class HeuristicsRunnerOld {
 		int retval =0;
 		
 
-		SixDie sixDie= new SixDie(e);
-		retval += sixDie.evaluate(keygroup.group);
-		
-		SevenUnsettled sevenUnsettled= new SevenUnsettled(e);
-		retval += sevenUnsettled.evaluate(keygroup.group);
-		
-		EightLive eightLive= new EightLive(e);
-		retval += eightLive.evaluate(keygroup.group);
-		
-		LineTwoSideEscape lineTwoSideEscape= new LineTwoSideEscape(e);
-		retval += lineTwoSideEscape.evaluate(keygroup.group);
+//		SixDie sixDie= new SixDie(e);
+//		retval += sixDie.evaluate(keygroup.group);
+//		
+//		SevenUnsettled sevenUnsettled= new SevenUnsettled(e);
+//		retval += sevenUnsettled.evaluate(keygroup.group);
+//		
+//		EightLive eightLive= new EightLive(e);
+//		retval += eightLive.evaluate(keygroup.group);
+//		
+//		LineTwoSideEscape lineTwoSideEscape= new LineTwoSideEscape(e);
+//		retval += lineTwoSideEscape.evaluate(keygroup.group);
 		
 		
 //		StraightOneSide straightOneSide= new StraightOneSide(e);
@@ -43,14 +43,14 @@ public class HeuristicsRunnerOld {
 //		StraightThreeSide straightThreeSide= new StraightThreeSide(e);
 //		retval += straightThreeSide.evaluate(keygroup.group);
 		
-		StraightFourSide straightFourSide= new StraightFourSide(e);
-		retval += straightFourSide.evaluate(keygroup.group);
-		
-		StraightFiveSide straightFiveSide= new StraightFiveSide(e);
-		retval += straightFiveSide.evaluate(keygroup.group);
-		
-		StraightSixSide straightSixSide= new StraightSixSide(e);
-		retval += straightSixSide.evaluate(keygroup.group);
+//		StraightFourSide straightFourSide= new StraightFourSide(e);
+//		retval += straightFourSide.evaluate(keygroup.group);
+//		
+//		StraightFiveSide straightFiveSide= new StraightFiveSide(e);
+//		retval += straightFiveSide.evaluate(keygroup.group);
+//		
+//		StraightSixSideOLD straightSixSide= new StraightSixSideOLD(e);
+//		retval += straightSixSide.evaluate(keygroup.group);
 		
 
 //		BentThree bentThree= new BentThree(e);
@@ -72,30 +72,30 @@ public class HeuristicsRunnerOld {
 //		retval += straightThree.evaluate(keygroup.group);
 		
 		
-		SquareFour squareFour= new SquareFour(e);
-		retval += squareFour.evaluate(keygroup.group);
-		
-		SquareFourCorner squareFourCorner= new SquareFourCorner(e);
-		retval += squareFourCorner.evaluate(keygroup.group);
-		
-		SquareFourSide squareFourSide= new SquareFourSide(e);
-		retval += squareFourSide.evaluate(keygroup.group);
-		
-		PyramidFour pyramidFour= new PyramidFour(e);
-		retval += pyramidFour.evaluate(keygroup.group);
-		
-		PyramidFourSide pyramidFourSide= new PyramidFourSide(e);
-		retval += pyramidFourSide.evaluate(keygroup.group);
-		
-		PyramidFourCorner pyramidFourCorner= new PyramidFourCorner(e);
-		retval += pyramidFourCorner.evaluate(keygroup.group);
-		
-		
-		CrossedFive crossedFive= new CrossedFive(e);
-		retval += crossedFive.evaluate(keygroup.group);
-		
-		BulkyFive bulkyFive= new BulkyFive(e);
-		retval += bulkyFive.evaluate(keygroup.group);
+//		SquareFour squareFour= new SquareFour(e);
+//		retval += squareFour.evaluate(keygroup.group);
+//		
+//		SquareFourCorner squareFourCorner= new SquareFourCorner(e);
+//		retval += squareFourCorner.evaluate(keygroup.group);
+//		
+//		SquareFourSide squareFourSide= new SquareFourSide(e);
+//		retval += squareFourSide.evaluate(keygroup.group);
+//		
+//		PyramidFour pyramidFour= new PyramidFour(e);
+//		retval += pyramidFour.evaluate(keygroup.group);
+//		
+//		PyramidFourSide pyramidFourSide= new PyramidFourSide(e);
+//		retval += pyramidFourSide.evaluate(keygroup.group);
+//		
+//		PyramidFourCorner pyramidFourCorner= new PyramidFourCorner(e);
+//		retval += pyramidFourCorner.evaluate(keygroup.group);
+//		
+//		
+//		CrossedFive crossedFive= new CrossedFive(e);
+//		retval += crossedFive.evaluate(keygroup.group);
+//		
+//		BulkyFive bulkyFive= new BulkyFive(e);
+//		retval += bulkyFive.evaluate(keygroup.group);
 		
 		
 //		SingleEye singleEye= new SingleEye(e);
@@ -108,55 +108,55 @@ public class HeuristicsRunnerOld {
 
 		
 
-		Eye eye= new Eye(e);
-		retval += eye.evaluate(keygroup.group)*1;
-		
-		EyeSide eyeSide= new EyeSide(e);
-		retval += eyeSide.evaluate(keygroup.group)*1;
-		
-		EyeCorner eyeCorner= new EyeCorner(e);
-		retval += eyeCorner.evaluate(keygroup.group)*1;
-		
-		StraightTwo straightTwo= new StraightTwo(e);
-		retval += straightTwo.evaluate(keygroup.group)*1;
-		
-
-		StraightTwoSidev2 StraightTwoSidev2= new StraightTwoSidev2(e);
-		retval += StraightTwoSidev2.evaluate(keygroup.group)*1;
-		
-		StraightTwoCorner straightTwoCorner= new StraightTwoCorner(e);
-		retval += straightTwoCorner.evaluate(keygroup.group)*1;
-		
-		
-		StraightThreev2 straightThreev2= new StraightThreev2(e);
-		retval += straightThreev2.evaluate(keygroup.group);
-		
-		
-
-		StraightThreeSidev2 straightThreeSidev2= new StraightThreeSidev2(e);
-		retval += straightThreeSidev2.evaluate(keygroup.group);
-		
-
-		
-		StraightThreeCornerv2 straightThreeCornerv2= new StraightThreeCornerv2(e);
-		retval += straightThreeCornerv2.evaluate(keygroup.group);
-		
-
-
-		
-		BentThreev2 bentThreev2= new BentThreev2(e);
-		retval += bentThreev2.evaluate(keygroup.group);
-		
-
-
-
-		BentThreeSide bentThreeSidev2= new BentThreeSide(e);
-		retval += bentThreeSidev2.evaluate(keygroup.group);
-		
-
-
-		BentThreeCornerv2 bentThreeCornerv2= new BentThreeCornerv2(e);
-		retval += bentThreeCornerv2.evaluate(keygroup.group);
+//		Eye eye= new Eye(e);
+//		retval += eye.evaluate(keygroup.group)*1;
+//		
+//		EyeSide eyeSide= new EyeSide(e);
+//		retval += eyeSide.evaluate(keygroup.group)*1;
+//		
+//		EyeCorner eyeCorner= new EyeCorner(e);
+//		retval += eyeCorner.evaluate(keygroup.group)*1;
+//		
+//		StraightTwo straightTwo= new StraightTwo(e);
+//		retval += straightTwo.evaluate(keygroup.group)*1;
+//		
+//
+//		StraightTwoSidev2 StraightTwoSidev2= new StraightTwoSidev2(e);
+//		retval += StraightTwoSidev2.evaluate(keygroup.group)*1;
+//		
+//		StraightTwoCorner straightTwoCorner= new StraightTwoCorner(e);
+//		retval += straightTwoCorner.evaluate(keygroup.group)*1;
+//		
+//		
+//		StraightThreev2 straightThreev2= new StraightThreev2(e);
+//		retval += straightThreev2.evaluate(keygroup.group);
+//		
+//		
+//
+//		StraightThreeSidev2 straightThreeSidev2= new StraightThreeSidev2(e);
+//		retval += straightThreeSidev2.evaluate(keygroup.group);
+//		
+//
+//		
+//		StraightThreeCornerv2 straightThreeCornerv2= new StraightThreeCornerv2(e);
+//		retval += straightThreeCornerv2.evaluate(keygroup.group);
+//		
+//
+//
+//		
+//		BentThreev2 bentThreev2= new BentThreev2(e);
+//		retval += bentThreev2.evaluate(keygroup.group);
+//		
+//
+//
+//
+//		BentThreeSide bentThreeSidev2= new BentThreeSide(e);
+//		retval += bentThreeSidev2.evaluate(keygroup.group);
+//		
+//
+//
+//		BentThreeCornerv2 bentThreeCornerv2= new BentThreeCornerv2(e);
+//		retval += bentThreeCornerv2.evaluate(keygroup.group);
 
 		
 //		Eye eye= new Eye(e);

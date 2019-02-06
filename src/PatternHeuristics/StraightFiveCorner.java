@@ -37,15 +37,21 @@ public class StraightFiveCorner {
 					counter++;
 					
 					
+
+					
+					
 //					if (e.isThere(S0) || e.isThere(S4))continue;
-//					if(!e.isTheres(TL)) continue;
-//					if(!e.isTheres(S1) && !e.isTheres(S2) && !e.isTheres(S3)) continue;
+//					if (e.isTheres(S1) || e.isTheres(S2) || e.isThere(S3))retval +=1000;
+//					if (e.isTheres(TL))retval +=2000;
 					
 					
 					if (e.isThere(S0) || e.isThere(S4))continue;
-					if (e.isTheres(S1) || e.isTheres(S2) || e.isThere(S3))retval +=1000;
-					if (e.isTheres(TL))retval +=2000;
-					
+					retval +=700;
+					float a = States.borderSafe(e, 1, TL);
+					float b = States.borderSafe(e, 3, S1,S2,S3);
+					float ncap = States.minFinder(a,b);
+					if(ncap>0.5) retval+=700;
+					else if(ncap<0.5) retval-=700;
 
 				
 

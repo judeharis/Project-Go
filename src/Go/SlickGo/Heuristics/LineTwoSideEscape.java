@@ -10,25 +10,20 @@ import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
 public class LineTwoSideEscape  {
-	Evaluator e;
-	PatternSearcher ps;
 
-	public LineTwoSideEscape (Evaluator e){
-		this.e=e;
-	}
+	static ArrayList<Pattern> lineTwoSideEscapePattern = Pattern.sToPv2("xrouodddS");
 
-	
-	public int evaluate(ArrayList<Tuple> sstring) {
+	public static int evaluate(ArrayList<Tuple> sstring, Evaluator e) {
 		int retval = 0;
-		ps = new PatternSearcher(e.cB,e.kscolour);
-		ArrayList<Pattern> pattern;
+		PatternSearcher ps = new PatternSearcher(e.cB,e.kscolour);
 
-		ArrayList<ArrayList<Tuple>> pMatches;
+		
+//		
+//		ArrayList<Pattern> pattern = Pattern.sToPv2("xrouodddS", e.kscolour);
+//		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatch(sstring, pattern);
 		
 		
-		
-		pattern = Pattern.sToPv2("xrouodddS", e.kscolour);
-		pMatches =ps.allStringMatch(sstring, pattern);
+		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, lineTwoSideEscapePattern,e.kscolour);
 		
 		if(!pMatches.isEmpty()) {
 			int counter=0;

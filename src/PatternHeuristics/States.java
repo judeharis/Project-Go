@@ -37,5 +37,60 @@ public enum States {
 		}
 		return states;
 	}
+	
+	static public float borderSafe(Evaluator e,int badlimit,Tuple...ts) {
+		float enemycount = 0;
+		float nothingcount = 0;
+		for(Tuple t :ts) {
+			if(e.isEnemy(t))enemycount++;
+			else if(e.isThere(t));
+			else nothingcount++;
+		}
+
+
+		enemycount +=(nothingcount/2);
+
+
+		if(enemycount+nothingcount <badlimit)return badlimit;
+
+		
+		
+		return badlimit - enemycount ;
+	}
+
+	
+	
+	static public float minFinder(float ...fs) {
+
+		float min = 10000;
+		int halfcount=0;
+		for(float f :fs) {
+			if(f<min)min=f;
+			if(f<1)halfcount ++;
+			if(halfcount>1)return 0;
+		}
+
+		
+		return min ;
+	}
+	
+	
+	static public boolean oneCheck(float ...fs) {
+		for(float f :fs)if(f!=1)return false;
+		return true ;
+	}
+	
+	static public boolean numCheck(double i,float ...fs) {
+		for(float f :fs)if(f!=i)return false;
+		return true ;
+	}
+	
+	static public void addAlly(ArrayList<Tuple> tlist,Evaluator e,Tuple ...ts) {
+
+		for (Tuple t :ts){
+			if (e.isTheres(t)) tlist.add(t);
+
+		}
+	}
 
 }

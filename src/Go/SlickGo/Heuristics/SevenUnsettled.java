@@ -9,22 +9,20 @@ import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
 public class SevenUnsettled  {
-	Evaluator e;
-	PatternSearcher ps;
-
-	public SevenUnsettled (Evaluator e){
-		this.e=e;
-	}
-
-
+	
+	
+	static ArrayList<Pattern> sevenUnsettledPattern = Pattern.sToPv2("xrxrxrxrxrxrxrozloddS");
 
 	
-	public int evaluate(ArrayList<Tuple> sstring) {
+	
+	public static int evaluate(ArrayList<Tuple> sstring , Evaluator e) {
 		int retval = 0;
-		ps = new PatternSearcher(e.cB,e.kscolour);
+		PatternSearcher ps = new PatternSearcher(e.cB,e.kscolour);
 		
-		ArrayList<Pattern> pattern7 = Pattern.sToPv2("xrxrxrxrxrxrxrozloddS",e.kscolour);
-		ArrayList<ArrayList<Tuple>>  pMatches =ps.allStringMatchv2(sstring, pattern7);
+//		ArrayList<Pattern> pattern7 = Pattern.sToPv2("xrxrxrxrxrxrxrozloddS",e.kscolour);
+//		ArrayList<ArrayList<Tuple>>  pMatches =ps.allStringMatchv2(sstring, pattern7);
+		
+		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, sevenUnsettledPattern,e.kscolour);
 		
 		if(!pMatches.isEmpty()) {
 			int counter=0;

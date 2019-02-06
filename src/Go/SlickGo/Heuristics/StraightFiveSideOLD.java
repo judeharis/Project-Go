@@ -8,11 +8,11 @@ import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-public class StraightFiveSide {
+public class StraightFiveSideOLD {
 	Evaluator e;
 	PatternSearcher ps;
 
-	public StraightFiveSide (Evaluator e){
+	public StraightFiveSideOLD (Evaluator e){
 		this.e=e;
 	}
 
@@ -85,8 +85,11 @@ public class StraightFiveSide {
 		
 
 		
-		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxrxdxzdxdS", e.kscolour);
-		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
+//		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxrxdxzdxdS", e.kscolour);
+//		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern);
+		
+		ArrayList<Pattern> pattern = Pattern.sToPv2("xrxrxrxrxrxrxdxzdxdS");
+		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, pattern,e.kscolour);
 		
 		if(!pMatches.isEmpty()) {
 				int counter=0;

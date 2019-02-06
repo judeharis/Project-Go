@@ -53,12 +53,15 @@ public class PyramidFour {
 //					String s = States.arrayToString(e,A1,A2,B1,B2,C1,C2,S0,S1,S2,D0);
 					
 					if(e.isThere(S0)||e.isThere(S2)||e.isThere(D0)) continue;
-					if(e.isTheres(A1,B1,C1) || e.isTheres(A1,B1,C2) ||
-							e.isTheres(A1,B2,C1) || e.isTheres(A1,B2,C2) ||
-							e.isTheres(A2,B1,C1) || e.isTheres(A2,B1,C2) ||
-							e.isTheres(A2,B2,C1) || e.isTheres(A2,B2,C2))retval+=600;
-					if(e.isTheres(S1)) retval+=1400;
+					retval +=600;
+					float a = States.borderSafe(e, 2, A1,A2);
+					float b = States.borderSafe(e, 2, B1,B2);
+					float c = States.borderSafe(e, 2, C1,C2);
+					float d = States.borderSafe(e, 1, S1);
 					
+					float ncap = States.minFinder(a,b,c,d);
+					if(ncap>0.5) retval+=600;
+					else if(ncap<0.5) retval-=600;
 
 				}
 				

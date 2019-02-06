@@ -8,6 +8,7 @@ public class Evaluator {
 	public Stone enemycolour = kscolour.getEC();
 	ArrayList<Tuple> checkedPoints = new ArrayList<Tuple>();
 
+
 	public Evaluator(Board cB) {
 		this.cB = cB;
 	}
@@ -47,6 +48,7 @@ public class Evaluator {
 		Grouping grouping = new Grouping(cB,false,false,false,false);
 		grouping.allocateGrouping();
 		
+
 		HeuristicsRunner hrunner= new HeuristicsRunner(cB , this);
 		
 		if (editormode) {
@@ -179,6 +181,7 @@ public class Evaluator {
 		checkedPoints.add(t);
 		return cB.stones[t.a][t.b].getSC() == kscolour.getEC();
 	}
+	
 
 
 	public boolean isEnemies(Tuple...ts) {
@@ -186,6 +189,8 @@ public class Evaluator {
 		for (Tuple t :ts)if(!isEnemy(t))ret=false;
 		return ret;
 	}
+	
+	
 
 	public boolean isTheres(Tuple...ts) {
 		boolean ret = true;

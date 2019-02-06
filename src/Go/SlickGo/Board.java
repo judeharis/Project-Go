@@ -28,7 +28,7 @@ public class Board{
 
 	
 	
-    Stone placing= Stone.BLACK;
+    public Stone placing= Stone.BLACK;
     Stone turn = Stone.BLACK;
     Stone keystone = Stone.KEYBLACKSTONE;
     
@@ -51,6 +51,7 @@ public class Board{
     ArrayList<Tuple> bCappedStrings = new ArrayList<Tuple>();
     ArrayList<Tuple> wCappedStrings = new ArrayList<Tuple>();
     ArrayList<Tuple> validMoves;
+
 
     ArrayList<ArrayList<Tuple>> bStoneStrings = new ArrayList<ArrayList<Tuple>>();
     ArrayList<ArrayList<Tuple>> wStoneStrings = new ArrayList<ArrayList<Tuple>>();
@@ -101,9 +102,11 @@ public class Board{
 		if (ko !=null) stones[ko.a][ko.b] = Stone.KO;
 		if (!editormode)placing =turn;
 		validMoves =getAllValidMoves();
+		
+
 		boardString = boardToString();
 		
-		
+
 		return moveMade;
 
     }
@@ -327,9 +330,11 @@ public class Board{
 		ArrayList<Tuple> vMoves = checkBoard.getAllValidMoves();
 		ArrayList<Tuple> libs = getLibs(list,true);
 		checkBoard.removeKo();
+		checkBoard.boardString = checkBoard.boardToString();
 		while (!vMoves.isEmpty()) {	
 			ArrayList<Tuple> preValidMoves =tupleArrayClone(vMoves);
 			vMoves.retainAll(libs);
+			checkBoard.boardString = checkBoard.boardToString();
 			if(vMoves.isEmpty()) {
 				vMoves = preValidMoves;
 				ArrayList<ArrayList<Tuple>> empty = getConnected(vMoves);
@@ -357,7 +362,7 @@ public class Board{
 			checkBoard.checkForCaps(colour.getEC(), false);
 			checkBoard.checkForCaps(colour,false);
 			checkBoard.boardString = checkBoard.boardToString();	
-			ArrayList<Tuple> cappedStrings = (colour== Stone.WHITE ? checkBoard.bCappedStrings: checkBoard.wCappedStrings);
+			ArrayList<Tuple> cappedStrings = (colour == Stone.WHITE ? checkBoard.bCappedStrings: checkBoard.wCappedStrings);
 			if(!cappedStrings.isEmpty()) {
 				checkBoard=nCB;		
 				for(Tuple t:cappedStrings) if(vMoves.remove(t))break;
