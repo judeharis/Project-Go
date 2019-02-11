@@ -106,6 +106,7 @@ public class Board{
 
 		boardString = boardToString();
 		
+		if(moveMade)redoString.clear();
 
 		return moveMade;
 
@@ -158,6 +159,18 @@ public class Board{
     	return validMoves;
     }
 
+    
+    public ArrayList<Tuple> getAllValidMovesEditorMode() {
+    	ArrayList<Tuple>  validPoint = new ArrayList<Tuple>();
+    	for(int i=0; i<stones.length; i++) {
+            for(int j=0; j<stones[i].length; j++) {
+            	if(stones[i][j]==Stone.VALID)validPoint.add(new Tuple(i,j));
+            }
+    	}
+    	return validPoint;
+    }
+    
+    
     public ArrayList<Tuple> removeBadMovess() {
         ArrayList<ArrayList<Tuple>> stoneStrings = turn.getSC().getSStrings(this);
         ArrayList<Tuple> capString =  turn.getEC().getCapList(this);
@@ -905,6 +918,33 @@ public class Board{
     		return (((x - (x % TileSize)) +  TileSize)/TileSize);}
     	else return -1;
     }
+
+	public boolean validBoard() {
+		Stone keystonecolour= Stone.KEYBLACKSTONE;
+		int keystonecount = 0;
+		int kocount =0;
+		
+		keystones.clear();
+        
+        for(int i=0; i<stones.length; i++) {
+            for(int j=0; j<stones[i].length; j++) {
+            	if(stones[i][j].isKey()) {
+                	if(keystonecount==0){
+                		keystonecolour=stones[i][j];
+                		keystonecount++;
+                		keystones.add(new Tuple(i,j));
+                	}else if(keystonecount >0) {
+                		if(keystonecolour!=stones[i][j])return false;
+                		keystonecount++;
+                		keystones.add(new Tuple(i,j));
+                	}
+                }else if(stones[i][j]==Stone.KO)kocount++;
+
+            }
+        }
+		if(kocount>1 || keystonecount<1)return false;
+		return true;
+	}
 
 
 

@@ -44,32 +44,45 @@ public class CrossedFive {
 					counter++;
 					
 
-					
-//					if (e.isThere(S0) || e.isThere(S1) || e.isThere(S3) || e.isThere(S4))continue;
-//					if(e.isTheres(S2)) retval+=2000;
-//					if(e.isTheres(A1) || e.isTheres(A2)) retval+=250;
-//					if(e.isTheres(B1) || e.isTheres(B2)) retval+=250;
-//					if(e.isTheres(C1) || e.isTheres(C2)) retval+=250;
-//					if(e.isTheres(D1) || e.isTheres(D2)) retval+=250;
-//					
-//					if(e.isEnemies(A1) && e.isEnemies(A2)) retval-=400;
-//					if(e.isEnemies(B1) && e.isEnemies(B2)) retval-=400;
-//					if(e.isEnemies(C1) && e.isEnemies(C2)) retval-=400;
-//					if(e.isEnemies(D1) && e.isEnemies(D2)) retval-=400;
-					
+
 					
 					if (e.isThere(S0) || e.isThere(S1) || e.isThere(S3) || e.isThere(S4))continue;
-					retval +=900;
+					
+					int patval =0;	
+					patval +=50;
+					float z1 = States.borderSafe(e, 1,S0);
+					float z2 = States.borderSafe(e, 1,S1);
+					float z3 = States.borderSafe(e, 1,S3);
+					float z4 = States.borderSafe(e, 1,S4);
+					float z5 = States.borderSafe(e, 8,A1,A2,B1,B2,C1,C2,D1,D2) +States.minFinder(z1,z2,z3,z4);
+					float zcap = States.minFinder(z5);
+					if(zcap>0.5) patval+=50;
+					else if(zcap<0.5) patval-=50;
+					if(e.isThere(S2))patval=0;
+					
+					patval +=850;
 					float b1 = States.borderSafe(e, 2, A1,A2);
 					float b2 = States.borderSafe(e, 2, B1,B2);
 					float b3 = States.borderSafe(e, 2, C1,C2);
 					float b4 = States.borderSafe(e, 2, D1,D2);
 					float b5 = States.borderSafe(e, 1, S2);
-					
-
 					float ncap = States.minFinder(b1,b2,b3,b4,b5);
-					if(ncap>0.5) retval+=900;
-					else if(ncap<0.5) retval-=900;
+					if(ncap>0.5) patval+=850;
+					else if(ncap<0.5) patval-=850;
+					
+					retval+=patval;
+					if(patval>=100 && !e.isThere(S2))e.addToEye(S0,S1,S2,S3,S4);
+					
+					
+//					retval +=900;
+//					float b1 = States.borderSafe(e, 2, A1,A2);
+//					float b2 = States.borderSafe(e, 2, B1,B2);
+//					float b3 = States.borderSafe(e, 2, C1,C2);
+//					float b4 = States.borderSafe(e, 2, D1,D2);
+//					float b5 = States.borderSafe(e, 1, S2);
+//					float ncap = States.minFinder(b1,b2,b3,b4,b5);
+//					if(ncap>0.5) retval+=900;
+//					else if(ncap<0.5) retval-=900;
 					
 
 					

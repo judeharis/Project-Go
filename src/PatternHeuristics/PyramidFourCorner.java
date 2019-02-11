@@ -44,14 +44,35 @@ public class PyramidFourCorner {
 					
 					
 					if(e.isThere(S0)||e.isThere(D2)||e.isThere(D0)) continue;
-					retval +=700;
+					
+					
+					int patval =0;	
+					patval +=100;
+					if(e.isThere(D1))patval=0;
+
+					patval +=650;
 					float a = States.borderSafe(e, 2, TL,TR);
 					float b = States.borderSafe(e, 1, LT);
 					float c = States.borderSafe(e, 1, D1);
 					
 					float ncap = States.minFinder(a,b,c);
-					if(ncap>0.5) retval+=700;
-					else if(ncap<0.5) retval-=700;
+					if(ncap>0.5) patval+=650;
+					else if(ncap<0.5) patval-=650;
+					
+					
+					retval+=patval;
+					if(patval>=100 && !e.isThere(D1))e.addToEye(S0,D0,D1,D2);
+					
+					
+					
+//					retval +=700;
+//					float a = States.borderSafe(e, 2, TL,TR);
+//					float b = States.borderSafe(e, 1, LT);
+//					float c = States.borderSafe(e, 1, D1);
+//					
+//					float ncap = States.minFinder(a,b,c);
+//					if(ncap>0.5) retval+=700;
+//					else if(ncap<0.5) retval-=700;
 
 				}
 				
@@ -87,13 +108,32 @@ public class PyramidFourCorner {
 
 
 					if(e.isThere(S0)||e.isThere(S2)||e.isThere(D0)) continue;
-					retval +=700;
+					
+					
+					int patval =0;	
+					patval +=100;
+					if(e.isThere(S1))patval=0;
+
+					patval +=650;
 					float a = States.borderSafe(e, 2, TL,BL);
 					float b = States.borderSafe(e, 1, S1);
 					
 					float ncap = States.minFinder(a,b);
-					if(ncap>0.5) retval+=700;
-					else if(ncap<0.5) retval-=700;
+					if(ncap>0.5) patval+=650;
+					else if(ncap<0.5) patval-=650;
+					
+					
+					retval+=patval;
+					if(patval>=100 && !e.isThere(S1))e.addToEye(S0,S1,S2,D0);
+					
+					
+//					retval +=700;
+//					float a = States.borderSafe(e, 2, TL,BL);
+//					float b = States.borderSafe(e, 1, S1);
+//					
+//					float ncap = States.minFinder(a,b);
+//					if(ncap>0.5) retval+=700;
+//					else if(ncap<0.5) retval-=700;
 
 					
 					

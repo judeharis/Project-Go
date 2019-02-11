@@ -40,39 +40,22 @@ public class TwistedFour {
 					Tuple BR = RB.side2(side,l);
 					counter++;
 					
-//					if (e.isThere(S1) || e.isThere(D1))continue;
-//					
-//					if (!e.isThere(S0) && !e.isThere(D0))continue;
-//					
-//					if (!e.isTheres(S0,TR,BR,BL) && !e.isTheres(S0,TR,BR,LT) 
-//							&& !e.isTheres(S0,RB,BR,BL) && !e.isTheres(S0,RB,BR,LT) 
-//							&& !e.isTheres(D0,BL,TL,TR) && !e.isTheres(D0,BL,TL,RB) 
-//							&& !e.isTheres(D0,LT,TL,TR) && !e.isTheres(D0,LT,TL,RB) 
-//							&& !e.isTheres(D0,S0,BL,RB) && !e.isTheres(D0,S0,BL,TR)
-//							&& !e.isTheres(D0,S0,LT,RB) && !e.isTheres(D0,S0,LT,TR))continue;
-					
-					
-//					if (e.isThere(S1) || e.isThere(D1))continue;
-//
-//					if (e.isTheres(S0,D0)){
-//						retval+=1400;
-//						if(e.isTheres(BL,RB) || e.isTheres(BL,TR)
-//								|| e.isTheres(LT,RB) || e.isTheres(LT,TR))retval+=700;
-//					}else if (e.isThere(S0)){
-//						retval+=1100;
-//						if (e.isTheres(TR,BR,BL) || e.isTheres(TR,BR,LT) 
-//								|| e.isTheres(RB,BR,BL) || e.isTheres(RB,BR,LT))retval+=900;
-//					}else if (e.isThere(D0)){
-//						retval+=1100;
-//						if (e.isTheres(BL,TL,TR) || e.isTheres(BL,TL,RB) 
-//								|| e.isTheres(LT,TL,TR) || e.isTheres(LT,TL,RB)) retval+=900;
-//					}
 
 					
 					
 					if (e.isThere(S1) || e.isThere(D1))continue;
 					if (e.isTheres(S0,BR,RB) || e.isTheres(D0,TL,LT) )continue;
-					retval +=700;
+					
+					
+					int patval =0;	
+					patval +=50;
+					float z1 = States.borderSafe(e, 6,RB,TR,LT,BL,S1,D1);
+					float zcap = States.minFinder(z1);
+					if(zcap>0.5) patval+=50;
+					else if(zcap<0.5) patval-=50;
+					if(e.isThere(S0) || e.isThere(D0))patval=0;
+					
+					patval +=650;
 					float b1 = States.borderSafe(e, 2, LT,BL);
 					float b2 = States.borderSafe(e, 2, TR,RB);
 					float b3 = States.borderSafe(e, 2, S0,D0);
@@ -80,10 +63,7 @@ public class TwistedFour {
 					float b5 = States.borderSafe(e, 3, D0,BR,BL);
 					float b6 = States.borderSafe(e, 3, S0,TL,TR);
 					float b7 = States.borderSafe(e, 3, S0,TL,RB);
-
 					float ncap = States.minFinder(b1,b2,b3,b4,b5,b6,b7);
-
-
 					if(States.oneCheck(b1,b3)  && States.numCheck(1.5, b4,b5)) ncap = States.minFinder(ncap,0.5f);
 					else if(States.oneCheck(b2,b3) && States.numCheck(1.5, b6,b7)) ncap = States.minFinder(ncap,0.5f);
 					else if(States.oneCheck(b3,b5) || States.oneCheck(b3,b6)) ncap = States.minFinder(ncap,0.5f);
@@ -92,9 +72,35 @@ public class TwistedFour {
 					else if(States.oneCheck(b2,b6) || States.oneCheck(b2,b7)) ncap = States.minFinder(ncap,0.5f);
 					else if(States.oneCheck(b4,b5) || States.oneCheck(b6,b7)) ncap = States.minFinder(ncap,0.5f);
 					if(States.oneCheck(b4,b5,b6,b7)) ncap = States.minFinder(ncap,0.5f);
+					if(ncap>0.5) patval+=650;
+					else if(ncap<0.5) patval-=650;
 					
-					if(ncap>0.5) retval+=700;
-					else if(ncap<0.5) retval-=700;
+					
+					retval+=patval;
+					if(patval>=100 && !e.isThere(S0) && !e.isThere(D0))e.addToEye(S0,S1,D0,D1);
+					
+					
+					
+//					retval +=700;
+//					float b1 = States.borderSafe(e, 2, LT,BL);
+//					float b2 = States.borderSafe(e, 2, TR,RB);
+//					float b3 = States.borderSafe(e, 2, S0,D0);
+//					float b4 = States.borderSafe(e, 3, D0,BR,LT);
+//					float b5 = States.borderSafe(e, 3, D0,BR,BL);
+//					float b6 = States.borderSafe(e, 3, S0,TL,TR);
+//					float b7 = States.borderSafe(e, 3, S0,TL,RB);
+//					float ncap = States.minFinder(b1,b2,b3,b4,b5,b6,b7);
+//					if(States.oneCheck(b1,b3)  && States.numCheck(1.5, b4,b5)) ncap = States.minFinder(ncap,0.5f);
+//					else if(States.oneCheck(b2,b3) && States.numCheck(1.5, b6,b7)) ncap = States.minFinder(ncap,0.5f);
+//					else if(States.oneCheck(b3,b5) || States.oneCheck(b3,b6)) ncap = States.minFinder(ncap,0.5f);
+//					else if(States.oneCheck(b3,b7) || States.oneCheck(b3,b4)) ncap = States.minFinder(ncap,0.5f);
+//					else if(States.oneCheck(b1,b4) || States.oneCheck(b1,b5)) ncap = States.minFinder(ncap,0.5f);
+//					else if(States.oneCheck(b2,b6) || States.oneCheck(b2,b7)) ncap = States.minFinder(ncap,0.5f);
+//					else if(States.oneCheck(b4,b5) || States.oneCheck(b6,b7)) ncap = States.minFinder(ncap,0.5f);
+//					if(States.oneCheck(b4,b5,b6,b7)) ncap = States.minFinder(ncap,0.5f);
+//					
+//					if(ncap>0.5) retval+=700;
+//					else if(ncap<0.5) retval-=700;
 
 
 

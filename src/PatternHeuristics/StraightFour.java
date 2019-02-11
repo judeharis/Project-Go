@@ -40,13 +40,36 @@ public class StraightFour {
 					
 					
 					if (e.isThere(S0) || e.isThere(S3))continue;
-					retval +=700;
+					
+					int patval =0;	
+					patval +=50;
+					float z1 = States.borderSafe(e, 6,TL,TR,BL,BR,S0,S3);
+					float zcap = States.minFinder(z1);
+					if(zcap>0.5) patval+=50;
+					else if(zcap<0.5) patval-=50;
+					if(e.isThere(S1) || e.isThere(S2))patval=0;
+					
+					patval +=650;
 					float a = States.borderSafe(e, 2, TL,BL);
 					float b = States.borderSafe(e, 2, TR,BR);
 					float c = States.borderSafe(e, 2, S1,S2);
 					float ncap = States.minFinder(a,b,c);
-					if(ncap>0.5) retval+=700;
-					else if(ncap<0.5) retval-=700;
+					if(ncap>0.5) patval+=650;
+					else if(ncap<0.5) patval-=650;
+					
+					
+					retval+=patval;
+					if(patval>=100 && !e.isThere(S1) && !e.isThere(S2))e.addToEye(S0,S1,S2,S3);
+					
+					
+					
+//					retval +=700;
+//					float a = States.borderSafe(e, 2, TL,BL);
+//					float b = States.borderSafe(e, 2, TR,BR);
+//					float c = States.borderSafe(e, 2, S1,S2);
+//					float ncap = States.minFinder(a,b,c);
+//					if(ncap>0.5) retval+=700;
+//					else if(ncap<0.5) retval-=700;
 					
 
 

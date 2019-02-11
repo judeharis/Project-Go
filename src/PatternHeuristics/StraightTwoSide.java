@@ -35,15 +35,35 @@ public class StraightTwoSide {
 
 					
 					if (e.isThere(S1) || e.isThere(S2))continue;
-					retval =75;
+					
+					int patval =0;	
+					patval +=50;
+					float z1 = States.borderSafe(e, 2, TL,S1);
+					float z2 = States.borderSafe(e, 2, TR,S2);
+					float z3 = States.borderSafe(e, 2, TL,TR);
+					float zcap = States.minFinder(z1,z2,z3);
+					if(States.oneCheck(z1,z3) || States.oneCheck(z2,z3)) zcap = States.minFinder(zcap,0.5f);
+					if(zcap>0.5) patval+=50;
+					else if(zcap<0.5) patval-=50;
+					
+					
+					
+					patval +=25;
 					float a = States.borderSafe(e, 1, TL,TR);
 					float ncap = States.minFinder(a);
+					if(ncap>0.5) patval+=25;
+					else if(ncap<0.5) patval-=25;
 
-					if(ncap>0.5) retval+=75;
-					else if(ncap<0.5) retval-=75;
+					
+					retval+=patval;
+					if(patval>=100)e.addToEye(S1,S2);
 					
 					
-
+//					retval +=75;
+//					float a = States.borderSafe(e, 1, TL,TR);
+//					float ncap = States.minFinder(a);
+//					if(ncap>0.5) retval+=75;
+//					else if(ncap<0.5) retval-=75;
 
 					
 					
@@ -70,14 +90,35 @@ public class StraightTwoSide {
 
 					
 					if (e.isThere(S1) || e.isThere(S2))continue;
-					retval =75;
 					
+					
+					int patval =0;	
+					patval +=50;
+					float z1 = States.borderSafe(e, 3, TL,TR,S1);
+					float zcap = States.minFinder(z1);
+					if(e.isEnemy(S2))zcap=1;
+					if(zcap>0.5) patval+=50;
+					else if(zcap<0.5) patval-=50;
+					
+					
+					
+					patval +=25;
 					float a = States.borderSafe(e, 1, TL,TR);
 					float ncap = States.minFinder(a);
+					if(ncap>0.5) patval+=25;
+					else if(ncap<0.5) patval-=25;
 
-					if(ncap>0.5) retval+=75;
-					else if(ncap<0.5) retval-=75;
-
+					
+					retval+=patval;
+					if(patval>=100)e.addToEye(S1,S2);
+					
+					
+//					retval +=75;
+//					float a = States.borderSafe(e, 1, TL,TR);
+//					float ncap = States.minFinder(a);
+//					if(ncap>0.5) retval+=75;
+//					else if(ncap<0.5) retval-=75;
+//					e.addToEye(S1,S2);
 
 					
 					

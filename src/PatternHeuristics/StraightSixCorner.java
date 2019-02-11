@@ -45,12 +45,27 @@ public class StraightSixCorner {
 
 					
 					if (e.isThere(S0) || e.isThere(S5))continue;
-					retval +=1100;
+					int patval =0;	
+					patval +=100;
+					if(e.isThere(S1) || e.isThere(S2) || e.isThere(S3) || e.isThere(S4))patval=0;
+					
+					patval +=1050;
 					float a = States.borderSafe(e, 1, TL);
 					float b = States.borderSafe(e, 4, S1,S2,S3,S4);
 					float ncap = States.minFinder(a,b);
-					if(ncap>0.5) retval+=1100;
-					else if(ncap<0.5) retval-=1100;
+					if(ncap>0.5) patval+=1050;
+					else if(ncap<0.5) patval-=1050;
+					
+					retval+=patval;
+					if(patval>=100 && !e.isThere(S1) && !e.isThere(S2) && !e.isThere(S3) && !e.isThere(S4))e.addToEye(S0,S1,S2,S3,S4,S5);
+					
+					
+//					retval +=1100;
+//					float a = States.borderSafe(e, 1, TL);
+//					float b = States.borderSafe(e, 4, S1,S2,S3,S4);
+//					float ncap = States.minFinder(a,b);
+//					if(ncap>0.5) retval+=1100;
+//					else if(ncap<0.5) retval-=1100;
 					
 				}
 				

@@ -29,11 +29,12 @@ public class IterativeDeepening  implements Runnable{
 
 
 
-	 IterativeDeepening(Board originalBoard, int toDepth,ArrayList<Tuple> lastIterPath,MoveFinder mf) {
+	 IterativeDeepening(Board originalBoard, int toDepth,ArrayList<Tuple> lastIterPath,MoveFinder mf,Tuple[][]  ikillers) {
 		 this.originalBoard = originalBoard;
 		 this.toDepth = toDepth;
 		 this.lastIterPath = lastIterPath;
 		 this.mf = mf;
+		 this.killers = ikillers;
 	 }
 	 
 
@@ -50,15 +51,11 @@ public class IterativeDeepening  implements Runnable{
 
 
 		
-		if (!keystoneLives(klist)) {
-			return min;
-		}
+		if(!keystoneLives(klist)) return min;
 		if(depth>50)return max;
 	
 		if (cB.placing != MoveFinder.keystonecolour && validMoves.size() == 0) return max;		
 		else if (cB.placing == MoveFinder.keystonecolour && goodMoves.size() == 0) goodMoves.add(new Tuple(-9,-9));
-		
-		
 		
 		if (cB.placing != MoveFinder.keystonecolour ) {goodMoves = validMoves;}
 		
@@ -68,9 +65,8 @@ public class IterativeDeepening  implements Runnable{
 			return evaluator.evaluateCurrentBoard(false);
 		}
 		
-		
+		if(depth>3)goodMoves = moveGen(cB,goodMoves);
 	    goodMoves = moveOrdering(depth,goodMoves);
-	    goodMoves = moveGen(cB,goodMoves);
 	
 	    if(isLive) {
 			int best = min;
@@ -78,7 +74,6 @@ public class IterativeDeepening  implements Runnable{
 			for (Tuple t : goodMoves) {
 				ArrayList<Tuple> path = new ArrayList<Tuple>();
 				path.add(t);
-//				Board b = cB;
 				Board b = Board.cloneBoard(cB);
 				
 				if(depth==1)System.out.print(t.clone()+ " :");
@@ -93,7 +88,6 @@ public class IterativeDeepening  implements Runnable{
 						good.put(key, returnscore);
 					}
 				}else returnscore = alphaBeta(b,liveKeys(b,klist),!isLive,depth,alpha,beta,path);
-//				b.undoMove(false);
 				if(returnscore > best)bestChoice=t.clone();
 				
 				if(depth==1) print(returnscore);
@@ -114,7 +108,6 @@ public class IterativeDeepening  implements Runnable{
 			for (Tuple t : goodMoves) {
 				ArrayList<Tuple> path = new ArrayList<Tuple>();
 				path.add(t);
-//				Board b = cB;
 				Board b = Board.cloneBoard(cB);
 				
 				if(depth==1)System.out.print(t.clone()+ " :");
@@ -129,7 +122,6 @@ public class IterativeDeepening  implements Runnable{
 						bad.put(key, returnscore);
 					}
 				}else returnscore = alphaBeta(b,liveKeys(b,klist),!isLive,depth,alpha,beta,path);
-//				b.undoMove(false);
 				if(returnscore < best)bestChoice=t.clone();
 				
 				if(depth==1) print(returnscore);
@@ -189,9 +181,8 @@ public class IterativeDeepening  implements Runnable{
 	
 	private void addToKillers() {
 		int kdepth = 0;
-		for(Tuple t: lastIterPath) {
-			killers[kdepth][0]=t;
-		}
+		for(Tuple t: lastIterPath) killers[kdepth][0]=t;
+		
 	}
 	
 	
@@ -200,13 +191,11 @@ public class IterativeDeepening  implements Runnable{
 		
 		Tuple k1 = killers[depth-1][0];
 		Tuple k2 = killers[depth-1][1];
-		if(k1!=null && goodMoves.remove(k1)) {
-			newOrder.add(k1);
-		}
+		if(k1!=null && goodMoves.remove(k1))newOrder.add(k1);
 		
-		if(k2!=null && goodMoves.remove(k2)) {
-			newOrder.add(k2);
-		}
+		
+		if(k2!=null && goodMoves.remove(k2))newOrder.add(k2);
+		
 		newOrder.addAll(goodMoves);
 		return newOrder;
 	}

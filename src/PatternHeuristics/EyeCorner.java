@@ -32,16 +32,18 @@ public class EyeCorner {
 					
 
 					if(e.isTheres(C)) continue;
-					retval =50;
+					int patval =0;
+					patval+=50;
 					float a = States.borderSafe(e, 1, TL);
 					float ncap = States.minFinder(a);
 
-					if(ncap>0.5) retval+=50;
-					else if(ncap<0.5) retval-=50;
+					if(ncap>0.5) patval+=50;
+					else if(ncap<0.5) patval-=50;
 					
 
 
-
+					retval+=patval;
+					if(patval>=100)e.addToEye(C);
 					
 
 

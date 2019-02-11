@@ -39,13 +39,22 @@ public class SquareFourSide {
 
 					
 					if(e.isThere(S0)||e.isThere(S1)||e.isThere(D0)||e.isThere(D1)) continue;
-					retval+=125;
+					int patval =0;	
+					patval+=125;
 					float b1 = States.borderSafe(e, 4, TL,TR,S0,S1);
-
-
 					float ncap = States.minFinder(b1);
-					if(ncap>0.5) retval+=25;
-					else if(ncap<0.5) retval-=25;
+					if(ncap>0.5) patval+=25;
+					else if(ncap<0.5) patval-=25;
+					retval+=patval;
+					if(patval>=100)e.addToEye(S0,S1,D0,D1);
+					
+					
+//					retval+=125;
+//					float b1 = States.borderSafe(e, 4, TL,TR,S0,S1);
+//					float ncap = States.minFinder(b1);
+//					if(ncap>0.5) retval+=25;
+//					else if(ncap<0.5) retval-=25;
+
 					
 				}
 				

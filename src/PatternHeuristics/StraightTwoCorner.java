@@ -9,6 +9,7 @@ import Go.SlickGo.UDLR;
 
 public class StraightTwoCorner {
 
+
 	static ArrayList<Pattern> straightTwoCornerPattern = Pattern.sToPv2("xldxdxr#");
 
 	public static int evaluate(ArrayList<Tuple> sstring , Evaluator e) {
@@ -36,12 +37,34 @@ public class StraightTwoCorner {
 
 					
 					if (e.isThere(S1) || e.isThere(S2))continue;
-					retval =75;
+					
+					
+					int patval =0;	
+					patval +=50;
+					float z1 = States.borderSafe(e, 2, TL,S1);
+					float zcap = States.minFinder(z1);
+					if(e.isEnemy(S2))zcap=1;
+					if(zcap>0.5) patval+=50;
+					else if(zcap<0.5) patval-=50;
+					
+					patval +=25;
 					float a = States.borderSafe(e, 1, TL);
 					float ncap = States.minFinder(a);
+					if(ncap>0.5) patval+=25;
+					else if(ncap<0.5) patval-=25;
 
-					if(ncap>0.5) retval+=75;
-					else if(ncap<0.5) retval-=75;
+					
+					retval+=patval;
+					if(patval>=100)e.addToEye(S1,S2);
+					
+					
+//					retval +=75;
+//					float a = States.borderSafe(e, 1, TL);
+//					float ncap = States.minFinder(a);
+//
+//					if(ncap>0.5) retval+=75;
+//					else if(ncap<0.5) retval-=75;
+
 					
 					
 					

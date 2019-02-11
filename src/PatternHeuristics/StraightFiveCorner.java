@@ -46,12 +46,27 @@ public class StraightFiveCorner {
 					
 					
 					if (e.isThere(S0) || e.isThere(S4))continue;
-					retval +=900;
+					int patval =0;	
+					patval +=100;
+					if(e.isThere(S1) || e.isThere(S2) || e.isThere(S3))patval=0;
+					
+					patval +=850;
 					float a = States.borderSafe(e, 1, TL);
 					float b = States.borderSafe(e, 3, S1,S2,S3);
 					float ncap = States.minFinder(a,b);
-					if(ncap>0.5) retval+=900;
-					else if(ncap<0.5) retval-=900;
+					if(ncap>0.5) patval+=850;
+					else if(ncap<0.5) patval-=850;
+					
+					retval+=patval;
+					if(patval>=100 && !e.isThere(S1) && !e.isThere(S2) && !e.isThere(S3))e.addToEye(S0,S1,S2,S3,S4);
+					
+					
+//					retval +=900;
+//					float a = States.borderSafe(e, 1, TL);
+//					float b = States.borderSafe(e, 3, S1,S2,S3);
+//					float ncap = States.minFinder(a,b);
+//					if(ncap>0.5) retval+=900;
+//					else if(ncap<0.5) retval-=900;
 
 				
 

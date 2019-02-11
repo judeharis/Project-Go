@@ -17,10 +17,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.StateBasedGame;
+
+
 
 public class SlickGo extends StateBasedGame {
 	
@@ -36,7 +40,7 @@ public class SlickGo extends StateBasedGame {
 	public static Play playI;
 	public static Editor editorI;
 	public static AppGameContainer appgc;
-	
+
 	
 	public SlickGo(String gamename) {
 
@@ -71,7 +75,7 @@ public class SlickGo extends StateBasedGame {
 
 		 appgc = new AppGameContainer(new SlickGo(gamename));
 		 appgc.setShowFPS(false);
-		 appgc.setDisplayMode(gcwidth, gcheigth, false);
+//		 appgc.setDisplayMode(gcwidth, gcheigth, false);
 		 appgc.setDisplayMode(1280, 840, false);
 		 appgc.setTargetFrameRate(maxfps);
 		 appgc.setAlwaysRender(true);
@@ -91,7 +95,9 @@ public class SlickGo extends StateBasedGame {
 		return (xpos >= x && xpos <= (x+w)  && ypos >= y && ypos <= (y+h) );
 	}
 	
-    public static void loadFile(Board board , boolean editormode) {
+
+	
+    public static Board loadFile(boolean editormode) {
     	
     	final JFileChooser fc = new JFileChooser();
         fc.setPreferredSize(new Dimension(800,500));
@@ -102,83 +108,138 @@ public class SlickGo extends StateBasedGame {
         JFrame w = new JFrame();
         w.setAlwaysOnTop(true);
         w.setVisible(false);
+        Board newBoard = new Board();
+
         if (fc.showOpenDialog(w) == JFileChooser.APPROVE_OPTION) {
         	
-            board.initBoard(editormode);
+        	newBoard.initBoard(editormode);
             BufferedReader br ;
             String st;
             int x = 0;
             int y = 0;
             StringBuilder desc = new StringBuilder();
-            String[] lkeystones = null ;
+
             try {br = new BufferedReader(new FileReader(fc.getSelectedFile()));
                 while ((st = br.readLine()) != null){
                     x =0;
-                    board.ko=null;
+                    newBoard.ko=null;
+
+                    
                     if (y<19){
-                        for(int i = 2, n = st.length() ; i < n ; i+=4) {
+                        char firstchar = st.charAt(0);
+                        if(firstchar!='|'){
+                        	br.close();return  msgMaker("Invalid File",300,editormode,255,0,0,null);}
+                        
+                        for(int i = 1, n = st.length() ; i < n ; i+=1) {
                             char c = st.charAt(i);
+                            if(i%4==0 && c!='|') {
+                            	br.close();return  msgMaker("Invalid File",300,editormode,255,0,0,null);}
+                            if(i%4==1 && c!=' ') {
+                            	br.close();return  msgMaker("Invalid File",300,editormode,255,0,0,null);}
+                            if(i%4==3 && c!=' ') {
+                            	br.close();return  msgMaker("Invalid File",300,editormode,255,0,0,null);}
+                
+                            
+                            if(i%4==0 ) continue;
+                            if(i%4==1 ) continue;
+                            if(i%4==3 ) continue;
+
+                            
                             switch (c){
-                                case 'x': board.stones[x][y] = Stone.BLACK;
+                                case 'x': newBoard.stones[x][y] = Stone.BLACK;
                                     break;
                                 case 'X':
-                                	board.stones[x][y] = Stone.KEYBLACKSTONE;
-                                	board. keystone = Stone.KEYBLACKSTONE;
+                                	newBoard.stones[x][y] = Stone.KEYBLACKSTONE;
+                                	newBoard. keystone = Stone.KEYBLACKSTONE;
                                     break;
-                                case 'o': board.stones[x][y] = Stone.WHITE;
+                                case 'o': newBoard.stones[x][y] = Stone.WHITE;
                                     break;
-                                case 'O': board.stones[x][y] = Stone.KEYWHITESTONE;
-                                	board.keystone = Stone.KEYWHITESTONE;
+                                case 'O': newBoard.stones[x][y] = Stone.KEYWHITESTONE;
+                                	newBoard.keystone = Stone.KEYWHITESTONE;
                                     break;
-                                case 'K': board.stones[x][y] = Stone.KO;
+                                case 'K': newBoard.stones[x][y] = Stone.KO;
                                     break;
-                                case '+': board.stones[x][y] = Stone.VALID;
+                                case '+': newBoard.stones[x][y] = Stone.VALID;
                                     break;
-                                case '-': board.stones[x][y] = Stone.INVALID;
+                                case '-': newBoard.stones[x][y] = Stone.INVALID;
                                     break;
+                                default :
+                            	    br.close();
+                            		return  msgMaker("Invalid File",300,editormode,255,0,0,null);
                             }
                             x++;
-                        }}
+                        }
+                        if(x!=19) {br.close(); return  msgMaker("Invalid File",300,editormode,255,0,0,null);}
+                    }
 
-                    if(y==19) board.turn = Stone.toStone(st.split(" ")[1]);
-                    if(y==20) board.capToWin = st.split(" ")[1].equals("Yes")?true:false;
-                    if(y==21) lkeystones = st.replaceAll("[\\[\\]\\)\\(]","").split(" ");
-                    if(y>21) desc.append(st);
+                    if(y==19) {
+                    	String[] k = st.split(" ");
+                    	if(k.length!=2 || !k[0].equals("Play:") || (!k[1].equals("Black") && !k[1].equals("White"))) {
+                    	    br.close();
+                    		return  msgMaker("Invalid File",300,editormode,255,0,0,null);
+                    	}
+                    	newBoard.turn = Stone.toStone(st.split(" ")[1]);
+                    }
+                    
+                    
+                    if(y==20) {
+                    	String[] k = st.split(" ");
+                    	if(k.length!=2 || !k[0].equals("Kill:") || (!k[1].equals("Yes") && !k[1].equals("No"))) {
+                    	    br.close();
+                    		return  msgMaker("Invalid File",300,editormode,255,0,0,null);
+                    	}
+                    	newBoard.capToWin = k[1].equals("Yes")?true:false;
+                    }
+                    
+                    
+                    if(y==21) {
+                    	if(!st.equals("Description: Black To Live") && !st.equals("Description: White To Live")
+                    	&& !st.equals("Description: Kill Black") && !st.equals("Description: Kill White")
+                    	&& !st.equals("Description: ")){
+                    	    br.close();
+                    		return  msgMaker("Invalid File",300,editormode,255,0,0,null);
+                    	}
+                    	desc.append(st);
+                    }
+                    
+                    if(y>21) { br.close();return msgMaker("Invalid File",300,editormode,255,0,0,null);}
                     y++;
                 }
+                if(y!=22) {br.close(); return  msgMaker("Invalid File",300,editormode,255,0,0,null);}
                 br.close();
     
 
-            }
-            catch (FileNotFoundException e1 ) {e1.printStackTrace();}
-            catch (IOException e1 ) {e1.printStackTrace();}
+            }catch (FileNotFoundException e1 ) {return msgMaker("No File Found",300,editormode,255,0,0,null);}
+            catch (IOException e1 ) {return msgMaker("File can't be accessed right now",300,editormode,255,0,0,null);}
+
             
-            for (int i=2; i<lkeystones.length;i++){
-                int ta;
-                int tb;
-                String[] temp= lkeystones[i].split(",");
-                ta = Integer.parseInt(temp[0]);
-                tb = Integer.parseInt(temp[1]);
-                board.keystones.add(new Tuple(ta,tb));
-            }
+            if(!newBoard.validBoard()){return msgMaker("Invalid File",300,editormode,255,0,0,null);}
+            
                       
-            board.blackFirst = (board.turn==Stone.BLACK);
-            board.placing = board.turn;
-            board.desc = desc.toString().replace("Description: ", "");
-            board.updateStringsFull();
-            board.checkForCaps(board.turn,false);
-            board.checkForCaps(board.turn.getEC(),false);
-            board.validMoves = board.getAllValidMoves();
-            board.resetboard =Board.cloneBoard(board);
-        	if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))MoveFinder.keystonecolour = Stone.WHITE;
+            newBoard.blackFirst = (newBoard.turn==Stone.BLACK);
+            newBoard.placing = newBoard.turn;
+            newBoard.desc = desc.toString().replace("Description: ", "");
+            newBoard.updateStringsFull();
+            newBoard.checkForCaps(newBoard.turn,false);
+            newBoard.checkForCaps(newBoard.turn.getEC(),false);
+            newBoard.validMoves = newBoard.getAllValidMoves();
+            newBoard.resetboard =Board.cloneBoard(newBoard);
+        	if((newBoard.blackFirst && newBoard.capToWin) || (!newBoard.blackFirst && !newBoard.capToWin))MoveFinder.keystonecolour = Stone.WHITE;
     		else MoveFinder.keystonecolour = Stone.BLACK;
            
 
-        }
+        }else return null;
+        
         w.dispose();
+		return msgMaker("Problem Loaded",300,editormode,0,200,50,newBoard);
+
     }
 	
-    public static void saveFile(Board board)  {
+    public static Board saveFile(Board board , boolean editormode)  {
+    	
+    	if(board.keystones.isEmpty()) return msgMaker("Problem Needs KeyStones",300,editormode,255,0,0,null);
+    	if(board.getAllValidMovesEditorMode().isEmpty()) return msgMaker("Problem Needs Valid Points",300,editormode,255,0,0,null);
+    	
 
 
         final JFileChooser fc = new JFileChooser();
@@ -241,14 +302,32 @@ public class SlickGo extends StateBasedGame {
             String kill = board.capToWin?"Yes":"No";
             writer.write("Play: "+whoplays +"\r\n") ;
             writer.write("Kill: "+kill +"\r\n") ;
-            String filekstone = board.keystones.toString();
-            writer.write("Key Stone/s: "+filekstone + "\r\n") ;
-            writer.write("Description: "+board.desc + "\r\n") ;
+            writer.write("Description: "+board.desc) ;
 
 
-            writer.close();}
+            writer.close();
+       }
   
         w.dispose();
+        return null;
+    }
+    
+    
+    public static Board msgMaker(String msg , int msgtimer, boolean editormode,int r,int g,int b , Board board) {
+		if(editormode) {
+			Editor.msg = msg;
+			Editor.msgtimer = msgtimer;
+			Editor.msgcr = r;
+			Editor.msgcg = g;
+			Editor.msgcb = b;
+		}else {
+			Play.msg = msg;
+			Play.msgtimer = msgtimer;
+			Play.msgcr = r;
+			Play.msgcg = g;
+			Play.msgcb = b;
+		}
+		return board;
     }
  
     public static boolean withinBounds(int x, int y){
@@ -279,6 +358,26 @@ public class SlickGo extends StateBasedGame {
         g.drawString(string,x+(w/5),y+(h/5) );
         
     	
+    }
+    public static void drawMessageBox(int x, int y , int w , int h, String string,Graphics g ,Color hc) {
+        Font oldfont = g.getFont();
+        
+		java.awt.Font newfont = new java.awt.Font("AngelCodeFont", java.awt.Font.PLAIN, 25);
+		TrueTypeFont trueTypeFont = new TrueTypeFont(newfont, true);
+        int width = trueTypeFont.getWidth(string);
+        int height = trueTypeFont.getHeight(string);
+        
+        Color oldcolour = g.getColor();
+        g.drawRect(x, y, w, h);
+        g.setColor(hc);
+        
+
+		g.setFont(trueTypeFont);
+        g.drawString(string,
+        			(x + w / 2) - (width / 2), 
+                    (y + h / 2) - (height / 2));
+        g.setColor(oldcolour);
+        g.setFont(oldfont);
     }
     
     public static void drawRButton(int x, int y , String string,Graphics g ,boolean selected) {

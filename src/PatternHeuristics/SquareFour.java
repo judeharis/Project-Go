@@ -41,16 +41,36 @@ public class SquareFour {
 
 
 					if(e.isThere(S0)||e.isThere(S1)||e.isThere(D0)||e.isThere(D1)) continue;
-					retval+=125;
+					
+					
+					
+					
+					int patval =0;	
+					patval+=125;
 					float b1 = States.borderSafe(e, 4, TL,TR,S0,S1);
 					float b2 = States.borderSafe(e, 4, BL,BR,D0,D1);
 					float b3 = States.borderSafe(e, 4, TL,BL,S0,D0);
 					float b4 = States.borderSafe(e, 4, TR,BR,S1,D1);
 					float b5 = States.borderSafe(e, 4, TL,TR,BL,BR);
-
 					float ncap = States.minFinder(b1,b2,b3,b4,b5);
-					if(ncap>0.5) retval+=25;
-					else if(ncap<0.5) retval-=25;
+					if(ncap>0.5) patval+=25;
+					else if(ncap<0.5) patval-=25;
+					retval+=patval;
+					if(patval>=100)e.addToEye(S0,S1,D0,D1);
+					
+					
+//					retval+=125;
+//					float b1 = States.borderSafe(e, 4, TL,TR,S0,S1);
+//					float b2 = States.borderSafe(e, 4, BL,BR,D0,D1);
+//					float b3 = States.borderSafe(e, 4, TL,BL,S0,D0);
+//					float b4 = States.borderSafe(e, 4, TR,BR,S1,D1);
+//					float b5 = States.borderSafe(e, 4, TL,TR,BL,BR);
+//
+//					float ncap = States.minFinder(b1,b2,b3,b4,b5);
+//					if(ncap>0.5) retval+=25;
+//					else if(ncap<0.5) retval-=25;
+					
+
 				
 				}
 				

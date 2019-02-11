@@ -39,53 +39,52 @@ public class BentFour {
 					Tuple BR = S3.side2(r,side);
 					counter++;
 					
-					
-//					if (e.isThere(S0) || e.isThere(S3))continue;
-//					if(!e.isTheres(TL,BL,S2) && !e.isTheres(TL,BR,S2)  
-//							&& !e.isTheres(LB,BL,S2)  && !e.isTheres(LB,BR,S2)
-//							&& !e.isTheres(S1,TL,BL,BR)
-//							&& !e.isTheres(S1,TL,BL,TR)
-//							&& !e.isTheres(S1,TL,BR,TR)
-//							&& !e.isTheres(S1,LB,BL,BR)
-//							&& !e.isTheres(S1,LB,BL,TR)
-//							&& !e.isTheres(S1,LB,BR,TR)) continue;
-					
-					
-					
-//					if (e.isThere(S0) || e.isThere(S3))continue;
-//					
-//					if (e.isThere(S2)) {
-//						retval+=1400;
-//						if(e.isTheres(TL,BL) || e.isTheres(TL,BR)  
-//								|| e.isTheres(LB,BL)  || e.isTheres(LB,BR)) retval+=700;
-//					}else if(e.isThere(S1)) {
-//						retval+=1200;
-//						if(e.isTheres(TL,BL,BR)
-//								|| e.isTheres(TL,BL,TR)
-//								|| e.isTheres(TL,BR,TR)
-//								|| e.isTheres(LB,BL,BR)
-//								|| e.isTheres(LB,BL,TR)
-//								|| e.isTheres(LB,BR,TR)) retval+=800;
-//					}
+
 					
 
 				
 					if (e.isThere(S0) || e.isThere(S3))continue;
-					retval +=700;
+					
+					int patval =0;	
+					patval +=50;
+					float z1 = States.borderSafe(e, 6,TL,BL,BR,LB,S0,S3);
+					float zcap = States.minFinder(z1);
+					if(zcap>0.5) patval+=50;
+					else if(zcap<0.5) patval-=50;
+					if(e.isThere(S1) || e.isThere(S2))patval=0;
+					
+					patval +=650;
 					float b1 = States.borderSafe(e, 2, TL,LB);
 					float b2 = States.borderSafe(e, 2, BL,BR);
 					float b3 = States.borderSafe(e, 2, S1,S2);
 					float b4 = States.borderSafe(e, 3, S2,TR,BL);
 					float b5 = States.borderSafe(e, 3, S2,TR,BR);
-
-
-	
 					float ncap = States.minFinder(b1,b2,b3,b4,b5);
 					if(States.oneCheck(b2,b4) || States.oneCheck(b2,b5) || States.oneCheck(b2,b3)) ncap = States.minFinder(ncap,0.5f);
 					if(States.oneCheck(b3,b4) || States.oneCheck(b3,b5)) ncap = States.minFinder(ncap,0.5f);
-
-					if(ncap>0.5) retval+=700;
-					else if(ncap<0.5) retval-=700;
+					if(ncap>0.5) patval+=650;
+					else if(ncap<0.5) patval-=650;
+					
+					
+					retval+=patval;
+					if(patval>=100 && !e.isThere(S1) && !e.isThere(S2))e.addToEye(S0,S1,S2,S3);
+					
+					
+//					retval +=700;
+//					float b1 = States.borderSafe(e, 2, TL,LB);
+//					float b2 = States.borderSafe(e, 2, BL,BR);
+//					float b3 = States.borderSafe(e, 2, S1,S2);
+//					float b4 = States.borderSafe(e, 3, S2,TR,BL);
+//					float b5 = States.borderSafe(e, 3, S2,TR,BR);
+//
+//
+//	
+//					float ncap = States.minFinder(b1,b2,b3,b4,b5);
+//					if(States.oneCheck(b2,b4) || States.oneCheck(b2,b5) || States.oneCheck(b2,b3)) ncap = States.minFinder(ncap,0.5f);
+//					if(States.oneCheck(b3,b4) || States.oneCheck(b3,b5)) ncap = States.minFinder(ncap,0.5f);
+//
+//					if(ncap>0.5) retval+=700;
+//					else if(ncap<0.5) retval-=700;
 
 
 

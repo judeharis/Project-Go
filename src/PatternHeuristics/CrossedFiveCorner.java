@@ -41,27 +41,34 @@ public class CrossedFiveCorner {
 					counter++;
 					
 
-					
-//					if (e.isThere(S0) || e.isThere(S1) || e.isThere(S3) || e.isThere(S4))continue;
-//					if(e.isTheres(S2)) retval+=1500;
-//					if(e.isTheres(A1) || e.isTheres(A2)) retval+=750;
-//					if(e.isTheres(D1) || e.isTheres(D2)) retval+=750;
-//					
-//					if(e.isEnemies(A1) && e.isEnemies(A2)) retval-=900;
-//					if(e.isEnemies(D1) && e.isEnemies(D2)) retval-=900;
 
 					
 					
 					if (e.isThere(S0) || e.isThere(S1) || e.isThere(S3) || e.isThere(S4))continue;
-					retval +=900;
+					
+					int patval =0;	
+					patval +=100;
+					if(e.isThere(S2))patval=0;
+					
+					patval +=850;
 					float b1 = States.borderSafe(e, 2, A1,A2);
 					float b2 = States.borderSafe(e, 2, D1,D2);
 					float b3 = States.borderSafe(e, 1, S2);
-					
-
 					float ncap = States.minFinder(b1,b2,b3);
-					if(ncap>0.5) retval+=900;
-					else if(ncap<0.5) retval-=900;
+					if(ncap>0.5) patval+=850;
+					else if(ncap<0.5) patval-=850;
+					
+					retval+=patval;
+					if(patval>=100 && !e.isThere(S2))e.addToEye(S0,S1,S2,S3,S4);
+					
+					
+//					retval +=900;
+//					float b1 = States.borderSafe(e, 2, A1,A2);
+//					float b2 = States.borderSafe(e, 2, D1,D2);
+//					float b3 = States.borderSafe(e, 1, S2);
+//					float ncap = States.minFinder(b1,b2,b3);
+//					if(ncap>0.5) retval+=900;
+//					else if(ncap<0.5) retval-=900;
 					
 					
 				

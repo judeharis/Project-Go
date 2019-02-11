@@ -11,8 +11,9 @@ public class Evaluator {
 	public Stone kscolour = MoveFinder.keystonecolour.getSC();
 	public Stone enemycolour = kscolour.getEC();
 	public ArrayList<Tuple> checkedPoints = new ArrayList<Tuple>();
-
-
+	public ArrayList<Tuple> eyes = new ArrayList<Tuple>();
+	ArrayList<ArrayList<Tuple>> connectedEyes = new ArrayList<ArrayList<Tuple>>();
+	public static long timed = 0;
 	public Evaluator(Board cB) {
 		this.cB = cB;
 	}
@@ -22,6 +23,7 @@ public class Evaluator {
 
 	
 	public  int evaluateCurrentBoard(boolean editormode) {
+		long start = System.currentTimeMillis();
 		int retval = 0;
 
 		Grouping grouping = new Grouping(cB,false,false,false,false);
@@ -32,9 +34,9 @@ public class Evaluator {
 		
 		if (editormode) {
 			for (Group g : grouping.allGroups) {
-				if(g.colour == kscolour)
-				retval += hrunner.runKeyStringHeuristics(g);
+				if(g.colour == kscolour)retval += hrunner.runKeyStringHeuristics(g);
 			}
+			retval+=eyeStonesLinked();
 		}else {
 			for (Tuple t : cB.keystones) {
 				ArrayList<Tuple> keystring = cB.checkForStrings(t, kscolour);
@@ -46,34 +48,41 @@ public class Evaluator {
 				}
 			}
 			
-			
-			for (ArrayList<Tuple>  slist : kscolour.getSStrings(cB)) {
-				for (Tuple  t : slist) retval += hrunner.runStoneHeuristics(t);	
-			}
+
+			retval+=eyeStonesLinked();
+
+//			for (ArrayList<Tuple>  slist : kscolour.getSStrings(cB)) {
+//				for (Tuple  t : slist) retval += hrunner.runStoneHeuristics(t);	
+//			}
 		
 		}
-
+		long end = System.currentTimeMillis();
+		timed += end-start;
 		return retval;
 	}
 
 
 	public ArrayList<Tuple> moveGen(ArrayList<Tuple> goodMoves,int max) {
 		
-		ArrayList<Tuple> orderedPatternPoints = countOrder(checkedPoints);
+		ArrayList<Tuple> oPP = countOrder(checkedPoints);
 		ArrayList<Tuple> workinglist = Board.tupleArrayClone(goodMoves);
 //		float r = ((float)(workinglist.size()*4))/5;
 //		if(orderedPatternPoints.size() < r) return goodMoves;
-		orderedPatternPoints.retainAll(workinglist);
-		workinglist.removeAll(orderedPatternPoints);
+		oPP.retainAll(workinglist);
+		workinglist.removeAll(oPP);
 		
-		int k = max-orderedPatternPoints.size();
+		int k = max-oPP.size();
+		while(k<0 && !oPP.isEmpty()) {
+			oPP.remove(oPP.size()-1);
+			k =max-oPP.size();
+		}
 		for(int i =0; i< k;i++) {
 			if(workinglist.isEmpty())break;
 			Tuple t = workinglist.remove(new Random().nextInt(workinglist.size()));
-			orderedPatternPoints.add(t);
+			oPP.add(t);
 		}
 
-		return orderedPatternPoints;
+		return oPP;
 		
 	}
 
@@ -106,6 +115,66 @@ public class Evaluator {
 		return res;
 		
 	}
+	
+	
+
+	
+	public ArrayList<Tuple> getEyeStoneLibs(ArrayList<Tuple> tlist){
+		ArrayList<Tuple> eyeStones = new ArrayList<Tuple>();
+		ArrayList<Tuple> adj = new ArrayList<Tuple>();
+		
+		for(Tuple t:tlist) adj.addAll(cB.getAdjacent(t.a, t.b));
+		
+		
+		for(Tuple a:adj) {
+			ArrayList<Tuple> linkedStones =cB.checkForStrings(a, kscolour);
+			eyeStones.removeAll(linkedStones);
+			eyeStones.addAll(linkedStones);
+		}
+		ArrayList<Tuple> eyeStonesLibs = cB.getLibs(eyeStones, true);
+		eyeStonesLibs.removeAll(tlist);
+		return eyeStonesLibs;
+	}
+	
+	
+	public int eyeStonesLinked(){
+//		ArrayList<Tuple> uniqEyes = (ArrayList<Tuple>) eyes.stream().distinct().collect(Collectors.toList());
+		ArrayList<ArrayList<ArrayList<Tuple>>> connectEyes = new ArrayList<ArrayList<ArrayList<Tuple>>>();
+		for(ArrayList<Tuple> eyes :connectedEyes) {
+			ArrayList<Tuple> eyeStonesLibs =  getEyeStoneLibs(eyes);
+			boolean added = false;
+			for(ArrayList<ArrayList<Tuple>> tlists : connectEyes) {
+				for (ArrayList<Tuple> tlist : tlists) {
+					for(Tuple e : tlist) {
+						if (eyeStonesLibs.contains(e)) {
+							tlists.add(eyes);
+							added =true;
+							break;
+						}
+					}
+					if(added)break;
+				}
+				if(added)break;
+			}
+			
+			if(added==false) {
+				ArrayList<ArrayList<Tuple>> newEyesList =  new ArrayList<ArrayList<Tuple>>();
+				newEyesList.add(eyes);
+				connectEyes.add(newEyesList);
+			}
+		}
+		
+		int retval = 0;
+		for(ArrayList<ArrayList<Tuple>> tlists : connectEyes) {
+			if(tlists.size()>=2) {
+				retval+=800;
+				retval+=(tlists.size() - 2) * 200;
+			}
+		}
+		return retval;
+	}
+	
+	
 
 
 	public boolean isThere(Tuple t){
@@ -118,6 +187,12 @@ public class Evaluator {
 		if(!cB.withinBounds(t)) return false;
 		checkedPoints.add(t);
 		return cB.stones[t.a][t.b].getSC() == kscolour.getEC();
+	}
+	
+	public boolean isEmptySpace(Tuple t) {
+		if(!cB.withinBounds(t)) return false;
+		checkedPoints.add(t);
+		return !cB.stones[t.a][t.b].isStone();
 	}
 	
 
@@ -158,6 +233,17 @@ public class Evaluator {
 		System.out.println(o);
 	}
 	
+	public void addToEye(Tuple...ts) {
+		ArrayList<Tuple> tlist = new ArrayList<Tuple>();
+		for(Tuple t:ts) {
+			if(isEmptySpace(t))eyes.add(t);
+			tlist.add(t);
+		}
+		connectedEyes.add(tlist);
+		
+	}
+	
+
 	
 
 //	public static Tuple countStone(Stone colour, Stone[][] stones) {

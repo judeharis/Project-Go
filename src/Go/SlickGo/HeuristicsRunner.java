@@ -1,7 +1,6 @@
 package Go.SlickGo;
 
 
-
 import Go.SlickGo.Heuristics.*;
 import PatternHeuristics.*;
 
@@ -26,12 +25,12 @@ public class HeuristicsRunner {
 
 		
 
-
+		retval += Hane.evaluate(group.group,e);
 		
 		retval += Eye.evaluate(group.group,e);
 		retval += EyeSide.evaluate(group.group,e);
 		retval += EyeCorner.evaluate(group.group,e);	
-		
+	
 		retval += StraightTwo.evaluate(group.group,e);
 		retval += StraightTwoSide.evaluate(group.group,e);
 		retval += StraightTwoCorner.evaluate(group.group,e);
@@ -42,6 +41,7 @@ public class HeuristicsRunner {
 		retval += BentThree.evaluate(group.group,e);
 		retval += BentThreeSide.evaluate(group.group,e);
 		retval += BentThreeCorner.evaluate(group.group,e);
+		
 		
 		retval += StraightFour.evaluate(group.group,e);
 		retval += StraightFourSide.evaluate(group.group,e);
@@ -59,15 +59,21 @@ public class HeuristicsRunner {
 		retval += TwistedFourSide.evaluate(group.group,e);
 		retval += TwistedFourCorner.evaluate(group.group,e);
 	
+		
+		
 		retval += StraightFive.evaluate(group.group,e);
 		retval += StraightFiveSide.evaluate(group.group,e);
 		retval += StraightFiveCorner.evaluate(group.group,e);
 		retval += CrossedFive.evaluate(group.group,e);
 		retval += CrossedFiveSide.evaluate(group.group,e);
 		retval += CrossedFiveCorner.evaluate(group.group,e);
+		
+		
 		retval += BulkyFive.evaluate(group.group,e);
 		retval += BulkyFiveSide.evaluate(group.group,e);
 		retval += BulkyFiveCorner.evaluate(group.group,e);
+		
+		
 		retval += FFive.evaluate(group.group,e);
 		retval += FFiveSide.evaluate(group.group,e);
 		retval += FFiveCorner.evaluate(group.group,e);	
@@ -84,13 +90,10 @@ public class HeuristicsRunner {
 //		retval += SixDie.evaluate(group.group,e);
 //		retval += SevenUnsettled.evaluate(group.group,e);
 //		retval += EightLive.evaluate(group.group,e);
-		retval += Liberties.evaluate(group.group,e);
+//		retval += Liberties.evaluate(group.group,e);
 		
 		
-		
-		
-//		LearningValues.evaluate(group.group,e,retval);
-//		retval +=TrainingPattern.evaluate(group.group,e,retval);
+	
 
 		
 		return retval * 1;
@@ -106,6 +109,8 @@ public class HeuristicsRunner {
 		return retval *0;
 		
 	}
+
+	
 
 	
     public static void print(Object o){

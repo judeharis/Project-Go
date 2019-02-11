@@ -38,21 +38,29 @@ public class StraightFiveSide {
 					Tuple TR = S4.side2(r,side.opp());
 					counter++;
 					
-
-
-					
-//					if (e.isThere(S0) || e.isThere(S4))continue;
-//					if(e.isTheres(S1) || e.isTheres(S2) || e.isTheres(S3)) retval+=600;
-//					if(e.isTheres(TL)) retval+=1200;
-//					if(e.isTheres(TR)) retval+=1200;
 					
 					if (e.isThere(S0) || e.isThere(S4))continue;
-					retval +=900;
+					
+					int patval =0;	
+					patval +=100;
+					if(e.isThere(S1) || e.isThere(S2) || e.isThere(S3))patval=0;
+					
+					patval +=850;
 					float a = States.borderSafe(e, 1, TL,TR);
 					float b = States.borderSafe(e, 3, S1,S2,S3);
 					float ncap = States.minFinder(a,b);
-					if(ncap>0.5) retval+=900;
-					else if(ncap<0.5) retval-=900;
+					if(ncap>0.5) patval+=850;
+					else if(ncap<0.5) patval-=850;
+					
+					retval+=patval;
+					if(patval>=100 && !e.isThere(S1) && !e.isThere(S2) && !e.isThere(S3))e.addToEye(S0,S1,S2,S3,S4);
+					
+//					retval +=900;
+//					float a = States.borderSafe(e, 1, TL,TR);
+//					float b = States.borderSafe(e, 3, S1,S2,S3);
+//					float ncap = States.minFinder(a,b);
+//					if(ncap>0.5) retval+=900;
+//					else if(ncap<0.5) retval-=900;
 					
 				
 
@@ -83,19 +91,29 @@ public class StraightFiveSide {
 					counter++;
 					
 
-					
-
-//					if (e.isThere(S0) || e.isThere(S4))continue;
-//					if(e.isTheres(S1) || e.isTheres(S2) || e.isThere(S3)) retval+=1000;
-//					if (e.isTheres(TL) || e.isThere(TR)) retval+=2000;
-					
 					if (e.isThere(S0) || e.isThere(S4))continue;
-					retval +=900;
+					
+					int patval =0;	
+					patval +=100;
+					if(e.isThere(S1) || e.isThere(S2) || e.isThere(S3))patval=0;
+					
+					patval +=850;
 					float a = States.borderSafe(e, 2, TL,TR);
 					float b = States.borderSafe(e, 3, S1,S2,S3);
 					float ncap = States.minFinder(a,b);
-					if(ncap>0.5) retval+=900;
-					else if(ncap<0.5) retval-=900;
+					if(ncap>0.5) patval+=850;
+					else if(ncap<0.5) patval-=850;
+					
+					retval+=patval;
+					if(patval>=100 && !e.isThere(S1) && !e.isThere(S2) && !e.isThere(S3))e.addToEye(S0,S1,S2,S3,S4);
+					
+					
+//					retval +=900;
+//					float a = States.borderSafe(e, 2, TL,TR);
+//					float b = States.borderSafe(e, 3, S1,S2,S3);
+//					float ncap = States.minFinder(a,b);
+//					if(ncap>0.5) retval+=900;
+//					else if(ncap<0.5) retval-=900;
 					
 				
 

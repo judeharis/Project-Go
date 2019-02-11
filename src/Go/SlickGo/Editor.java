@@ -7,14 +7,11 @@ import java.util.ArrayList;
 
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -22,10 +19,17 @@ public class Editor extends BasicGameState {
 	Board board;
 	Grouping grouping;
 	Image bg;
-	Font font;
-	TextField desc;
+	public static String msg="";
+	public static int msgtimer = 0;
+	public static int msgcr=0;
+	public static int msgcg=0;
+	public static int msgcb=0;
+
+	
 	boolean drawPattern;
 	ArrayList<Pattern> pattern= new ArrayList<Pattern>();
+
+	
 	public Editor(int state ,int gcsize  ) {
 		this.board = Board.cloneBoard(SlickGo.mainBoard);
 		grouping = new Grouping(board);
@@ -33,17 +37,11 @@ public class Editor extends BasicGameState {
 
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		bg = new Image("Images/woodenbg3.jpg");
-		font = new TrueTypeFont(new java.awt.Font(java.awt.Font.MONOSPACED,java.awt.Font.BOLD , 12), false);
-	    desc = new TextField(gc, font, board.boardSize , board.TileSize +460, 300, 40); 
-
-	    desc.setBackgroundColor(Color.transparent);
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		bg.draw(0, 0, (float) 0.5);
-		desc.setFocus(true);
-	    desc.setMaxLength(40);
-		desc.render(gc, g);
+
 		
 		int xpos = Mouse.getX();
 		int ypos =  Math.abs(gc.getHeight() - Mouse.getY());
@@ -57,7 +55,16 @@ public class Editor extends BasicGameState {
         
         grouping.draw(g);
         if(!pattern.isEmpty() && drawPattern)pattern.get(0).draw(g,pattern,board);
+        
 
+        if(msgtimer>0) {
+        	Color c = new Color(msgcr, msgcg,  msgcb, msgtimer);
+        	SlickGo.drawMessageBox(board.boardSize ,board.TileSize +500,420,50,msg, g ,c);
+    	}else {
+    		SlickGo.drawMessageBox(board.boardSize ,board.TileSize +500,420,50,"", g ,Color.black);
+    	}
+        
+        g.setColor(Color.black);
 		SlickGo.drawRButton(board.boardSize , board.TileSize +40 , "Place Black Stones", g, board.placing == Stone.BLACK||board.placing == Stone.KEYBLACKSTONE);
 		SlickGo.drawRButton(board.boardSize , board.TileSize +80, "Place White Stones", g,board.placing == Stone.WHITE||board.placing == Stone.KEYWHITESTONE);
 		SlickGo.drawRButton(board.boardSize , board.TileSize +120, "Mark Valid Spots", g,board.placing==Stone.VALID);
@@ -93,12 +100,16 @@ public class Editor extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		
+
 		Input input = gc.getInput();
 		int xpos = Mouse.getX();
 		int ypos =  Math.abs(gc.getHeight() - Mouse.getY());
 		int bx =  board.calulatePostionOnBoard(xpos-board.TileSize);
 		int by =  board.calulatePostionOnBoard(ypos-board.TileSize);
-		board.desc = desc.getText();
+		if(msgtimer>0)msgtimer--;
+		board.desc = saveDesc();
+		
+		
 		Stone currentKeystone = board.keystone;
 		if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))board.keystone = Stone.KEYWHITESTONE;
 		else board.keystone = Stone.KEYBLACKSTONE;
@@ -171,7 +182,7 @@ public class Editor extends BasicGameState {
 		
 
 
-		pattern = Pattern.sToPv2("xrdxddXlxzldxldxdx");
+		pattern = Pattern.sToPv2("xlddr#zldxdx");
 		if (input.isMousePressed(0)) {
 			if (SlickGo.withinBounds(bx,by)) {		
 				board.takeTurn(bx,by , true,false);
@@ -207,13 +218,14 @@ public class Editor extends BasicGameState {
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +400,200,40,gc))board.placing = board.keystone;
 			
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +560,200,50,gc)) {
-				SlickGo.loadFile(board,true);
-				desc.setText(board.desc);
+				Board loadBoard = SlickGo.loadFile(true);
+				if(loadBoard!=null) board =loadBoard;
 			}
+			
 			
 			if (SlickGo.regionChecker(board.boardSize+220 ,board.TileSize +560,200,50,gc))this.board.initBoard(true);
 			
-			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +620,200,50,gc))SlickGo.saveFile(board);
+			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +620,200,50,gc))SlickGo.saveFile(board,true);
 			
 			if (SlickGo.regionChecker(board.boardSize ,board.TileSize +680,200,50,gc)) {
 				if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))MoveFinder.keystonecolour = Stone.WHITE;
@@ -248,6 +260,15 @@ public class Editor extends BasicGameState {
 			}
 			
 		}
+	}
+
+	private String saveDesc() {
+		String s = "";
+		if(board.blackFirst && board.capToWin )s= "Kill White";
+		if(!board.blackFirst && board.capToWin )s= "Kill Black";
+		if(board.blackFirst && !board.capToWin )s= "Black To Live";
+		if(!board.blackFirst && !board.capToWin )s= "White To Live";
+		return s;
 	}
 
 	public int getID() {
