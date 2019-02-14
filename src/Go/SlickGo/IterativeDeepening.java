@@ -66,6 +66,9 @@ public class IterativeDeepening  implements Runnable{
 		}
 		
 //	    if(depth>3)goodMoves = moveGen(cB,goodMoves);
+		if(depth==1) {
+			print("");
+		}
 	    goodMoves = moveGen(cB,goodMoves);
 	    goodMoves = moveOrdering(depth,goodMoves);
 	
@@ -77,7 +80,7 @@ public class IterativeDeepening  implements Runnable{
 				path.add(t);
 				Board b = Board.cloneBoard(cB);
 				
-				if(depth==1)System.out.print(t.clone()+ " :");
+				if(depth==1)print(t.clone()+ " :");
 				
 				b.takeTurn(t.a,t.b,false,true);  
 				int returnscore = 0;
@@ -111,7 +114,7 @@ public class IterativeDeepening  implements Runnable{
 				path.add(t);
 				Board b = Board.cloneBoard(cB);
 				
-				if(depth==1)System.out.print(t.clone()+ " :");
+				if(depth==1)print(t.clone()+ " :");
 				
 				b.takeTurn(t.a,t.b,false,true);
 				int returnscore = 0;
@@ -221,7 +224,7 @@ public class IterativeDeepening  implements Runnable{
     
 	  
     public static void print(Object o){
-        //System.out.println(o);
+        System.out.println(o);
     }
    
 }

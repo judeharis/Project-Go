@@ -252,7 +252,8 @@ public class Play extends BasicGameState {
 					if(iterativeDeepening) {
 			        	if (k.choice != null) {
 			        		board.takeTurn(k.choice.a,k.choice.b , false,false);
-			        		gameMsg= "AI Placed at " + Board.coord(k.choice); ;
+			        		if(k.choice.a == -9 && k.choice.b==-9)gameMsg= "AI Passed";
+			        		else gameMsg= "AI Placed at " + Board.coord(k.choice);
 			        	}else winMsg= "AI says " + board.placing.getEC()+" Wins";
 			        	afterMove();
 					}else gameMsg= "AI Stopped";
@@ -363,7 +364,8 @@ public class Play extends BasicGameState {
     		aiStarted=false;
         	if (k.choice != null) {
         		board.takeTurn(k.choice.a,k.choice.b , false,false);
-        		gameMsg= "AI Placed at " + Board.coord(k.choice); ;
+        		if(k.choice.a == -9 && k.choice.b==-9)gameMsg= "AI Passed";
+        		else gameMsg= "AI Placed at " + Board.coord(k.choice);
         	}else winMsg= "AI says " + board.placing.getEC()+" Wins";
 //			gameMsg= "AI Done";
 			afterMove();

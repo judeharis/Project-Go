@@ -77,7 +77,7 @@ public class MoveFinder  implements Runnable{
 			for (Tuple t : goodMoves) {
 				Board b = Board.cloneBoard(cB);
 				b.takeTurn(t.a,t.b,false,true);  
-				if(depth==1)System.out.print(t.clone()+ " :");
+				if(depth==1)print(t.clone()+ " :");
 				
 				int returnscore = 0;
 				if(useHashTable) {
@@ -104,7 +104,7 @@ public class MoveFinder  implements Runnable{
 			for (Tuple t : goodMoves) {
 				Board b = Board.cloneBoard(cB);
 				b.takeTurn(t.a,t.b,false,true);
-				if(depth==1)System.out.print(t.clone()+ " :");
+				if(depth==1)print(t.clone()+ " :");
 				
 				int returnscore = 0;
 				if(useHashTable) {
@@ -230,7 +230,7 @@ public class MoveFinder  implements Runnable{
     
 	  
     public static void print(Object o){
-        //System.out.println(o);
+        System.out.println(o);
     }
    
 }

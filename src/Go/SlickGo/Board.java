@@ -19,6 +19,7 @@ public class Board{
 	static int boardSize = ((SlickGo.gcheigth/18)/10) *10 *18;
 	static int TileSize = ((boardSize/18)/10) *10;
 	
+
 	
 	static float fullTime = 0;
 	static long[] arrayTimes = new long[10];

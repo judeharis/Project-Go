@@ -82,6 +82,23 @@ public class SlickGo extends StateBasedGame {
 		    
 
 		
+    	
+		DisplayMode[] modes = Display.getAvailableDisplayModes();
+		int width =0;
+		int height =0;
+        for (int i=0;i<modes.length;i++) {
+            DisplayMode current = modes[i];
+            int curw =current.getWidth() ;
+            System.out.println(current.getWidth() + "x" + current.getHeight() + "x" +
+                                current.getBitsPerPixel() + " " + current.getFrequency() + "Hz");
+            if(curw >width) {
+            	width=curw;
+            	height= current.getHeight() ;
+            }
+        }
+
+        
+        
 		appgc = new AppGameContainer(new SlickGo(gamename));
 		appgc.setShowFPS(false);
 		appgc.setDisplayMode(gcwidth, gcheigth, false);
