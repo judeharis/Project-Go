@@ -16,10 +16,10 @@ public class Board{
     boolean capToWin;
     boolean passing;
     
-	int gcsize = 1000;
-	int boardSize = gcsize * 4 /5;
-	int TileSize = boardSize/20;
-	int stoneSize = TileSize;
+	static int boardSize = ((SlickGo.gcheigth/18)/10) *10 *18;
+	static int TileSize = ((boardSize/18)/10) *10;
+	
+	
 	static float fullTime = 0;
 	static long[] arrayTimes = new long[10];
 	static float takeTurnTime = 0;
@@ -60,10 +60,11 @@ public class Board{
     public boolean takeTurn(int i, int j, boolean  editormode , boolean check) {
 
     	boolean moveMade = false;
+		if(editormode)removeKo();
     	if(i==-9 && j ==-9) passing =true;
 		if (withinBounds(i,j) && !passing) {
-			if (stones[i][j]== Stone.KO)print("Can't Place On KO"); 
-			else if (selfCap(i,j,placing.getEC()))print("Can't Self Capture"); 
+			if (stones[i][j]== Stone.KO)printSent("Can't Place On KO", check, editormode); 
+			else if (selfCap(i,j,placing.getEC()))printSent("Can't Self Capture", check, editormode); 
 			else if (editormode){
 				undoBoard = cloneBoard(this);
 				redoBoard = null;
@@ -82,7 +83,7 @@ public class Board{
 				moveMade=true;
 				removeKo();
 				turn = turn.getEC();
-			}else if(!false) print("Invalid Move");
+			}else if(!false) printSent("Invalid Move", check, editormode);
 //			updateStringsSingle(i,j);
 		}else if (passing) {
 			passing=false;
@@ -92,7 +93,7 @@ public class Board{
 			undoString.push(boardString);
 			removeKo();
 			turn = turn.getEC();
-		}else print("Out of bound");
+		}else printSent("Out of bound", check, editormode);
 
 
 		updateStringsFull();
@@ -623,7 +624,6 @@ public class Board{
     public static Board cloneBoard(Board oB) {
     	Board nB = new Board();
     	nB.capToWin = oB.capToWin;
-    	nB.boardSize = oB.boardSize;
     	nB.placing = oB.placing;
     	nB.turn = oB.turn;
     	nB.keystone = oB.keystone;
@@ -725,21 +725,26 @@ public class Board{
     	}
     }
    
-    public void flip() {
+    public void flip(boolean v) {
 	    undoBoard = cloneBoard(this);
 	    redoBoard = null;
     	Board nB = cloneBoard(this);
         for(int i=0; i<stones.length; i++) {
             for(int j=0; j<stones[i].length; j++) {
-            	nB.stones[j][18-i]= this.stones[j][i];
+            	if(v)nB.stones[j][18-i]= this.stones[j][i];
+            	else nB.stones[18-j][i]= this.stones[j][i];
             }
         }
         ArrayList<Tuple> nkeystones = new ArrayList<Tuple>();
         for(Tuple t:keystones) {
-        	nkeystones.add(new Tuple(t.a,18-t.b));
+        	if(v)nkeystones.add(new Tuple(t.a,18-t.b));
+        	else nkeystones.add(new Tuple(18-t.a,t.b));
         }
         keystones = nkeystones;
-        if(ko!=null)ko= new Tuple(ko.a,18-ko.b);
+        if(ko!=null) {
+        	if(v)ko= new Tuple(ko.a,18-ko.b);
+        	else ko= new Tuple(18-ko.a,ko.b);
+        }
         stones = nB.stones;
         updateStringsFull();
         checkForCaps(turn.getSC(),true);
@@ -823,11 +828,24 @@ public class Board{
     public void draw(Graphics g,boolean editormode) {
     	
 		g.setBackground(Color.lightGray);
-        for (float i =TileSize; i < boardSize; i+=TileSize){
+		int bS = TileSize*20;
+        for (float i =TileSize; i < bS; i+=TileSize){
             g.setColor(Color.red);
-            g.drawLine(i,TileSize,i, boardSize-TileSize);
-            g.drawLine(TileSize,i,boardSize-TileSize, i);
+            g.drawLine(i,TileSize,i, bS-TileSize);
+            g.drawLine(TileSize,i,bS-TileSize, i);
         }
+        
+        char c = 'a';
+        for (float i =TileSize; i < bS; i+=TileSize){
+            g.setColor(Color.black);
+            g.drawString(c+"", i-5, TileSize-40);
+            g.drawString((c-'a'+1)+"", TileSize-40, i-8);    
+            g.drawString(c+"", i-5, TileSize-20 + (TileSize*19));
+            g.drawString((c-'a'+1)+"", TileSize-20 + (TileSize*19), i-8);         
+            c++;
+
+        }
+        
         
         for(int i = 4; i<17; i+=6) {
         	g.setColor(Color.blue);
@@ -886,29 +904,44 @@ public class Board{
     }
 
     public void drawoval(Graphics g,  int x, int y , Color c , boolean key) {
-    	int r = (stoneSize/2);
+    	int r = (TileSize/2);
     	x = x - r;
     	y = y - r;
         g.setColor(c);
-        g.fillOval(x, y, stoneSize, stoneSize);
+        g.fillOval(x, y, TileSize, TileSize);
         if (key){
             g.setColor(new Color(255,175,55));
             g.drawOval(x+(r/2), y+(r/2),r, r);
-            }
-        else{
-            g.setColor(Color.black);}
+            g.drawOval(x, y, TileSize, TileSize);
+        }else{
+            g.setColor(Color.black);
+            g.drawOval(x, y, TileSize, TileSize);
+        }
+        g.setColor(Color.black);
 
-        g.drawOval(x, y, stoneSize, stoneSize);
+
     }
 
     public void drawsquare(Graphics g,  int x, int y , Color c) {
         g.setColor(c);
-        g.fillRect(x-(stoneSize/2), y-(stoneSize/2), stoneSize, stoneSize);
+        g.fillRect(x-(TileSize/2), y-(TileSize/2), TileSize, TileSize);
     }
 
     public static void print(Object o){
         System.out.println(o);
         //Play.gameMsg=(String)o;
+    }
+    
+    public static void printSent(Object o,boolean check ,boolean editormode){
+        System.out.println(o);
+        if(!check && !editormode)Play.gameMsg = o.toString();
+        if(!check && editormode) {
+        	Editor.msg = o.toString();
+        	Editor.msgtimer = 300;
+        	Editor.msgcb = Editor.msgcg = Editor.msgcr =0;
+        	
+        }
+
     }
    
     public int calulatePostionOnBoard(int x){
@@ -944,6 +977,22 @@ public class Board{
         }
 		if(kocount>1 || keystonecount<1)return false;
 		return true;
+	}
+	
+	public static void changeSize(int width,int height) {
+		float  r =(float)  SlickGo.gcheigth/SlickGo.gcwidth;
+		float  rn = (float) height/width;
+		float  f= (r-rn)*18;
+		int k = (int) (18 + (f));
+		boardSize = ((height/k)/10) *10 *k;
+		TileSize = ((boardSize/k)/10) *10;
+		print(TileSize);
+	}
+
+	public static String coord(Tuple choice) {
+		String strAsciiTab = Character.toString((char) ('a' + choice.a));
+		
+        return strAsciiTab +""+ choice.b ;
 	}
 
 

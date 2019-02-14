@@ -68,7 +68,8 @@ public class MoveFinder  implements Runnable{
 	    if(searched.contains(cB.boardString) && !goodMoves.isEmpty()) goodMoves.add(goodMoves.remove(0));
 	    else if(!searched.contains(cB.boardString)) searched.add(cB.boardString);
 	
-	    if(depth>3)goodMoves = moveGen(cB,goodMoves);
+//	    if(depth>3)goodMoves = moveGen(cB,goodMoves);
+	    goodMoves = moveGen(cB,goodMoves);
 	    goodMoves = moveOrdering(depth,goodMoves);
 	
 	    if(isLive) {
@@ -229,7 +230,7 @@ public class MoveFinder  implements Runnable{
     
 	  
     public static void print(Object o){
-        System.out.println(o);
+        //System.out.println(o);
     }
    
 }

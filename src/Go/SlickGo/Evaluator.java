@@ -38,23 +38,31 @@ public class Evaluator {
 			}
 			retval+=eyeStonesLinked();
 		}else {
+//			for (Tuple t : cB.keystones) {
+//				ArrayList<Tuple> keystring = cB.checkForStrings(t, kscolour);
+//				Group keygroup = grouping.inGroup(t, kscolour);
+//				if (!keystring.isEmpty()) {
+//					ArrayList<Tuple> cBneedList = cB.getNeedList(keystring, kscolour.getEC(),true);
+//					for (Tuple k : cBneedList)if (cB.stones[k.a][k.b] == Stone.INVALID)return Integer.MAX_VALUE;
+//					retval += hrunner.runKeyStringHeuristics(keygroup);
+//				}
+//			}
+			
+			
+			
 			for (Tuple t : cB.keystones) {
 				ArrayList<Tuple> keystring = cB.checkForStrings(t, kscolour);
-				Group keygroup = grouping.inGroup(t, kscolour);
 				if (!keystring.isEmpty()) {
 					ArrayList<Tuple> cBneedList = cB.getNeedList(keystring, kscolour.getEC(),true);
 					for (Tuple k : cBneedList)if (cB.stones[k.a][k.b] == Stone.INVALID)return Integer.MAX_VALUE;
-					retval += hrunner.runKeyStringHeuristics(keygroup);
 				}
 			}
 			
-
+			for (Group g : grouping.allGroups) {
+				if(g.colour == kscolour)retval += hrunner.runKeyStringHeuristics(g);
+			}
 			retval+=eyeStonesLinked();
 
-//			for (ArrayList<Tuple>  slist : kscolour.getSStrings(cB)) {
-//				for (Tuple  t : slist) retval += hrunner.runStoneHeuristics(t);	
-//			}
-		
 		}
 		long end = System.currentTimeMillis();
 		timed += end-start;
@@ -76,6 +84,7 @@ public class Evaluator {
 			oPP.remove(oPP.size()-1);
 			k =max-oPP.size();
 		}
+		
 		for(int i =0; i< k;i++) {
 			if(workinglist.isEmpty())break;
 			Tuple t = workinglist.remove(new Random().nextInt(workinglist.size()));

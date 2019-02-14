@@ -7,6 +7,8 @@
 \usepackage{enumitem}
 \usepackage{graphicx}
 \usepackage{subcaption}
+
+
 \graphicspath{ {images/} }
 
 
@@ -256,49 +258,54 @@ These two constraints are closely related to each other, more valid moves the AI
 
 \chapter{Design}
 
-\section{Design Principles}
 
 \section{Brute Force Search}
-For the computer to play against a human it needs to be able to determine the best move it can make. Simplest way to do this is by searching through the game tree and determining the end results of each valid move. The game tree consists of every single board position that is possible to occur from the current board position. Every valid move’s board position is explored deeper and deeper in the game tree until the game is over or a condition is met. Within the program the ability to do this “brute force search” was essential as it is the foundation to which rest of the program’s AI is built upon.
+For the computer to play against a human it needs to be able to determine the best move it can make. Simplest way to do this is by searching through the game tree and determining the end results of each valid move. The game tree consists of every single board position that is possible to occur from the current board position. Board position refers to the state of the entire board, each sub tree of the game tree is the result of making a valid move in the current board position. Every sub tree is explored deeper until the resulting board position is in a game ending state. This type of search can be referred to as a brute force search and within GoLD the ability to “brute force search” is essential as it is the foundation to which rest of the program’s AI is built upon.
 
 \subsection{Alpha-Beta Pruning Search Algorithm}
 
-The basis of finding the correct move within the project is the Alpha-Beta pruning search algorithm. Alpha-Beta is an optimisation of the simple minimax algorithm. Minimax is perfect for searching Go game tree where two players are playing and where one player’s gains are directly linked to the other player’s losses. A simple implementation of minimax will search each valid move of the initial board position and choose a move which results in victory even if the opponent plays perfectly, if there is such a move. In terms of Go given the computer is black, during the search minimax alternates between playing as black and white until an end goal is reached and then chooses an initial move which leads black to win.
+The basis of finding the correct move within GoLD is the Alpha-Beta pruning search algorithm. Alpha-Beta is an algorithm which optimises the simple minimax algorithm and returns the same results in less time. Minimax is perfect for searching Go’s game tree where two players are playing, and one player’s gains are directly linked to the other player’s losses. A simple implementation of minimax will search each valid move of the initial board position and choose a move which results in victory even if the opponent plays perfectly, if there is such a move. In terms of Go given the computer is black, during the search minimax alternates between playing as black and white until an end goal is reached and then chooses an initial move which leads black to win.
 
-Within life and death situation of this project the end goal is easy to determine if the attacking player as no valid moves and the keystones remain on the board then the defending player has won. Alternatively, as soon as all the keystones on the board is captured then the attacking player has won. In a real game of Go, results of end games are not so simple. There might be multiple solutions which results in capture of a string but there might only be one solution which won’t allow for losses in other parts of the board for the attacking player. This is ignored in this program as we are only interested in the result of life and death problems not the outcome of the board. Hence any solution which captures the given keystones are sufficient for the project. An example of minimax algorithm used in a simple number game is show in ~\autoref{fig:MinMaxNumTree}
+Within life and death situation of this project the end goal is easy to determine if the attacking player as no valid moves and the keystones remain on the board then the defending player has won. Alternatively, as soon as all the keystones on the board is captured then the attacking player has won. In a real game of Go, results of end games are not so simple. There might be multiple solutions which results in capture of all the keystones’ string but there might only be one solution which will do so without allowing for losses on other parts of the board for the attacking player. This is ignored with GoLD as we are only interested in the result of life and death problems not the outcome of the board. Hence any solution which captures the given keystones are sufficient for the project. An example of minimax algorithm used in a simple number game is show in ~\autoref{fig:MinMaxNumTree}
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=0.9\textwidth]{MinMaxNumTree}
-\caption{Minimax being used for simple number game. The best score the maximizing player can get is 8. Even though scoring 10 and 12 are possible when minimizing player plays optimally the score can’t out be achieved.}
+\caption{Minimax being used for simple number game. Best score the maximizing player can get is 8. Even though scoring 10 and 12 are possible when minimizing player plays optimally the score can’t out be achieved.}
 \label{fig:MinMaxNumTree}
 \end{figure}
 
-The alpha-beta pruning algorithm is smart improvement to reduce the search time of the minimax algorithm. It allows for the correct result to be determined without having to search through every possible branch in the tree of possible moves. It uses alpha and beta values determine whether further search is required or not. To begin with alpha is set -inf and beta is set to +inf, these values are passed down through the layers of the search algorithm and changes to value only affect the deeper layers of the search. If a maximizing layer finds a move which gives a score greater than the previous best move of that layer, then the alpha value of that layer is increased to the value of new best move. If a minimizing layer finds a move which gives a score less than the previous best move of that layer, then the beta value of that layer is decreased to the value of new best move.  After each move is searched in a layer, the algorithm checks if the alpha value is greater than or equal to the beta value and if it is the algorithm decides that checking more moves in that layer is pointless and returns the best move back to previous layer. This results drastic improvements to the minimax algorithm without changing the result as it cuts out the search of many branches of the game tree which doesn’t affect the result of the algorithm. An example of Alpha-Beta pruning algorithm used for the same simple number game is show in ~\autoref{fig:ABNumTree}
+The alpha-beta pruning algorithm is smart improvement to reduce the search time of the minimax algorithm. It allows for the correct result to be determined without having to search through every possible sub tree of the initial game tree. It uses alpha and beta values to determine whether further search is required or not. To begin with alpha is set -inf and beta is set to +inf, these values are passed down through the layers of the search algorithm and changes to the alpha or beta values only affect the deeper layers of the search. If a maximizing layer finds a move which gives a score greater than the previous best move of that layer, then the alpha value of that layer is increased to the value of new best move. If a minimizing layer finds a move which gives a score less than the previous best move of that layer, then the beta value of that layer is decreased to the value of new best move.  After each move is searched in a layer, the algorithm checks if the alpha value is greater than or equal to the beta value and if it is the algorithm decides that checking more moves in that layer is pointless and returns the best move back to previous layer. This results drastic improvements to the minimax algorithm without changing the result as it cuts out the search of many branches of the game tree which doesn’t affect the result of the algorithm. An example of Alpha-Beta pruning algorithm used for the same simple number game is show in ~\autoref{fig:ABNumTree}
 
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=0.9\textwidth]{ABNumTree}
-\caption{Same simple number game using alpha-beta pruning. In the second layer of the second branch after searching the first child node which returns 5 the algorithm cuts off from any further search in that branch as it realises the first branch will also be better than 5. }
+\caption{Same simple number game using alpha-beta pruning. In the second layer of the second sub three after searching the first child node which returns 5 the algorithm cuts off from any further search in that sub tree as it realises the first sub tree will always be better than 5. }
 \label{fig:ABNumTree}
 \end{figure}
 
 Pseudocode of the implementation of alpha-beta algorithm for the program is as follows:
 
-\subsection{Bad Move Removal}
-Keystones are an absolute objective in the program, they are one of the refence points which the program checks to see if the problem is solved or not. From the defender’s perspective any moves that are detrimental to the immediate safety of keystones need to be removed from the list of valid moves to be searched by alpha-beta algorithm. This entails removing any moves that decreases the number of liberties of keystone to 1.
 
-A solution can be derived from the fact that placing 1 stone can at maximum only remove 1 liberty of a keystring. Hence, there is only a need to check the liberties of keystring with 2 liberties as anymore liberties would ensure at least 2 liberties would remain intact. For keystrings with 2 liberties, placing in one of those 2 liberties does not automatically mean it is a suicidal move for 2 reasons: Move would capture opponent string; Move would increase or maintain the liberty count. If any of these two reasons are met, then the move is not suicidal.
-Within the program, all keystrings with only 2 liberties are checked. During the check the following occurs:
+
+
+
+
+
+\subsection{Suicidal Move Removal}
+Keystones are an absolute objective in the program, they are one of the reference points which the program checks to see if the problem is solved or not. From the defender’s perspective any moves that are detrimental to the immediate safety of keystones need to be removed from the list of valid moves to be searched by alpha-beta algorithm. This entails removing any suicidal moves that decreases the number of liberties of a keystring to 1.
+
+A solution can be derived from the fact that placing 1 stone can at maximum only remove 1 liberty of a keystring. Hence, GoLD only needs to look at the moves that places a stone in liberties of keystrings with 2 liberties, anymore liberties would ensure at least 2 liberties would remain intact if a stone was to be placed on a liberty. For keystrings with 2 liberties, placing in one of those 2 liberties does not automatically mean it is a suicidal move for two reasons: Move captures an opponent string; Move would increase or maintain the liberty count. If any of these two reasons are met, then the move is not suicidal.
+
 \begin{itemize}
 	\item Both liberties of the keystring is added to the suicidal move list.
-	\item Moves that place in the liberty of any opponent string which is in Atari is removed from the suicidal move list.
-    \item 	Moves which connects keystring to another string which fits the following criteria are removed from the suicidal move list: Must be same colour as the keystring; Has more than 2 liberties or has 2 liberties which are not the same 2 liberties of the keystring.
-    \item Moves which places a stone adjacent to any empty point which is not a liberty of the keystring.
+	\item Moves that places a stone in the liberty of any opponent string which is in Atari is removed from the suicidal move list.
+    \item Moves that connects the keystring to another string which fits the following criteria are removed from the suicidal move list: Must be same colour as the keystring; Has more than 2 liberties or has 2 liberties which are not the same 2 liberties of the keystring.
+    \item Moves that places a stone adjacent to any empty point which is not a liberty of the keystring are removed from the suicidal move list.
 \end{itemize}
 
-After these checks are done for all keystrings, any moves remaining in the suicidal moves list are removed from the valid moves list and returned as the good moves list. The good moves list is used during AB search instead of valid moves list to save time by not searching valid moves which would lead to immediate capture of keystones. If no moves are considered “good” then the defending player is to pass instead of making a bad move during AB search.
+After these checks are done for all the keystrings, any moves remaining in the suicidal moves list are removed from the valid moves list – this new list of moves is referred to as the good moves list. The good moves list is used during AB search instead of valid moves list to save time by not searching valid moves which would lead to immediate capture of keystones. If no moves are considered “good” then the defending player is to pass instead of making a bad move during AB search
 
 
 \section{Heuristic Search}

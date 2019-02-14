@@ -65,7 +65,8 @@ public class IterativeDeepening  implements Runnable{
 			return evaluator.evaluateCurrentBoard(false);
 		}
 		
-		if(depth>3)goodMoves = moveGen(cB,goodMoves);
+//	    if(depth>3)goodMoves = moveGen(cB,goodMoves);
+	    goodMoves = moveGen(cB,goodMoves);
 	    goodMoves = moveOrdering(depth,goodMoves);
 	
 	    if(isLive) {
@@ -220,7 +221,7 @@ public class IterativeDeepening  implements Runnable{
     
 	  
     public static void print(Object o){
-        System.out.println(o);
+        //System.out.println(o);
     }
    
 }

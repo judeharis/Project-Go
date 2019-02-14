@@ -26,6 +26,8 @@ public class HeuristicsRunner {
 		
 
 		retval += Hane.evaluate(group.group,e);
+		retval += Cut.evaluate(group.group,e);
+		retval += OnePJump.evaluate(group.group,e);
 		
 		retval += Eye.evaluate(group.group,e);
 		retval += EyeSide.evaluate(group.group,e);
@@ -52,6 +54,7 @@ public class HeuristicsRunner {
 		retval += PyramidFour.evaluate(group.group,e);
 		retval += PyramidFourSide.evaluate(group.group,e);
 		retval += PyramidFourCorner.evaluate(group.group,e);
+		
 		retval += BentFour.evaluate(group.group,e);
 		retval += BentFourSide.evaluate(group.group,e);
 		retval += BentFourCorner.evaluate(group.group,e);
@@ -90,7 +93,8 @@ public class HeuristicsRunner {
 //		retval += SixDie.evaluate(group.group,e);
 //		retval += SevenUnsettled.evaluate(group.group,e);
 //		retval += EightLive.evaluate(group.group,e);
-//		retval += Liberties.evaluate(group.group,e);
+		
+		retval += Liberties.evaluate(group.group,e);
 		
 		
 	

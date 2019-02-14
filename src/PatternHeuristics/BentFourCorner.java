@@ -54,13 +54,39 @@ public class BentFourCorner {
 					else if(zcap<0.5) patval-=50;
 					if(e.isThere(S1) || e.isThere(S2))patval=0;
 					
-					patval +=650;
+					
+					
+					
+					patval +=450;
+
+					float a1 = States.borderSafe(e, 2, S2,TL);
+					float a2 = States.borderSafe(e, 2, S1,LB);
+					float a3 = States.borderSafe(e, 2, S1,S2);
+					float a4 = States.borderSafe(e, 2, TL,LB);
+					
+					float acap = States.minFinder(a1,a2,a3,a4);		
+					if(States.oneCheck(a1,a3) || States.oneCheck(a2,a3)) acap = States.minFinder(acap,0.5f);	
+					if(States.oneCheck(a1,a4) || States.oneCheck(a2,a4)) acap = States.minFinder(acap,0.5f);	
+					
+					if(acap>0.5) patval+=450;
+					else if(acap<0.5) patval-=450;
+					
+					patval +=200;
 					float b1 = States.borderSafe(e, 1, TL);
 					float b2 = States.borderSafe(e, 1, LB);
 					float b3 = States.borderSafe(e, 1, S1);
 					float ncap = States.minFinder(b1,b2,b3);
-					if(ncap>0.5) patval+=650;
-					else if(ncap<0.5) patval-=650;
+					if(ncap>0.5) patval+=200;
+					else if(ncap<0.5) patval-=200;
+					
+					
+//					patval +=650;
+//					float b1 = States.borderSafe(e, 1, TL);
+//					float b2 = States.borderSafe(e, 1, LB);
+//					float b3 = States.borderSafe(e, 1, S1);
+//					float ncap = States.minFinder(b1,b2,b3);
+//					if(ncap>0.5) patval+=650;
+//					else if(ncap<0.5) patval-=650;
 
 					retval+=patval;
 					if(patval>=100 && !e.isThere(S1) && !e.isThere(S2))e.addToEye(S0,S1,S2,S3);
@@ -231,11 +257,31 @@ public class BentFourCorner {
 					patval +=100;
 					if(e.isThere(S1) || e.isThere(S2))patval=0;
 					
-					patval +=650;
+					
+					patval +=450;
+					float a4 = States.borderSafe(e, 1, S0);
+					float a5 = States.borderSafe(e, 1, S2);
+					float a6 = e.isThere(S1)?0:1;
+					float a1 = States.borderSafe(e, 2, TL,TR)  + States.minFinder(a4,a5,a6);
+					float a2 = States.borderSafe(e, 2, S1,S2);					
+					float acap = States.minFinder(a1,a2);		
+					if(acap>0.5) patval+=450;
+					else if(acap<0.5) patval-=450;
+					
+					patval +=200;
 					float b1 = States.borderSafe(e, 2, TL,TR,S1,S2);
 					float ncap = States.minFinder(b1);
-					if(ncap>0.5) patval+=650;
-					else if(ncap<0.5) patval-=650;
+					if(ncap>0.5) patval+=200;
+					else if(ncap<0.5) patval-=200;
+					
+					
+					
+					
+//					patval +=650;
+//					float b1 = States.borderSafe(e, 2, TL,TR,S1,S2);
+//					float ncap = States.minFinder(b1);
+//					if(ncap>0.5) patval+=650;
+//					else if(ncap<0.5) patval-=650;
 
 					retval+=patval;
 					if(patval>=100 && !e.isThere(S1) && !e.isThere(S2))e.addToEye(S0,S1,S2,S3);

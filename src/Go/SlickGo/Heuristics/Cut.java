@@ -8,8 +8,8 @@ import Go.SlickGo.PatternSearcher;
 import Go.SlickGo.Tuple;
 import Go.SlickGo.UDLR;
 
-public class Hane {
-	static ArrayList<Pattern> hanePattern = Pattern.sToPv2("xro");
+public class Cut {
+	static ArrayList<Pattern> crossCutPattern = Pattern.sToPv2("xrdx");
 
 	
 	
@@ -19,7 +19,7 @@ public class Hane {
 		
 		
 
-		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, hanePattern,e.kscolour);
+		ArrayList<ArrayList<Tuple>> pMatches =ps.allStringMatchv2(sstring, crossCutPattern,e.kscolour);
 		
 		if(!pMatches.isEmpty()) {
 			int counter=0;
@@ -27,23 +27,28 @@ public class Hane {
 				if (!tlist.isEmpty()) {
 					boolean diagSide= ps.dirSideToBool(counter);
 					UDLR d = ps.dirNumToDir(counter);
-					UDLR u = d.opp();
 					UDLR r = d.diag(diagSide);
-					UDLR l = d.diag(!diagSide);
+//					UDLR u = d.opp();
+//					UDLR l = d.diag(!diagSide);
 					counter++;
 
 							
 					
-					Tuple U = tlist.get(0).side(u);
-					Tuple UR =U.side(r);
 					Tuple D = tlist.get(0).side(d);
-					Tuple DL = D.side(l);
-					Tuple L = tlist.get(0).side(l);
+					Tuple R = tlist.get(0).side(r);
 					
-					if(e.isEnemy(U) && !e.isThere(UR))retval-=10;
-					if(e.isEnemy(D) && !e.isThere(DL))retval-=10;
-					if(e.isEnemy(L))retval-=5;
-				
+					retval+=20;
+					
+					if(e.isEnemy(R))retval-=10;
+					if(e.isEnemy(D))retval-=10;
+					if(e.isEnemies(D,R))retval-=10;
+					
+					if(e.isThere(R) && !e.isEnemy(D))retval-=10;
+					if(e.isThere(D) && !e.isEnemy(R))retval-=10;
+					
+					if(e.isThere(R) && e.isEnemy(D))retval+=5;
+					if(e.isThere(D) && e.isEnemy(R))retval+=5;
+					
 						
 				}
 		

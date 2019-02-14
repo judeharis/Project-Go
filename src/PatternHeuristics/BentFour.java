@@ -53,7 +53,29 @@ public class BentFour {
 					else if(zcap<0.5) patval-=50;
 					if(e.isThere(S1) || e.isThere(S2))patval=0;
 					
-					patval +=650;
+					
+					
+					
+					patval +=450;
+					float a4 = States.borderSafe(e, 1, S0);
+					float a5 = States.borderSafe(e, 1, S2);
+					float a6 = e.isThere(S1)?0:1;
+					float a7 = e.isThere(S2)?0:1;
+					float a8 = States.borderSafe(e, 1, S1);
+					float a9 = States.borderSafe(e, 1, S3);
+					
+					
+					float a1 = States.borderSafe(e, 2, TL,LB) + States.minFinder(a4,a5,a6);
+					float a2 = States.borderSafe(e, 2, BL,BR) + States.minFinder(a8,a9,a7);
+					float a3 = States.borderSafe(e, 2, S1,S2);
+					float acap = States.minFinder(a1,a2,a3);
+					
+					if(acap>0.5) patval+=450;
+					else if(acap<0.5) patval-=450;
+					
+					
+					
+					patval +=200;
 					float b1 = States.borderSafe(e, 2, TL,LB);
 					float b2 = States.borderSafe(e, 2, BL,BR);
 					float b3 = States.borderSafe(e, 2, S1,S2);
@@ -62,8 +84,22 @@ public class BentFour {
 					float ncap = States.minFinder(b1,b2,b3,b4,b5);
 					if(States.oneCheck(b2,b4) || States.oneCheck(b2,b5) || States.oneCheck(b2,b3)) ncap = States.minFinder(ncap,0.5f);
 					if(States.oneCheck(b3,b4) || States.oneCheck(b3,b5)) ncap = States.minFinder(ncap,0.5f);
-					if(ncap>0.5) patval+=650;
-					else if(ncap<0.5) patval-=650;
+					if(ncap>0.5) patval+=200;
+					else if(ncap<0.5) patval-=200;
+					
+					
+					
+//					patval +=650;
+//					float b1 = States.borderSafe(e, 2, TL,LB);
+//					float b2 = States.borderSafe(e, 2, BL,BR);
+//					float b3 = States.borderSafe(e, 2, S1,S2);
+//					float b4 = States.borderSafe(e, 3, S2,TR,BL);
+//					float b5 = States.borderSafe(e, 3, S2,TR,BR);
+//					float ncap = States.minFinder(b1,b2,b3,b4,b5);
+//					if(States.oneCheck(b2,b4) || States.oneCheck(b2,b5) || States.oneCheck(b2,b3)) ncap = States.minFinder(ncap,0.5f);
+//					if(States.oneCheck(b3,b4) || States.oneCheck(b3,b5)) ncap = States.minFinder(ncap,0.5f);
+//					if(ncap>0.5) patval+=650;
+//					else if(ncap<0.5) patval-=650;
 					
 					
 					retval+=patval;
