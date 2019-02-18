@@ -101,6 +101,20 @@ Throughout this dissertation many terms are used to describe many aspects of Go 
 
 \section{Life and Death Problems}
 
+Life and Death is an essential part of Go. Life and Death is the term used to describe the battle that takes place to either capture stone enemy stone strings or to defend and keep alive ally stone strings. Situations on the board where it become crucial to defend one’s own stone strings or capture enemy ones arrive very often. During the end game in Go the ability to win these battles with as much territory as possible will decide the victor. Beginners are highly recommended to understand and  learn the how to play out these battles as they are clear deciders in the game. Many of the literature on Go are purely based around providing life and death problems  and explaining the importance of them and how to tackle such situations appropriately.[3][4] The purpose of GoLD is to create a tool which helps players to understand and solve these problems.
+
+\subsection{Dead, Alive or Unsettled}
+
+The three main way to describe a string of stones are alive, dead or unsettled. To deduct accurately the state of a group of stone can be difficult and requires a lot of experience and knowledge about the possible moves that could be made and the counter plays to them and the result of counter plays.
+A group of stones are said to be alive if the group can not be captured even if the opponent is to plays first. To expand on this, even if opponent plays a move which threatens the group of stone there is always a responding move which will in turn keep the group of stones alive. Figure 1 shows an example of white group which can be deemed to be alive, if black first plays at 1 then white will play at 2 , if black first plays at 2 then white will play at 1 both outcomes will lead white group having two eyes.
+A group of  stones is said to be dead if the group can be captured even if the group’s colour can play first. A white group can be deemed dead if white can play the first move and black has a responding move which will keep the white group in a dead state. Figure 2 show group of dead white stones, for this group to live it requires white stones on two points diagonals to each other and no white stones on the other two , for example if white can play at a and d then it becomes alive. This is impossible to achieve as black can respond to white’s initial move by playing at diagonally opposite point seen in 2-b.
+A group of stone is said  to be unsettled when the group is alive  if the group’s colour can play first but dead if the opponent plays first. Groups which are unsettled are crucial to out come of the board, who ever can play first near the group can determine who controls the whole territory the unsettled group surrounds. Figure 3 show an unsettled white group which has vital point at a where if white plays first at a then the group achieves two eyes and is alive. On the other hand, if black plays first at a then white cannot achieve two eyes hence it becomes dead.
+
+\subsection{Eyes}
+The concept of an eye is key in understanding life and death problems and Go in general. There are no perfectly defined statements on what an eye is but in general an eye is a space surround by a group of the same colour. A single eye point shapes as shown below in figure 4. The stones surrounding eyes are important if any of them are missing then the eye will not be a true eye. An important deduction about a true single point eye is the fact opponent cannot play on the single point eye unless the eye is only liberty of the surrounding stones. If two eyes are connected by the same group of stones, then it becomes impossible to capture that group of stone unless the eyes are covered up by the its own colour. These groups of stones are unconditionally alive which means even if the opponent is  able to play multiple times in a row the group cannot be captured. Figure 5 shows an example of a group of white stone which contains two eyes at a and b , due the self-capture rule black can never place in a with out having a stone at b and same applies of b hence the white group in unconditionally alive.
+
+
+
 
 \section{Examples}
 
@@ -373,6 +387,8 @@ After these checks are done for all the keystrings, any moves remaining in the s
 \chapter{References}
 1.http://www.cs.cmu.edu/~wjh/go/rules/Japanese.html
 2.Müller, M. (2002). POSITION EVALUATION IN COMPUTER GO. ICGA Journal, 25(4), pp.219-228.
+3.Chikun, C. (1993). All About Life & Death. Ishi Pr.
+4.Davies, J. (1996). Life and Death. Ishi Pr.
 
 
 
