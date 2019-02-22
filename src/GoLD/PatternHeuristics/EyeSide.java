@@ -46,7 +46,6 @@ public class EyeSide{
 					retval+=patval;
 					if(patval>=100)e.addToEye(C);
 
-
 				}
 
 			}

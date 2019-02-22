@@ -164,7 +164,7 @@ public class Editor extends BasicGameState {
 //		SlickGo.drawButton(editorx +90,editory,20,20,"C", g,grouping.drawC);
 //		SlickGo.drawButton(editorx +120,editory,20,20,"P", g,drawPattern);		
 //		endSection();
-
+//
 
 
 	}
@@ -212,7 +212,7 @@ public class Editor extends BasicGameState {
 				}
 				grouping = new Grouping(board,grouping.draw,grouping.drawW,grouping.drawB,grouping.drawC);
 				grouping.allocateGrouping();
-//				grouping.allocateControl();
+				grouping.allocateControl();
 			}
 		}
 
@@ -232,7 +232,7 @@ public class Editor extends BasicGameState {
 		}
 
 		if(trigon && trigwhich!=null) {
-			board.chars[trigwhich.a][trigwhich.b] = '2';
+			board.chars[trigwhich.a][trigwhich.b] = '1';
 			trigon=false;
 		}
 
@@ -242,10 +242,15 @@ public class Editor extends BasicGameState {
 			
 			if (SlickGo.withinBounds(bx,by)) {
 				board.takeTurn(bx,by , true,false);
+				board.distance = new int[19][19];
 				if(!blackKeyStone)MoveFinder.keystonecolour = Stone.WHITE;
 				else MoveFinder.keystonecolour = Stone.BLACK;			
 				Evaluator evaluator = new Evaluator(board);
-				print(evaluator. evaluateCurrentBoard(true));
+				print(evaluator.evaluateCurrentBoard(true));
+				Evaluator evaluator2 = new Evaluator(board);
+				evaluator2.moveGen(board.removeBadMovess(), MoveFinder.breathcutoff);
+
+				
 			}
 
 
@@ -360,6 +365,7 @@ public class Editor extends BasicGameState {
 	    		SlickGo.playI.board = Board.cloneBoard(board);
 	    		SlickGo.playI.board.placing = board.blackFirst?Stone.BLACK:Stone.WHITE;
 	    		SlickGo.playI.board.turn = SlickGo.playI.board.placing;
+	    		SlickGo.playI.board.refreshBoard();
 	    		SlickGo.playI.board.resetboard =  Board.cloneBoard(SlickGo.playI.board);
 	    		sbg.enterState(1);
 			}

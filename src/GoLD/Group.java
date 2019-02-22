@@ -165,7 +165,7 @@ public class Group {
 	
 
     
-    public ArrayList<Tuple> getStoneRegion(Tuple t, boolean all){
+	public static ArrayList<Tuple> getStoneRegion(Tuple t, boolean all){
     	int i = t.a;
     	int j = t.b;
         ArrayList<Tuple> region = new ArrayList<Tuple>();

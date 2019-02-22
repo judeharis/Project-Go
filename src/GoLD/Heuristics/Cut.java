@@ -28,14 +28,18 @@ public class Cut {
 					boolean diagSide= ps.dirSideToBool(counter);
 					UDLR d = ps.dirNumToDir(counter);
 					UDLR r = d.diag(diagSide);
-//					UDLR u = d.opp();
-//					UDLR l = d.diag(!diagSide);
+					UDLR u = d.opp();
+					UDLR l = d.diag(!diagSide);
 					counter++;
 
 							
 					
 					Tuple D = tlist.get(0).side(d);
 					Tuple R = tlist.get(0).side(r);
+					Tuple UR =  tlist.get(0).sides(u,r);
+					Tuple RR =  tlist.get(0).sides(r,r);
+					Tuple DL =  tlist.get(0).sides(d,l);
+					Tuple DD =  tlist.get(0).sides(d,d);
 					
 					retval+=20;
 					
@@ -48,6 +52,8 @@ public class Cut {
 					
 					if(e.isThere(R) && e.isEnemy(D))retval+=5;
 					if(e.isThere(D) && e.isEnemy(R))retval+=5;
+					
+					e.addToCheckedPoints(D,R,UR,RR,DL,DD);
 					
 						
 				}

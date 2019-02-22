@@ -61,6 +61,13 @@ public class Tuple implements Comparable<Tuple>{
     public Tuple side2(UDLR side,UDLR side2) {
     	return this.side(side).side(side2);
    }
+    public Tuple sides(UDLR ...side) {
+    	Tuple t = this;
+    	for(UDLR s :side) {
+    		t = t.side(s);
+    	}
+    	return t;
+   }
     
     
     

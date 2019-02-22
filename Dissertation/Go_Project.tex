@@ -264,9 +264,13 @@ These two constraints are closely related to each other, more valid moves the AI
 
 
 \section{Non-Functional Requirements}
+Throughout the project some non-functional requirements where discovered and needed to be addressed , following categories were made to specify the different criteria GoLD need to achieve.
 
-\section{Must/Should/Could/Won't have}
+Performance / Time - Important concern was the time factor a user wants to spend during the process of solving problems using GoLD.
 
+Usability - Another concern was the ease of use , whether the program is simple and understandable for untrained users.
+
+Reliability – The program should be able to cope with any kind of user inputs and should maintain running with any failures or crashes.
 
 
 
@@ -322,9 +326,25 @@ A solution can be derived from the fact that placing 1 stone can at maximum only
 After these checks are done for all the keystrings, any moves remaining in the suicidal moves list are removed from the valid moves list – this new list of moves is referred to as the good moves list. The good moves list is used during AB search instead of valid moves list to save time by not searching valid moves which would lead to immediate capture of keystones. If no moves are considered “good” then the defending player is to pass instead of making a bad move during AB search
 
 
-\section{Heuristic Search}
-\subsection{Board Evaluation}
+\section{Heuristics}
+
+The Alpha-Beta pruning search algorithm by itself is great improvement over the standard minimax but with this improvement the sheer size of the search space can become quickly overwhelming for it to handle in reasonable time. Alpha-Beta even at best case has complexity of O($\sqrt{b^d}$) and at worst O($b^d$) which means for problems with greater area of search space or problems that require search into further depths to come to a terminating state could incalculable amount of time. For this reason, we have to introduce heuristics within the Alpha-Beta search to allow the search to come with a quicker solution rather than the perfect solution. There are quite a few methods of implementing heuristics within the Alpha-Beta search, GoLD will be able to use few of these in combination or by themselves to restrict the time taken for the computer to respond to the user.
+
+\subsection{Depth Limited Search with Board Evaluation}
+Alpha-Beta search which will search deeper with no depth restriction until a terminal state is found are impractical. Best way to deal with this is to introduce a depth limit where once depth X is reached the search is not continued. Of course, the problem with this is that when cut offs occur the game state will not be in a terminal state and hence the alpha search needs to do some type of evaluation in order to return a score which is between the two opposing terminal state of being dead or alive. The alpha-beta search will have to evaluate the board position when the cut off depth is reached and return value which represents how good the board is for players. For example, if the board position will lead the attacking player to capture all the keystones then the board evaluation should return -5000  on the other hand if the board position is in favour of the defending team then it should return 5000. Creating a function which evaluates the board accurately is a difficult task and doing so which can perform at the level of humans is even more difficult. An important factor to consider when designing an evaluation function is also the time it takes evaluate a board position. More complex the evaluation function becomes the longer it takes to evaluate single a  board position hence the more time it takes to evaluate the board position every time the depth limit is reached.
+
+
+\subsubsection{Pattern Matching Evaluation}
+
+When evaluating a board position GoLD looks at the board similar to how humans would look at a board it tries to identify general patterns on the board to give values depending on pattern it finds. These patterns are based of the idea of eyes and eyes space. Identifying patterns which will lead to multiple eyes will be evaluated to very high score and hence the search will be able to recognise the group of stone will be able to live without further searching. General principle behind the patterns used in GoLD is to identify the number of eyes it can produce when fully played out and values according to this factor is added to the overall board score.
+
+Most of the patterns used within GoLD have a distinct feature which is common in life and death problems which is that depending on who plays first the pattern/shape becomes dead or alive. Another words these shaped are unsettled and hence contains a vital point which will determine the number of eyes that can be produced by the shape. Figure 1a shows a pattern used in GoLD, the shape referred as straight three but with its corner stones. The vital point of this pattern is a , if white is able to play at a then the pattern is almost ensured to create two eyes unless white makes a mistake filling in the corners. The corners b, c, d and e are also important for this pattern if black is able to have stones in both b and c  or in d and e then the wall of shape becomes weak and hence the shape can become captured. Due to alternating play if white plays first in this situation then it will be played out as shown in Figure 1b where white is able to produce two real eyes.
+
+
+
 \subsection{Pattern Searching}
+
+
 \subsection{Move Generator}
 
 \section{Problem Files}
@@ -389,7 +409,9 @@ After these checks are done for all the keystrings, any moves remaining in the s
 2.Müller, M. (2002). POSITION EVALUATION IN COMPUTER GO. ICGA Journal, 25(4), pp.219-228.
 3.Chikun, C. (1993). All About Life & Death. Ishi Pr.
 4.Davies, J. (1996). Life and Death. Ishi Pr.
-
+5.Cornelis Diederik van der Werf, E. (2004). AI techniques for the game of Go. [Maastricht]: UPM, Universitaire Pers Maastricht.
+6.Akl, S.G., & Newborn, M. (1977). The principal continuation and the killer heuristic. ACM Annual Conference.
+7.Huberman, B.J. (1968). A PROGRAM TO PLAY CHESS END GAMES.
 
 
 

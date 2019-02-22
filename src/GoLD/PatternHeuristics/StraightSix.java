@@ -52,7 +52,7 @@ public class StraightSix {
 					patval +=1050;
 					float a = States.borderSafe(e, 2, TL,BL);
 					float b = States.borderSafe(e, 2, TR,BR);
-					float c = States.borderSafe(e, 4, S1,S2,S3,S4);
+					float c = States.borderSafe(e, 5, S1,S2,S3,S4);
 					float ncap = States.minFinder(a,b,c);
 					if(ncap>0.5) patval+=1050;
 					else if(ncap<0.5) patval-=1050;

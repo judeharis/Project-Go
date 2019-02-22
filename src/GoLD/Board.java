@@ -14,7 +14,6 @@ import org.newdawn.slick.Graphics;
 public class Board{
 
     boolean blackFirst;
-//    boolean capToWin;
 
     boolean passing;
     
@@ -26,7 +25,7 @@ public class Board{
 	public static int sPx =0;
 	public static int sPy =0;
 	
-	static boolean showCoord = false;
+	static boolean showCoord = true;
 
 	static float fullTime = 0;
 	static long[] arrayTimes = new long[10];
@@ -42,6 +41,7 @@ public class Board{
     
     Stone[][] stones = new Stone[19][19];
     char[][] chars = new char[19][19];
+	int[][] distance = new int[19][19];
     
     Board resetboard;
     Board undoBoard;
@@ -49,6 +49,8 @@ public class Board{
    
     Stack<String> undoString =  new Stack<String>();
     Stack<String> redoString =  new Stack<String>();
+    
+
 
     Tuple ko;
     Tuple maybeko;
@@ -93,7 +95,6 @@ public class Board{
 				removeKo();
 				turn = turn.getEC();
 			}else if(!false) printSent("Invalid Move", check, editormode);
-//			updateStringsSingle(i,j);
 		}else if (passing) {
 			passing=false;
 			moveMade=true;
@@ -166,6 +167,7 @@ public class Board{
             	if (checkValidMove(i,j)) validMoves.add(new Tuple(i,j));
             }
     	}
+    	if(turn==keystone.getSC())validMoves.add(new Tuple(-9,-9));
     	return validMoves;
     }
 
@@ -542,7 +544,7 @@ public class Board{
 //
 //    }
     
-    private void removeKo(){
+    public void removeKo(){
         if (ko != null){
             stones[ko.a][ko.b] =Stone.VALID;
             ko = null;}
@@ -829,16 +831,6 @@ public class Board{
     	return nl;
     }
     
-//    private ArrayList<Tuple> tupleArrayMerger(ArrayList<Tuple> a,ArrayList<Tuple> b){
-//    	ArrayList<Tuple> l = new ArrayList<Tuple>();
-//    	l.addAll(a);
-//    	for (Tuple t : b ) {
-//    		if (!l.contains(t)) l.add(t);
-//    	}
-//		return l;
-//    	
-//    }
-    
 
     
     public void draw(Graphics g,boolean editormode,int sPx,int sPy) {
@@ -856,18 +848,32 @@ public class Board{
             g.drawLine(x+TileSize,y+i,x+bS-TileSize, y+i);
         }
         
+//        if(showCoord) {
+//	        char c = 'a';
+//	        for (float i =TileSize; i < bS; i+=TileSize){
+//	            g.setColor(Color.black);
+//	            g.drawString(c+"", x+i-5, y+TileSize-40);
+//	            g.drawString((c-'a'+1)+"", x+TileSize-40,y+i-8);    
+//	            g.drawString(c+"",x+i-5, y+ TileSize-20 + (TileSize*19));
+//	            g.drawString((c-'a'+1)+"", x+TileSize-20 + (TileSize*19), y+i-8);         
+//	            c++;
+//
+//	        }
+//        }
+        
         if(showCoord) {
 	        char c = 'a';
 	        for (float i =TileSize; i < bS; i+=TileSize){
 	            g.setColor(Color.black);
-	            g.drawString(c+"", x+i-5, y+TileSize-40);
-	            g.drawString((c-'a'+1)+"", x+TileSize-40,y+i-8);    
-	            g.drawString(c+"",x+i-5, y+ TileSize-20 + (TileSize*19));
-	            g.drawString((c-'a'+1)+"", x+TileSize-20 + (TileSize*19), y+i-8);         
+	            g.drawString((c-'a')+"", x+i-5, y+TileSize-40);
+	            g.drawString((c-'a')+"", x+TileSize-40,y+i-8);    
+	            g.drawString((c-'a')+"",x+i-5, y+ TileSize-20 + (TileSize*19));
+	            g.drawString((c-'a')+"", x+TileSize-20 + (TileSize*19), y+i-8);         
 	            c++;
 
+	        }
         }
-        }
+        
         
         for(int i = 4; i<17; i+=6) {
         	g.setColor(Color.blue);
@@ -913,7 +919,8 @@ public class Board{
                     case EMPTY:
                         break;
                 }
-                if(editormode)drawCharOnStone(g,(i+1)*TileSize,(j+1)*TileSize,Color.black,chars[i][j]);
+//                if(editormode)drawCharOnStone(g,(i+1)*TileSize,(j+1)*TileSize,Color.black,chars[i][j]);
+                if(editormode)drawCharOnStone(g,(i+1)*TileSize,(j+1)*TileSize,Color.black,distance[i][j]);
             }
 
         }
@@ -961,6 +968,35 @@ public class Board{
     	boolean isInt =true;
 
     	 
+        try{Integer.parseInt(s);} 
+        catch (NumberFormatException nfe) {isInt=false;}
+        
+        if(isInt)g.setColor(Color.red);
+        else g.setColor(c);
+    
+        Font oldfont = g.getFont();
+        int width = oldfont.getWidth(s);
+        int height = oldfont.getHeight(s);
+        g.drawString(s,(x + w / 2) - (width / 2), (y + h / 2) - (height / 2));
+
+        g.setColor(Color.black);
+
+
+    }
+    
+    public void drawCharOnStone(Graphics g,  int x, int y , Color c ,int chars) {
+    	if (chars ==0 )return;
+    	x+=sPx;
+    	y+=sPy;
+    	int r = (TileSize/2);
+    	x = x - r;
+    	y = y - r;
+    	int w = TileSize-2;
+    	int h = TileSize-4;
+    	
+    	String s = chars+"";
+    	boolean isInt =true;
+ 
         try{Integer.parseInt(s);} 
         catch (NumberFormatException nfe) {isInt=false;}
         

@@ -49,7 +49,7 @@ public class StraightFive {
 					patval +=850;
 					float a = States.borderSafe(e, 2, TL,BL);
 					float b = States.borderSafe(e, 2, TR,BR);
-					float c = States.borderSafe(e, 3, S1,S2,S3);
+					float c = States.borderSafe(e, 4, S1,S2,S3);
 					float ncap = States.minFinder(a,b,c);
 					if(ncap>0.5) patval+=850;
 					else if(ncap<0.5) patval-=850;

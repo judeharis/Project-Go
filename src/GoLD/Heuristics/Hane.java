@@ -40,9 +40,12 @@ public class Hane {
 					Tuple DL = D.side(l);
 					Tuple L = tlist.get(0).side(l);
 					
+					
 					if(e.isEnemy(U) && !e.isThere(UR))retval-=10;
 					if(e.isEnemy(D) && !e.isThere(DL))retval-=10;
 					if(e.isEnemy(L))retval-=5;
+					
+					e.addToCheckedPoints(U,UR,D,DL,L);
 				
 						
 				}

@@ -108,7 +108,9 @@ public class Play extends BasicGameState {
 		startSection(990,100);
 		fontStart(g);
 		SlickGo.drawString(playx ,playy,(problemLoaded?("Turn: "+board.placing.toString()):""), g);
-//		SlickGo.drawString(playx +200 ,playy,(problemLoaded?problemName:""), g);
+		SlickGo.drawString(playx ,playy +50,board.desc, g);
+//		SlickGo.drawString(playx +300 ,playy,(problemLoaded?("Valid: "+board.validMoves.size()):""), g);
+//		SlickGo.drawString(playx +300 ,playy -50,(problemLoaded?problemName:""), g);
 		fontEnd(g);
 		endSection();
 		
@@ -214,7 +216,7 @@ public class Play extends BasicGameState {
 
 		if(ai) {
 			ai=false;
-			gameMsg= "AI Running";
+			gameMsg= "Searching Moves...";
 			makeComputerMove();
 		}
 
@@ -236,7 +238,7 @@ public class Play extends BasicGameState {
 			msgtimer=0;
 			//Place Stone
 			if (SlickGo.withinBounds(bx,by) && !gameOver && problemLoaded) {
-				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
+				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
 				else{
 					board.passing = false;
 					gameMsg = "";
@@ -257,15 +259,15 @@ public class Play extends BasicGameState {
 			startSection(10,0);
 	        //Breadth
 			if (SlickGo.regionChecker(playx,playy,200,50,gc)) {
-				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
+				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
 				else MoveFinder.breadthcut = !MoveFinder.breadthcut;
 			}
 			if (SlickGo.regionChecker(playx+400,playy ,80,24,gc)) {
-				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
+				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
 				else MoveFinder.breathcutoff++;
 			}
 			if (SlickGo.regionChecker(playx+400,playy +26,80,24,gc)&& MoveFinder.breathcutoff >1) {
-				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
+				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
 				else MoveFinder.breathcutoff--;
 			}
 			endSection();
@@ -273,15 +275,15 @@ public class Play extends BasicGameState {
 			startSection(10,60);
 			//Depth
 			if (SlickGo.regionChecker(playx,playy ,200,50,gc)) {
-				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
+				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
 				else heuristic=!heuristic;
 			}
 			if (SlickGo.regionChecker(playx+400,playy ,80,25,gc)) {
-				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
+				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
 				else MoveFinder.cutoff++;
 			}
 			if (SlickGo.regionChecker(playx+400,playy +26,80,25,gc)&& MoveFinder.cutoff >1) {
-				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
+				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
 				else MoveFinder.cutoff--;
 			}
 			endSection();
@@ -291,10 +293,15 @@ public class Play extends BasicGameState {
 			if (SlickGo.regionChecker(playx,playy,200,50,gc)) turnOffComputer=!turnOffComputer;
 			//Switch Turn
 			if (SlickGo.regionChecker(playx +280 ,playy,200,50,gc) && !gameOver  && problemLoaded) {
-				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
+				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
 				else{
-					board.passing = true;
-					board.takeTurn(-9,-9,false,false);
+
+					board.turn = board.turn.getEC();
+					board.placing = board.turn;
+					board.validMoves = board.getAllValidMoves();
+					board.removeKo();
+//					board.passing = true;
+//					board.takeTurn(-9,-9,false,false);
 					winMsg="";
 					afterMove();
 				}
@@ -308,7 +315,7 @@ public class Play extends BasicGameState {
 			startSection(20,280);
 			//Start AI
 			if (SlickGo.regionChecker(playx ,playy,200,50,gc) && !ai && !gameOver && problemLoaded) {
-				if(aiStarted) msgMaker("AI Is Running" , 180,250,0,0);
+				if(aiStarted) msgMaker("Searching Moves..." , 180,250,0,0);
 				else ai=true;
 			}
 			//Stop AI
@@ -319,11 +326,11 @@ public class Play extends BasicGameState {
 				if(iterativeDeepening) {
 		        	if (k.choice != null) {
 		        		board.takeTurn(k.choice.a,k.choice.b , false,false);
-		        		if(k.choice.a == -9 && k.choice.b==-9)gameMsg= "AI Passed";
-		        		else gameMsg= "AI Placed at " + Board.coord(k.choice);
-		        	}else winMsg= "AI says " + board.placing.getEC()+" Wins";
+		        		if(k.choice.a == -9 && k.choice.b==-9)gameMsg= "Computer Passed";
+		        		else gameMsg= "Computer Placed at " + Board.coord(k.choice);
+		        	}else winMsg= "Computer says " + board.placing.getEC()+" Wins";
 		        	afterMove();
-				}else gameMsg= "AI Stopped";
+				}else gameMsg= "Search Stopped";
 
 				t1 =null;
 				k = null;
@@ -334,7 +341,7 @@ public class Play extends BasicGameState {
 			//Undo ,Redo,Pass, Reset
 			//Undo
 			if (SlickGo.regionChecker(playx,playy,200,50,gc)  && problemLoaded) {
-				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
+				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
 				else{
 					resetPlayScreen();
 					board.undoMove(true);
@@ -345,7 +352,7 @@ public class Play extends BasicGameState {
 			
 			//Redo
 			if (SlickGo.regionChecker(playx +280,playy,200,50,gc) && problemLoaded) {
-				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
+				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
 				else{
 					resetPlayScreen();
 					board.redoMove();
@@ -354,7 +361,7 @@ public class Play extends BasicGameState {
 			}
 			//Pass
 			if (SlickGo.regionChecker(playx ,playy +60,200,50,gc) && !gameOver  && problemLoaded ) {
-				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
+				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
 				else{
 					gameMsg = board.turn+" passed";
 					board.passing = true;
@@ -384,194 +391,29 @@ public class Play extends BasicGameState {
 			
 			//Load
 			if (SlickGo.regionChecker(playx ,playy +60,500,50,gc)) {
-				resetPlayScreen();
-				Board loadBoard = SlickGo.loadFile(false);
-				if(loadBoard!=null) {
-					board =loadBoard;
-					problemLoaded=true;
-					editorFailBoard=false;
+				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
+				else{
+					resetPlayScreen();
+					Board loadBoard = SlickGo.loadFile(false);
+					if(loadBoard!=null) {
+						board =loadBoard;
+						problemLoaded=true;
+						editorFailBoard=false;
+					}
 				}
 			}
 			//Save
-			if (SlickGo.regionChecker(playx ,playy +120,500,50,gc))SlickGo.saveFile(board,false);
+			if (SlickGo.regionChecker(playx ,playy +120,500,50,gc)) {
+				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
+				else{
+					SlickGo.saveFile(board,false);
+				}
+			}
 
 			endSection();
 			
 			endSection(990,220);
 			
-			
-
-//
-//			if(problemLoaded) {
-//				//Place Stone
-//				if (SlickGo.withinBounds(bx,by) && !gameOver) {
-//					if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
-//					else{
-//						board.passing = false;
-//						gameMsg = "";
-//						makeMove(bx,by);
-//						afterMove();
-//					}
-//				}
-//
-//				//Undo
-//				if (SlickGo.regionChecker(playx,playy +500,90,50,gc)) {
-//					if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
-//					else{
-//						resetPlayScreen();
-//						board.undoMove(true);
-//						afterMove();
-//					}
-//				}
-//
-//				//Redo
-//				if (SlickGo.regionChecker(playx +110,playy +500,90,50,gc)) {
-//					if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
-//					else{
-//						resetPlayScreen();
-//						board.redoMove();
-//						afterMove();
-//					}
-//				}
-//
-//				//Pass
-//				if (SlickGo.regionChecker(playx+220 ,playy +500,200,50,gc) && !gameOver) {
-//					if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
-//					else{
-//						gameMsg = board.turn+" passed";
-//						board.passing = true;
-//						makeMove(bx,by);
-//						afterMove();
-//					}
-//
-//				}
-//
-//
-//
-//
-//				//Start AI
-//				if (SlickGo.regionChecker(playx ,playy +560,200,50,gc) && !ai && !gameOver) {
-//					if(aiStarted) msgMaker("AI Is Running" , 180,250,0,0);
-//					else ai=true;
-//				}
-//
-//
-//				//Stop AI
-//				if (SlickGo.regionChecker(playx+220 ,playy +560,200,50,gc) && aiStarted) {
-//					if (k != null)k.exit = true;
-//					try {if(t1!=null)t1.join();} catch (InterruptedException e) {e.printStackTrace();}
-//					aiStarted = false;
-//					if(iterativeDeepening) {
-//			        	if (k.choice != null) {
-//			        		board.takeTurn(k.choice.a,k.choice.b , false,false);
-//			        		if(k.choice.a == -9 && k.choice.b==-9)gameMsg= "AI Passed";
-//			        		else gameMsg= "AI Placed at " + Board.coord(k.choice);
-//			        	}else winMsg= "AI says " + board.placing.getEC()+" Wins";
-//			        	afterMove();
-//					}else gameMsg= "AI Stopped";
-//
-//					t1 =null;
-//					k = null;
-//				}
-//			}
-//
-//
-//
-//
-//
-//
-//
-//
-//			//Breadth
-//			if (SlickGo.regionChecker(playx+275,playy +380,50,24,gc)) {
-//				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
-//				else MoveFinder.breathcutoff++;
-//			}
-//			if (SlickGo.regionChecker(playx+275,playy +406,50,24,gc)&& MoveFinder.breathcutoff >1) {
-//				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
-//				else MoveFinder.breathcutoff--;
-//			}
-//			if (SlickGo.regionChecker(playx,playy +380,200,50,gc)) {
-//				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
-//				else MoveFinder.breadthcut = !MoveFinder.breadthcut;
-//			}
-//
-//			//Depth
-//			if (SlickGo.regionChecker(playx+275,playy +440,50,25,gc)) {
-//				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
-//				else MoveFinder.cutoff++;
-//			}
-//			if (SlickGo.regionChecker(playx+275,playy +466,50,25,gc)&& MoveFinder.cutoff >1) {
-//				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
-//				else MoveFinder.cutoff--;
-//			}
-//			if (SlickGo.regionChecker(playx,playy +440,200,50,gc)) {
-//				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
-//				else heuristic=!heuristic;
-//			}
-//
-////			//IDeep
-////			if (SlickGo.regionChecker(playx+220,playy +160,200,50,gc)) {
-////				if(aiStarted) msgMaker("Stop AI First" , 180,250,0,0);
-////				else iterativeDeepening = !iterativeDeepening;
-////			}
-//
-//
-//
-//
-//
-//			//Toggle AI
-//			if (SlickGo.regionChecker(playx,playy +620,200,50,gc)) turnOffComputer=!turnOffComputer;
-//
-//			//Reset
-//			if (SlickGo.regionChecker(playx +220,playy +620,200,50,gc)) {
-//				board = board.resetboard;
-//				resetPlayScreen();
-//				board.resetboard = Board.cloneBoard(board);
-//				int k = 900;
-//				int or = ((k-100)/100) *100;
-//		    	print( (or%200==0?or-100:or));
-//			}
-//
-//
-//
-//
-//			//Load
-//			if (SlickGo.regionChecker(playx ,playy +680,200,50,gc)) {
-//				resetPlayScreen();
-//				Board loadBoard = SlickGo.loadFile(false);
-//				if(loadBoard!=null) {
-//					board =loadBoard;
-//					problemLoaded=true;
-//				}
-//			}
-//
-//
-//			//Menu
-//			if (SlickGo.regionChecker(playx -20,playy +20,200,50,gc)) {
-////				resetPlayScreen();
-////				problemLoaded=false;
-////				board.desc = "No Problem Loaded";
-//				gameMsg="";
-//				deleteAI();
-//				sbg.enterState(0);
-//			}
-//
-//
-////			//Save
-////			if (SlickGo.regionChecker(playx ,playy +620,200,50,gc))SlickGo.saveFile(board,false);
-////			//Undo
-////			if (SlickGo.regionChecker(playx +220,playy +680,90,50,gc) && board.undoBoard != null) {
-////				resetPlayScreen();
-////				board.undoBoard.redoBoard =  Board.cloneBoard(board);
-////				board = Board.cloneBoard(board.undoBoard);
-////			}
-////
-////			//Redo
-////			if (SlickGo.regionChecker(playx +330,playy +680,90,50,gc)&& board.redoBoard != null) {
-////				resetPlayScreen();
-////				board = Board.cloneBoard(board.redoBoard);
-////			}
 
 		}
 
@@ -579,9 +421,9 @@ public class Play extends BasicGameState {
     		aiStarted=false;
         	if (k.choice != null) {
         		board.takeTurn(k.choice.a,k.choice.b , false,false);
-        		if(k.choice.a == -9 && k.choice.b==-9)gameMsg= "AI Passed";
-        		else gameMsg= "AI Placed at " + Board.coord(k.choice);
-        	}else winMsg= "AI says " + board.placing.getEC()+" Wins";
+        		if(k.choice.a == -9 && k.choice.b==-9)gameMsg= "Computer Passed";
+        		else gameMsg= "Computer Placed at " + Board.coord(k.choice);
+        	}else winMsg= "Computer says " + board.placing.getEC()+" Wins";
 //			gameMsg= "AI Done";
 			afterMove();
     	}
@@ -618,10 +460,10 @@ public class Play extends BasicGameState {
 //		    }
 
 		    if ((liveList.isEmpty())){
-		    	winMsg= (MoveFinder.keystonecolour==Stone.KEYWHITESTONE?"Black":"White") + " Won";
+		    	winMsg= (MoveFinder.keystonecolour.getSC()==Stone.WHITE?"Black":"White") + " Won";
 		    	gameOver=true;
 		    }else if (board.validMoves.isEmpty() && board.turn != MoveFinder.keystonecolour){
-		    	winMsg= (MoveFinder.keystonecolour==Stone.KEYWHITESTONE?"Black":"White") + " Lost";
+		    	winMsg= (MoveFinder.keystonecolour.getSC()==Stone.WHITE?"Black":"White") + " Lost";
 		    	gameOver=true;
 		    }
 

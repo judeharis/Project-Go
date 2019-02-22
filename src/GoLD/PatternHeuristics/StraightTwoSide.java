@@ -65,6 +65,8 @@ public class StraightTwoSide {
 //					float ncap = States.minFinder(a);
 //					if(ncap>0.5) retval+=75;
 //					else if(ncap<0.5) retval-=75;
+					
+
 
 					
 					
@@ -120,6 +122,7 @@ public class StraightTwoSide {
 //					if(ncap>0.5) retval+=75;
 //					else if(ncap<0.5) retval-=75;
 //					e.addToEye(S1,S2);
+
 
 					
 					

@@ -41,14 +41,37 @@ public enum States {
 	static public float borderSafe(Evaluator e,int badlimit,Tuple...ts) {
 		float enemycount = 0;
 		float nothingcount = 0;
+		ArrayList<Tuple> nothings = new ArrayList<Tuple>();
 		for(Tuple t :ts) {
 			if(e.isEnemy(t))enemycount++;
 			else if(e.isThere(t));
-			else nothingcount++;
+			else {
+				e.addToCheckedPoints(t);
+				nothingcount++;
+			}
 		}
 		enemycount +=(nothingcount/2);
-		if(enemycount+nothingcount <badlimit)return badlimit;
-		return badlimit - enemycount ;
+		
+		float retval = 0;
+		if(enemycount+nothingcount <badlimit)retval = badlimit;
+		else retval = badlimit - enemycount ;
+		
+		
+		int addNumber =0;
+		if(retval ==0)addNumber=5;
+		else if(retval <1) addNumber=3;
+		else if(retval ==1) addNumber=1;
+		for(Tuple t : nothings) {
+			if(e.cB.withinBounds(t)) {
+				e.checkedMap.put(t, e.checkedMap.getOrDefault(t, 0)+addNumber);	
+				e.checkedMapSize+=addNumber;
+			}
+		}
+		
+//		if(enemycount+nothingcount <badlimit)return badlimit;
+//		return badlimit - enemycount ;
+		
+		return retval;
 	}
 
 	

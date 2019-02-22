@@ -15,13 +15,14 @@ import GoLD.Tuple;
 public class Grouping {
 	Stone[][] stones;
 	double[][] stonesControl;
+
 	Board b;
 	
     static int gcsize =  ((SlickGo.gcheigth-50)/50)*50;
 	static int boardSize = (gcsize%100==0?gcsize-50:gcsize);
 	static int TileSize = ((boardSize/18)/10) *10;
 	
-	ArrayList<Tuple> checked =new ArrayList<Tuple>();
+
     
 
 //    ArrayList<Group> bGroups = new ArrayList<Group>();
@@ -284,11 +285,80 @@ public class Grouping {
 //        return regions;
 //	}
 	
+	public ArrayList<Tuple> distanceGen(ArrayList<Tuple> sstring , Stone enemy){
+		
+    	
+    	int d = 0;
+    	ArrayList<Tuple> adj = new ArrayList<>();
+    	adj.addAll(sstring);
+    	ArrayList<Tuple> updated = new ArrayList<>();
+    	ArrayList<Tuple> updatedd = new ArrayList<>();
+		
+    	while(!adj.isEmpty() && d<4) {
+    		updated.addAll(adj);
 
+    		for(Tuple t :adj ) {
+    			if(!updatedd.contains(t)) {
+    				b.distance[t.a][t.b] =d;
+    				updatedd.add(t);
+    			}
+    			
+    			
+//
+//    			if(stones[t.a][t.b].getSC() == enemy) {
+//			    	ArrayList<Tuple> enemys = b.checkForStrings(t, enemy);
+//			    	ArrayList<Tuple> enemylibs = b.getNeedList(enemys, enemy.getEC(), true);
+//			    	int elcount = enemylibs.size();
+//			    	for(Tuple j:enemylibs ) {
+//			    		if(!stones[j.a][j.b].isStone()  && !updatedd.contains(j)) {
+//			    			b.distance[j.a][j.b] = d+elcount-1;
+//			    			updatedd.add(j);
+//			    		}
+//			    	}
+//    				
+//    			} 
+    			
+
+        		
+    		}
+    		
+    		ArrayList<Tuple> tempAdj= Board.tupleArrayClone(adj);
+    		for(Tuple t :adj) {
+    			if(!stones[t.a][t.b].isStone() || d==0) {
+	    			ArrayList<Tuple>  newAdj = b.getAdjacent(t.a, t.b);
+	    			tempAdj.removeAll(newAdj);
+	    			tempAdj.addAll(newAdj);
+    			}
+    		}
+    		
+    		tempAdj.removeAll(adj);
+    		adj = tempAdj;
+    		adj.removeAll(updated);
+    		d++;
+    	}
+    	
+    	ArrayList<Tuple> d1 = new ArrayList<>();
+    	ArrayList<Tuple> d2 = new ArrayList<>();
+    	ArrayList<Tuple> d3 = new ArrayList<>();
+
+		
+		for(int i=0; i<stones.length; i++) {
+			for(int j=0; j<stones[i].length; j++) {
+			    	if(b.distance[i][j]==1)d1.add(new Tuple(i,j));
+			    	else if(b.distance[i][j]==2)d2.add(new Tuple(i,j));
+			    	else if(b.distance[i][j]==3)d3.add(new Tuple(i,j));
+			}
+		}
+		
+		d1.addAll(d2);
+		d1.addAll(d3);
+		
+		return d1;
+	}
 
 
 	public void findGroupStones(Tuple t, Group g ){
-		ArrayList<Tuple> surrounding = g.getStoneRegion(t,true);
+		ArrayList<Tuple> surrounding = Group.getStoneRegion(t,true);
 		g.group.add(t);
 		g.score();
 		for(Tuple k: surrounding) {

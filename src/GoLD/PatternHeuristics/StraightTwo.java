@@ -70,6 +70,8 @@ public class StraightTwo {
 					if(patval>=100)e.addToEye(S1,S2);
 					
 
+					
+
 
 					
 	

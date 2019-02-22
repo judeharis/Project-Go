@@ -49,7 +49,7 @@ public class StraightSixSide {
 					
 					patval +=1050;
 					float a = States.borderSafe(e, 1, TL,TR);
-					float b = States.borderSafe(e, 4, S1,S2,S3,S4);
+					float b = States.borderSafe(e, 5, S1,S2,S3,S4);
 					float ncap = States.minFinder(a,b);
 					if(ncap>0.5) patval+=1050;
 					else if(ncap<0.5) patval-=1050;

@@ -28,6 +28,11 @@ public class OnePJump {
 			for(ArrayList<Tuple> tlist: pMatches) {
 				if (!tlist.isEmpty()) {
 					retval+=5;	
+					if(tlist.size()>1) {
+						Tuple A = tlist.get(0);
+						Tuple B = tlist.get(1);
+						e.addToCheckedPoints(A,B);
+					}
 				}
 			}
 
@@ -48,6 +53,7 @@ public class OnePJump {
 					Tuple R = tlist.get(0).side(r);
 					retval+=10;	
 					if(e.isEnemy(R))retval-=10;
+					e.addToCheckedPoints(R);
 				}
 			}
 

@@ -14,7 +14,7 @@ public class Liberties  {
 		ArrayList<Tuple> liberties = e.cB.getLibs(sstring,false);
 		
 //		retval += ((double)nlist.size()/(double)liberties.size()) * 100;
-		e.checkedPoints.addAll(nlist);
+		e.addToCheckedPoints(nlist);
 		
 		retval +=((double)liberties.size() - ((double)liberties.size()-(double)nlist.size())) * 1;
 
