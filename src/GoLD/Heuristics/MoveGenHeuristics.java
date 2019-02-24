@@ -3,11 +3,8 @@ package GoLD.Heuristics;
 import java.util.ArrayList;
 
 import GoLD.Evaluator;
-import GoLD.Group;
-import GoLD.Pattern;
-import GoLD.PatternSearcher;
 import GoLD.Tuple;
-import GoLD.UDLR;
+
 
 public class MoveGenHeuristics {
 	

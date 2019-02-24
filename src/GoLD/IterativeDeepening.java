@@ -54,8 +54,9 @@ public class IterativeDeepening  implements Runnable{
 		if(!keystoneLives(klist)) return min;
 		if(depth>50)return max;
 	
-		if (cB.placing != MoveFinder.keystonecolour && validMoves.size() == 0) return max;		
+		if (cB.placing != MoveFinder.keystonecolour && validMoves.size() == 0 && cB.ko==null) return max;		
 		else if (cB.placing == MoveFinder.keystonecolour && goodMoves.size() == 0) goodMoves.add(new Tuple(-9,-9));
+		
 		
 		if (cB.placing != MoveFinder.keystonecolour ) {goodMoves = validMoves;}
 		
@@ -85,10 +86,10 @@ public class IterativeDeepening  implements Runnable{
 				 	String key = b.boardToString();
 					if(good.containsKey(key)) returnscore = good.get(key);
 					else {
-						returnscore = alphaBeta(b,liveKeys(b,klist),!isLive,depth,alpha,beta,path);
+						returnscore = alphaBeta(b,MoveFinder.liveKeys(b,klist),!isLive,depth,alpha,beta,path);
 						good.put(key, returnscore);
 					}
-				}else returnscore = alphaBeta(b,liveKeys(b,klist),!isLive,depth,alpha,beta,path);
+				}else returnscore = alphaBeta(b,MoveFinder.liveKeys(b,klist),!isLive,depth,alpha,beta,path);
 				if(returnscore > best)bestChoice=t.clone();
 				
 				if(depth==1) println(returnscore);
@@ -119,10 +120,10 @@ public class IterativeDeepening  implements Runnable{
 				 	String key = b.boardToString();
 					if(bad.containsKey(key)) returnscore = bad.get(key);
 					else {
-						returnscore = alphaBeta(b,liveKeys(b,klist),!isLive,depth,alpha,beta,path);
+						returnscore = alphaBeta(b,MoveFinder.liveKeys(b,klist),!isLive,depth,alpha,beta,path);
 						bad.put(key, returnscore);
 					}
-				}else returnscore = alphaBeta(b,liveKeys(b,klist),!isLive,depth,alpha,beta,path);
+				}else returnscore = alphaBeta(b,MoveFinder.liveKeys(b,klist),!isLive,depth,alpha,beta,path);
 				if(returnscore < best)bestChoice=t.clone();
 				
 				if(depth==1) println(returnscore);
@@ -207,13 +208,13 @@ public class IterativeDeepening  implements Runnable{
 	 	return false;
 	}
 	
-	static public ArrayList<Tuple> liveKeys(Board b,ArrayList<Tuple> keystonelist){
-	 	ArrayList<Tuple> liveList = new ArrayList<Tuple>();
-		for (Tuple t : keystonelist){
-			if (b.stones[t.a][t.b].getSC() == MoveFinder.keystonecolour) liveList.add(new Tuple(t.a,t.b));
-		}
-		return liveList;
-	}
+//	static public ArrayList<Tuple> liveKeys(Board b,ArrayList<Tuple> keystonelist){
+//	 	ArrayList<Tuple> liveList = new ArrayList<Tuple>();
+//		for (Tuple t : keystonelist){
+//			if (b.stones[t.a][t.b].getSC() == MoveFinder.keystonecolour) liveList.add(new Tuple(t.a,t.b));
+//		}
+//		return liveList;
+//	}
 
     
 	  

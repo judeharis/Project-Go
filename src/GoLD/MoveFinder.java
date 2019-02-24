@@ -10,7 +10,7 @@ import java.util.Hashtable;
 
 public class MoveFinder  implements Runnable{
 
-	 static Stone keystonecolour;
+	 static Stone keystonecolour =Stone.BLACK;
 	 static int max = Integer.MAX_VALUE;
 	 static int min = Integer.MIN_VALUE;
 	 static int cutoff=1;
@@ -53,7 +53,7 @@ public class MoveFinder  implements Runnable{
 		if(!keystoneLives(keystonelist)) return min;
 		if(depth>50)return max;
 	
-		if (cB.placing != keystonecolour && validMoves.size() == 0) return max;		
+		if (cB.placing != MoveFinder.keystonecolour && validMoves.size() == 0 && cB.ko==null) return max;	
 		else if (cB.placing == keystonecolour && goodMoves.size() == 0) goodMoves.add(new Tuple(-9,-9));
 		
 
@@ -218,14 +218,25 @@ public class MoveFinder  implements Runnable{
 	}
 
 	
-
+	
 	static public ArrayList<Tuple> liveKeys(Board b,ArrayList<Tuple> keystonelist){
+		
+//	 	ArrayList<Tuple> liveList = new ArrayList<Tuple>();
+//		for (Tuple t : keystonelist){
+//			if (b.stones[t.a][t.b].getSC() == keystonecolour) liveList.add(new Tuple(t.a,t.b));
+//		}
+//		return liveList;
+		
+		
 	 	ArrayList<Tuple> liveList = new ArrayList<Tuple>();
-		for (Tuple t : keystonelist){
-			if (b.stones[t.a][t.b].getSC() == keystonecolour) liveList.add(new Tuple(t.a,t.b));
+	    for(int i=0; i<b.stones.length; i++) {
+            for(int j=0; j<b.stones[i].length; j++) {
+            	if (b.stones[i][j] == keystonecolour.getKeyStone()) liveList.add(new Tuple(i,j));
+            }
 		}
 		return liveList;
 	}
+	
 
 	static public boolean keystoneLives(ArrayList<Tuple> keystonelist){
 	 	if(!keystonelist.isEmpty()) return true;

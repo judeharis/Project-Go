@@ -43,17 +43,6 @@ public class Evaluator {
 			}
 			retval+=eyeStonesLinked();
 		}else {
-//			for (Tuple t : cB.keystones) {
-//				ArrayList<Tuple> keystring = cB.checkForStrings(t, kscolour);
-//				Group keygroup = grouping.inGroup(t, kscolour);
-//				if (!keystring.isEmpty()) {
-//					ArrayList<Tuple> cBneedList = cB.getNeedList(keystring, kscolour.getEC(),true);
-//					for (Tuple k : cBneedList)if (cB.stones[k.a][k.b] == Stone.INVALID)return Integer.MAX_VALUE;
-//					retval += hrunner.runKeyStringHeuristics(keygroup);
-//				}
-//			}
-			
-			
 			
 			for (Tuple t : cB.keystones) {
 				ArrayList<Tuple> keystring = cB.checkForStrings(t, kscolour);
@@ -73,52 +62,6 @@ public class Evaluator {
 
 		return retval;
 	}
-
-
-	public ArrayList<Tuple> moveGenOLD(ArrayList<Tuple> goodMoves,int max) {
-		long start = System.currentTimeMillis();
-		
-		Grouping grouping = new Grouping(cB,false,false,false,false);
-		grouping.allocateGrouping();
-		
-
-		HeuristicsRunner hrunner= new HeuristicsRunner(cB , this);
-		for (Group g : grouping.allGroups) {
-			if(g.colour == kscolour) {
-				hrunner.findUseFullMoves(g.group);
-//				checkedPoints.addAll(g.r1);
-//				checkedPoints.addAll(g.region);
-			}
-
-		}
-		
-		ArrayList<Tuple> oPP = new ArrayList<Tuple>();
-		oPP.addAll(countOrder());
-		ArrayList<Tuple> workinglist = Board.tupleArrayClone(goodMoves);
-		oPP.retainAll(workinglist);
-		workinglist.removeAll(oPP);
-		
-		int k = max-oPP.size();
-		while(k<0 && !oPP.isEmpty()) {
-			oPP.remove(oPP.size()-1);
-			k =max-oPP.size();
-		}
-		
-		for(int i =0; i< k;i++) {
-			if(workinglist.isEmpty())break;
-			Tuple t = workinglist.remove(new Random().nextInt(workinglist.size()));
-			oPP.add(t);
-		}
-		long end = System.currentTimeMillis();
-		
-		timed += end-start;
-
-		
-		return oPP;
-		
-	}
-	
-	
 
 	public ArrayList<Tuple> moveGen(ArrayList<Tuple> goodMoves,int max) {
 		long start = System.currentTimeMillis();
@@ -178,36 +121,6 @@ public class Evaluator {
 	}
 	
 
-	
-	
-
-	
-	@SuppressWarnings("unchecked")
-	public ArrayList<Tuple> countOrderOLD(ArrayList<Tuple> patternPoints){
-		Map<Tuple,Integer> map = new HashMap<>();
-	    List<Tuple>[] bucket = new List[patternPoints.size() + 1];
-		for(Tuple t :patternPoints) {
-			map.put(t, map.getOrDefault(t, 0)+1);
-		}
-	    for (Tuple key : map.keySet()) {
-	        int frequency = map.get(key);
-	        if (bucket[frequency] == null) {
-	            bucket[frequency] = new ArrayList<>();
-	        }
-	        bucket[frequency].add(key);
-	        
-	    }
-	    ArrayList<Tuple> res = new ArrayList<>();
-	    for (int i = bucket.length - 1; i >= 0; i--) {
-	        if (bucket[i] != null) {
-	            res.addAll(bucket[i]);
-	        }
-	    }
-		
-		
-		return res;
-		
-	}
 	
 	
 	@SuppressWarnings("unchecked")
@@ -369,13 +282,6 @@ public class Evaluator {
 			checkedMapSize++;
 		}
 	}
-
-
-
-
-
-
-	
 
 
 

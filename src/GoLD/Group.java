@@ -19,7 +19,7 @@ public class Group {
     
     Stone colour;
     ArrayList<Tuple> connectPoints = new ArrayList<Tuple>();
-    double strength =0;
+//    double strength =0;
 	Board b;
 	
     static int gcsize =  ((SlickGo.gcheigth-50)/50)*50;
@@ -53,45 +53,45 @@ public class Group {
 	
     
 
-    public 	double[][] updateControl(double[][] stonesControl){
-    	double spread = 1.0f;
-    	
-    	ArrayList<Tuple> updated = new ArrayList<>();
-
-    	updated.addAll(group);
-    	ArrayList<Tuple> adj = new ArrayList<>();
-		for(Tuple t :group) {
-    		if (colour.getSC()==Stone.BLACK)stonesControl[t.a][t.b] += strength;
-    		else stonesControl[t.a][t.b] -= strength;
-    			
-			ArrayList<Tuple>  newAdj = getStoneRegion(t,false);
-			adj.removeAll(newAdj);
-			adj.addAll(newAdj);
-		}
-
-		adj.removeAll(updated);
-		
-    	while(!adj.isEmpty() && spread <4) {
-    		updated.addAll(adj);
-    		
-    		if (colour.getSC()==Stone.BLACK)for(Tuple t: adj) stonesControl[t.a][t.b] += strength/(spread*2);
-    		else for(Tuple t: adj) stonesControl[t.a][t.b] -= strength/(spread*2);
-    			
-    		
-    		ArrayList<Tuple> tempAdj= Board.tupleArrayClone(adj);
-    		for(Tuple t :adj) {
-    			ArrayList<Tuple>  newAdj = getStoneRegion(t,false);
-    			tempAdj.removeAll(newAdj);
-    			tempAdj.addAll(newAdj);
-    		}
-    		adj =tempAdj;
-    		adj.removeAll(updated);
-    		spread++;
-    	}
-
-    	erosionControl(stonesControl,updated);
-    	return stonesControl;
-    }
+//    public 	double[][] updateControl(double[][] stonesControl){
+//    	double spread = 1.0f;
+//    	
+//    	ArrayList<Tuple> updated = new ArrayList<>();
+//
+//    	updated.addAll(group);
+//    	ArrayList<Tuple> adj = new ArrayList<>();
+//		for(Tuple t :group) {
+//    		if (colour.getSC()==Stone.BLACK)stonesControl[t.a][t.b] += strength;
+//    		else stonesControl[t.a][t.b] -= strength;
+//    			
+//			ArrayList<Tuple>  newAdj = getStoneRegion(t,false);
+//			adj.removeAll(newAdj);
+//			adj.addAll(newAdj);
+//		}
+//
+//		adj.removeAll(updated);
+//		
+//    	while(!adj.isEmpty() && spread <4) {
+//    		updated.addAll(adj);
+//    		
+//    		if (colour.getSC()==Stone.BLACK)for(Tuple t: adj) stonesControl[t.a][t.b] += strength/(spread*2);
+//    		else for(Tuple t: adj) stonesControl[t.a][t.b] -= strength/(spread*2);
+//    			
+//    		
+//    		ArrayList<Tuple> tempAdj= Board.tupleArrayClone(adj);
+//    		for(Tuple t :adj) {
+//    			ArrayList<Tuple>  newAdj = getStoneRegion(t,false);
+//    			tempAdj.removeAll(newAdj);
+//    			tempAdj.addAll(newAdj);
+//    		}
+//    		adj =tempAdj;
+//    		adj.removeAll(updated);
+//    		spread++;
+//    	}
+//
+//    	erosionControl(stonesControl,updated);
+//    	return stonesControl;
+//    }
     
 
     
@@ -135,20 +135,20 @@ public class Group {
 
 
 
-	public void score() {
-		Stone colour = b.getStones()[group.get(0).a][group.get(0).b];
-		ArrayList<Tuple> nlist = b.getNeedList(group, colour.getEC(), true);
-		ArrayList<Tuple> libs = b.getLibs(group, true);
-
-		
-//		strength= (nlist.size()*10) + group.size()*10;
-//		strength= nlist.size()*10 +libs.size()*10+  group.size()*5;
-		strength= (nlist.size()*100/libs.size()) + group.size()*10;
-		region = getRegionCovered(true);
-		r1 = getRegionCovered(false);
-		r2 = Board.tupleArrayClone(region);
-		r2.removeAll(r1);
-	}
+//	public void score() {
+//		Stone colour = b.getStones()[group.get(0).a][group.get(0).b];
+//		ArrayList<Tuple> nlist = b.getNeedList(group, colour.getEC(), true);
+//		ArrayList<Tuple> libs = b.getLibs(group, true);
+//
+//		
+////		strength= (nlist.size()*10) + group.size()*10;
+////		strength= nlist.size()*10 +libs.size()*10+  group.size()*5;
+//		strength= (nlist.size()*100/libs.size()) + group.size()*10;
+//		region = getRegionCovered(true);
+//		r1 = getRegionCovered(false);
+//		r2 = Board.tupleArrayClone(region);
+//		r2.removeAll(r1);
+//	}
 	
 	public ArrayList<Tuple> getRegionCovered(boolean all) {
 		ArrayList<Tuple> regions = new ArrayList<Tuple>();
@@ -220,7 +220,7 @@ public class Group {
 //    	s+= " \nRegion : " + this.region.toString() ;
     	s+= " \nR1 : " + this.r1.toString() ;
     	s+= " \nR2 : " + this.r2.toString() ;
-    	s+= " \nStrength: "+strength;
+//    	s+= " \nStrength: "+strength;
     	return s;
     }
 

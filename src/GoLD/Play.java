@@ -4,13 +4,12 @@ package GoLD;
 
 import java.util.ArrayList;
 
-import org.lwjgl.LWJGLException;
+
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
@@ -20,13 +19,15 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Play extends BasicGameState {
 
 
-	Image bg;
+
 
 	boolean ai = false;
 	int aicounter;
 	Thread t1;
 	MoveFinder k;
 	boolean aiStarted = false;
+	int aiStartedTimer = 0;
+	
 	boolean turnOffComputer = false;
 	static boolean heuristic = true;
 	static boolean iterativeDeepening = true;
@@ -63,7 +64,7 @@ public class Play extends BasicGameState {
 	}
 
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		bg = new Image("Images/woodenbg3.jpg");
+
 		java.awt.Font newfont = new java.awt.Font("AngelCodeFont", java.awt.Font.PLAIN, 25);
 		ttfont = new TrueTypeFont(newfont, true);
 		defaultFont = gc.getGraphics().getFont();
@@ -72,10 +73,8 @@ public class Play extends BasicGameState {
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 
-		bg.draw(0, 0, (float) 0.5);
-//		g.setColor(bgcolour);
-//		g.drawRect(0, 0, SlickGo.gcwidth,  SlickGo.gcheigth);
-//		g.setColor(Color.black);
+		Menu.bg.draw(0, 0, (float) 0.5);
+
 
 		int xpos = Mouse.getX();
 		int ypos =  Math.abs(gc.getHeight() - Mouse.getY());
@@ -95,15 +94,6 @@ public class Play extends BasicGameState {
 
 		
 
-
-
-
-//    	float hratio = (float) ((SlickGo.gcheigth*1.0)/800);
-//    	float wratio = (float) ((SlickGo.gcwidth*1.0)/1400);
-//        if(problemLoaded)g.drawString("Turn: "+board.placing.toString(), (playx+200)*wratio,playy*hratio);
-//		g.drawString((problemLoaded?problemName:"") +board.desc, (playx+200)*wratio, (playy+40)*hratio);
-		
-		
 		
 		startSection(990,100);
 		fontStart(g);
@@ -177,26 +167,13 @@ public class Play extends BasicGameState {
 		
 		startSection(10, 460);
 		fontStart(g);
-		SlickGo.drawButton(playx ,playy,500,50,"Switch Mode", g ,SlickGo.regionChecker(playx ,playy,500,50,gc));
+		SlickGo.drawButton(playx ,playy,500,50,"Switch To Editor Mode", g ,SlickGo.regionChecker(playx ,playy,500,50,gc));
 		SlickGo.drawButton(playx ,playy +60,500,50,"Load", g ,SlickGo.regionChecker(playx ,playy +60,500,50,gc));
 		SlickGo.drawButton(playx ,playy +120,500,50,"Save", g ,SlickGo.regionChecker(playx ,playy +120,500,50,gc));
 		fontEnd(g);
 		endSection();
 		
 		endSection(990,220);
-
-
-		
-
-
-
-		
-		
-//		SlickGo.drawButton(playx +220,playy +680,200,50,"Menu", g,SlickGo.regionChecker(playx +220 ,playy +680,200,50,gc));
-
-		//removed
-//		SlickGo.drawButton(playx ,playy +620,200,50,"Save", g,SlickGo.regionChecker(playx ,playy +620,200,50,gc));
-//		SlickGo.drawButton(playx +220,playy +440,200,50,"Heuristics " +(!heuristic?"Off":"On"), g ,heuristic,Color.green);
 
 	}
 
@@ -210,13 +187,13 @@ public class Play extends BasicGameState {
 		int bx = posb.a;
 		int by = posb.b;
 		if(msgtimer>0)msgtimer--;
-		if(problemLoaded)board.desc = saveDesc();
+		board.desc = saveDesc();
 
 		blackKeyStone=board.keystone.getSC()==Stone.WHITE?false:true;
 
 		if(ai) {
 			ai=false;
-			gameMsg= "Searching Moves...";
+			gameMsg= "Searching Moves";
 			makeComputerMove();
 		}
 
@@ -228,10 +205,14 @@ public class Play extends BasicGameState {
 				print(board.checkStringSafetyv2(sstring,colour));
 			}
 		}
-
-		if((input.isKeyPressed(Input.KEY_ESCAPE)) && gc.isFullscreen() ) {
-			try {SlickGo.goFullScreen();
-			} catch (LWJGLException e) {e.printStackTrace();}
+		
+		if(aiStarted) {
+			aiStartedTimer++;
+			if(aiStartedTimer>180)gameMsg= "   Searching Moves...";
+			else if(aiStartedTimer>120)gameMsg= "  Searching Moves..";
+			else if(aiStartedTimer>60)gameMsg= " Searching Moves.";
+			else if(aiStartedTimer>0)gameMsg= "Searching Moves";
+			if(aiStartedTimer>240)aiStartedTimer=0;
 		}
 
 		if (input.isMousePressed(0)) {
@@ -300,8 +281,6 @@ public class Play extends BasicGameState {
 					board.placing = board.turn;
 					board.validMoves = board.getAllValidMoves();
 					board.removeKo();
-//					board.passing = true;
-//					board.takeTurn(-9,-9,false,false);
 					winMsg="";
 					afterMove();
 				}
@@ -323,6 +302,7 @@ public class Play extends BasicGameState {
 				if (k != null)k.exit = true;
 				try {if(t1!=null)t1.join();} catch (InterruptedException e) {e.printStackTrace();}
 				aiStarted = false;
+				aiStartedTimer=0;
 				if(iterativeDeepening) {
 		        	if (k.choice != null) {
 		        		board.takeTurn(k.choice.a,k.choice.b , false,false);
@@ -362,12 +342,14 @@ public class Play extends BasicGameState {
 			//Pass
 			if (SlickGo.regionChecker(playx ,playy +60,200,50,gc) && !gameOver  && problemLoaded ) {
 				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
-				else{
+				else if(board.turn != board.keystone.getSC() && board.ko ==null)msgMaker("Attacking Player Can't Pass Unless in Ko" , 180,250,0,0);
+				else {
 					gameMsg = board.turn+" passed";
 					board.passing = true;
 					makeMove(bx,by);
 					afterMove();
 				}
+
 
 			}
 			//Reset
@@ -418,13 +400,13 @@ public class Play extends BasicGameState {
 		}
 
     	if (t1 != null && !t1.isAlive() && aiStarted) {
-    		aiStarted=false;
+    		aiStarted = false;
+    		aiStartedTimer=0;
         	if (k.choice != null) {
         		board.takeTurn(k.choice.a,k.choice.b , false,false);
         		if(k.choice.a == -9 && k.choice.b==-9)gameMsg= "Computer Passed";
         		else gameMsg= "Computer Placed at " + Board.coord(k.choice);
         	}else winMsg= "Computer says " + board.placing.getEC()+" Wins";
-//			gameMsg= "AI Done";
 			afterMove();
     	}
 
@@ -444,20 +426,6 @@ public class Play extends BasicGameState {
 		   ArrayList<Tuple> liveList = MoveFinder.liveKeys(board,board.keystones);
 
 	        liveList = MoveFinder.liveKeys(board,board.keystones);
-//		    if ((liveList.isEmpty() && !board.capToWin) || (board.validMoves.isEmpty() &&board.capToWin && board.turn != MoveFinder.keystonecolour)) {
-//		    	winMsg= (board.blackFirst?"Black":"White") + " Lost";
-//		    	gameOver=true;
-//		    }
-//
-//		    if ((liveList.isEmpty() && board.capToWin) || (board.validMoves.isEmpty() && !board.capToWin && board.turn != MoveFinder.keystonecolour)) {
-//		    	winMsg= (board.blackFirst?"Black":"White") + " Won";
-//		    	gameOver=true;
-//		    }
-		    
-//		    if ((liveList.isEmpty() && !board.capToWin) || (board.validMoves.isEmpty() &&board.capToWin && board.turn != MoveFinder.keystonecolour)) {
-//		    	winMsg= (board.blackFirst?"Black":"White") + " Lost";
-//		    	gameOver=true;
-//		    }
 
 		    if ((liveList.isEmpty())){
 		    	winMsg= (MoveFinder.keystonecolour.getSC()==Stone.WHITE?"Black":"White") + " Won";
@@ -495,6 +463,7 @@ public class Play extends BasicGameState {
 	public void deleteAI() {
 		if (k != null)k.exit = true;
 		aiStarted = false;
+		aiStartedTimer=0;
 		t1 =null;
 		k = null;
 	}
@@ -504,6 +473,7 @@ public class Play extends BasicGameState {
 		if(!board.blackFirst && blackKeyStone )s= "Kill Black";
 		if(board.blackFirst && blackKeyStone )s= "Black To Live";
 		if(!board.blackFirst && !blackKeyStone )s= "White To Live";
+		if(!problemLoaded)s="";
 		return s;
 	}
 

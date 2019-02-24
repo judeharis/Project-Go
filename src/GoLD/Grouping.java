@@ -252,7 +252,7 @@ public class Grouping {
 	public void allocateControl(){
 		stonesControl= doubleIntegerArray();
 
-		for (Group g : allGroups) g.updateControl(stonesControl);
+//		for (Group g : allGroups) g.updateControl(stonesControl);
 		
 		for(int i=0; i<stonesControl.length; i++) {
             for(int j=0; j<stonesControl[i].length; j++) {
@@ -360,7 +360,7 @@ public class Grouping {
 	public void findGroupStones(Tuple t, Group g ){
 		ArrayList<Tuple> surrounding = Group.getStoneRegion(t,true);
 		g.group.add(t);
-		g.score();
+//		g.score();
 		for(Tuple k: surrounding) {
 			if(stones[k.a][k.b].getSC()==g.colour && !g.group.contains(k))findGroupStones(k,g);
 		}

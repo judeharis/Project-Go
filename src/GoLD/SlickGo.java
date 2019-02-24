@@ -11,14 +11,10 @@ import java.io.PrintWriter;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
@@ -27,6 +23,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.StateBasedGame;
+
 
 
 
@@ -44,7 +41,6 @@ public class SlickGo extends StateBasedGame {
 	public static Play playI;
 	public static Editor editorI;
 	public static AppGameContainer appgc;
-	
 
 	
 
@@ -74,30 +70,18 @@ public class SlickGo extends StateBasedGame {
 	}
 	
 	public static void main(String[] args) throws IOException, SlickException, LWJGLException  {
-		try{ UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");}
-		catch (ClassNotFoundException e1) {e1.printStackTrace();}
-		catch (InstantiationException e1){ e1.printStackTrace();}
-		catch (IllegalAccessException e1){ e1.printStackTrace();}
-		catch (UnsupportedLookAndFeelException e1) {e1.printStackTrace();}
-		    
+//		try{ UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");}
+//		catch (ClassNotFoundException e1) {e1.printStackTrace();}
+//		catch (InstantiationException e1){ e1.printStackTrace();}
+//		catch (IllegalAccessException e1){ e1.printStackTrace();}
+//		catch (UnsupportedLookAndFeelException e1) {e1.printStackTrace();}
+		
+//		try{ UIManager.setLookAndFeel("com.petersoft.white.PetersoftWhiteLookAndFeel");}
+//		catch (ClassNotFoundException e1) {e1.printStackTrace();}
+//		catch (InstantiationException e1){ e1.printStackTrace();}
+//		catch (IllegalAccessException e1){ e1.printStackTrace();}
+//		catch (UnsupportedLookAndFeelException e1) {e1.printStackTrace();}
 
-
-//		DisplayMode[] modes = Display.getAvailableDisplayModes();
-//		int width =0;
-//		int height =0;
-//        for (int i=0;i<modes.length;i++) {
-//            DisplayMode current = modes[i];
-//            int curw =current.getWidth() ;
-//            System.out.println(current.getWidth() + "x" + current.getHeight() + "x" +
-//                                current.getBitsPerPixel() + " " + current.getFrequency() + "Hz");
-//            if(curw >width) {
-//            	width=curw;
-//            	height= current.getHeight() ;
-//            }
-//        }
-
-        
-        
 		appgc = new AppGameContainer(new SlickGo(gamename));
 		appgc.setShowFPS(false);
 		appgc.setDisplayMode(gcwidth, gcheigth, false);
@@ -105,18 +89,16 @@ public class SlickGo extends StateBasedGame {
 		appgc.setAlwaysRender(true);
 		appgc.setClearEachFrame(false);
 		appgc.setUpdateOnlyWhenVisible(false);
-		System.out.println(appgc.getAspectRatio());
+		appgc.setIcons(new String[] { "Images/GoLD32.png", "Images/GoLD16.png" });
 		appgc.start();
-	
+		appgc.getGraphics().setColor(Color.black);
 	
 	
 	
 	
 	}
 	 
-	 
 
-	
 
 	
     public static Board loadFile(boolean editormode) {
@@ -125,7 +107,8 @@ public class SlickGo extends StateBasedGame {
  
     	final JFileChooser fc = new JFileChooser();
         fc.setPreferredSize(new Dimension(800,500));
-        File workingDirectory = new File(System.getProperty("user.dir")+"\\Computer Boards");
+//      File workingDirectory = new File(System.getProperty("user.dir")+"\\Computer Boards");
+        File workingDirectory = new File(System.getProperty("user.dir"));
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", "txt", "text");
         fc.setFileFilter(filter);
         fc.setCurrentDirectory(workingDirectory);
@@ -210,16 +193,6 @@ public class SlickGo extends StateBasedGame {
                     }
                     
                     
-//                    if(y==20) {
-//                    	String[] k = st.split(" ");
-//                    	if(k.length!=2 || !k[0].equals("Kill:") || (!k[1].equals("Yes") && !k[1].equals("No"))) {
-//                    	    br.close();
-//                    		return  msgMaker("Invalid File",300,editormode,255,0,0,null, w);
-//                    	}
-//                    	newBoard.capToWin = k[1].equals("Yes")?true:false;
-//                    }
-                    
-                    
                     if(y==20) {
                     	if(!st.equals("Description: Black To Live") && !st.equals("Description: White To Live")
                     	&& !st.equals("Description: Kill Black") && !st.equals("Description: Kill White")
@@ -272,8 +245,7 @@ public class SlickGo extends StateBasedGame {
             newBoard.validMoves = newBoard.getAllValidMoves();
             newBoard.resetboard =Board.cloneBoard(newBoard);
             
-//        	if((newBoard.blackFirst && newBoard.capToWin) || (!newBoard.blackFirst && !newBoard.capToWin))MoveFinder.keystonecolour = Stone.WHITE;
-//    		else MoveFinder.keystonecolour = Stone.BLACK;
+
             
 
         	MoveFinder.keystonecolour = newBoard.keystone.getSC();
@@ -311,7 +283,8 @@ public class SlickGo extends StateBasedGame {
         final JFileChooser fc = new JFileChooser();
 
         fc.setPreferredSize(new Dimension(800,500));
-        File workingDirectory = new File(System.getProperty("user.dir")+"\\Computer Boards");
+//        File workingDirectory = new File(System.getProperty("user.dir")+"\\Computer Boards");
+        File workingDirectory = new File(System.getProperty("user.dir"));
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", "txt", "text");
         fc.setFileFilter(filter);
         fc.setCurrentDirectory(workingDirectory);
@@ -365,9 +338,7 @@ public class SlickGo extends StateBasedGame {
    
             
             String whoplays = board.blackFirst?"Black":"White";
-//            String kill = board.capToWin?"Yes":"No";
             writer.write("Play: "+whoplays +"\r\n") ;
-//            writer.write("Kill: "+kill +"\r\n") ;
             writer.write("Description: "+board.desc) ;
             writer.write("\r\n[0,0]") ;
 
@@ -500,7 +471,6 @@ public class SlickGo extends StateBasedGame {
         int width = oldfont.getWidth(string);
         int height = oldfont.getHeight(string);
         g.drawString(string,(x + w / 2) - (width / 2), (y + h / 2) - (height / 2));
-//      g.drawString(string,x+(w/5),y+(h/5) );
 
         
     	
@@ -570,33 +540,6 @@ public class SlickGo extends StateBasedGame {
         g.drawString(s,x,y);
         
     	
-    }
-    
-    public static void goFullScreen() throws SlickException, LWJGLException {
-    	if(appgc.isFullscreen()) {
-    		appgc.setDisplayMode(gcwidth, gcheigth, false);
-    		Board.changeSize(gcwidth,gcheigth);
-    		return;
-    	}
-    	
-		DisplayMode[] modes = Display.getAvailableDisplayModes();
-		int width =0;
-		int height =0;
-        for (int i=0;i<modes.length;i++) {
-            DisplayMode current = modes[i];
-            int curw =current.getWidth() ;
-            System.out.println(current.getWidth() + "x" + current.getHeight() + "x" +
-                                current.getBitsPerPixel() + " " + current.getFrequency() + "Hz");
-            if(curw >width) {
-            	width=curw;
-            	height= current.getHeight() ;
-            }
-        }
-
-        
-        
-    	appgc.setDisplayMode(width, height, true);
-		Board.changeSize(width,height);
     }
     
     public static void print(Object o){

@@ -10,7 +10,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
@@ -20,7 +19,6 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Editor extends BasicGameState {
 	Board board;
 	Grouping grouping;
-	Image bg;
 	public static String msg="";
 	public static int msgtimer = 0;
 	public static int msgcr=0;
@@ -55,7 +53,6 @@ public class Editor extends BasicGameState {
 	}
 
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		bg = new Image("Images/woodenbg3.jpg");
 		java.awt.Font newFont = new java.awt.Font("AngelCodeFont", java.awt.Font.PLAIN, 25);
 		ttfont = new TrueTypeFont(newFont, true);
 		defaultFont = gc.getGraphics().getFont();
@@ -63,7 +60,7 @@ public class Editor extends BasicGameState {
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		bg.draw(0, 0, (float) 0.5);
+		Menu.bg.draw(0, 0, (float) 0.5);
 
 
 		int xpos = Mouse.getX();
@@ -144,7 +141,7 @@ public class Editor extends BasicGameState {
 		startSection(40,600);
 //		SlickGo.drawBox(editorx-20 ,editory  ,540,220,"", g,false);
 		fontStart(g);
-		SlickGo.drawButton(editorx ,editory +20,500,50,"Switch Mode", g,SlickGo.regionChecker(editorx,editory +20,500,50,gc));
+		SlickGo.drawButton(editorx ,editory +20,500,50,"Switch To Play Mode", g,SlickGo.regionChecker(editorx,editory +20,500,50,gc));
 		SlickGo.drawButton(editorx ,editory +80,500,50,"Load", g ,SlickGo.regionChecker(editorx ,editory +80,500,50,gc));
 		SlickGo.drawButton(editorx ,editory +140,500,50,"Save", g,SlickGo.regionChecker(editorx ,editory +140,500,50,gc));
 		fontEnd(g);
@@ -184,8 +181,6 @@ public class Editor extends BasicGameState {
 		board.desc = saveDesc();
 
 		Stone currentKeystone = board.keystone;
-//		if((board.blackFirst && board.capToWin) || (!board.blackFirst && !board.capToWin))board.keystone = Stone.KEYWHITESTONE;
-//		else board.keystone = Stone.KEYBLACKSTONE;
 
 		if(!blackKeyStone)board.keystone = Stone.KEYWHITESTONE;
 		else board.keystone = Stone.KEYBLACKSTONE;
@@ -205,50 +200,50 @@ public class Editor extends BasicGameState {
 			if (SlickGo.withinBounds(bx,by)) {
 
 				print(bx+","+by);
-				Stone colour = board.stones[bx][by].getSC();
-				if(colour.isStone()) {
-					ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
-					print(board.checkStringSafetyv2(sstring,colour));
-				}
-				grouping = new Grouping(board,grouping.draw,grouping.drawW,grouping.drawB,grouping.drawC);
-				grouping.allocateGrouping();
-				grouping.allocateControl();
-			}
-		}
-
-		
-		if (input.isMousePressed(2)) {
-			if (SlickGo.withinBounds(bx,by) && input.isKeyDown(Input.KEY_LSHIFT)) {
-				trigon=true;
-				trigwhich = new Tuple(bx,by);
-//				print(bx+","+by);
-//				print(board.stones[bx][by]);
 //				Stone colour = board.stones[bx][by].getSC();
 //				if(colour.isStone()) {
 //					ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
 //					print(board.checkStringSafetyv2(sstring,colour));
 //				}
+//				grouping = new Grouping(board,grouping.draw,grouping.drawW,grouping.drawB,grouping.drawC);
+//				grouping.allocateGrouping();
+//				grouping.allocateControl();
 			}
 		}
 
-		if(trigon && trigwhich!=null) {
-			board.chars[trigwhich.a][trigwhich.b] = '1';
-			trigon=false;
-		}
+		
+//		if (input.isMousePressed(2)) {
+//			if (SlickGo.withinBounds(bx,by) && input.isKeyDown(Input.KEY_LSHIFT)) {
+//				trigon=true;
+//				trigwhich = new Tuple(bx,by);
+////				print(bx+","+by);
+////				print(board.stones[bx][by]);
+////				Stone colour = board.stones[bx][by].getSC();
+////				if(colour.isStone()) {
+////					ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
+////					print(board.checkStringSafetyv2(sstring,colour));
+////				}
+//			}
+//		}
+
+//		if(trigon && trigwhich!=null) {
+//			board.chars[trigwhich.a][trigwhich.b] = '1';
+//			trigon=false;
+//		}
 
 
-		pattern = Pattern.sToPv2("xlddr#zldxdx");
+//		pattern = Pattern.sToPv2("xlddr#zldxdx");
 		if (input.isMousePressed(0)) {
 			
 			if (SlickGo.withinBounds(bx,by)) {
 				board.takeTurn(bx,by , true,false);
-				board.distance = new int[19][19];
-				if(!blackKeyStone)MoveFinder.keystonecolour = Stone.WHITE;
-				else MoveFinder.keystonecolour = Stone.BLACK;			
-				Evaluator evaluator = new Evaluator(board);
-				print(evaluator.evaluateCurrentBoard(true));
-				Evaluator evaluator2 = new Evaluator(board);
-				evaluator2.moveGen(board.removeBadMovess(), MoveFinder.breathcutoff);
+//				board.distance = new int[19][19];
+//				if(!blackKeyStone)MoveFinder.keystonecolour = Stone.WHITE;
+//				else MoveFinder.keystonecolour = Stone.BLACK;			
+//				Evaluator evaluator = new Evaluator(board);
+//				print(evaluator.evaluateCurrentBoard(true));
+//				Evaluator evaluator2 = new Evaluator(board);
+//				evaluator2.moveGen(board.removeBadMovess(), MoveFinder.breathcutoff);
 
 				
 			}
@@ -367,6 +362,9 @@ public class Editor extends BasicGameState {
 	    		SlickGo.playI.board.turn = SlickGo.playI.board.placing;
 	    		SlickGo.playI.board.refreshBoard();
 	    		SlickGo.playI.board.resetboard =  Board.cloneBoard(SlickGo.playI.board);
+				if(!blackKeyStone)MoveFinder.keystonecolour = Stone.WHITE;
+				else MoveFinder.keystonecolour = Stone.BLACK;
+	    		msgtimer=0;
 	    		sbg.enterState(1);
 			}
 			
@@ -382,95 +380,6 @@ public class Editor extends BasicGameState {
 
 			endSection(960,60);
 			
-			
-			
-			
-			
-			
-			
-//			startSection(0,240);
-//			startSection(40,20);
-//			if (SlickGo.regionChecker(editorx ,editory +20,200,40,gc)) {board.placing = Stone.BLACK;}
-//			if (SlickGo.regionChecker(editorx ,editory +60,200,40,gc)) {board.placing = Stone.WHITE;}
-//			if (SlickGo.regionChecker(editorx ,editory +100,200,40,gc)) board.placing = Stone.VALID;
-//			if (SlickGo.regionChecker(editorx ,editory +140,200,40,gc)) board.placing = Stone.INVALID;
-//			endSection();
-//
-//			
-//			startSection(40,220);
-//			if (SlickGo.regionChecker(editorx ,editory +20,200,40,gc)) board.blackFirst=true;
-//			if (SlickGo.regionChecker(editorx ,editory +60,200,40,gc)) board.blackFirst=false;
-//			endSection();
-//
-//			startSection(40,340);
-//			if (SlickGo.regionChecker(editorx ,editory +20,250,40,gc)) blackKeyStone=true;
-//			if (SlickGo.regionChecker(editorx ,editory +60,250,40,gc)) blackKeyStone=false;
-//			if (SlickGo.regionChecker(editorx ,editory +100,200,40,gc))board.placing = board.keystone;
-//			endSection();
-//			endSection(0,240);
-
-
-
-//			startSection(40,20);
-//			//Undo
-//			if (SlickGo.regionChecker(editorx ,editory +20,90,50,gc) && board.undoBoard != null) {
-//				board.undoBoard.redoBoard =  Board.cloneBoard(board);
-//				board = Board.cloneBoard(board.undoBoard);
-//			}
-//
-//			//Redo
-//			if (SlickGo.regionChecker(editorx +110 ,editory +20,90,50,gc)&& board.redoBoard != null) {
-//				board = Board.cloneBoard(board.redoBoard);
-//			}
-//
-//
-//			//Rotate
-//			if (SlickGo.regionChecker(editorx,editory +80,90,50,gc)) {
-//				board.rotate();
-//			}
-//
-//			//FlipV
-//			if (SlickGo.regionChecker(editorx +110,editory +80,90,24,gc)) {
-//				board.flip(true);
-//			}
-//
-//			//FlipH
-//			if (SlickGo.regionChecker(editorx +110,editory +106,90,24,gc)) {
-//				board.flip(false);
-//			}
-//			
-//			//Reset
-//			if (SlickGo.regionChecker(editorx ,editory+140,200,50,gc))this.board.initBoard(true);
-//			endSection();
-			
-
-			
-//			startSection(40,20);
-//			//Menu
-//			if (SlickGo.regionChecker(editorx,editory +20,300,50,gc)) {
-//				
-//				if(!blackKeyStone)MoveFinder.keystonecolour = Stone.WHITE;
-//				else MoveFinder.keystonecolour = Stone.BLACK;
-//				
-//				board.turn = (board.blackFirst)? Stone.BLACK:Stone.WHITE;
-//				board.placing = board.turn;
-//				SlickGo.mainBoard = Board.cloneBoard(board);
-//				SlickGo.mainBoard.resetboard = Board.cloneBoard(board);
-//				sbg.enterState(0);
-//			}
-//
-//
-//			//Load
-//			if (SlickGo.regionChecker(editorx ,editory +80,300,50,gc)) {
-//				Board loadBoard = SlickGo.loadFile(true);
-//				if(loadBoard!=null) board =loadBoard;
-//
-//			}
-//			//Save
-//			if (SlickGo.regionChecker(editorx ,editory +140,300,50,gc))SlickGo.saveFile(board,true);
-//			endSection();
-
-
 
 
 		}
@@ -478,10 +387,6 @@ public class Editor extends BasicGameState {
 
 	private String saveDesc() {
 		String s = "";
-//		if(board.blackFirst && board.capToWin )s= "Kill White";
-//		if(!board.blackFirst && board.capToWin )s= "Kill Black";
-//		if(board.blackFirst && !board.capToWin )s= "Black To Live";
-//		if(!board.blackFirst && !board.capToWin )s= "White To Live";
 		
 		if(board.blackFirst && !blackKeyStone )s= "Kill White";
 		if(!board.blackFirst && blackKeyStone )s= "Kill Black";
@@ -512,9 +417,7 @@ public class Editor extends BasicGameState {
 	}
 	
 	private void fontStart(Graphics g) {
-		
 		g.setFont(ttfont);
-		
 	}
 	private void fontEnd(Graphics g) {
 		g.setFont(defaultFont);

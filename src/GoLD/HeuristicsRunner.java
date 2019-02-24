@@ -91,10 +91,7 @@ public class HeuristicsRunner {
 		retval += RabbitSixCorner.evaluate(group.group,e);
 		
 		
-		
-//		retval += SixDie.evaluate(group.group,e);
-//		retval += SevenUnsettled.evaluate(group.group,e);
-//		retval += EightLive.evaluate(group.group,e);
+	
 		
 		retval += Liberties.evaluate(group.group,e);
 		
