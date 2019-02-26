@@ -713,14 +713,18 @@ public class Board{
     	Board.sPy= sPy;
 
 
-		g.setBackground(Color.lightGray);
+//		g.setBackground(Color.lightGray);
 		int bS = TileSize*20;
+		g.setColor(new Color(200,140,80));
+		g.fillRect(sPx, sPy, bS, bS);
+		
         for (float i =TileSize; i < bS; i+=TileSize){
-            g.setColor(Color.red);
+            g.setColor(Color.black);
+//            g.setColor(Color.red);
             g.drawLine(x+i,y+TileSize,x+i, y+bS-TileSize);
             g.drawLine(x+TileSize,y+i,x+bS-TileSize, y+i);
         }
-        
+        showCoord=false;
         if(showCoord) {
 	        char c = 'a';
 	        for (float i =TileSize; i < bS; i+=TileSize){
@@ -780,7 +784,7 @@ public class Board{
                         break;
                 }
 //                if(editormode)drawCharOnStone(g,(i+1)*TileSize,(j+1)*TileSize,Color.black,chars[i][j]);
-//                if(editormode)drawCharOnStone(g,(i+1)*TileSize,(j+1)*TileSize,Color.black,distance[i][j]);
+                if(editormode)drawCharOnStone(g,(i+1)*TileSize,(j+1)*TileSize,Color.black,distance[i][j]);
             }
 
         }
@@ -854,18 +858,25 @@ public class Board{
     	int w = TileSize-2;
     	int h = TileSize-4;
     	
+    	
+    	
     	String s = chars+"";
     	boolean isInt =true;
  
         try{Integer.parseInt(s);} 
         catch (NumberFormatException nfe) {isInt=false;}
         
-        if(isInt)g.setColor(Color.red);
-        else g.setColor(c);
+
     
         Font oldfont = g.getFont();
         int width = oldfont.getWidth(s);
         int height = oldfont.getHeight(s);
+        
+		g.setColor(new Color(200,140,80));
+        g.fillOval((x + w / 2) - (width / 2), (y + h / 2) - (height / 2),20,20);
+        
+        if(isInt)g.setColor(c);
+        else g.setColor(c);
         g.drawString(s,(x + w / 2) - (width / 2), (y + h / 2) - (height / 2));
 
         g.setColor(Color.black);

@@ -58,9 +58,9 @@ public enum States {
 		
 		
 		int addNumber =0;
-		if(retval ==0)addNumber=5;
-		else if(retval <1) addNumber=3;
-		else if(retval ==1) addNumber=1;
+		if(retval ==0)addNumber=16;
+		else if(retval <1) addNumber=8;
+		else if(retval ==1) addNumber=4;
 		for(Tuple t : nothings) {
 			if(e.cB.withinBounds(t)) {
 				e.checkedMap.put(t, e.checkedMap.getOrDefault(t, 0)+addNumber);	

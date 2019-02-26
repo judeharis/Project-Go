@@ -76,7 +76,7 @@ public class Evaluator {
 		
 		
 		grouping.allocateGrouping();
-		grouping.allocateControl();
+//		grouping.allocateControl();
 		for (Tuple t : cB.keystones) {
 			ArrayList<Tuple> keygroup = grouping.inGroup(t, kscolour).group;
 			allKeyStringStones.removeAll(keygroup);
@@ -103,7 +103,7 @@ public class Evaluator {
 		}
 		
 
-		cB.distance = new int[19][19];
+//		cB.distance = new int[19][19];
 //		int counter =1;
 //		for(Tuple t :oPP) {
 //			if(cB.withinBounds(t)) {
@@ -129,6 +129,7 @@ public class Evaluator {
 	    List<Tuple>[] bucket = new List[checkedMapSize + 1];
 
 	    for (Tuple key : map.keySet()) {
+	    	if(cB.withinBounds(key) && !cB.stones[key.a][key.b].isStone())cB.distance[key.a][key.b]= map.getOrDefault(key, 0);
 	        int frequency = map.get(key);
 	        if (bucket[frequency] == null) {
 	            bucket[frequency] = new ArrayList<>();

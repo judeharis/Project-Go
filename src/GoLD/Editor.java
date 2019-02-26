@@ -3,7 +3,10 @@ package GoLD;
 
 
 
+
 import java.util.ArrayList;
+
+
 
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
@@ -237,13 +240,14 @@ public class Editor extends BasicGameState {
 			
 			if (SlickGo.withinBounds(bx,by)) {
 				board.takeTurn(bx,by , true,false);
-//				board.distance = new int[19][19];
-//				if(!blackKeyStone)MoveFinder.keystonecolour = Stone.WHITE;
-//				else MoveFinder.keystonecolour = Stone.BLACK;			
-//				Evaluator evaluator = new Evaluator(board);
-//				print(evaluator.evaluateCurrentBoard(true));
-//				Evaluator evaluator2 = new Evaluator(board);
-//				evaluator2.moveGen(board.removeBadMovess(), MoveFinder.breathcutoff);
+				board.distance = new int[19][19];
+				if(!blackKeyStone)MoveFinder.keystonecolour = Stone.WHITE;
+				else MoveFinder.keystonecolour = Stone.BLACK;			
+				Evaluator evaluator = new Evaluator(board);
+				print(evaluator.evaluateCurrentBoard(true));
+				Evaluator evaluator2 = new Evaluator(board);
+				evaluator2.moveGen(board.removeBadMovess(), MoveFinder.breathcutoff);
+				
 
 				
 			}

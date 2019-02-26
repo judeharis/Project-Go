@@ -72,6 +72,7 @@ public class IterativeDeepening  implements Runnable{
 	
 	    if(isLive) {
 			int best = min;
+			ArrayList<Tuple> bestPath = new ArrayList<Tuple>(); 
 			Tuple bestChoice =null;
 			for (Tuple t : goodMoves) {
 				ArrayList<Tuple> path = new ArrayList<Tuple>();
@@ -90,7 +91,10 @@ public class IterativeDeepening  implements Runnable{
 						good.put(key, returnscore);
 					}
 				}else returnscore = alphaBeta(b,MoveFinder.liveKeys(b,klist),!isLive,depth,alpha,beta,path);
-				if(returnscore > best)bestChoice=t.clone();
+				if(returnscore > best) {
+					bestChoice=t.clone();
+					bestPath =path;
+				}
 				
 				if(depth==1) println(returnscore);
 				
@@ -102,10 +106,12 @@ public class IterativeDeepening  implements Runnable{
 					break;
 				}
 			}
-			if(bestChoice!=null)soFar.add(0,bestChoice);
+//			if(bestChoice!=null)soFar.add(0,bestChoice);
+			if(bestChoice!=null)soFar.addAll(bestPath);
 			return best;		
 	    }else{
 			int best = max;
+			ArrayList<Tuple> bestPath = new ArrayList<Tuple>(); 
 			Tuple bestChoice =null;
 			for (Tuple t : goodMoves) {
 				ArrayList<Tuple> path = new ArrayList<Tuple>();
@@ -124,7 +130,10 @@ public class IterativeDeepening  implements Runnable{
 						bad.put(key, returnscore);
 					}
 				}else returnscore = alphaBeta(b,MoveFinder.liveKeys(b,klist),!isLive,depth,alpha,beta,path);
-				if(returnscore < best)bestChoice=t.clone();
+				if(returnscore < best) {
+					bestChoice=t.clone();
+					bestPath =path;
+				}
 				
 				if(depth==1) println(returnscore);
 				
@@ -136,7 +145,8 @@ public class IterativeDeepening  implements Runnable{
 					break;
 				}
 			}
-			if(bestChoice!=null)soFar.add(0,bestChoice);
+//			if(bestChoice!=null)soFar.add(0,bestChoice);
+			if(bestChoice!=null)soFar.addAll(bestPath);
 			return best;
 		}
 	} 
@@ -180,7 +190,7 @@ public class IterativeDeepening  implements Runnable{
 	
 	private void addToKillers() {
 		int kdepth = 0;
-		for(Tuple t: lastIterPath) killers[kdepth][0]=t;
+		for(Tuple t: lastIterPath) killers[kdepth++][0]=t;
 		
 	}
 	
@@ -190,10 +200,11 @@ public class IterativeDeepening  implements Runnable{
 		
 		Tuple k1 = killers[depth-1][0];
 		Tuple k2 = killers[depth-1][1];
+		if(k2!=null && goodMoves.remove(k2))newOrder.add(k2);
 		if(k1!=null && goodMoves.remove(k1))newOrder.add(k1);
 		
 		
-		if(k2!=null && goodMoves.remove(k2))newOrder.add(k2);
+
 		
 		newOrder.addAll(goodMoves);
 		return newOrder;

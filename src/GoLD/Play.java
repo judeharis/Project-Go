@@ -107,7 +107,9 @@ public class Play extends BasicGameState {
 
 
 //		//IDeep
-//		SlickGo.drawButton(playx+220 ,playy +160,200,50,"IterDeepening", g ,iterativeDeepening,Color.green);
+		startSection(990,40);
+		SlickGo.drawButton(playx ,playy,200,50,"IterDeepening", g ,iterativeDeepening,Color.green);
+		endSection();
 
 		
 		startSection(990,220);
@@ -235,6 +237,13 @@ public class Play extends BasicGameState {
 				sbg.enterState(0);
 			}
 			
+			
+			startSection(990,40);
+			if (SlickGo.regionChecker(playx,playy,200,50,gc)) {
+				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
+				else iterativeDeepening =!iterativeDeepening;
+			}
+			endSection();
 			
 			startSection(990,220);
 			startSection(10,0);

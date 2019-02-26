@@ -134,10 +134,11 @@ public class MoveFinder  implements Runnable{
 
 		Evaluator.timed =0;
 		long startTime = System.currentTimeMillis();
-		boolean iterativeDeepening =Play.iterativeDeepening;
-
+		
 		Board cB = Board.cloneBoard(originalBoard);
+		boolean iterativeDeepening =Play.iterativeDeepening;
 		boolean isLive = (cB.turn==keystonecolour);
+		
 		
 		if(!iterativeDeepening || editormode) {
 			useHashTable= false;
@@ -170,7 +171,9 @@ public class MoveFinder  implements Runnable{
 					print(choice + ": " + result +"\n To Depth: " + (iterDepth-1) );
 					return;
 				}
+
 				iterPath = iDeep.thisIterPath;
+				print(iterPath);
 				ikillers = iDeep.killers;
 				if(!iterPath.isEmpty())choice = iterPath.get(0);
 				result = iDeep.result;
@@ -180,6 +183,13 @@ public class MoveFinder  implements Runnable{
 			
 			print(choice + ": " + result +"\n To Depth: " + iterDepth );
 		}
+		
+		
+		
+		
+		
+		
+		
 		
 		long endTime = System.currentTimeMillis();
 		long duration = (endTime - startTime);
@@ -210,8 +220,8 @@ public class MoveFinder  implements Runnable{
 		
 		Tuple k1 = killers[depth-1][0];
 		Tuple k2 = killers[depth-1][1];
-		if(k1!=null && goodMoves.remove(k1)) newOrder.add(k1);
-		if(k2!=null && goodMoves.remove(k2)) newOrder.add(k2);
+		if(k2!=null && goodMoves.remove(k2))newOrder.add(k2);
+		if(k1!=null && goodMoves.remove(k1))newOrder.add(k1);
 		
 		newOrder.addAll(goodMoves);
 		return newOrder;

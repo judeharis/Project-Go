@@ -299,27 +299,10 @@ public class Grouping {
 
     		for(Tuple t :adj ) {
     			if(!updatedd.contains(t)) {
-    				b.distance[t.a][t.b] =d;
+//    				b.distance[t.a][t.b] =d;
+    				if (!stones[t.a][t.b].isStone())b.distance[t.a][t.b] =d;
     				updatedd.add(t);
-    			}
-    			
-    			
-//
-//    			if(stones[t.a][t.b].getSC() == enemy) {
-//			    	ArrayList<Tuple> enemys = b.checkForStrings(t, enemy);
-//			    	ArrayList<Tuple> enemylibs = b.getNeedList(enemys, enemy.getEC(), true);
-//			    	int elcount = enemylibs.size();
-//			    	for(Tuple j:enemylibs ) {
-//			    		if(!stones[j.a][j.b].isStone()  && !updatedd.contains(j)) {
-//			    			b.distance[j.a][j.b] = d+elcount-1;
-//			    			updatedd.add(j);
-//			    		}
-//			    	}
-//    				
-//    			} 
-    			
-
-        		
+    			}   		
     		}
     		
     		ArrayList<Tuple> tempAdj= Board.tupleArrayClone(adj);
@@ -350,6 +333,9 @@ public class Grouping {
 			}
 		}
 		
+		d1.addAll(d1);
+		d1.addAll(d1);
+		d1.addAll(d2);
 		d1.addAll(d2);
 		d1.addAll(d3);
 		
