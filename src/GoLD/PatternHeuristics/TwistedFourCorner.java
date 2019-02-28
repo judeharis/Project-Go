@@ -48,9 +48,9 @@ public class TwistedFourCorner {
 					if(e.isThere(S0) || e.isThere(D0))patval=0;
 					
 					patval +=650;
-					float b1 = States.borderSafe(e, 2, TL,TR);
-					float b2 = States.borderSafe(e, 2, S0,D0);
-					float b3 = States.borderSafe(e, 2, S0,BL);
+					float b1 = States.borderSafeRel2(e, 2, TL,TR);
+					float b2 = States.borderSafeRel2(e, 2, S0,D0);
+					float b3 = States.borderSafeRel2(e, 2, S0,BL);
 					float ncap = States.minFinder(b1,b2,b3);
 					if(States.oneCheck(b2,b3)) ncap = States.minFinder(ncap,0.5f);
 					if(ncap>0.5) patval+=650;
@@ -107,9 +107,9 @@ public class TwistedFourCorner {
 					if(e.isThere(S0) || e.isThere(D0))patval=0;
 					
 					patval +=650;
-					float b1 = States.borderSafe(e, 1, TL);
-					float b2 = States.borderSafe(e, 2, LT,D0);
-					float b3 = States.borderSafe(e, 1, S0);
+					float b1 = States.borderSafeRel2(e, 1, TL);
+					float b2 = States.borderSafeRel2(e, 2, LT,D0);
+					float b3 = States.borderSafeRel2(e, 1, S0);
 					float ncap = States.minFinder(b1,b2,b3);
 					if(ncap>0.5) patval+=650;
 					else if(ncap<0.5) patval-=650;

@@ -41,7 +41,7 @@ public class Eye{
 					
 					int patval =0;
 					patval +=50;
-					float bs1 = States.borderSafe(e, 2, TL,TR,BL,BR);
+					float bs1 = States.borderSafeRel1(e, 2, TL,TR,BL,BR);
 		
 					float ncap = bs1;
 	

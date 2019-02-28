@@ -39,9 +39,9 @@ public class StraightTwoSide {
 					
 					int patval =0;	
 					patval +=50;
-					float z1 = States.borderSafe(e, 2, TL,S1);
-					float z2 = States.borderSafe(e, 2, TR,S2);
-					float z3 = States.borderSafe(e, 2, TL,TR);
+					float z1 = States.borderSafeRel1(e, 2, TL,S1);
+					float z2 = States.borderSafeRel1(e, 2, TR,S2);
+					float z3 = States.borderSafeRel1(e, 2, TL,TR);
 					float zcap = States.minFinder(z1,z2,z3);
 					if(States.oneCheck(z1,z3) || States.oneCheck(z2,z3)) zcap = States.minFinder(zcap,0.5f);
 					if(zcap>0.5) patval+=50;
@@ -97,7 +97,7 @@ public class StraightTwoSide {
 					
 					int patval =0;	
 					patval +=50;
-					float z1 = States.borderSafe(e, 3, TL,TR,S1);
+					float z1 = States.borderSafeRel1(e, 3, TL,TR,S1);
 					float zcap = States.minFinder(z1);
 					if(e.isEnemy(S2))zcap=1;
 					if(zcap>0.5) patval+=50;

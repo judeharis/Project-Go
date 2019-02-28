@@ -16,6 +16,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -46,7 +47,7 @@ public class Editor extends BasicGameState {
 	Tuple trigwhich =null;
 	public static char chars;
 
-
+	public static TextField txt;
 
 
 
@@ -59,11 +60,17 @@ public class Editor extends BasicGameState {
 		java.awt.Font newFont = new java.awt.Font("AngelCodeFont", java.awt.Font.PLAIN, 25);
 		ttfont = new TrueTypeFont(newFont, true);
 		defaultFont = gc.getGraphics().getFont();
+		txt = new TextField(gc, defaultFont, 0, 0, 100, 100);
+
 
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		Menu.bg.draw(0, 0, (float) 0.5);
+		txt.render(gc, g);
+		txt.setLocation(1000, 20);
+
+
 
 
 		int xpos = Mouse.getX();
@@ -173,7 +180,10 @@ public class Editor extends BasicGameState {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-
+//		pattern = Pattern.sToPv2("xlddr#zldxdx");
+		
+		
+		
 		Input input = gc.getInput();
 		int xpos = Mouse.getX();
 		int ypos =  Math.abs(gc.getHeight() - Mouse.getY());
@@ -215,27 +225,27 @@ public class Editor extends BasicGameState {
 		}
 
 		
-//		if (input.isMousePressed(2)) {
-//			if (SlickGo.withinBounds(bx,by) && input.isKeyDown(Input.KEY_LSHIFT)) {
-//				trigon=true;
-//				trigwhich = new Tuple(bx,by);
-////				print(bx+","+by);
-////				print(board.stones[bx][by]);
-////				Stone colour = board.stones[bx][by].getSC();
-////				if(colour.isStone()) {
-////					ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
-////					print(board.checkStringSafetyv2(sstring,colour));
-////				}
-//			}
-//		}
+		if (input.isMousePressed(2)) {
+			if (SlickGo.withinBounds(bx,by) && input.isKeyDown(Input.KEY_LSHIFT)) {
+				trigon=true;
+				trigwhich = new Tuple(bx,by);
+//				print(bx+","+by);
+//				print(board.stones[bx][by]);
+//				Stone colour = board.stones[bx][by].getSC();
+//				if(colour.isStone()) {
+//					ArrayList<Tuple> sstring = board.checkForStrings(bx,by,colour.getSStrings(board));
+//					print(board.checkStringSafetyv2(sstring,colour));
+//				}
+			}
+		}
 
-//		if(trigon && trigwhich!=null) {
-//			board.chars[trigwhich.a][trigwhich.b] = '1';
-//			trigon=false;
-//		}
+		if(trigon && trigwhich!=null) {
+			board.chars[trigwhich.a][trigwhich.b] = txt.getText().isEmpty()?' ':txt.getText().charAt(0);
+			trigon=false;
+		}
 
 
-//		pattern = Pattern.sToPv2("xlddr#zldxdx");
+
 		if (input.isMousePressed(0)) {
 			
 			if (SlickGo.withinBounds(bx,by)) {

@@ -51,11 +51,11 @@ public class BulkyFive {
 					if(e.isThere(S1))patval=0;
 					
 					patval +=450;
-					float a1 = States.borderSafe(e, 2, S1,D1);
-					float a2 = States.borderSafe(e, 2, S1,S0);
-					float a3 = States.borderSafe(e, 3, RT,BR,D0);
-					float a6 = States.borderSafe(e, 4, TR,RT,D1,S2);
-					float a7 = States.borderSafe(e, 4, BR,BRR,RT,S2);
+					float a1 = States.borderSafeRel2(e, 2, S1,D1);
+					float a2 = States.borderSafeRel2(e, 2, S1,S0);
+					float a3 = States.borderSafeRel2(e, 3, RT,BR,D0);
+					float a6 = States.borderSafeRel2(e, 4, TR,RT,D1,S2);
+					float a7 = States.borderSafeRel2(e, 4, BR,BRR,RT,S2);
 					if(!e.isEnemy(D1) && !e.isEnemy(S0) && !e.isEnemy(S2) && !e.isThere(S1))a3+=0.5;
 					if(!e.isEnemy(S1) && e.isEnemies(D1,S0)) {a1+=0.5;a2+=0.5;}
 					float acap = States.minFinder(a1,a2,a3,a6,a7);
@@ -64,9 +64,11 @@ public class BulkyFive {
 					else if(States.oneCheck(a3,a6) || States.oneCheck(a3,a7)) acap = States.minFinder(acap,0.5f);
 					if(acap>0.5) patval+=450;
 					else if(acap<0.5) patval-=450;
+					
+					
 					patval +=400;
-					float c1 = States.borderSafe(e, 2, TL,TR,RT,BR,BL);
-					float c2 = States.borderSafe(e, 1, S1);
+					float c1 = States.borderSafeRel1(e, 2, TL,TR,RT,BR,BL);
+					float c2 = States.borderSafeRel1(e, 1, S1);
 					float ccap = States.minFinder(c1,c2);
 					if(ccap>0.5) patval+=400;
 					else if(ccap<0.5) patval-=400;

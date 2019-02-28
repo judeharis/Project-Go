@@ -20,7 +20,7 @@ public class Board{
 	
     static int gcsize =  ((SlickGo.gcheigth-50)/50)*50;
 	static int boardSize = (gcsize%100==0?gcsize-50:gcsize);
-	static int TileSize = ((boardSize/18)/10) *10;
+	static int TileSize = (((boardSize/18)/10) *10);
 	
 	public static int sPx =0;
 	public static int sPy =0;
@@ -761,7 +761,7 @@ public class Board{
 
                     case VALID: // if (editormode)drawoval(g,(i+1)*TileSize,(j+1)*TileSize,new Color(0f,1f,0f,.0f ),false);
                     	 if (editormode)drawoval(g,(i+1)*TileSize,(j+1)*TileSize,new Color(0f,0f,0f,.0f ),false);
-                        else if(!validMoves.contains(new Tuple(i,j)))drawoval( g,(i+1)*TileSize,(j+1)*TileSize ,new Color(1f,0f,0f,.1f),false);
+                        else if(!validMoves.contains(new Tuple(i,j)))drawoval( g,(i+1)*TileSize,(j+1)*TileSize ,new Color(1f,0f,0f,.2f),false);
                         break;
 
                     case INVALID:  //drawoval( g,(i+1)*TileSize,(j+1)*TileSize ,new Color(1f,0f,0f,.1f),false);
@@ -783,8 +783,9 @@ public class Board{
                     case EMPTY:
                         break;
                 }
-//                if(editormode)drawCharOnStone(g,(i+1)*TileSize,(j+1)*TileSize,Color.black,chars[i][j]);
-                if(editormode)drawCharOnStone(g,(i+1)*TileSize,(j+1)*TileSize,Color.black,distance[i][j]);
+                boolean idOn = false;
+                if(idOn&&editormode)drawCharOnStone(g,i,j,Color.black,chars[i][j]);
+                if(!idOn&&editormode)drawCharOnStone(g,(i+1)*TileSize,(j+1)*TileSize,Color.black,distance[i][j]);
             }
 
         }
@@ -819,28 +820,34 @@ public class Board{
 
     }
     
-    public void drawCharOnStone(Graphics g,  int x, int y , Color c ,char chars) {
+    public void drawCharOnStone(Graphics g,  int i, int j , Color c ,char chars) {
+
+    	if((int)chars==0)return;
+    	int x = (i+1)*TileSize;
+    	int y = (j+1)*TileSize;
     	x+=sPx;
     	y+=sPy;
     	int r = (TileSize/2);
     	x = x - r;
     	y = y - r;
-    	int w = TileSize-2;
-    	int h = TileSize-4;
+    	int w = TileSize;
+    	int h = TileSize-6;
+    	
     	
     	String s = chars+"";
-    	boolean isInt =true;
 
-    	 
-        try{Integer.parseInt(s);} 
-        catch (NumberFormatException nfe) {isInt=false;}
-        
-        if(isInt)g.setColor(Color.red);
-        else g.setColor(c);
-    
         Font oldfont = g.getFont();
         int width = oldfont.getWidth(s);
         int height = oldfont.getHeight(s);
+        
+		g.setColor(new Color(200,140,80));
+		if(!stones[i][j].isStone())g.fillOval((x + w / 2) - (width / 2), (y + h / 2) - (height / 2),(width)+2,(height)+2);
+        
+        
+        if(stones[i][j].isStone())g.setColor(Color.red);
+        else g.setColor(c);
+    
+        
         g.drawString(s,(x + w / 2) - (width / 2), (y + h / 2) - (height / 2));
 
         g.setColor(Color.black);
@@ -855,8 +862,9 @@ public class Board{
     	int r = (TileSize/2);
     	x = x - r;
     	y = y - r;
-    	int w = TileSize-2;
-    	int h = TileSize-4;
+    	int w = TileSize;
+    	int h = TileSize-6;
+    	
     	
     	
     	
@@ -873,8 +881,7 @@ public class Board{
         int height = oldfont.getHeight(s);
         
 		g.setColor(new Color(200,140,80));
-        g.fillOval((x + w / 2) - (width / 2), (y + h / 2) - (height / 2),20,20);
-        
+        g.fillOval((x + w / 2) - (width / 2), (y + h / 2) - (height / 2),(width)+2,(height)+2);
         if(isInt)g.setColor(c);
         else g.setColor(c);
         g.drawString(s,(x + w / 2) - (width / 2), (y + h / 2) - (height / 2));

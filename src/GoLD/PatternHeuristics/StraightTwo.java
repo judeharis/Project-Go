@@ -43,9 +43,9 @@ public class StraightTwo {
 
 					int patval =0;	
 					patval +=50;
-					float z1 = States.borderSafe(e, 3, TL,BL,S1);
-					float z2 = States.borderSafe(e, 3, TR,BR,S2);
-					float z3 = States.borderSafe(e, 4, TL,BL,TR,BR);
+					float z1 = States.borderSafeRel1(e, 3, TL,BL,S1);
+					float z2 = States.borderSafeRel1(e, 3, TR,BR,S2);
+					float z3 = States.borderSafeRel1(e, 4, TL,BL,TR,BR);
 					float zcap = States.minFinder(z1,z2,z3);
 					if(States.oneCheck(z1,z3) || States.oneCheck(z2,z3)) zcap = States.minFinder(zcap,0.5f);
 					if(zcap>0.5) patval+=50;

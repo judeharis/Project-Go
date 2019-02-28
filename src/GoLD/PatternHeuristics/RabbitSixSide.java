@@ -57,11 +57,11 @@ public class RabbitSixSide {
 					if(e.isThere(S1))patval=0;
 					
 					patval +=450;
-					float a1 = States.borderSafe(e, 2 ,S1,S0);
-					float a2 = States.borderSafe(e, 2 ,S1,B1);
-					float a3 = States.borderSafe(e, 4, TL,LT,S0,A1);
-					float a4 = States.borderSafe(e, 4, TR,RT,S2,A1);
-					float a5 = States.borderSafe(e, 3, B1,S2,RB);
+					float a1 = States.borderSafeRel2(e, 2 ,S1,S0);
+					float a2 = States.borderSafeRel2(e, 2 ,S1,B1);
+					float a3 = States.borderSafeRel2(e, 4, TL,LT,S0,A1);
+					float a4 = States.borderSafeRel2(e, 4, TR,RT,S2,A1);
+					float a5 = States.borderSafeRel2(e, 3, B1,S2,RB);
 					if(!e.isEnemies(S1)) {a1+=0.5;a2+=0.5;};
 					float acap = States.minFinder(a1,a2,a3,a4,a5);
 					if(States.oneCheck(a1,a2) || States.oneCheck(a1,a3)) acap = States.minFinder(acap,0.5f);
@@ -69,16 +69,18 @@ public class RabbitSixSide {
 					else if(States.oneCheck(a4,a5)) acap = States.minFinder(acap,0.5f);
 					if(acap>0.5) patval+=450;
 					else if(acap<0.5) patval-=450;
+					
 					patval +=400;
-					float b1 = States.borderSafe(e, 1, S1);
-					float b2 = States.borderSafe(e, 2, TL,TR);
-					float b3 = States.borderSafe(e, 2, RT,RB);
+					float b1 = States.borderSafeRel1(e, 1, S1);
+					float b2 = States.borderSafeRel1(e, 2, TL,TR);
+					float b3 = States.borderSafeRel1(e, 2, RT,RB);
 					float bcap = States.minFinder(b1,b2,b3);
 					if(bcap>0.5) patval+=400;
 					else if(bcap<0.5) patval-=400;
+					
 					patval +=200;
-					float c1 = States.borderSafe(e, 1, S1);
-					float c2 = States.borderSafe(e, 1, TL,TR,LT,RT,RB);
+					float c1 = States.borderSafeRel1(e, 1, S1);
+					float c2 = States.borderSafeRel1(e, 1, TL,TR,LT,RT,RB);
 					float ccap = States.minFinder(c1,c2);
 					if(ccap>0.5) patval+=200;
 					else if(ccap<0.5) patval-=200;
@@ -160,11 +162,11 @@ public class RabbitSixSide {
 					if(e.isThere(S1))patval=0;
 					
 					patval +=450;
-					float a1 = States.borderSafe(e, 2 ,S1,S0);
-					float a2 = States.borderSafe(e, 2 ,S1,B1);
-					float a3 = States.borderSafe(e, 3, BL,S0,A1);
-					float a4 = States.borderSafe(e, 3, A1,S2,BR);
-					float a5 = States.borderSafe(e, 4, TR,B1,S2,RT);
+					float a1 = States.borderSafeRel2(e, 2 ,S1,S0);
+					float a2 = States.borderSafeRel2(e, 2 ,S1,B1);
+					float a3 = States.borderSafeRel2(e, 3, BL,S0,A1);
+					float a4 = States.borderSafeRel2(e, 3, A1,S2,BR);
+					float a5 = States.borderSafeRel2(e, 4, TR,B1,S2,RT);
 					if(!e.isEnemies(S1)) {a1+=0.5;a2+=0.5;};
 					float acap = States.minFinder(a1,a2,a3,a4,a5);
 					if(States.oneCheck(a1,a2) || States.oneCheck(a1,a3)) acap = States.minFinder(acap,0.5f);
@@ -172,17 +174,19 @@ public class RabbitSixSide {
 					else if(States.oneCheck(a4,a5)) acap = States.minFinder(acap,0.5f);
 					if(acap>0.5) patval+=450;
 					else if(acap<0.5) patval-=450;
+					
 					patval +=400;
-					float b1 = States.borderSafe(e, 1, S1);
-					float b2 = States.borderSafe(e, 2, RT,BR);
-					float b3 = States.borderSafe(e, 2, BL,TL,TR);
+					float b1 = States.borderSafeRel1(e, 1, S1);
+					float b2 = States.borderSafeRel1(e, 2, RT,BR);
+					float b3 = States.borderSafeRel1(e, 2, BL,TL,TR);
 					float bcap = States.minFinder(b1,b2,b3);
 					if(bcap>0.5) patval+=400;
 					else if(bcap<0.5) patval-=400;
+					
 					patval +=200;
-					float c1 = States.borderSafe(e, 1, S1);
-					float c2 = States.borderSafe(e, 1, TL,BL);
-					float c3 = States.borderSafe(e, 2, TL,TR,BL,BR,RT);
+					float c1 = States.borderSafeRel1(e, 1, S1);
+					float c2 = States.borderSafeRel1(e, 1, TL,BL);
+					float c3 = States.borderSafeRel1(e, 2, TL,TR,BL,BR,RT);
 					if(States.numCheck(0.5, c2,c3)) c3+=0.5;		
 					float ccap = States.minFinder(c1,c2,c3);
 					if(ccap>0.5) patval+=200;

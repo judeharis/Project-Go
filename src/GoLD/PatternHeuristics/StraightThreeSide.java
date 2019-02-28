@@ -40,11 +40,11 @@ public class StraightThreeSide {
 					
 					int patval =0;	
 					patval +=50;
-					float z1 = States.borderSafe(e, 3, TL,S0,S1);
-					float z2 = States.borderSafe(e, 3, TR,S1,S2);
+					float z1 = States.borderSafeRel1(e, 3, TL,S0,S1);
+					float z2 = States.borderSafeRel1(e, 3, TR,S1,S2);
 					float z3 = States.borderSafe(e, 1,S0);
 					float z4 = States.borderSafe(e, 1,S2);
-					float z5 = States.borderSafe(e, 2, TL,TR) + States.minFinder(z3,z4);
+					float z5 = States.borderSafeRel1(e, 2, TL,TR) + States.minFinder(z3,z4);
 					float zcap = States.minFinder(z1,z2,z5);
 					if(States.oneCheck(z1,z2) || States.oneCheck(z1,z5)) zcap = States.minFinder(zcap,0.5f);
 					else if(States.oneCheck(z2,z5)) zcap = States.minFinder(zcap,0.5f);
@@ -55,8 +55,8 @@ public class StraightThreeSide {
 					
 					
 					patval +=450;
-					float a = States.borderSafe(e, 1, TL,TR);
-					float b = States.borderSafe(e, 1, S1);
+					float a = States.borderSafeRel2(e, 1, TL,TR);
+					float b = States.borderSafeRel2(e, 1, S1);
 					float ncap = States.minFinder(a,b);
 					if(ncap>0.5) patval+=450;
 					else if(ncap<0.5) patval-=450;
@@ -107,8 +107,8 @@ public class StraightThreeSide {
 					if(e.isThere(S1))patval=0;
 					
 					patval +=450;
-					float a = States.borderSafe(e, 2, TL,TR);
-					float b = States.borderSafe(e, 1, S1);
+					float a = States.borderSafeRel2(e, 2, TL,TR);
+					float b = States.borderSafeRel2(e, 1, S1);
 					float ncap = States.minFinder(a,b);
 					if(ncap>0.5) patval+=450;
 					else if(ncap<0.5) patval-=450;

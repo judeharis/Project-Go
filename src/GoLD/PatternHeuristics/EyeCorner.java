@@ -34,7 +34,7 @@ public class EyeCorner {
 					if(e.isTheres(C)) continue;
 					int patval =0;
 					patval+=50;
-					float a = States.borderSafe(e, 1, TL);
+					float a = States.borderSafeRel1(e, 1, TL);
 					float ncap = States.minFinder(a);
 
 					if(ncap>0.5) patval+=50;

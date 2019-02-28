@@ -42,7 +42,7 @@ public class StraightTwoCorner {
 					
 					int patval =0;	
 					patval +=50;
-					float z1 = States.borderSafe(e, 2, TL,S1);
+					float z1 = States.borderSafeRel1(e, 2, TL,S1);
 					float zcap = States.minFinder(z1);
 					if(e.isEnemy(S2))zcap=1;
 					if(zcap>0.5) patval+=50;

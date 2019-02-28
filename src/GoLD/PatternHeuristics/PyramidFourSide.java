@@ -55,7 +55,7 @@ public class PyramidFourSide {
 					float z1 = States.borderSafe(e, 1,S0);
 					float z2 = States.borderSafe(e, 1,S2);
 					float z3 = States.borderSafe(e, 1,D0);
-					float z4 = States.borderSafe(e, 4,BL,BR,B1,B2) +States.minFinder(z1,z2,z3);
+					float z4 = States.borderSafeRel1(e, 4,BL,BR,B1,B2) +States.minFinder(z1,z2,z3);
 					float zcap = States.minFinder(z4);
 					if(zcap>0.5) patval+=50;
 					else if(zcap<0.5) patval-=50;
@@ -65,14 +65,12 @@ public class PyramidFourSide {
 					
 					
 					patval +=450;
-					float a4 = States.borderSafe(e, 1, BL);
-					float a5 = States.borderSafe(e, 1, BR);
-
+					float a4 = States.borderSafeRel1(e, 1, BL);
+					float a5 = States.borderSafeRel1(e, 1, BR);
 					
-					
-					float a1 = States.borderSafe(e, 2, B1,B2) + States.minFinder(a4,a5);
-					float a2 = States.borderSafe(e, 2, BL,BR);
-					float a3 = States.borderSafe(e, 1, S1);
+					float a1 = States.borderSafeRel2(e, 2, B1,B2) + States.minFinder(a4,a5);
+					float a2 = States.borderSafeRel2(e, 2, BL,BR);
+					float a3 = States.borderSafeRel2(e, 1, S1);
 					float acap = States.minFinder(a1,a2,a3);
 					
 					if(acap>0.5) patval+=450;
@@ -81,9 +79,9 @@ public class PyramidFourSide {
 					
 					
 					patval +=200;
-					float a = States.borderSafe(e, 1, BL,BR);
-					float b = States.borderSafe(e, 2, B1,B2);
-					float c = States.borderSafe(e, 1, S1);
+					float a = States.borderSafeRel1(e, 1, BL,BR);
+					float b = States.borderSafeRel1(e, 2, B1,B2);
+					float c = States.borderSafeRel1(e, 1, S1);
 					float ncap = States.minFinder(a,b,c);
 					if(ncap>0.5) patval+=200;
 					else if(ncap<0.5) patval-=200;
@@ -150,16 +148,16 @@ public class PyramidFourSide {
 					float z1 = States.borderSafe(e, 1,S0);
 					float z2 = States.borderSafe(e, 1,S2);
 					float z3 = States.borderSafe(e, 1,D0);
-					float z4 = States.borderSafe(e, 4,BL,BR,TL,TR) +States.minFinder(z1,z2,z3);
+					float z4 = States.borderSafeRel1(e, 4,BL,BR,TL,TR) +States.minFinder(z1,z2,z3);
 					float zcap = States.minFinder(z4);
 					if(zcap>0.5) patval+=50;
 					else if(zcap<0.5) patval-=50;
 					if(e.isThere(S1))patval=0;
 
 					patval +=650;
-					float a = States.borderSafe(e, 2, TL,BL);
-					float b = States.borderSafe(e, 2, TR,BR);
-					float c = States.borderSafe(e, 1, S1);
+					float a = States.borderSafeRel2(e, 2, TL,BL);
+					float b = States.borderSafeRel2(e, 2, TR,BR);
+					float c = States.borderSafeRel2(e, 1, S1);
 					float ncap = States.minFinder(a,b,c);
 					if(ncap>0.5) patval+=650;
 					else if(ncap<0.5) patval-=650;
@@ -219,9 +217,9 @@ public class PyramidFourSide {
 					
 					if(e.isThere(S0)||e.isThere(S2)||e.isThere(D0)) continue;
 					retval +=650;
-					float a = States.borderSafe(e, 2, TL,BL);
-					float b = States.borderSafe(e, 2, B1,B2);
-					float c = States.borderSafe(e, 1, S1);
+					float a = States.borderSafeRel2(e, 2, TL,BL);
+					float b = States.borderSafeRel2(e, 2, B1,B2);
+					float c = States.borderSafeRel2(e, 1, S1);
 					
 					float ncap = States.minFinder(a,b,c);
 					if(ncap>0.5) retval+=650;

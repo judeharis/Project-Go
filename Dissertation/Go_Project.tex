@@ -8,19 +8,22 @@
 \usepackage{graphicx}
 \usepackage{subcaption}
 
+% \usepackage{algorithm}
+% \usepackage{algorithmicx}
+% \usepackage[noend]{algpseudocode}
+
+
 
 \graphicspath{ {images/} }
 
 
 
 \title{Go - Project}
-\author{Jude Haris }
+\author{Jude Haris}
 \date{May 2019}
 
 \begin{document}
-
 \maketitle
-
 \chapter{Introduction}
 \pagenumbering{arabic}
 
@@ -133,7 +136,7 @@ Life and death problems can also conclude where Ko occurs within the area, in th
 
 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \begin{subfigure}[b]{0.45\textwidth}
 \includegraphics[width=\textwidth]{ex/Ex1-0.png}
@@ -150,7 +153,7 @@ Life and death problems can also conclude where Ko occurs within the area, in th
 \end{figure}
 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \begin{subfigure}[b]{0.45\textwidth}
 \includegraphics[width=\textwidth]{ex/Ex2-0.png}
@@ -161,7 +164,7 @@ Life and death problems can also conclude where Ko occurs within the area, in th
 \label{fig:ex2}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \begin{subfigure}[b]{0.45\textwidth}
 \includegraphics[width=\textwidth]{ex/Ex3-0.png}
@@ -178,7 +181,7 @@ Life and death problems can also conclude where Ko occurs within the area, in th
 \end{figure}
 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \begin{subfigure}[b]{0.45\textwidth}
 \centering
@@ -197,7 +200,7 @@ Life and death problems can also conclude where Ko occurs within the area, in th
 \end{figure}
 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \begin{subfigure}[b]{0.45\textwidth}
 \centering
@@ -216,7 +219,7 @@ In ~\autoref{fig:ex5-1} intersections a to g are the liberties of the black ston
 \label{fig:ex5}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \begin{subfigure}[b]{0.45\textwidth}
 \centering
@@ -290,114 +293,298 @@ Reliability – The program should be able to cope with any kind of user inputs 
 \chapter{Design}
 
 
-\section{Brute Force Search}
-For the computer to play against a human it needs to be able to determine the best move it can make. Simplest way to do this is by searching through the game tree and determining the end results of each valid move. The game tree consists of every single board position that is possible to occur from the current board position. Board position refers to the state of the entire board, each sub tree of the game tree is the result of making a valid move in the current board position. Every sub tree is explored deeper until the resulting board position is in a game ending state. This type of search can be referred to as a brute force search and within GoLD the ability to “brute force search” is essential as it is the foundation to which rest of the program’s AI is built upon.
+\section{Tree Search}
+GoLD allows the user to play against the computer which is one of the main requirements of the project. To create a computer which is able to play against a human, GoLD must be able to determine the best move out of all the valid moves in the given board position for the current turn. The simplest way to achieve this is by searching through the game tree and determining the end result of each valid move sequence of moves. The game tree consists of every single board position that is possible to occur from the current board position. Board position refers to the state of the entire board, where each stone is on the board , whose turn it is and also if there is an intersection of the board where the Ko rule is applied. Each subtree of the game tree is the result of making a valid move in the current board position. To determine the best move, every sub tree of the current board position needs to be explored until the resulting board position is a game ending state. This type of search where every sequence of moves is processed is referred to as a brute force search. The ability to “brute force search” Go’s game tree is essential to have in GoLD as it is the foundation to which rest of the program’s AI is built upon.
 
-\subsection{Alpha-Beta Pruning Search Algorithm}
-
-The basis of finding the correct move within GoLD is the Alpha-Beta pruning search algorithm. Alpha-Beta is an algorithm which optimises the simple minimax algorithm and returns the same results in less time. Minimax is perfect for searching Go’s game tree where two players are playing, and one player’s gains are directly linked to the other player’s losses. A simple implementation of minimax will search each valid move of the initial board position and choose a move which results in victory even if the opponent plays perfectly, if there is such a move. In terms of Go given the computer is black, during the search minimax alternates between playing as black and white until an end goal is reached and then chooses an initial move which leads black to win.
-
-Within life and death situation of this project the end goal is easy to determine if the attacking player as no valid moves and the keystones remain on the board then the defending player has won. Alternatively, as soon as all the keystones on the board is captured then the attacking player has won. In a real game of Go, results of end games are not so simple. There might be multiple solutions which results in capture of all the keystones’ string but there might only be one solution which will do so without allowing for losses on other parts of the board for the attacking player. This is ignored with GoLD as we are only interested in the result of life and death problems not the outcome of the board. Hence any solution which captures the given keystones are sufficient for the project. An example of minimax algorithm used in a simple number game is show in ~\autoref{fig:MinMaxNumTree}
-
-\begin{figure}[!h]
+\subsection{Minimax}
+The basis of finding the correct move within GoLD is the Alpha-Beta pruning search algorithm which is based on the Minimax search algorithm. In order to understand Alpha-Beta, it is essential to understand Minimax. Minimax is based on the idea of taking turns, and fundamentally how one player is trying to maximise their own score and the other player is trying to minimise the opponent's score by increasing their own. Minimax is perfect for searching Go’s game tree where two players are playing, and one player’s gains are directly linked to the other player’s losses. A simple implementation of minimax with no depth limit will search each valid move of the initial board position until a gaming-ending state occurs. Minimax will choose a move which results in victory even if the opponent plays perfectly if there is such a move. In terms of Go, if it is currently black’s turn then minimax will start the search as black and during the search will alternate between playing as black and playing as white until a game-ending state is reached. Each subtree of the initial game tree is searched until either a subtree (move) is found where white cannot avoid defeat or all the subtrees are searched.
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=0.9\textwidth]{MinMaxNumTree}
-\caption{Minimax being used for simple number game. Best score the maximizing player can get is 8. Even though scoring 10 and 12 are possible when minimizing player plays optimally the score can’t out be achieved.}
+\caption{Minimax used for simple number game. Best score the maximizing player can get is 8. Even though scoring 10 and 12 are possible if the minimizing player plays optimally these scores cannot out be achieved.}
 \label{fig:MinMaxNumTree}
 \end{figure}
 
-The alpha-beta pruning algorithm is smart improvement to reduce the search time of the minimax algorithm. It allows for the correct result to be determined without having to search through every possible sub tree of the initial game tree. It uses alpha and beta values to determine whether further search is required or not. To begin with alpha is set -inf and beta is set to +inf, these values are passed down through the layers of the search algorithm and changes to the alpha or beta values only affect the deeper layers of the search. If a maximizing layer finds a move which gives a score greater than the previous best move of that layer, then the alpha value of that layer is increased to the value of new best move. If a minimizing layer finds a move which gives a score less than the previous best move of that layer, then the beta value of that layer is decreased to the value of new best move.  After each move is searched in a layer, the algorithm checks if the alpha value is greater than or equal to the beta value and if it is the algorithm decides that checking more moves in that layer is pointless and returns the best move back to previous layer. This results drastic improvements to the minimax algorithm without changing the result as it cuts out the search of many branches of the game tree which doesn’t affect the result of the algorithm. An example of Alpha-Beta pruning algorithm used for the same simple number game is show in ~\autoref{fig:ABNumTree}
+GoLD is only concerned with life and death situation in Go and hence it is simple to determine if the current board position is in a game-ending state. If the attacking player has no valid moves and the keystones, marked by the problem creator, remains on the board then the defending player has won. Alternatively, as soon as all the keystones on the board are captured then the attacking player has won. In a real game of Go, results of life and death situations are not so simple. There might be multiple solutions which result in the capture of all the keystones but there might only be one solution which will do so without allowing losses on other parts of the board for the attacking player. This is ignored within GoLD as we are only interested in the result of a life and death problem, and not the outcome of the board. Hence any solution which captures all the keystones are sufficient for the GoLD. ~\autoref{fig:MinMaxNumTree} show an example of minimax for a simple game where the max player tries to obtain the highest value and the min player tries to obtain the lowest value. Note the game-ending states are shown by a circular shape.
 
+\subsection{Alpha-Beta Pruning Search}
+The Alpha-Beta pruning algorithm is a smart improvement on the Minimax algorithm in order to reduce the search time. It allows for the same result to be determined without having to search through as many subtrees as Minimax does. It uses alpha and beta values to determine whether searching a subtree further ahead is a waste of effort or not. The search begins with the alpha value set to -inf and the beta value set to +inf. These values are passed down from the parent tree to each of its subtrees during the search. If a maximizing subtree finds a move which results in a score greater than the previous best score for that board position, then the alpha value of that subtree is increased to the value of the new best score. If a minimizing subtree finds a move which results in a score less than the previous best score for that board position, then the beta value of that subtree is decreased to the value of the new best score. After searching each move within a subtree, the algorithm checks if the alpha value is greater than or equal to the beta value and if it is then the algorithm decides that searching more moves within that subtree is pointless and returns the best score found so far back to the parent tree. These “beta cut-offs” reduces the search space for the algorithm by cutting off all the other moves from being searched. This amounts to a great improvement in search time compared to the minimax algorithm without changing the result. This is because the move that caused the beta-cut off to occur is worse than the parent tree’s best move found so far.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=0.9\textwidth]{ABNumTree}
-\caption{Same simple number game using alpha-beta pruning. In the second layer of the second sub three after searching the first child node which returns 5 the algorithm cuts off from any further search in that sub tree as it realises the first sub tree will always be better than 5. }
+
+\caption{The same simple number game as ~\autoref{fig:MinMaxNumTree} but using Alpha-Beta pruning. In the second subtree after searching the first move which returns 5, the algorithm cuts off from any further search in that subtree as it realises the first subtree will always be better than 5. }
 \label{fig:ABNumTree}
 \end{figure}
 
-Pseudocode of the implementation of alpha-beta algorithm for the program is as follows:
 
 
+% \begin{algorithm}
+% \caption{Alpha Beta Pruning Search}\label{Alpha-Beta}
+% \begin{algorithmic}
+%     \Procedure{alphaBeta}{$board,isDefending,depth,alpha,beta$}
+%         \State $depth\gets (depth+1)$
+%         \State $validMoves\gets (board.validMoves)$
+%         \State $keyStones\gets (board.getAliveKeyStones())$
+%         \If {keyStones.size == 0}
+%             \State \Return{$-\infty$}
+%         \EndIf
+%
+%          \If {board.turn = attackingPlayer \& validMoves.size == 0 }
+%             \State \Return{$\infty$}
+%         \EndIf
+%
+%         \If {isDefending}
+%             \State $best\gets -\infty$
+%             \For{move in validMoves}
+%                 \State board.makeMove(move)
+%                 \State $score \gets alphaBeta(board,!isDefending,depth,alpha,beta)$
+%                 \State board.undoMove()
+%                 \If {($depth = 1$  { \& }  $score < best$)}
+%                     \State {$bestMove \gets move$}
+%                 \EndIf
+%                 \State $best \gets max(best,score)$
+%                 \State $alpha \gets max(alpha,score)$
+%                 \If {$beta \leq alpha$}
+%                     \State $break$
+%                 \EndIf
+%             \EndFor
+%             \State \Return{$best$}
+%         \Else
+%            \State $best\gets \infty$
+%             \For{move in validMoves}
+%                 \State board.makeMove(move)
+%                 \State $score \gets alphaBeta(board,!isDefending,depth,alpha,beta)$
+%                 \State board.undoMove()
+%                 \If {($depth = 1$  { \& }  $score < best$)}
+%                     \State $bestMove \gets move$
+%                 \EndIf
+%                 \State $best \gets min(best,score)$
+%                 \State $alpha \gets min(alpha,score)$
+%                 \If {$(beta \leq alpha)$}
+%                     \State $break$
+%                 \EndIf
+%             \EndFor
+%             \State \Return{$best$}
+%         \EndIf
+%     \EndProcedure
+% \end{algorithmic}
+% \end{algorithm}
+
+The following pseudocode addresses the Alpha-Beta pruning search algorithm with Go's Life and Death problems in mind. It was used for the initial design of GoLD's move finder function and later adapted to implement heuristics described in the following sections of this chapter.
+
+\begin{algorithm}[H]
+\caption{Alpha Beta Pruning Search}\label{Alpha-Beta}
+    \DontPrintSemicolon
+    \SetKwFunction{FalphaBeta}{alphaBeta}
+    \SetKwProg{Pn}{Procedure}{:}{}
+    \Pn{\FalphaBeta{$board,isDefending,depth,alpha,beta$}}{
+         $depth\gets (depth+1)$\;
+         $validMoves\gets (board.validMoves)$\;
+        \uIf{keyStones.size = 0}{$\KwRet -\infty\;$}
+        \uIf{(board.turn = attacking \textbf{and} validMoves.size = 0)}{$\KwRet { }\infty\;$}
+
+        \eIf {isDefending}{
+            $best\gets -\infty$\;
+            \ForEach{move in validMoves}{
+                board.makeMove(move)\;
+                $score \gets alphaBeta(board,!isDefending,depth,alpha,beta)$\;
+                board.undoMove()\;
+                \lIf {($depth = 1$  \textbf{and}  $\mbox{score}<\mbox{best}$)}{$bestMove \gets move$}
+                $best \gets max(best,score)$\;
+                $alpha \gets max(alpha,score)$\;
+                \lIf {$beta \leq alpha$}{$break$}
+            }
+            {$\KwRet { }best\;$}
+        }{
+            $best\gets \infty$\;
+            \ForEach{move in validMoves}{
+                board.makeMove(move)\;
+                $score \gets alphaBeta(board,!isDefending,depth,alpha,beta)$\;
+                board.undoMove()\;
+                \lIf {($depth = 1$  \textbf{and}  $\mbox{score}>\mbox{best}$)}{$bestMove \gets move$}
+                $best \gets min(best,score)$\;
+                $alpha \gets min(alpha,score)$\;
+                \lIf {$beta \leq alpha$}{$break$}
+            }
+            {$\KwRet { }best\;$}
+        }
+    }
+\end{algorithm}
+
+
+
+
+
+\section{Heuristics}
+
+The Alpha-Beta pruning search algorithm by itself is a great improvement over the standard Minimax algorithm but even with this improvement, the sheer size of search space for a game tree can become quickly overwhelming for the search to handle in a reasonable time. Alpha-Beta even at best case has a complexity of O($\sqrt{b^d}$) and at worst, O($b^d$) which means for problems with a higher number of initial valid moves or problems that require to search further ahead to come to a game-ending state could take an endless amount of time to search. For this reason, we have to introduce heuristics to allow the search to come to a quicker solution which could be incorrect rather than taking a long time to find a guaranteed correct solution. There are quite a few methods of implementing heuristics within the Alpha-Beta search, GoLD will be able to use few of these in combination or by themselves to restrict the time taken for the computer to respond to the user.
+
+\subsection{Depth Limited Search with Board Evaluation}
+A non-depth limited Alpha-Beta search will search deeper and deeper until a terminal state is found, this is very impractical for larger problems. Note that “depth” and “deeper” refers to how many moves ahead computer searches, the higher the depth the further ahead the computer has searched. Best way to deal with this is to introduce a depth limit where once depth X is reached the search is not continued. Of course, the problem with this is that when these depth cut-offs occur the board position will not be in a game-ending state and hence the Alpha-Beta search needs to do some type of evaluation in order to return a score which is between the two-opposing game-ending state of being dead or alive. The Alpha-Beta search will have to evaluate the board position when the cut-off depth is reached and return a value which represents how good the board is for the players. For example, if the board position will lead the attacking player to capture all the keystones then the board evaluation should return -5000,   on the other hand if the board position is in favour of the defending team then it should return 5000. Creating a function which evaluates the board accurately is a difficult task and doing so which can perform at the level of humans is even more difficult. An important factor to consider when designing an evaluation function is the time it takes to evaluate a board position. More complex the evaluation function becomes the longer it takes to evaluate single a board position hence the more time it takes to evaluate the board position every time the depth limit is reached.
+
+\subsubsection{Pattern Matching Evaluation}
+
+When evaluating a board position GoLD looks at the board similar to how humans would look at a board. It tries to identify general patterns on the board to give values depending on the pattern it finds. These patterns are based on the idea of eyes and eyes space. Identifying patterns which will lead to multiple eyes will be evaluated to give a very high score and hence the search will be able to recognise a group of stones which will be able to live without further searching. The general principle behind the patterns used in GoLD is to identify the number of eyes the pattern can yield when fully played out and values the pattern according to this factor. The values for each pattern found is added to the overall board score.
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{heur/1a.png}
+\caption{Before}
+\label{fig:heur-1a}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{heur/1b.png}
+\caption{After}
+\label{fig:heur-1b}
+\end{subfigure}
+\caption{Straight Three in the middle of the board with missing corners.}
+\label{fig:heur-1}
+\end{figure}
+
+
+Most of the patterns used within GoLD have a distinct feature which is common in life and death problems which is that depending on who plays first the pattern/shape becomes dead or alive. In other words, these shapes are unsettled and hence contains a vital point which will determine the number of eyes that can be produced by the shape. ~\autoref{fig:heur-1a} shows a pattern used in GoLD, the shape referred to as Straight Three but with its corner stones missing. The vital point of this pattern is a, if white is able to play at a then the pattern is almost ensured to create two eyes unless white makes a mistake filling in the corners. The corners b, c, d and e are also important for this pattern if black is able to have stones in both b and c  or in d and e then the wall of shape becomes weak and hence the shape can become captured. Due to alternating play if white plays first in this situation then it will be played out as shown in ~\autoref{fig:heur-1b} where white is able to produce two real eyes.
+
+
+% Figure2
+% The same pattern as Fig1 but on the side has similar properties but the safety of the shape requires white to have stones in both corners and the vital middle point.
+
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{heur/2a.png}
+\caption{Before}
+\label{fig:heur-2a}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{heur/2b.png}
+\caption{After}
+\label{fig:heur-2b}
+\end{subfigure}
+\caption{Bent Three in the corner with a Single Point eye nearby  to connect.}
+\label{fig:heur-2}
+\end{figure}
+
+
+An important insight into creating a better evaluation function is to recognise that patterns like the one mentioned above will be able to create a single point eye at the worst-case scenario. If the opponent is able to play at a pattern's vital point and restrict it from creating 2 eyes, the pattern will still be able to create 1 real eye which should be valued quite highly. By connecting two groups each containing a 1 real eye the defending player can achieve a live shape. When searched patterns fail to meet 2 eyes, GoLD stores the eye space of each failed pattern in a collection of eye spaces. This is because each of these eye spaces is highly probable to contain one real eye. Once the whole board is searched for all the different patterns used within GoLD and each identified pattern's values totalled, the evaluating function is left with the collection of eye spaces which all contain one real eye. Using this collection of eye spaces GoLD is able to group together multiple eye spaces which are connected through stones of the same colour. Any group of eye spaces that contains two or more unique eye spaces are identified as highly valuable due to fact that they will most likely produce two real eyes.
+
+~\autoref{fig:heur-2} shows an example of where GoLD is able to recognise a new shape with 2 real eyes. Bent Three in the corner is about to lose its vital point once black plays at a but white can connect to the Single Point Eye nearby by playing at b. This creates a new shape which contains 2 real eyes. GoLD recognises that the Bent Three in the corner will create one real eye even though it has lost its vital point. When white connects at b, GoLD's eye space grouping algorithm identifies that the new shape contains at least 2 real eyes and hence will score the shape highly.
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.34\textwidth}
+\centering
+\includegraphics[width=\textwidth]{heur/3a.png}
+\caption{Black Hanes at 1}
+\label{fig:heur-3a}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{heur/3b.png}
+\caption{Black Cuts at 1}
+\label{fig:heur-3b}
+\end{subfigure}
+\caption{Important type of moves}
+\label{fig:heur-3}
+\end{figure}
+
+
+
+To limit time spent on board evaluation only a small number of unique patterns can be searched. Due to this constraint, it was important to identify the essential shapes/patterns which have the ability to create eyes. Fifteen different patterns ranging from a Single Point Eye to a Rabbity Six along with all their variations on the edges and corners of the board are used within GoLD.  Along with these patterns, the evaluating function also tries to identify stones which are placed in good positions with respect to the opponent stones. The evaluating function looks for areas of the board that are the result of a cut, hane or even simply connecting two groups of stones and awards values accordingly.
+
+
+
+~\autoref{fig:heur-3a} shows a hane which is a move where a stone is placed next to an opponent stone which is already in contact with one’s own stone. Hane is a move which plays around one or more opponent stones. Note: playing at the opposite side of white here is not a hane.~\autoref{fig:heur-3b} shows a cut where black is able to stop white from connecting the two white stones by playing at 1.
+
+
+
+
+
+
+\subsection{Move Ordering}
+The benefit of Alpha-Beta pruning search over simple Minimax search is that when cut-offs occur a great number of subtrees of possible board positions do not need to be searched. Erik van der Werf talks about the importance of move ordering during Alpha-Beta search and the effects of good move ordering heuristics [5]. If the best move is always selected to be searched first, then the algorithm will produce cut-offs when all the other moves are searched afterwards. The idea behind this is if the best move is found first then all other moves will never return a score which is better than the best move. With this in mind, we can see that ordering the moves list to consider the best move first or even a move which will produce more cut-offs first, is a great way to reduce the number of board positions to search without altering the result.
+\subsubsection{Killer Move Heuristic}
+GoLD uses a deeply researched [6] method, Killer Heuristic, introduced by Huberman, B.J. [7] to order moves when searching through endgames of Chess using AB. Huberman’s theory was that a move (killer move) which led to a better board position from initial board position A will also lead to a better position from a similar initial board position B if the move is a valid move for B.  Using this theory, these killer moves should be searched first when a similar board position occurs during AB search. The moves which are considered killer moves are defined easily by using the cut-off characteristics of AB search, during the search if a move causes a beta cut-off to occur then this move can be considered a killer move and hence will be stored to be used for move ordering.  We can define a similar board position simply by looking at the depth in which the board position occurs in. Hence an ideal way to implement the killer heuristic is to store a number of moves for each depth which caused beta cut-offs to occur. Storing a great number of moves for each depth can lead to increased work during the move ordering process hence it is most effective only to store a few moves. GoLD only stores two killer moves k1 and k2  for each depth.
+
+Move Ordering for a board position A which occurs at depth d consists of searching the list of valid moves for k2 of depth d and if k2 is a valid move in this board position then k2 is ordered to the top of the valid moves list. After which, the same is done for k1 of this depth(k1 is searched second in order to give k1 priority over k2). When a cut-off occurs at depth d then the k1 of that depth becomes k2 and the move that caused the cut-off to occur becomes the new k1 of depth d.
+
+\subsection{Alpha-Beta with Iterative Deepening}
+An issue with AB search is that if the best move is found at depth d then searching past depth d for the other branches is always a waste of time. For example,  black is to play and kill white. Moves A to E are the valid moves of the current board position and the moves will be searched in alphabetical order. If D is the best move and will result in a victory for Black at depth 3 then searching past depth 3 for move A, B and C is a waste of time. Without searching D first there is no way to obtain this information hence A, B and C will be searched to deeper depths. Iterative deepening is an effective method to work around this problem. Alpha-Beta with Iterative Deepening is a process in which AB search is performed multiple times and at each iteration, the depth limit is increased by 1. This cycle takes place until max depth limit is reached, or a favourable game-ending state is found  (in the example it would be white dead). This effectively alters AB search to only increment depth by 1 at a time and hence solving the problem of searching moves to deeper levels than not required.
+The drawback of this process is that it requires multiple iterations of AB search and will have to perform redundant computation for the lower depths of the game tree. Work done by Korf R. [8] shows that redundant computation does not affect the overall time of the tree search as much as it would seem. In fact, using the result of each iteration to perform the next iteration can reduce the time taken to perform the next iteration and possibly the overall run time of the search. Each iteration will return the principal variation(PV) which is the sequence of moves which is considered to be the best determined by the search. The PV of the previous iteration will be set as the first sequence of moves the next iteration searches. This is another form of move ordering which effectively improves overall performance compared to a normal fixed depth limit search.
+Due to the depth-first nature of the depth limited AB search, the search will not provide a result until every move is searched to a game-ending state or to the limited depth. This means the search will not be able to produce the best move searched so for if it is stopped in the middle of searching. Without the introduction of Iterative Deepening in GoLD’s search the user is not able to search for a limited amount of time, rather the user would have to predict which depth limit to set in order for the search to complete in the time they desire.  Predicting the depth limit could lead the user to set the depth limit too high which would lead the search to last longer than what the user would like. Iterative deepening fixes this issue by allowing the user to stop the search whenever they desire and to use the result of the last fully performed iteration to make the best move found so far hence improving the usability of the GoLD.
+
+
+\subsection{Move Generator}
+GoLD allows the creator of the problem to set the valid points of play on the board and any points on the board which contains a stone when captured become a valid point of play within the problem. A high number of valid moves to begin the problem with creates extremely large game trees which would take too long to search even with the best heuristic move ordering. The number of valid moves can be regarded as the breadth of the game tree. In order to limit the breadth of the game tree GoLD introduces a move generator.
+The goal of a move generator is to pick out x number of moves from all the valid moves of the current board position in order to cut down the number of moves to be searched. A perfect move generator will always pick the best move if it could only pick one move to generate but this is impossible to achieve without searching ahead.  The next best result is that the generated moves list has a high chance of containing the best move and this chance obviously increases with the number of moves generated. The generated moves list should contain the best move possible otherwise the best move will not be searched hence the search will never return the correct result. If more moves are generated for use, then there is a high chance of one of them being the correct move but then more moves have to be searched. In order to maintain a low number of generated moves and still have a high chance of containing the correct move, the move generator within GoLD uses different types of heuristics to determine which moves have a high chance of being the correct move and which moves are irrelevant.
+One approach to determine which moves are good moves is to simulate each move being played and then evaluate the board to see which move will lead to an immediately better board position. While this could be an effective approach, it will also increase the worked load to process each board position. This might, in turn, slow the search down rather than speeding it up. The approach which GoLD uses is to simply process the board position as it is and then pick out moves which are relevant and give them each a score indicating how relevant they are.  Then the top x number of relevant moves are generated for search.
+One heuristic used to process the current board is a simple distance-based method. It relies on the school of thought that the closer a move is to the key group of stones the higher relevancy they have. Within GoLD, the search is aware of the key group of stones (marked by keystones) hence the distance-based heuristic will give a high relevancy score to any moves 1 step away from the key group then a lesser score to moves 2 steps away and so forth. This process is used for moves up to 3 steps away from the key group as the relevancy of moves further away is minuscule and hence a waste of time to process. This heuristic also accounts for enemy stones which are blocking the key group's access to other points hence in situations like the one in ~\autoref{fig:heur-4b} where points that are blocked by the surrounding white stones are considered irrelevant.
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{heur/4a.png}
+\caption{Value is halfed each step away from the key group}
+\label{fig:heur-4a}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{heur/4b.png}
+\caption{White stones devalues moves outside the wall}
+\label{fig:heur-4b}
+\end{subfigure}
+\caption{Distance Based Relevancy}
+\label{fig:heur-4}
+\end{figure}
+
+The other heuristic method used for move generation is based on pattern matching. Similar to pattern matching for board evaluation, here we use pattern matching to identify relevant moves. The same patterns used for board evaluations are also used to identify relevant moves on the board. The move generator searches for patterns on the board and increments the relevancy score to any moves which are vital points within a pattern found. This will allow the move generator to consider more complex shapes on the board and generate moves according to these shapes. In general, moves found through pattern matching are given higher relevancy score than ones found through the distance-based heuristic. The flaw in this heuristic is of course only a limited number of patterns can be searched because increasing the number of patterns will increase time taken to generate moves hence the same crucial patterns used for board evaluation are used for the move generator.
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{heur/5a.png}
+\caption{Not surrounded by white stones}
+\label{fig:heur-5a}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{heur/5b.png}
+\caption{Surrounded by white stones}
+\label{fig:heur-5b}
+\end{subfigure}
+\caption{Distance \& Pattern Based Relevancy Combined}
+\label{fig:heur-5}
+\end{figure}
+
+
+Relevancy score from the distance-based heuristic and pattern-based heuristic are combined together for each valid move and is ordered into a list from the highest to the lowest relevancy.  Depending on the user’s choice of breadth limit x,  the top x number of moves from this list will be generated and used  within the Alpha-Beta search.~\autoref{fig:heur-5} shows the same board positions shown in  ~\autoref{fig:heur-4} but both the distance-based and pattern-based heuristic applied. We can see that relevancy value for the vital points of the key group is significantly higher than all the other points nearby. The move generator would pick the two vital points as the first two moves to generate which is the best case scenario for the move generator.
 
 
 
 
 
 \subsection{Suicidal Move Removal}
-Keystones are an absolute objective in the program, they are one of the reference points which the program checks to see if the problem is solved or not. From the defender’s perspective any moves that are detrimental to the immediate safety of keystones need to be removed from the list of valid moves to be searched by alpha-beta algorithm. This entails removing any suicidal moves that decreases the number of liberties of a keystring to 1.
+Keystones are an absolute objective in the program, they are one of the reference points which the program checks to see if the problem is solved or not. From the defender’s perspective, any moves that are detrimental to the immediate safety of keystones need to be removed from the list of valid moves to be searched by the Alpha-Beta algorithm. This entails removing any suicidal moves that decrease the number of liberties of a keystring to 1.
 
-A solution can be derived from the fact that placing 1 stone can at maximum only remove 1 liberty of a keystring. Hence, GoLD only needs to look at the moves that places a stone in liberties of keystrings with 2 liberties, anymore liberties would ensure at least 2 liberties would remain intact if a stone was to be placed on a liberty. For keystrings with 2 liberties, placing in one of those 2 liberties does not automatically mean it is a suicidal move for two reasons: Move captures an opponent string; Move would increase or maintain the liberty count. If any of these two reasons are met, then the move is not suicidal.
+A solution can be derived from the fact that placing 1 stone can at maximum only remove 1 liberty of a keystring. Hence, GoLD only needs to look at the moves that place a stone in liberties of keystrings with 2 liberties, any more liberties would ensure at least 2 liberties would remain intact if a stone was to be placed on a liberty. For a keystring with 2 liberties, placing in one of those 2 liberties does not automatically mean it is a suicidal move for two reasons: Move captures an opponent string; Move would increase or maintain the liberty count. If any of these two reasons are met, then the move is not suicidal.
 
 \begin{itemize}
-	\item Both liberties of the keystring is added to the suicidal move list.
-	\item Moves that places a stone in the liberty of any opponent string which is in Atari is removed from the suicidal move list.
-    \item Moves that connects the keystring to another string which fits the following criteria are removed from the suicidal move list: Must be same colour as the keystring; Has more than 2 liberties or has 2 liberties which are not the same 2 liberties of the keystring.
+    \item Both liberties of the keystring is added to the suicidal move list.
+    \item Moves that places a stone in the liberty of any opponent string which is in Atari is removed from the suicidal move list.
+    \item Moves that connects the keystring to another string which fits the following criteria are removed from the suicidal move list: Must be the same colour as the keystring; Has more than 2 liberties or has 2 liberties which are not the same 2 liberties of the keystring.
     \item Moves that places a stone adjacent to any empty point which is not a liberty of the keystring are removed from the suicidal move list.
 \end{itemize}
 
 After these checks are done for all the keystrings, any moves remaining in the suicidal moves list are removed from the valid moves list – this new list of moves is referred to as the good moves list. The good moves list is used during AB search instead of valid moves list to save time by not searching valid moves which would lead to immediate capture of keystones. If no moves are considered “good” then the defending player is to pass instead of making a bad move during AB search.
-
-
-\section{Heuristics}
-
-The Alpha-Beta pruning search algorithm by itself is great improvement over the standard minimax but with this improvement the sheer size of the search space can become quickly overwhelming for it to handle in reasonable time. Alpha-Beta even at best case has complexity of O($\sqrt{b^d}$) and at worst O($b^d$) which means for problems with greater area of search space or problems that require search into further depths to come to a terminating state could incalculable amount of time. For this reason, we have to introduce heuristics within the Alpha-Beta search to allow the search to come with a quicker solution rather than the perfect solution. There are quite a few methods of implementing heuristics within the Alpha-Beta search, GoLD will be able to use few of these in combination or by themselves to restrict the time taken for the computer to respond to the user.
-
-\subsection{Depth Limited Search with Board Evaluation}
-Alpha-Beta search which will search deeper with no depth restriction until a terminal state is found are impractical. Best way to deal with this is to introduce a depth limit where once depth X is reached the search is not continued. Of course, the problem with this is that when cut offs occur the game state will not be in a terminal state and hence the alpha search needs to do some type of evaluation in order to return a score which is between the two opposing terminal state of being dead or alive. The alpha-beta search will have to evaluate the board position when the cut off depth is reached and return value which represents how good the board is for players. For example, if the board position will lead the attacking player to capture all the keystones then the board evaluation should return -5000  on the other hand if the board position is in favour of the defending team then it should return 5000. Creating a function which evaluates the board accurately is a difficult task and doing so which can perform at the level of humans is even more difficult. An important factor to consider when designing an evaluation function is also the time it takes evaluate a board position. More complex the evaluation function becomes the longer it takes to evaluate single a  board position hence the more time it takes to evaluate the board position every time the depth limit is reached.
-
-
-\subsubsection{Pattern Matching Evaluation}
-
-When evaluating a board position GoLD looks at the board similar to how humans would look at a board it tries to identify general patterns on the board to give values depending on pattern it finds. These patterns are based of the idea of eyes and eyes space. Identifying patterns which will lead to multiple eyes will be evaluated to very high score and hence the search will be able to recognise the group of stone will be able to live without further searching. General principle behind the patterns used in GoLD is to identify the number of eyes it can produce when fully played out and values according to this factor is added to the overall board score.
-
-Most of the patterns used within GoLD have a distinct feature which is common in life and death problems which is that depending on who plays first the pattern/shape becomes dead or alive. Another words these shaped are unsettled and hence contains a vital point which will determine the number of eyes that can be produced by the shape. Figure 1a shows a pattern used in GoLD, the shape referred as straight three but with its corner stones. The vital point of this pattern is a , if white is able to play at a then the pattern is almost ensured to create two eyes unless white makes a mistake filling in the corners. The corners b, c, d and e are also important for this pattern if black is able to have stones in both b and c  or in d and e then the wall of shape becomes weak and hence the shape can become captured. Due to alternating play if white plays first in this situation then it will be played out as shown in Figure 1b where white is able to produce two real eyes.
-
-
-Figure2
-The same pattern as Fig1 but on the side has similar properties but the safety of the shape requires white to have stones in both corners and the vital middle point.
-
-
-An important insight into creating better evaluations is to recognise pattern like the one mentioned at worst when opponent is able to play at its vital point becomes a single point eye which should valued quite highly. By connecting two group each containing a single point eye the defending player can achieve live shape. When patterns searched for fails to meet 2 eyes GoLD stores the eye space inside the pattern defined as highly probable single eye. Once the whole board is searched for all the patterns used within GoLD and their values added to the board’s total value, the evaluating function is left with a collection of eye spaces which all contains a single eye. Using this collection of eye spaces GoLD is able  group together multiple eye spaces which are connected through stones of the same colour. Any group of eye spaces that contains two or more unique eye spaces are identified as highly valuable due to fact that they will most likely produce two real eyes.
-
-Figure 3 shows an example of this situation occurring where a Bent Three in a corner has lost its vital point by black playing 1, but white connects to a single point eye by playing 2 hence combining two eyes spaces which that have one eye each.
-
-To limit evaluation time the number of patterns searched needs to be concise . Due to this constraint it was important to identify the essential shapes/patterns which have the ability to create eyes. Fifteen different patterns ranging from a single point eye to a Rabbity Six along with all their variations on the edges and corners of the board are used within GoLD.  Along with these patterns, the evaluating function also tries to identify stones which are placed in good positions in respect to the opponent stones. The evaluating function looks for area of the board are the result of a cut , hane or even simply connecting two groups of stones and awards value accordingly.
-
-Fig 4a shows a hane which is move where a stone is placed next to an opponent stone which is already in contact with one’s own stone. Hane is a move which plays around one or more opponent stones. Note: playing at the opposite side of white here is not a hane.
-
-Fig 4b shows a cut where black is able to stop white from connecting the two stone by playing at 1
-
-
-
-
-\subsection{Move Ordering}
-The benefit of Alpha-Beta pruning search over simple Minimax search is that when cut-offs occur a great number of sub trees of possible board positions do not need to be searched. Erik van der Werf  talks about the importance of  move ordering during Alpha-Beta search and the effects of good move ordering heuristics [5]. If the best move is always selected to be searched first, then it will produce cut offs when all the other moves are searched afterwards. The idea behind this is if the best move is found first then any other will never return a value which is better than the best move. With this in mind we can see that ordering moves to consider the best move or even a move which will produce cut offs first, is great way to reduce of search space without altering the result.
-
-\subsubsection{Killer Move Heuristic}
-GoLD uses a deeply researched [6] method , Killer Heuristic, introduced by Huberman, B.J. [7] to order moves when searching through endgames of Chess using AB. Huberman’s theory was that a move (killer move) which led to a better board position from initial board position A will also lead to a better position from a similar initial board position B if the move is a valid move for B.  Using this theory, these killer moves should be searched first when a similar board position occurs during AB search. The moves which are considered killer moves are defined easily by using the cut-off characteristics of AB search , during search if a move causes AB cut-off to occur then this move can be considered a killer move and hence will be stored to be used for move ordering.  We can define a similar board position simply by looking at the depth in which the board position occurs. Hence an ideal way to implement the killer heuristic is to store moves for each depth which caused AB cut-offs to occur. Storing a great number of moves for each depth can lead to increased work during the move ordering process hence it is most effective only to store few moves. GoLD only stores two killer moves k1 and k2  for each depth.
-
-Move ordering for a board position A which occurs at depth d consists of searching the list of valid moves for k2 of depth d and if k2 is a valid move in this board position then k2 is ordered to the top of the valid moves list. After which, the same is done for k1 of this depth(k1 is searched second in order to give k1 priority over k2). When a cut off occurs at depth d then the k1 of that depth becomes k2 and the move that caused the cut-off to occur becomes the new k1 of depth d.
-
-\subsection{Alpha-Beta with Iterative Deepening}
-An issue with AB search is that if the best move is found at depth d then searching past depth d for the other branches is always a waste of time. For example,  Black is to play and kill white. Moves A to E are the valid moves of the current board position and the moves will be searched in alphabetical order. If D is the best move and will result in a victory for Black at depth 3 then searching past depth 3 for move A,B and C is a waste of time. Without searching D first there is no way to obtain this information hence A,B and C will be searched to deeper depths. Iterative deepening is an effective method to work around this problem. Alpha-Beta with Iterative deepening is process in which AB search is performed multiple times and at each iteration the depth limit is increased by 1. This cycle takes place until max depth limit is reached, or a goal state is found  (in the example it would be White dead). This effectively alters Alpha-Beta search to only increment depth by 1 at a time and hence solving the problem of searching moves to deeper levels than not required.
-
-The drawback of this process is that it requires multiple iterations of AB search and will have to do redundant computation . Work done by Korf R. [8] shows that redundant computation does not affect the overall time of the tree search as much it would seem. In fact, using the result of each iteration to perform the next iteration can reduce the time taken to perform next iteration and possibly the overall run time of the search. Each iteration will return the principal variation(PV) which is the sequence of moves which considered the best determined by the search. The PV of the previous iteration will be set as the first sequence of moves next iteration will search. This is another form of move ordering which effectively improves overall performance compared to a normal fixed depth limit search.
-
-Due the depth first nature of the depth limited AB search , the search will not provide a result until every move is searched to a terminal state or to a limited depth. This means the search will not be able to produce the best move searched so for if it is stopped in the middle of searching. Without the introduction of iterative deepening in GoLD’s search the user is not able to search for limited amount of time , rather the user would have to predict which depth limit to set in order for the search to complete in the time they desire.  Predicting the depth limit could lead the user to set the depth limit too high which would lead the search to last longer than what the user would like. Iterative deepening fixes this issue by allowing the user to stop the search whenever they desire and to use the result of the last fully performed iteration to make the best move found so far hence improving the usability of the GoLD.
-
-\subsection{Move Generator}
-GoLD allows the creator of problems to set the valid points of play on the board and any points on the board which contains a stone when captured become a valid point of play within the problem. High number of valid moves to begin the problem with, creates extremely large game trees which would take too long to search even with the best heuristic move ordering. The number of valid moves can be regard as the breadth of the game tree. In order to limit the breadth of the game tree GoLD introduces a move generator.
-
-The goal of a move generator is to pick out x number of moves from all the valid moves of the current board position in order to cut down the number of moves to be searched. A perfect move generator will always pick the best move if it could only pick one move to generate but this is impossible to achieve without searching ahead.  Next best result is that the generated moves list has a high chance of containing the best move and this chance obviously increases with the number of moves generated. The generated moves list should contain the best move possible otherwise the best move will not be searched hence the search will never return the correct result. If more moves are generated for use, then there is a high chance of one of them being the correct move but then more moves have to be searched. In order to maintain a low number of generated moves and still have high chance of containing the correct move, the move generator within GoLD uses different types of heuristics to determine which moves have a high chance of being the correct and which moves are irrelevant.
-
-One approach to determine which moves are good moves is to simulate each move being played and then evaluate the board to see which  move will lead to a better board position. While this could be an effective approach , it will also cause increased worked load to process each board position. This might in turn slow the all search down rather than speeding it up. The approach which GoLD uses is to simply process the board position as it is  and then pick out moves which are relevant and give them each a score indicating how relevant they are.  Then the  top x number of relevant moves are generated for use.
-
-One heuristic used to process the current board is a simple distance-based method. It relies on the school of thought that the closer a move is to key group of stones the higher relevancy they have. Within GoLD the search is aware of the key group of stones (marked by keystones) hence the distance-based heuristic will give a high relevancy score to any moves 1 step away from key group then a lesser score to moves 2 steps away and so forth. This process is for moves up to 3 steps away from the key group as the relevancy of moves further away is miniscule and hence a waste of time to process. This heuristic also accounts for enemy stones which are blocking the path hence in cases like in  fig 5b where any moves that are blocked by then white wall of stones are considered irrelevant.
-
-The other heuristic method used for move generation is based of pattern matching. Similar to pattern matching for board evaluation , here we use pattern matching to identify relevant moves. The same pattern used for board evaluations are also used to identify relevant moves on the board. The move generator searches for patterns on the board and increments the relevancy score to any moves which are vital points within a pattern found. This will allow the move generator to consider more complex shapes on the board and generate moves according to these shapes. In general moves found through pattern matching are given higher relevancy score than ones found through the distance-based heuristic. The flaw in this heuristic is of course only a limited number of patterns can be searched because increasing the number of patterns will increase time taken to generate moves hence the same crucial patterns used for board evaluation are used for the move generator.
-Relevancy score from the distance-based heuristic and pattern-based heuristic are combined together for each valid move and is order into a list from the highest to the lowest relevancy.  Depending on the user’s choice of breadth limit X,  the top X amount of moves from this list will be generated and used  within the Alpha-Beta search.
-
 
 
 
@@ -452,10 +639,10 @@ Relevancy score from the distance-based heuristic and pattern-based heuristic ar
 \chapter{References}
 1.http://www.cs.cmu.edu/~wjh/go/rules/Japanese.html
 2.Müller, M. (2002). POSITION EVALUATION IN COMPUTER GO. ICGA Journal, 25(4), pp.219-228.
-3.Chikun, C. (1993). All About Life & Death. Ishi Pr.
+3.Chikun, C. (1993). All About Life \& Death. Ishi Pr.
 4.Davies, J. (1996). Life and Death. Ishi Pr.
 5.Cornelis Diederik van der Werf, E. (2004). AI techniques for the game of Go. [Maastricht]: UPM, Universitaire Pers Maastricht.
-6.Akl, S.G., & Newborn, M. (1977). The principal continuation and the killer heuristic. ACM Annual Conference.
+6.Akl, S.G., \& Newborn, M. (1977). The principal continuation and the killer heuristic. ACM Annual Conference.
 7.Huberman, B.J. (1968). A PROGRAM TO PLAY CHESS END GAMES.
 8.Korf R. Depth-first iterative-deepening. Artif Intell. 1985;27(1):97-109. doi:10.1016/0004-3702(85)90084-0
 

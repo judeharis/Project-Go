@@ -50,9 +50,9 @@ public class StraightSix {
 					if(e.isThere(S1) || e.isThere(S2) || e.isThere(S3) || e.isThere(S4))patval=0;
 					
 					patval +=1050;
-					float a = States.borderSafe(e, 2, TL,BL);
-					float b = States.borderSafe(e, 2, TR,BR);
-					float c = States.borderSafe(e, 5, S1,S2,S3,S4);
+					float a = States.borderSafeRel2(e, 2, TL,BL);
+					float b = States.borderSafeRel2(e, 2, TR,BR);
+					float c = States.borderSafeRel2(e, 5, S1,S2,S3,S4);
 					float ncap = States.minFinder(a,b,c);
 					if(ncap>0.5) patval+=1050;
 					else if(ncap<0.5) patval-=1050;

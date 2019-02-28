@@ -47,9 +47,9 @@ public class StraightFive {
 					if(e.isThere(S1) || e.isThere(S2) || e.isThere(S3))patval=0;
 					
 					patval +=850;
-					float a = States.borderSafe(e, 2, TL,BL);
-					float b = States.borderSafe(e, 2, TR,BR);
-					float c = States.borderSafe(e, 4, S1,S2,S3);
+					float a = States.borderSafeRel2(e, 2, TL,BL);
+					float b = States.borderSafeRel2(e, 2, TR,BR);
+					float c = States.borderSafeRel2(e, 4, S1,S2,S3);
 					float ncap = States.minFinder(a,b,c);
 					if(ncap>0.5) patval+=850;
 					else if(ncap<0.5) patval-=850;

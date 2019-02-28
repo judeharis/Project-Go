@@ -47,7 +47,7 @@ public class BentThreeSide {
 					patval +=50;
 					float z1 = States.borderSafe(e, 1,S0);
 					float z2 = States.borderSafe(e, 1,S2);
-					float z3 = States.borderSafe(e, 3, TL,TR,LT) + States.minFinder(z1,z2);
+					float z3 = States.borderSafeRel1(e, 3, TL,TR,LT) + States.minFinder(z1,z2);
 					float zcap = States.minFinder(z3);
 					if(zcap>0.5) patval+=50;
 					else if(zcap<0.5) patval-=50;
@@ -56,9 +56,9 @@ public class BentThreeSide {
 					
 					
 					patval +=450;
-					float a = States.borderSafe(e, 2, TL,TR);
-					float b = States.borderSafe(e, 1, LT);
-					float c = States.borderSafe(e, 1, S1);
+					float a = States.borderSafeRel2(e, 2, TL,TR);
+					float b = States.borderSafeRel2(e, 1, LT);
+					float c = States.borderSafeRel2(e, 1, S1);
 					float ncap = States.minFinder(a,b,c);
 					
 					if(ncap>0.5) patval+=450;
@@ -131,8 +131,8 @@ public class BentThreeSide {
 					
 					
 					patval +=450;
-					float a = States.borderSafe(e, 2, TR,RB);
-					float b = States.borderSafe(e, 1, S1);
+					float a = States.borderSafeRel2(e, 2, TR,RB);
+					float b = States.borderSafeRel2(e, 1, S1);
 					float ncap = States.minFinder(a,b);
 					
 					if(ncap>0.5) patval+=450;

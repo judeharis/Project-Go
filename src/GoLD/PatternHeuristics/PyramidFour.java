@@ -53,17 +53,17 @@ public class PyramidFour {
 					float z1 = States.borderSafe(e, 1,S0);
 					float z2 = States.borderSafe(e, 1,S2);
 					float z3 = States.borderSafe(e, 1,D0);
-					float z4 = States.borderSafe(e, 6,A1,A2,B1,B2,C1,C2) +States.minFinder(z1,z2,z3);
+					float z4 = States.borderSafeRel1(e, 6,A1,A2,B1,B2,C1,C2) +States.minFinder(z1,z2,z3);
 					float zcap = States.minFinder(z4);
 					if(zcap>0.5) patval+=50;
 					else if(zcap<0.5) patval-=50;
 					if(e.isThere(S1))patval=0;
 					
 					patval +=650;
-					float a = States.borderSafe(e, 2, A1,A2);
-					float b = States.borderSafe(e, 2, B1,B2);
-					float c = States.borderSafe(e, 2, C1,C2);
-					float d = States.borderSafe(e, 1, S1);
+					float a = States.borderSafeRel2(e, 2, A1,A2);
+					float b = States.borderSafeRel2(e, 2, B1,B2);
+					float c = States.borderSafeRel2(e, 2, C1,C2);
+					float d = States.borderSafeRel2(e, 1, S1);
 					float ncap = States.minFinder(a,b,c,d);
 					if(ncap>0.5) patval+=650;
 					else if(ncap<0.5) patval-=650;

@@ -42,15 +42,15 @@ public class StraightFourSide {
 					
 					int patval =0;	
 					patval +=50;
-					float z1 = States.borderSafe(e, 4,TL,TR,S0,S3);
+					float z1 = States.borderSafeRel1(e, 4,TL,TR,S0,S3);
 					float zcap = States.minFinder(z1);
 					if(zcap>0.5) patval+=50;
 					else if(zcap<0.5) patval-=50;
 					if(e.isThere(S1) || e.isThere(S2))patval=0;
 					
 					patval +=650;
-					float a = States.borderSafe(e, 1, TL,TR);
-					float b = States.borderSafe(e, 2, S1,S2);
+					float a = States.borderSafeRel2(e, 1, TL,TR);
+					float b = States.borderSafeRel2(e, 2, S1,S2);
 					float ncap = States.minFinder(a,b);
 					if(ncap>0.5) patval+=650;
 					else if(ncap<0.5) patval-=650;
@@ -103,8 +103,8 @@ public class StraightFourSide {
 					if(e.isThere(S1) || e.isThere(S2))patval=0;
 					
 					patval +=650;
-					float a = States.borderSafe(e, 2, TL,TR);
-					float b = States.borderSafe(e, 2, S1,S2);
+					float a = States.borderSafeRel2(e, 2, TL,TR);
+					float b = States.borderSafeRel2(e, 2, S1,S2);
 					float ncap = States.minFinder(a,b);
 					if(ncap>0.5) patval+=650;
 					else if(ncap<0.5) patval-=650;

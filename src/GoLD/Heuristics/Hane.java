@@ -37,17 +37,21 @@ public class Hane {
 					Tuple U = tlist.get(0).side(u);
 					Tuple UR =U.side(r);
 					Tuple D = tlist.get(0).side(d);
-					Tuple DL = D.side(l);
+					Tuple DR = D.side(r);
 					Tuple L = tlist.get(0).side(l);
+					
+					Tuple DL = D.side(l);
+					Tuple UL = U.side(l);
 					
 					
 					if(e.isEnemy(U) && !e.isThere(UR))retval-=10;
-					if(e.isEnemy(D) && !e.isThere(DL))retval-=10;
+					if(e.isEnemy(D) && !e.isThere(DR))retval-=10;
 					if(e.isEnemy(L))retval-=5;
 					
-					e.addToCheckedPoints(U,UR,D,DL,L);
+					e.addToCheckedPoints(U,UR,D,DR,L);
 				
-						
+					if(e.isEnemy(U) || e.isEnemy(L))e.addToCheckedPoints(UL);
+					if(e.isEnemy(D) || e.isEnemy(L))e.addToCheckedPoints(DL);
 				}
 		
 			}

@@ -17,7 +17,7 @@ public class Evaluator {
 	public int checkedMapSize =0;
 	
 	public ArrayList<Tuple> eyes = new ArrayList<Tuple>();
-	ArrayList<ArrayList<Tuple>> connectedEyes = new ArrayList<ArrayList<Tuple>>();
+	ArrayList<ArrayList<Tuple>> collectionOfEyeSpaces = new ArrayList<ArrayList<Tuple>>();
 	public static long timed = 0;
 	
 	public Evaluator(Board cB) {
@@ -73,19 +73,17 @@ public class Evaluator {
 		ArrayList<Tuple> allKeyStringStones = new ArrayList<Tuple>();
 		ArrayList<Tuple> oPP = new ArrayList<Tuple>();
 		ArrayList<Tuple> workinglist = Board.tupleArrayClone(goodMoves);
-		
-		
+
 		grouping.allocateGrouping();
-//		grouping.allocateControl();
+
 		for (Tuple t : cB.keystones) {
 			ArrayList<Tuple> keygroup = grouping.inGroup(t, kscolour).group;
 			allKeyStringStones.removeAll(keygroup);
 			allKeyStringStones.addAll(keygroup);
 		}
 		hrunner.findUseFullMoves(allKeyStringStones);
-
-		
 		addToCheckedPoints(grouping.distanceGen(allKeyStringStones, kscolour.getEC()));
+		
 		oPP.addAll(countOrder());
 		oPP.retainAll(workinglist);
 		workinglist.removeAll(oPP);
@@ -149,30 +147,9 @@ public class Evaluator {
 		
 	}
 	
-	
-
-	
-	public ArrayList<Tuple> getEyeStoneLibs(ArrayList<Tuple> tlist){
-		ArrayList<Tuple> eyeStones = new ArrayList<Tuple>();
-		ArrayList<Tuple> adj = new ArrayList<Tuple>();
-		
-		for(Tuple t:tlist) adj.addAll(cB.getAdjacent(t.a, t.b));
-		
-		
-		for(Tuple a:adj) {
-			ArrayList<Tuple> linkedStones =cB.checkForStrings(a, kscolour);
-			eyeStones.removeAll(linkedStones);
-			eyeStones.addAll(linkedStones);
-		}
-		ArrayList<Tuple> eyeStonesLibs = cB.getLibs(eyeStones, true);
-		eyeStonesLibs.removeAll(tlist);
-		return eyeStonesLibs;
-	}
-	
-	
-	public int eyeStonesLinked(){
+	public int eyeStonesLinkedOLD(){
 		ArrayList<ArrayList<ArrayList<Tuple>>> connectEyes = new ArrayList<ArrayList<ArrayList<Tuple>>>();
-		for(ArrayList<Tuple> eyes :connectedEyes) {
+		for(ArrayList<Tuple> eyes :collectionOfEyeSpaces) {
 			ArrayList<Tuple> eyeStonesLibs =  getEyeStoneLibs(eyes);
 			boolean added = false;
 			for(ArrayList<ArrayList<Tuple>> tlists : connectEyes) {
@@ -206,6 +183,89 @@ public class Evaluator {
 		return retval;
 	}
 	
+//	public int eyeStonesLinked(){
+//	ArrayList<ArrayList<ArrayList<Tuple>>> connectEyes = new ArrayList<ArrayList<ArrayList<Tuple>>>();
+//	for(ArrayList<Tuple> eyes :connectedEyes) {
+//		boolean grouped = false;
+//		ArrayList<Tuple> eyeStonesLibs =  getEyeStoneLibs(eyes);
+//		for(ArrayList<ArrayList<Tuple>> tlists : connectEyes) grouped = groupEyeSpaces(tlists,eyeStonesLibs);
+//		if(grouped==false) {
+//			ArrayList<ArrayList<Tuple>> newEyesList =  new ArrayList<ArrayList<Tuple>>();
+//			newEyesList.add(eyes);
+//			connectEyes.add(newEyesList);
+//		}
+//	}
+//	
+//	int retval = 0;
+//	for(ArrayList<ArrayList<Tuple>> tlists : connectEyes) {
+//		if(tlists.size()>=2) {
+//			retval+=800;
+//			retval+=(tlists.size() - 2) * 200;
+//		}
+//	}
+//	return retval;
+//}
+
+	
+	public ArrayList<Tuple> getEyeStoneLibs(ArrayList<Tuple> tlist){
+		ArrayList<Tuple> eyeStones = new ArrayList<Tuple>();
+		ArrayList<Tuple> adj = new ArrayList<Tuple>();
+		
+		for(Tuple t:tlist) adj.addAll(cB.getAdjacent(t.a, t.b));
+		
+		
+		for(Tuple a:adj) {
+			ArrayList<Tuple> linkedStones =cB.checkForStrings(a, kscolour);
+			eyeStones.removeAll(linkedStones);
+			eyeStones.addAll(linkedStones);
+		}
+		ArrayList<Tuple> eyeStonesLibs = cB.getLibs(eyeStones, true);
+		eyeStonesLibs.removeAll(tlist);
+		return eyeStonesLibs;
+	}
+	
+	
+
+	
+	
+	public int eyeStonesLinked(){
+		ArrayList<ArrayList<ArrayList<Tuple>>> groupsOfEyeSpaces = new ArrayList<ArrayList<ArrayList<Tuple>>>();
+		for(ArrayList<Tuple> eyeSpace :collectionOfEyeSpaces) {
+			boolean grouped = false;
+			ArrayList<Tuple> stonesConnectedToEyeSpace =  getEyeStoneLibs(eyeSpace);
+			for(ArrayList<ArrayList<Tuple>> ConnectedEyeSpaces : groupsOfEyeSpaces) {
+				grouped = groupEyeSpaces(ConnectedEyeSpaces,stonesConnectedToEyeSpace);
+			}
+			if(grouped==false) {
+				ArrayList<ArrayList<Tuple>> newEyeSpaceGroup =  new ArrayList<ArrayList<Tuple>>();
+				newEyeSpaceGroup.add(eyes);
+				groupsOfEyeSpaces.add(newEyeSpaceGroup);
+			}
+		}
+		
+		int retval = 0;
+		for(ArrayList<ArrayList<Tuple>> groupOfEyeSpaces : groupsOfEyeSpaces) {
+			if(groupOfEyeSpaces.size()>=2) {
+				retval+=800;
+				retval+=(groupOfEyeSpaces.size() - 2) * 200;
+			}
+		}
+		return retval;
+	}
+	
+	
+	
+	public boolean groupEyeSpaces(ArrayList<ArrayList<Tuple>> tlists , ArrayList<Tuple> stonesConnectedToEyeSpace){
+		for (ArrayList<Tuple> tlist : tlists) {
+			for(Tuple e : tlist) {
+				if (stonesConnectedToEyeSpace.contains(e)) {
+					tlists.add(eyes);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	public boolean isThere(Tuple t){
 		if(!cB.withinBounds(t)) return false;
@@ -266,7 +326,7 @@ public class Evaluator {
 			if(isEmptySpace(t))eyes.add(t);
 			tlist.add(t);
 		}
-		connectedEyes.add(tlist);
+		collectionOfEyeSpaces.add(tlist);
 		
 	}
 	

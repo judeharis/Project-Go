@@ -46,8 +46,8 @@ public class StraightFourCorner {
 					if(e.isThere(S1) || e.isThere(S2))patval=0;
 					
 					patval +=650;
-					float a = States.borderSafe(e, 1, TL);
-					float b = States.borderSafe(e, 2, S1,S2);
+					float a = States.borderSafeRel2(e, 1, TL);
+					float b = States.borderSafeRel2(e, 2, S1,S2);
 					float ncap = States.minFinder(a,b);
 					if(ncap>0.5) patval+=650;
 					else if(ncap<0.5) patval-=650;

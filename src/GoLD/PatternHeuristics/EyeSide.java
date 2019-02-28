@@ -36,7 +36,7 @@ public class EyeSide{
 					
 					int patval =0;
 					patval+=50;
-					float a = States.borderSafe(e, 1, TL,TR);
+					float a = States.borderSafeRel1(e, 1, TL,TR);
 					float ncap = States.minFinder(a);
 	
 

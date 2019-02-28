@@ -54,18 +54,18 @@ public class CrossedFive {
 					float z2 = States.borderSafe(e, 1,S1);
 					float z3 = States.borderSafe(e, 1,S3);
 					float z4 = States.borderSafe(e, 1,S4);
-					float z5 = States.borderSafe(e, 8,A1,A2,B1,B2,C1,C2,D1,D2) +States.minFinder(z1,z2,z3,z4);
+					float z5 = States.borderSafeRel1(e, 8,A1,A2,B1,B2,C1,C2,D1,D2) +States.minFinder(z1,z2,z3,z4);
 					float zcap = States.minFinder(z5);
 					if(zcap>0.5) patval+=50;
 					else if(zcap<0.5) patval-=50;
 					if(e.isThere(S2))patval=0;
 					
 					patval +=850;
-					float b1 = States.borderSafe(e, 2, A1,A2);
-					float b2 = States.borderSafe(e, 2, B1,B2);
-					float b3 = States.borderSafe(e, 2, C1,C2);
-					float b4 = States.borderSafe(e, 2, D1,D2);
-					float b5 = States.borderSafe(e, 1, S2);
+					float b1 = States.borderSafeRel2(e, 2, A1,A2);
+					float b2 = States.borderSafeRel2(e, 2, B1,B2);
+					float b3 = States.borderSafeRel2(e, 2, C1,C2);
+					float b4 = States.borderSafeRel2(e, 2, D1,D2);
+					float b5 = States.borderSafeRel2(e, 1, S2);
 					float ncap = States.minFinder(b1,b2,b3,b4,b5);
 					if(ncap>0.5) patval+=850;
 					else if(ncap<0.5) patval-=850;

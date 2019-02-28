@@ -44,15 +44,15 @@ public class BentThreeCorner {
 					patval +=50;
 					float z1 = States.borderSafe(e, 1,S0);
 					float z2 = States.borderSafe(e, 1,S2);
-					float z3 = States.borderSafe(e, 2, TL,LT) + States.minFinder(z1,z2);
+					float z3 = States.borderSafeRel1(e, 2, TL,LT) + States.minFinder(z1,z2);
 					float zcap = States.minFinder(z3);
 					if(zcap>0.5) patval+=50;
 					else if(zcap<0.5) patval-=50;
 					if(e.isThere(S1))patval=0;
 					
 					patval +=450;
-					float a = States.borderSafe(e, 1, TL,LT);
-					float b = States.borderSafe(e, 1, S1);
+					float a = States.borderSafeRel2(e, 1, TL,LT);
+					float b = States.borderSafeRel2(e, 1, S1);
 					float ncap = States.minFinder(a,b);
 					if(ncap>0.5) patval+=450;
 					else if(ncap<0.5) patval-=450;
@@ -103,7 +103,7 @@ public class BentThreeCorner {
 					if(e.isThere(S1))patval=0;
 					
 					patval +=450;
-					float a = States.borderSafe(e, 1, S1);
+					float a = States.borderSafeRel2(e, 1, S1);
 					float ncap = States.minFinder(a);
 					if(ncap>0.5) patval+=450;
 					else if(ncap<0.5) patval-=450;
@@ -155,12 +155,22 @@ public class BentThreeCorner {
 					patval +=100;
 					if(e.isThere(S1))patval=0;
 					
-					patval +=450;
-					float a = States.borderSafe(e, 2, TL,BL);
-					float b = States.borderSafe(e, 1, S1);
-					float ncap = States.minFinder(a,b);
-					if(ncap>0.5) patval+=450;
-					else if(ncap<0.5) patval-=450;
+					
+					if(e.isTheres(S1,BL)){
+						patval +=450;
+						float a = States.borderSafeRel1(e, 2, TL,BL);
+						float b = States.borderSafeRel1(e, 1, S1);
+						float ncap = States.minFinder(a,b);
+						if(ncap>0.5) patval+=450;
+						else if(ncap<0.5) patval-=450;
+					}else {
+						patval +=450;
+						float a = States.borderSafeRel2(e, 2, TL,BL);
+						float b = States.borderSafeRel2(e, 1, S1);
+						float ncap = States.minFinder(a,b);
+						if(ncap>0.5) patval+=450;
+						else if(ncap<0.5) patval-=450;
+					}
 					
 					
 					if(e.isTheres(S1,BL))patval/=2;

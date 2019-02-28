@@ -49,7 +49,7 @@ public class BentFourSide {
 					
 					int patval =0;	
 					patval +=50;
-					float z1 = States.borderSafe(e, 5,TL,TR,LT,S0,S3);
+					float z1 = States.borderSafeRel1(e, 5,TL,TR,LT,S0,S3);
 					float zcap = States.minFinder(z1);
 					if(zcap>0.5) patval+=50;
 					else if(zcap<0.5) patval-=50;
@@ -58,17 +58,17 @@ public class BentFourSide {
 					
 					
 					patval +=450;
-					float a1 = States.borderSafe(e, 1, LT);
-					float a2 = States.borderSafe(e, 2 ,TL,TR);
-					float a3 = States.borderSafe(e, 2, S1,S2);
+					float a1 = States.borderSafeRel2(e, 1, LT);
+					float a2 = States.borderSafeRel2(e, 2 ,TL,TR);
+					float a3 = States.borderSafeRel2(e, 2, S1,S2);
 					float acap = States.minFinder(a1,a2,a3);
 					if(acap>0.5) patval+=450;
 					else if(acap<0.5) patval-=450;
 					
 					
 					patval +=200;
-					float b1 = States.borderSafe(e, 1, LT);
-					float b2 = States.borderSafe(e, 2, S1,S2,TL,TR);
+					float b1 = States.borderSafeRel1(e, 1, LT);
+					float b2 = States.borderSafeRel1(e, 2, S1,S2,TL,TR);
 					float ncap = States.minFinder(b1,b2);
 					if(ncap>0.5) patval+=200;
 					else if(ncap<0.5) patval-=200;
@@ -128,16 +128,16 @@ public class BentFourSide {
 					
 					int patval =0;	
 					patval +=50;
-					float z1 = States.borderSafe(e, 5,TL,TR,RT,S0,S3);
+					float z1 = States.borderSafeRel1(e, 5,TL,TR,RT,S0,S3);
 					float zcap = States.minFinder(z1);
 					if(zcap>0.5) patval+=50;
 					else if(zcap<0.5) patval-=50;
 					if(e.isThere(S1) || e.isThere(S2))patval=0;
 					
 					patval +=650;
-					float b1 = States.borderSafe(e, 2, TL,TR);
-					float b2 = States.borderSafe(e, 1, RT);
-					float b3 = States.borderSafe(e, 2, S1,S2);
+					float b1 = States.borderSafeRel2(e, 2, TL,TR);
+					float b2 = States.borderSafeRel2(e, 1, RT);
+					float b3 = States.borderSafeRel2(e, 2, S1,S2);
 					float ncap = States.minFinder(b1,b2,b3);
 					if(ncap>0.5) patval+=650;
 					else if(ncap<0.5) patval-=650;
@@ -199,21 +199,21 @@ public class BentFourSide {
 					if(e.isThere(S1) || e.isThere(S2))patval=0;
 					
 					patval +=450;
-					float a4 = States.borderSafe(e, 1, S0);
-					float a5 = States.borderSafe(e, 1, S2);
+					float a4 = States.borderSafeRel1(e, 1, S0);
+					float a5 = States.borderSafeRel1(e, 1, S2);
 					float a6 = e.isThere(S1)?0:1;
-					float a1 = States.borderSafe(e, 2, TL,BL) + States.minFinder(a4,a5,a6);
-					float a3 = States.borderSafe(e, 2, S1,S2);
+					float a1 = States.borderSafeRel2(e, 2, TL,BL) + States.minFinder(a4,a5,a6);
+					float a3 = States.borderSafeRel2(e, 2, S1,S2);
 					float acap = States.minFinder(a1,a3);
 					
 					if(acap>0.5) patval+=450;
 					else if(acap<0.5) patval-=450;
 					
 					patval +=200;
-					float b1 = States.borderSafe(e, 2, TL,BL);
-					float b2 = States.borderSafe(e, 2, S1,S2);
-					float b3 = States.borderSafe(e, 3, S1,TR,TL);
-					float b4 = States.borderSafe(e, 3, S1,TR,BL);
+					float b1 = States.borderSafeRel1(e, 2, TL,BL);
+					float b2 = States.borderSafeRel1(e, 2, S1,S2);
+					float b3 = States.borderSafeRel1(e, 3, S1,TR,TL);
+					float b4 = States.borderSafeRel1(e, 3, S1,TR,BL);
 					float ncap = States.minFinder(b1,b2,b3,b4);
 					if(States.oneCheck(b1,b3) || States.oneCheck(b1,b4) || States.oneCheck(b1,b2)) ncap = States.minFinder(ncap,0.5f);
 					if(States.oneCheck(b2,b3) || States.oneCheck(b2,b4)) ncap = States.minFinder(ncap,0.5f);
@@ -293,11 +293,11 @@ public class BentFourSide {
 					
 					
 					patval +=450;
-					float a4 = States.borderSafe(e, 1, S0);
-					float a5 = States.borderSafe(e, 1, S2);
+					float a4 = States.borderSafeRel1(e, 1, S0);
+					float a5 = States.borderSafeRel1(e, 1, S2);
 					float a6 = e.isThere(S1)?0:1;
-					float a1 = States.borderSafe(e, 2, TL,BL) + States.minFinder(a4,a5,a6);
-					float a3 = States.borderSafe(e, 2, S1,S2);
+					float a1 = States.borderSafeRel2(e, 2, TL,BL) + States.minFinder(a4,a5,a6);
+					float a3 = States.borderSafeRel2(e, 2, S1,S2);
 					float acap = States.minFinder(a1,a3);
 					
 					if(acap>0.5) patval+=450;
@@ -305,9 +305,9 @@ public class BentFourSide {
 					
 					
 					patval +=200;
-					float b1 = States.borderSafe(e, 2, TL,BL);
-					float b2 = States.borderSafe(e, 2, S1,S2);
-					float b3 = States.borderSafe(e, 2, S2,TR);
+					float b1 = States.borderSafeRel1(e, 2, TL,BL);
+					float b2 = States.borderSafeRel1(e, 2, S1,S2);
+					float b3 = States.borderSafeRel1(e, 2, S2,TR);
 					float ncap = States.minFinder(b1,b2,b3);
 					if(States.oneCheck(b2,b3)) ncap = States.minFinder(ncap,0.5f);
 

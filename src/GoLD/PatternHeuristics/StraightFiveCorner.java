@@ -51,8 +51,8 @@ public class StraightFiveCorner {
 					if(e.isThere(S1) || e.isThere(S2) || e.isThere(S3))patval=0;
 					
 					patval +=850;
-					float a = States.borderSafe(e, 1, TL);
-					float b = States.borderSafe(e, 4, S1,S2,S3);
+					float a = States.borderSafeRel2(e, 1, TL);
+					float b = States.borderSafeRel2(e, 4, S1,S2,S3);
 					float ncap = States.minFinder(a,b);
 					if(ncap>0.5) patval+=850;
 					else if(ncap<0.5) patval-=850;

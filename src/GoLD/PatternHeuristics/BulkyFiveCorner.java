@@ -57,9 +57,9 @@ public class BulkyFiveCorner {
 					if(e.isThere(S1))patval=0;
 					
 					patval +=450;
-					float c1 = States.borderSafe(e, 2, S1,S2);
-					float c2 = States.borderSafe(e, 2, S1,D0);
-					float c3 = States.borderSafe(e, 2, LT,D1);
+					float c1 = States.borderSafeRel2(e, 2, S1,S2);
+					float c2 = States.borderSafeRel2(e, 2, S1,D0);
+					float c3 = States.borderSafeRel2(e, 2, LT,D1);
 					if(!e.isEnemy(D0) && !e.isEnemy(S0) && !e.isEnemy(S2) && !e.isThere(S1))c3+=0.5;
 					if(!e.isEnemy(S1) && e.isEnemies(S2,D0)) {c1+=0.5;c2+=0.5;}
 					float ccap = States.minFinder(c1,c2,c3);
@@ -122,8 +122,8 @@ public class BulkyFiveCorner {
 					if(e.isThere(S1))patval=0;
 					
 					patval +=450;
-					float c1 = States.borderSafe(e, 2, S1,S0);
-					float c2 = States.borderSafe(e, 2, S1,D1);
+					float c1 = States.borderSafeRel2(e, 2, S1,S0);
+					float c2 = States.borderSafeRel2(e, 2, S1,D1);
 					if(!e.isEnemy(S1) && e.isEnemies(S0,D1)) {c1+=0.5;c2+=0.5;}
 					float ccap = States.minFinder(c1,c2);
 					if(States.oneCheck(c1,c2)) ccap = States.minFinder(ccap,0.5f);
@@ -183,8 +183,8 @@ public class BulkyFiveCorner {
 					if(e.isThere(S1))patval=0;
 					
 					patval +=450;
-					float c1 = States.borderSafe(e, 2, S1,S0);
-					float c2 = States.borderSafe(e, 2, S1,D1);
+					float c1 = States.borderSafeRel2(e, 2, S1,S0);
+					float c2 = States.borderSafeRel2(e, 2, S1,D1);
 					if(!e.isEnemy(S1) && e.isEnemies(S0,D1)) {c1+=0.5;c2+=0.5;}
 					float ccap = States.minFinder(c1,c2);
 					if(States.oneCheck(c1,c2)) ccap = States.minFinder(ccap,0.5f);
@@ -244,9 +244,9 @@ public class BulkyFiveCorner {
 					if(e.isThere(S1))patval=0;
 					
 					patval +=450;
-					float c1 = States.borderSafe(e, 2, S1,S0);
-					float c2 = States.borderSafe(e, 2, S1,D1);
-					float c3 = States.borderSafe(e, 3, TL,TR,D0);
+					float c1 = States.borderSafeRel2(e, 2, S1,S0);
+					float c2 = States.borderSafeRel2(e, 2, S1,D1);
+					float c3 = States.borderSafeRel2(e, 3, TL,TR,D0);
 					if(!e.isEnemy(D1) && !e.isEnemy(S0) && !e.isEnemy(S2) && !e.isThere(S1))c3+=0.5;
 					if(!e.isEnemy(S1) && e.isEnemies(S0,D1)) {c1+=0.5;c2+=0.5;}
 					float ccap = States.minFinder(c1,c2,c3);

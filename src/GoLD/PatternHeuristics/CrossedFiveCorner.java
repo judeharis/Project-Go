@@ -51,9 +51,9 @@ public class CrossedFiveCorner {
 					if(e.isThere(S2))patval=0;
 					
 					patval +=850;
-					float b1 = States.borderSafe(e, 2, A1,A2);
-					float b2 = States.borderSafe(e, 2, D1,D2);
-					float b3 = States.borderSafe(e, 1, S2);
+					float b1 = States.borderSafeRel2(e, 2, A1,A2);
+					float b2 = States.borderSafeRel2(e, 2, D1,D2);
+					float b3 = States.borderSafeRel2(e, 1, S2);
 					float ncap = States.minFinder(b1,b2,b3);
 					if(ncap>0.5) patval+=850;
 					else if(ncap<0.5) patval-=850;

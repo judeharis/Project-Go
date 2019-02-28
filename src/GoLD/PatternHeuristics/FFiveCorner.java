@@ -50,18 +50,19 @@ public class FFiveCorner {
 					if(e.isThere(S1) || e.isThere(S0))patval=0;
 					
 					patval +=450;
-					float a1 = States.borderSafe(e, 2, S1,S0);
-					float a2 = States.borderSafe(e, 3, C0,S1,S2);
+					float a1 = States.borderSafeRel2(e, 2, S1,S0);
+					float a2 = States.borderSafeRel2(e, 3, C0,S1,S2);
 					if(States.numCheck(0.5,a1,a2) && !e.isEnemy(S0) && !e.isEnemy(S2)) a2+=0.5;
 					if(States.numCheck(0.5,a1,a2) && !e.isEnemy(S1)) a2+=0.5;
 					float acap = States.minFinder(a1,a2);
 					if(States.oneCheck(a1,a2)) acap = States.minFinder(acap,0.5f);
 					if(acap>0.5) patval+=450;
 					else if(acap<0.5) patval-=450;
+					
 					patval +=400;
-					float c1 = States.borderSafe(e, 1, S1);
-					float c2 = States.borderSafe(e, 2, S0,LT);
-					float c3 = States.borderSafe(e, 2, TL,TR);
+					float c1 = States.borderSafeRel1(e, 1, S1);
+					float c2 = States.borderSafeRel1(e, 2, S0,LT);
+					float c3 = States.borderSafeRel1(e, 2, TL,TR);
 					float ccap = States.minFinder(c1,c2,c3);
 					if(ccap>0.5) patval+=400;
 					else if(ccap<0.5) patval-=400;
@@ -129,10 +130,10 @@ public class FFiveCorner {
 					if(e.isThere(S1) || e.isThere(S0))patval=0;
 
 					patval +=450;
-					float a1 = States.borderSafe(e, 2, S1,S0);
-					float a2 = States.borderSafe(e, 5, TL,TR,LT,BL,S0);
-					float a3 = States.borderSafe(e, 5, TL,TR,LT,BL,S2);
-					float a4 = States.borderSafe(e, 5, TL,TR,LT,BL,D0);
+					float a1 = States.borderSafeRel2(e, 2, S1,S0);
+					float a2 = States.borderSafeRel2(e, 5, TL,TR,LT,BL,S0);
+					float a3 = States.borderSafeRel2(e, 5, TL,TR,LT,BL,S2);
+					float a4 = States.borderSafeRel2(e, 5, TL,TR,LT,BL,D0);
 					if(States.numCheck(0.5,a2) && !e.isEnemy(S0) && e.isThere(S1)) a2-=0.5;
 					if(States.numCheck(0.5,a3) && !e.isEnemy(S2) && e.isThere(S1)) a3-=0.5;
 					if(States.numCheck(0.5,a4) && !e.isEnemy(D0) && e.isThere(S1)) a4-=0.5;
@@ -140,14 +141,16 @@ public class FFiveCorner {
 					if(States.oneCheck(a1,a2)) acap = States.minFinder(acap,0.5f);
 					if(acap>0.5) patval+=450;
 					else if(acap<0.5) patval-=450;
+					
+					
 					patval +=400;
-					float c1 = States.borderSafe(e, 2, S0,S1);
-					float c2 = States.borderSafe(e, 2, S1,TL);
-					float c3 = States.borderSafe(e, 2, S1,TR);
-					float c4 = States.borderSafe(e, 2, S1,LT);
-					float c5 = States.borderSafe(e, 2, S1,BL);
-					float c6 = States.borderSafe(e, 2, S0,BL,LT);
-					float c7 = States.borderSafe(e, 2, TL,TR);
+					float c1 = States.borderSafeRel1(e, 2, S0,S1);
+					float c2 = States.borderSafeRel1(e, 2, S1,TL);
+					float c3 = States.borderSafeRel1(e, 2, S1,TR);
+					float c4 = States.borderSafeRel1(e, 2, S1,LT);
+					float c5 = States.borderSafeRel1(e, 2, S1,BL);
+					float c6 = States.borderSafeRel1(e, 2, S0,BL,LT);
+					float c7 = States.borderSafeRel1(e, 2, TL,TR);
 					float ccap = States.minFinder(c1,c2,c3,c4,c5,c6,c7);
 					if(States.oneCheck(c1,c2) || (States.oneCheck(c1,c3))) ccap = States.minFinder(ccap,0.5f);
 					else if(States.oneCheck(c1,c4) || (States.oneCheck(c1,c5))) ccap = States.minFinder(ccap,0.5f);
@@ -242,10 +245,10 @@ public class FFiveCorner {
 					if(e.isThere(S1) || e.isThere(S0))patval=0;
 
 					patval +=450;
-					float a1 = States.borderSafe(e, 2, S1,S0);
-					float a2 = States.borderSafe(e, 3, TL,LT,BL,S0);
-					float a3 = States.borderSafe(e, 5, TL,LT,BL,S2);
-					float a4 = States.borderSafe(e, 5, TL,LT,BL,D0);	
+					float a1 = States.borderSafeRel2(e, 2, S1,S0);
+					float a2 = States.borderSafeRel2(e, 3, TL,LT,BL,S0);
+					float a3 = States.borderSafeRel2(e, 5, TL,LT,BL,S2);
+					float a4 = States.borderSafeRel2(e, 5, TL,LT,BL,D0);	
 					if(States.numCheck(0.5,a2) && !e.isEnemy(S0) && e.isThere(S1)) a2-=0.5;
 					if(States.numCheck(0.5,a3) && !e.isEnemy(S2) && e.isThere(S1)) a3-=0.5;
 					if(States.numCheck(0.5,a4) && !e.isEnemy(D0) && e.isThere(S1)) a4-=0.5;
@@ -326,20 +329,21 @@ public class FFiveCorner {
 					if(e.isThere(S1) || e.isThere(S0))patval=0;
 
 					patval +=450;
-					float a1 = States.borderSafe(e, 2, S1,S0);
-					float a2 = States.borderSafe(e, 2, S2,D0);
-					float a3 = States.borderSafe(e, 3, TR,S0,D0);
-					float a4 = States.borderSafe(e, 3, TL,LT,S1);
+					float a1 = States.borderSafeRel2(e, 2, S1,S0);
+					float a2 = States.borderSafeRel2(e, 2, S2,D0);
+					float a3 = States.borderSafeRel2(e, 3, TR,S0,D0);
+					float a4 = States.borderSafeRel2(e, 3, TL,LT,S1);
 					if(a1 == 0.5 || a4==0.5) {a2+=0.5;a3+=0.5;};
 					float acap = States.minFinder(a1,a2,a3,a4);
 					if(States.oneCheck(a1,a3) || States.oneCheck(a1,a4)) acap = States.minFinder(acap,0.5f);
 					if(acap>0.5) patval+=450;
 					else if(acap<0.5) patval-=450;
+					
 					patval +=400;
-					float c1 = States.borderSafe(e, 1, S1);
-					float c2 = States.borderSafe(e, 2, S0,TR);
-					float c3 = States.borderSafe(e, 2, TL,LT);
-					float c4 = States.borderSafe(e, 2, S2,D0);
+					float c1 = States.borderSafeRel1(e, 1, S1);
+					float c2 = States.borderSafeRel1(e, 2, S0,TR);
+					float c3 = States.borderSafeRel1(e, 2, TL,LT);
+					float c4 = States.borderSafeRel1(e, 2, S2,D0);
 					if(c4==0.5 && !e.isEnemies(S1))c4+=0.5;
 					float ccap = States.minFinder(c1,c2,c3,c4);
 					if(ccap>0.5) patval+=400;
