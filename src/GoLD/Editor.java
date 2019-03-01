@@ -257,9 +257,6 @@ public class Editor extends BasicGameState {
 				print(evaluator.evaluateCurrentBoard(true));
 				Evaluator evaluator2 = new Evaluator(board);
 				evaluator2.moveGen(board.removeBadMovess(), MoveFinder.breathcutoff);
-				
-
-				
 			}
 
 

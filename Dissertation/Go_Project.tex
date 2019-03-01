@@ -419,7 +419,7 @@ The following pseudocode addresses the Alpha-Beta pruning search algorithm with 
 
 \section{Heuristics}
 
-The Alpha-Beta pruning search algorithm by itself is a great improvement over the standard Minimax algorithm but even with this improvement, the sheer size of search space for a game tree can become quickly overwhelming for the search to handle in a reasonable time. Alpha-Beta even at best case has a complexity of O($\sqrt{b^d}$) and at worst, O($b^d$) which means for problems with a higher number of initial valid moves or problems that require to search further ahead to come to a game-ending state could take an endless amount of time to search. For this reason, we have to introduce heuristics to allow the search to come to a quicker solution which could be incorrect rather than taking a long time to find a guaranteed correct solution. There are quite a few methods of implementing heuristics within the Alpha-Beta search, GoLD will be able to use few of these in combination or by themselves to restrict the time taken for the computer to respond to the user.
+The Alpha-Beta pruning search algorithm by itself is a great improvement over the standard Minimax algorithm but even with this improvement, the sheer size of search space for a game tree can become quickly overwhelming for the search to handle in a reasonable time. Alpha-Beta even at best case has a complexity of $O(\sqrt{b^d})$ and at worst, $O(b^d)$  which means for problems with a higher number of initial valid moves or problems that require to search further ahead to come to a game-ending state could take an endless amount of time to search. For this reason, we have to introduce heuristics to allow the search to come to a quicker solution which could be incorrect rather than taking a long time to find a guaranteed correct solution. There are quite a few methods of implementing heuristics within the Alpha-Beta search, GoLD will be able to use few of these in combination or by themselves to restrict the time taken for the computer to respond to the user.
 
 \subsection{Depth Limited Search with Board Evaluation}
 A non-depth limited Alpha-Beta search will search deeper and deeper until a terminal state is found, this is very impractical for larger problems. Note that “depth” and “deeper” refers to how many moves ahead computer searches, the higher the depth the further ahead the computer has searched. Best way to deal with this is to introduce a depth limit where once depth X is reached the search is not continued. Of course, the problem with this is that when these depth cut-offs occur the board position will not be in a game-ending state and hence the Alpha-Beta search needs to do some type of evaluation in order to return a score which is between the two-opposing game-ending state of being dead or alive. The Alpha-Beta search will have to evaluate the board position when the cut-off depth is reached and return a value which represents how good the board is for the players. For example, if the board position will lead the attacking player to capture all the keystones then the board evaluation should return -5000,   on the other hand if the board position is in favour of the defending team then it should return 5000. Creating a function which evaluates the board accurately is a difficult task and doing so which can perform at the level of humans is even more difficult. An important factor to consider when designing an evaluation function is the time it takes to evaluate a board position. More complex the evaluation function becomes the longer it takes to evaluate single a board position hence the more time it takes to evaluate the board position every time the depth limit is reached.
@@ -592,6 +592,29 @@ After these checks are done for all the keystrings, any moves remaining in the s
 
 
 \chapter{Implementation}
+This chapter will go into detail about how GoLD is implemented. GoLD is entirely written in Java and uses a simple 2D game engine called Slick2D which is based on LWJGL. All of the major constructs of Go are implemented within GoLD to create a stable environment for user to solve Life and Death problems. Some of the key aspects of the program includes the Go board, the Pattern Matcher and the two modes of play. These features were implemented to be able to facilitate GoLD's requirements such as the "computer" which plays against the player. Which is essential a search function greatly dependant on how the Go Board is structured. Many smaller but crucial features had to be implemented in order to create a completely standalone program which can create and solve problems. To enable complex heuristics to be performed in order to evaluate board positions or generate moves which are relevant, a method of creating and identify patterns of stones is required. A pattern matcher which is able to distinguish between middle , side and corner of the board is built into GoLD.
+
+
+\section{Board}
+
+The Go board is represent as an object class within GoLD which contains all the vital data to represent the current board position. GoLD's board is desgined for the purpose of making tree search and board evaluations as quick as possible. This meant storing more imformation within the board object was ideal  instead of recalaculating information every time it was needed. The board object also implements public methods which allows the computer and also the users to interact with the board. The board in essence implements the rules of Go and automatically updates the board position once a move is played either by the user or the computer.
+
+
+\subsection{Stones}
+Representation
+
+\subsection{Vaild Move Generator}
+
+\subsection{Capture}
+
+\subsection{Board State}
+
+
+
+
+
+\section{Pattern Matcher}
+
 
 \section{Play Mode}
 
@@ -600,11 +623,6 @@ After these checks are done for all the keystrings, any moves remaining in the s
 \section{Game Board}
 
 \section{Problem File}
-
-\section{Pattern Searcher}
-
-
-
 
 
 
@@ -618,9 +636,8 @@ After these checks are done for all the keystrings, any moves remaining in the s
 \subsection{Types of Problems}
 \subsection{Success Rate}
 
-\section{Beta Testing with Go Players}
+\section{Beta Testing}
 \subsection{Questionnaires}
-\subsection{Interviews}
 
 
 

@@ -14,7 +14,7 @@ public class PatternSearcher {
 	Integer foundNum;
 	int foundCount;
 	ArrayList<Integer> matchesDirNums;
-	ArrayList<Integer> tolCount = new ArrayList<Integer>();
+	public ArrayList<Tuple> tolPoint = new ArrayList<Tuple>();
 	
 	public PatternSearcher(Board b, Stone colour){
 		this.b = b;
@@ -105,7 +105,7 @@ public class PatternSearcher {
 			Tuple u,d,l,r,nu,nd,nl,nr;
 			ArrayList<ArrayList<Tuple>> matchTries = new ArrayList<ArrayList<Tuple>>();
 			boolean[] toSkip = new boolean[8];
-			int[] tolcount = new int[8];
+			Tuple[] tolpoint = new Tuple[8];
 			
 
 			for(int n=0 ; n<8;n++) matchTries.add(new ArrayList<Tuple>());
@@ -141,14 +141,14 @@ public class PatternSearcher {
 						boolean colourCheck = ((b.stones[k.a][k.b].getSC() == pcolour)!=p.isNot) || p.wildCard;
 						boolean cornerCheck = p.isCorner? isCorner(k):true;
 						if(colourCheck && cornerCheck)matchTries.get(counter).add(k);
-						else {
-							if(tolcount[counter]>0)toSkip[counter]=true;
+						else if(pcolour==def.getSC() && cornerCheck) {
+							if(tolpoint[counter]!=null)toSkip[counter]=true;
 							else {
-								tolcount[counter]++;
+								tolpoint[counter]=k;
 								if(b.stones[k.a][k.b].getSC() == pcolour.getEC())toSkip[counter]=true;
 								else matchTries.get(counter).add(k);
 							}
-						}
+						}else toSkip[counter]=true;
 					}else toSkip[counter]=true;
 					counter++;
 				}
@@ -169,7 +169,7 @@ public class PatternSearcher {
 					if(!skip) {
 						matches.add(slist);
 						matchesDirNums.add(dirNum);
-						tolCount.add(tolcount[dirNum]);
+						tolPoint.add(tolpoint[dirNum]);
 					}
 				}
 				dirNum++;
@@ -291,7 +291,7 @@ public class PatternSearcher {
 
 	
 	public boolean tolOk(int tolNumber) {
-		if(tolCount.get(tolNumber)>0)return false;
+		if(tolPoint.get(tolNumber)!=null)return false;
 		
 		return true;
 	}

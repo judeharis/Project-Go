@@ -108,7 +108,8 @@ public class SlickGo extends StateBasedGame {
     	final JFileChooser fc = new JFileChooser();
         fc.setPreferredSize(new Dimension(800,500));
 //      File workingDirectory = new File(System.getProperty("user.dir")+"\\Computer Boards");
-        File workingDirectory = new File(System.getProperty("user.dir"));
+//        File workingDirectory = new File(System.getProperty("user.dir"));
+        File workingDirectory = new File(System.getProperty("user.dir")+"\\Computer Boards");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", "txt", "text");
         fc.setFileFilter(filter);
         fc.setCurrentDirectory(workingDirectory);

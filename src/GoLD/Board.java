@@ -712,18 +712,21 @@ public class Board{
     	Board.sPx= sPx;
     	Board.sPy= sPy;
 
-
-//		g.setBackground(Color.lightGray);
 		int bS = TileSize*20;
+		
+//		g.setBackground(Color.lightGray);
+		
 		g.setColor(new Color(200,140,80));
 		g.fillRect(sPx, sPy, bS, bS);
 		
         for (float i =TileSize; i < bS; i+=TileSize){
+
             g.setColor(Color.black);
 //            g.setColor(Color.red);
             g.drawLine(x+i,y+TileSize,x+i, y+bS-TileSize);
             g.drawLine(x+TileSize,y+i,x+bS-TileSize, y+i);
         }
+        
         showCoord=false;
         if(showCoord) {
 	        char c = 'a';

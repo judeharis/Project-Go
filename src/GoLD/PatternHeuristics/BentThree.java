@@ -71,6 +71,7 @@ public class BentThree {
 						float c = States.borderSafeRel2(e, 1, S1);
 						float ncap = States.minFinder(a,b,c);
 						if(ncap>0.5) patval+=450;
+						else if(ncap<0.5) patval-=450;
 						
 					}
 					

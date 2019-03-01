@@ -78,6 +78,7 @@ public enum States {
 		float nothingcount = 0;
 		ArrayList<Tuple> nothings = new ArrayList<Tuple>();
 		for(Tuple t :ts) {
+			if(t==null)return badlimit;
 			if(e.isEnemy(t))enemycount++;
 			else if(e.isThere(t));
 			else {

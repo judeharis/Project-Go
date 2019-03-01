@@ -34,26 +34,31 @@ public class Eye{
 					Tuple BL = TL.side2(side,side);
 					Tuple BR = TR.side2(side,side);
 					Tuple C = tlist.get(0).side(side);
+					Tuple TOL = ps.tolPoint.get(counter);
 					counter++;
+					
 					
 					
 					if(e.isThere(C)) continue;
 					
+					float tol = States.borderSafeRel2(e, 1, TOL);
+//					if(TOL!=null)continue;
+					
 					int patval =0;
 					patval +=50;
 					float bs1 = States.borderSafeRel1(e, 2, TL,TR,BL,BR);
-		
-					float ncap = bs1;
+					float ncap = States.minFinder(tol,bs1);
 	
 					if(ncap>0.5) patval+=50;
 					else if(ncap<0.5) patval-=50;
 					
 					
-					if(!ps.tolOk(counter-1))patval*=0.5;
 					
 					retval+=patval;
 					
 					if(patval>=100)e.addToEye(C);
+
+
 					
 				}
 

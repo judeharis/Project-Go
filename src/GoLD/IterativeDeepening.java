@@ -197,15 +197,10 @@ public class IterativeDeepening  implements Runnable{
 	
 	private ArrayList<Tuple> moveOrdering(int depth, ArrayList<Tuple> goodMoves) {
 		ArrayList<Tuple> newOrder = new ArrayList<Tuple>();
-		
 		Tuple k1 = killers[depth-1][0];
 		Tuple k2 = killers[depth-1][1];
-		if(k2!=null && goodMoves.remove(k2))newOrder.add(k2);
 		if(k1!=null && goodMoves.remove(k1))newOrder.add(k1);
-		
-		
-
-		
+		if(k2!=null && goodMoves.remove(k2))newOrder.add(k2);
 		newOrder.addAll(goodMoves);
 		return newOrder;
 	}
@@ -218,14 +213,6 @@ public class IterativeDeepening  implements Runnable{
 	 	if(!keystonelist.isEmpty()) return true;
 	 	return false;
 	}
-	
-//	static public ArrayList<Tuple> liveKeys(Board b,ArrayList<Tuple> keystonelist){
-//	 	ArrayList<Tuple> liveList = new ArrayList<Tuple>();
-//		for (Tuple t : keystonelist){
-//			if (b.stones[t.a][t.b].getSC() == MoveFinder.keystonecolour) liveList.add(new Tuple(t.a,t.b));
-//		}
-//		return liveList;
-//	}
 
     
 	  

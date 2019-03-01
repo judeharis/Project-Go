@@ -13,7 +13,7 @@ public class MoveFinder  implements Runnable{
 	 static Stone keystonecolour =Stone.BLACK;
 	 static int max = Integer.MAX_VALUE;
 	 static int min = Integer.MIN_VALUE;
-	 static int cutoff=1;
+	 static int cutoff=6;
 	 static int breathcutoff=10;
 	 static boolean breadthcut = false;
 	 static boolean editormode = false; 
@@ -220,8 +220,9 @@ public class MoveFinder  implements Runnable{
 		
 		Tuple k1 = killers[depth-1][0];
 		Tuple k2 = killers[depth-1][1];
-		if(k2!=null && goodMoves.remove(k2))newOrder.add(k2);
 		if(k1!=null && goodMoves.remove(k1))newOrder.add(k1);
+		if(k2!=null && goodMoves.remove(k2))newOrder.add(k2);
+
 		
 		newOrder.addAll(goodMoves);
 		return newOrder;

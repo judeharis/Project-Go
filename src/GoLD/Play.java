@@ -100,16 +100,16 @@ public class Play extends BasicGameState {
 		SlickGo.drawString(playx ,playy,(problemLoaded?("Turn: "+board.placing.toString()):""), g);
 		SlickGo.drawString(playx ,playy +50,board.desc, g);
 //		SlickGo.drawString(playx +300 ,playy,(problemLoaded?("Valid: "+board.validMoves.size()):""), g);
-//		SlickGo.drawString(playx +300 ,playy -50,(problemLoaded?problemName:""), g);
+		SlickGo.drawString(playx +300 ,playy -50,(problemLoaded?problemName:""), g);
 		fontEnd(g);
 		endSection();
 		
 
 
 //		//IDeep
-		startSection(990,40);
-		SlickGo.drawButton(playx ,playy,200,50,"IterDeepening", g ,iterativeDeepening,Color.green);
-		endSection();
+//		startSection(990,40);
+//		SlickGo.drawButton(playx ,playy,200,50,"IterDeepening", g ,iterativeDeepening,Color.green);
+//		endSection();
 
 		
 		startSection(990,220);
@@ -237,13 +237,13 @@ public class Play extends BasicGameState {
 				sbg.enterState(0);
 			}
 			
-			
-			startSection(990,40);
-			if (SlickGo.regionChecker(playx,playy,200,50,gc)) {
-				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
-				else iterativeDeepening =!iterativeDeepening;
-			}
-			endSection();
+//			//IDeep
+//			startSection(990,40);
+//			if (SlickGo.regionChecker(playx,playy,200,50,gc)) {
+//				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
+//				else iterativeDeepening =!iterativeDeepening;
+//			}
+//			endSection();
 			
 			startSection(990,220);
 			startSection(10,0);
@@ -362,7 +362,7 @@ public class Play extends BasicGameState {
 
 			}
 			//Reset
-			if (SlickGo.regionChecker(playx +280,playy +60,200,50,gc)) {
+			if (SlickGo.regionChecker(playx +280,playy +60,200,50,gc) && problemLoaded) {
 				board = board.resetboard;
 				resetPlayScreen();
 				board.resetboard = Board.cloneBoard(board);
