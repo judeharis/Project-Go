@@ -329,7 +329,7 @@ public class SlickGo extends StateBasedGame {
                         case KO:  writer.write("| K ") ;
                             break;
 
-                        case EMPTY: break;
+                        //case EMPTY: break;
                     }
                 }
                 writer.write("|\r\n") ;

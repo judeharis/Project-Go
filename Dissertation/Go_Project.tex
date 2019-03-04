@@ -24,26 +24,41 @@
 
 \begin{document}
 \maketitle
-\chapter{Introduction}
+
 \pagenumbering{arabic}
 
-
-The ancient game of Go is regarded as the oldest board game still being played in the modern day. The origins of Go are not completely known but it is said to be invented in China 3000-4000 years ago. The game is formed by very simple rules that is played out most commonly in a 19x19 board. Each player takes turns placing a black or white stone on the intersections of the grid lines on the board. The board size is very crucial for the project. Due to increased board size compared to most western board games, a computer will take significantly more time to process through each possible move in every turn of the game to determine the final outcome. On the other side the basic principles of the game are much simpler to program and execute in software. Some complicated rules such as self-capture, and ko rule do exist. While implementing these rules can be simple,the effect of them being implemented correctly is great. For instance without implementing the ko rule it would be impossible to make progress in the game search tree in certain situations where moves could be played so that a never ending battle for the same point on the board takes place. Brute force methods to solve board positions would get stuck in these situation and loop infinitely.
-
-
+\chapter{Introduction}
+The ancient game of Go is regarded as the oldest board game still being played in the modern day. The origins of Go are not completely known but it is said to be invented in China 3000-4000 years ago. The game is formed by very simple rules and the officially used board size is a 19x19 board. Each player takes turns placing a black or white stone on the intersections of the grid lines on the board. There are 361 intersections on the Go board whereas Chess’s only has 64 squares to play on. The size of the Go board is key factor in this project. Due to increased board size compared to most western board games, a computer will take significantly more time to search through each valid move in every turn of the game to determine the final outcome. On the other side the basic principles of the game are much simpler to program and execute in software. Some complicated rules such as self-capture, and Ko rule do exist. While implementing these rules can be simple, the effect of them being implemented correctly is great. For instance, without implementing the Ko rule it would be impossible to make progress while searching Go’s game tree. Some situation occurs where it becomes optimal for both players to repeat the same moves over and over in order to capture a single point on the board.  This would lead to a never-ending battle for the same point on the board without the existence of the Ko rule which forbids this to occur. Therefore, any type of game tree search algorithm to solve the position would get stuck in these situation and loop infinitely. This project implements Go using Java to allow the user to not fully play the game of Go but rather solve Go problems.
 \section{Motivation}
-The simplicity of the game's rules are deceiving as the game's strategy and tactics used are very complex. The possible amount of different games of Go to occur is inconceivably large. It has been said to learn the game it takes little time but to become an expert or remotely good at it takes years maybe even decades. To allow a computer to calculate the perfect move via brute force would take too long to be considered viable. The current best AI built to play Go is AlphaGo, it has defeated one of the world's best Go player Kie Jie in 2017 at Future of Go Summit. AlphaGo uses Monte Carlo Tree Search used with neural networks to evaluate the board and calculate the best move. With that in mind AlphaGo is yet to be anywhere near perfectly solving Go due to the enormous complexity and possibility of moves.
+The simplicity of the game's rules is deceiving, anyone can learn the rules of the game within 5-10 mins and will be able to play full game of Go. The game's strategy and tactics are incredibly complex compared to the rules. Go players agrees with the sentiment that, to learn the game it takes little time but to become an expert or remotely good at it takes years maybe even decades. Due to the nature of the size of the board possible number of different games that could be played out in Go is inconceivably large. For a computer to calculate the perfect move via searching every valid move that could occur would take too long to be considered viable, not months or years but rather millenniums .
 
+The current best AI built to play Go is AlphaGo [9] and its successors built by Google’s DeepMind team. It has defeated some of the world’s best Go players such as Lee Sedol during challenge match in South Korea dropping only 1 game out the 5 played. AlphaGo has also defeated Ke Jie  another highly ranked player in 2017 at Future of Go Summit wining all three games played. AlphaGo uses Monte Carlo Tree Search along with neural networks to evaluate different board positions and calculate the best move according to what it has learned through machine learning. With that in mind AlphaGo is yet to be anywhere near perfectly solving Go due to the enormous complexity and possibility of moves.
 
+The  main motivation behind this project is to create a tool for Go players to enhance their skill at a certain aspect of Go. It is not to create an AI which plays whole games of Go but to create an AI which can play Life and Death problems and solve them.
 \section{Aim}
+The aim of this project was to create a tool program for Go players, from beginners to experienced  which allows them to practise life and death problems and in doing improve their overall skill level at the game.  The aim also includes that the tool should contain an AI to play against its users in Go, which can identify all the valid moves and play the correct move given a board position.
+Specifically, the project’s aim was to create a program which given a life and death  problem for Go it would solve it. If the problem is solvable,  the AI should play the move which solves the problem otherwise it should play the move that it thinks is the best possible. The project was divided into two big milestones to keep track of the progress.
 
-The aim of this project was to create an AI to play against users in Go, which can choose the correct move given a board position. Specifically, the project’s aim was to create a program which given a Go life and death problem it would solve it, if solvable or return as unsolvable. First milestone was to achieve perfect AI which would choose the correct move given infinite time or smaller problem with less valid moves. The goal was to use brute force search method to look through every possible board state that could occur given the current state and choose the move which will lead to victory for the computer if there is any. The final goal of the project was to alter and enhance the AI which was achieved through the first milestone to be able to solve larger problems in the same time scale. And to do so, use heuristics to determine how favourable a board position is after searching for certain depth into the possible line of choices and then picking the line which leads to the most favourable board position. This final aim was set so that more realistic problems could be solved using the final product as without larger problems would simply take too long to play through. The motivation behind the project was to create a tool for Go players to use to improve tactical skill in Go via an interactive problem solver which helps the user figure out the solutions to life and death problems by having the computer play against them.
+First milestone within the project was to implement a substantial number of features, enough to let the users create problems and view them. This included implementing the rules of Go, having the ability to place stones and also to implement the bare bones of the AI which would altered in the second part of the project to implement heuristics. This meant to implement a simple tree search which would be able to choose and play the correct move given infinite time or a problem small enough so that every possible variation could be searched. Other features such as loading and saving problem files were also part of the aim for the first milestone.
+
+The second milestone was to alter and enhance the tree search implemented in the first milestone to be able to solve larger problems. To achieve this GoLD needed a way to limit the search space hence decreasing the time taken to search but also creating uncertainty of choosing the best move. An aim for the second milestone was to introduce heuristics to determine how favourable a board position is after searching for certain depth into the possible sequence of moves and then picking move which leads to the most favourable board position. The overall goal of the second milestone was to enable GoLD to solve more realistic problems in viable time frame for users to use without waiting too long.
 
 \section{Project Outline}
 
+Here is a short summary for each chapter within this paper:
+
+Chapter 2 Background \& Related Works – Explains key concepts which are used within the project, introduces Go and some relevant details of Go in more detail. Also looks at some similar work done.
+
+Chapter 3 Requirements – Deals with expressing the functional requirements of GoLD and also some non-functional requirements.
 
 
+Chapter 4 Design – Goes in depth about the AI and the tree search used with GoLD.  Explores the heuristics used to enable the GoLD to limit time spent search the game tree. This includes board evaluation , move ordering and move generation.
 
+Chapter 5 Implementation – Talks about key features of GoLD and how they are implemented. Goes into some detail on how the Go board is represented within the program. Explains the pattern matching functionality used during board evaluation and move generation .
+
+Chapter 6 Evaluation – Contains result of Beta testing and analyses of it. Also evaluates the performance of GoLD for every problem within the problems folder provided to beta testers. Goes into detail about the unit tests designed and tested to prove correctness of the program.
+
+Chapter 7 Conclusion – Concludes the whole paper by looking at the successes of the project , places of improvements and any possible future work.
 
 
 
@@ -594,35 +609,160 @@ After these checks are done for all the keystrings, any moves remaining in the s
 \chapter{Implementation}
 This chapter will go into detail about how GoLD is implemented. GoLD is entirely written in Java and uses a simple 2D game engine called Slick2D which is based on LWJGL. All of the major constructs of Go are implemented within GoLD to create a stable environment for user to solve Life and Death problems. Some of the key aspects of the program includes the Go board, the Pattern Matcher and the two modes of play. These features were implemented to be able to facilitate GoLD's requirements such as the "computer" which plays against the player. Which is essential a search function greatly dependant on how the Go Board is structured. Many smaller but crucial features had to be implemented in order to create a completely standalone program which can create and solve problems. To enable complex heuristics to be performed in order to evaluate board positions or generate moves which are relevant, a method of creating and identify patterns of stones is required. A pattern matcher which is able to distinguish between middle , side and corner of the board is built into GoLD.
 
-
 \section{Board}
 
-The Go board is represent as an object class within GoLD which contains all the vital data to represent the current board position. GoLD's board is desgined for the purpose of making tree search and board evaluations as quick as possible. This meant storing more imformation within the board object was ideal  instead of recalaculating information every time it was needed. The board object also implements public methods which allows the computer and also the users to interact with the board. The board in essence implements the rules of Go and automatically updates the board position once a move is played either by the user or the computer.
-
+The Go board is represented as an object class within GoLD which contains all the vital data to represent the current board position. GoLD's board is designed for the purpose of making tree search and board evaluations as quick as possible. This meant storing more information within the board object was ideal  instead of recalculating information every time it was needed. The board object also implements public methods which allows the computer and also the users to interact with the board. The board in essence implements the rules of Go and automatically updates the board position once a move is played either by the user or the computer.
 
 \subsection{Stones}
-Representation
+Representation of stones on the board is simple but effective to keep operation of gathering information about strings and liberties quick. GoLD takes advantage of Java’s enum type to define the different possible states each intersection on the board could be. While it is possible to represent all the points on the board with simply black , white or empty constants , this would lead to extra operations to distinguish between different types of points such as an empty intersection which is within a problem’s boundaries and an empty intersection which is removed from play. Similar operations are required to distinguish between Ko points and Valid points, black stones and key black stones, white stones and key white stones. To bypass this problem GoLD uses 7 different constants to represent all the intersections on the board. The constants used are BLACK, WHITE, VALID, INVALID, KO, BLACKKEYSTONE, WHITEKEYSTONE . The entire board is represented by a 2D array of enum Stone type. While the use of a 1D array is possible to represent a 2D Go board and is more space efficient than a 2D array, it would require extra operations to define the board within a 2D coordinate system. This would lead to an extra operation each time the board is accessed which would in essence slow down the entire program.
 
-\subsection{Vaild Move Generator}
+
+
+\subsection{Strings}
+We can define a string of stone as any number of stones of the same colour which are connected through adjacent stones of the same colour. A key observation of strings is that once a string of stones is formed , the only way to deform it is through capture by placing on all the liberties of the string. Hence the board object maintains two collection of strings , one for black and one for white, for the use of the capture functionality. Both collections of strings are updated after each move to represent any changes on the board. Each string is represented by a list of 2D coordinates, due to the lack of an inbuilt tuple type with Java, GoLD uses a custom-built Tuple object to represent 2D coordinates.
 
 \subsection{Capture}
+To process capturing of opponent stones, the two collection of strings are used to iterate through each string inside the collection of opponent strings and determine whether any opponent strings lack liberties and then same is done for one’s own strings. If an opponent string has zero liberties, then each of these stones are replaced by a VALID in the 2D array and the string itself is removed from the collection of opponent strings. Same is applied for one’s own strings but if a capture occurs then the move is invalidated under the self-capture rule.
+During this process two additional information is gathered about the board. For every opponent string if the liberty count is one then the string is considered to be in Atari and hence the intersection of liberty is added on to the opponent’s Atari list which consists all of the opponent’s single liberties and the same applies for the current players strings. Two Atari list ,one for each colour, is maintained within the board and is updated during the process of checking for capture.
+The other additional information gathered is whether the Ko rule should be in play the next turn. While checking the opponent’s strings for capture, if a string containing one stone is captured then the intersection of that one stone is in consideration for Ko. After the checking for capture, a simple test for Ko is occurs. If there is an intersection in considerable for Ko, then the stone placed this turn is checked for the following:
 
-\subsection{Board State}
 
+\begin{itemize}
+    \item Is the stone in Atari?
+    \item Is the stone not connected to any stones of the same colour?
+    \item Is the liberty of the stone the same intersection as the one in consideration for Ko?
+\end{itemize}
 
+If true for all three questions, then a KO is placed at the intersection which was in consideration for Ko.
 
+\subsection{Valid Move Checker}
+Valid move check is a simple function which returns true or false depending on whether placing on intersection being checked is valid for the current player. This function consists of three core checks. Is the point being checked on the board ? This is in the case of a human player trying to place a stone outside the board grid area. Is the value of that position in the board’ 2D array VALID? This is multifunctional as it restricts the user and the computer from playing on points of the board which are removed from play during a problem represented by INVALID and also restricts play on the point of KO. The third check is to makes sure that if the current player plays on the point it will not lead to self-capture. To check for self-capture can be intricate , the following algorithm is used to determine whether a move is considered self-capture hence invalid.
 
+\begin{algorithm}[H]
+\caption{Self-Capture Check}\label{Self-Capture Check}
+    \DontPrintSemicolon
+    \SetKwFunction{FselfCapture}{selfCapture}
+    \SetKwProg{Pn}{Procedure}{:}{}
+    \Pn{\FselfCapture{$point$}}{
+       \uIf{enemyAtariList.contains(point)}{$\KwRet { true}\;$}
+        $ adjacents \gets getAdjancentPoints(point)$\;
+
+        \eIf {(selfAtariList.contains(point))}{
+        	\ForEach{adjacent in adjacents}{
+        		\uIf{(adjacent is currentColour)}{
+        			$adjancentString \gets getString(adjacentPoint)$\;
+        			\lIf{($getLiberties(adjacentString).size > 1$)} {$\KwRet { false}\;$}
+        		}
+        		\ElseIf{(adjacent point is empty)}{$\KwRet { false}\;$}
+        	}
+    	    {$\KwRet { true}\;$}
+	    }{
+    	    \ForEach {(adjacent in adjacents)}{
+    		    \uIf{(adjacent not enemyColour)} {$\KwRet { false}\;$}
+    	    }
+    	    {$\KwRet { true}\;$}
+	    }
+    }
+\end{algorithm}
+
+The valid move checker plays an integral part during the tree search which the computer uses to determines the move to play. Every time a new board position is visited by the search , the Alpha-Beta algorithm requires the list of all valid moves in order to generate moves using the move generator and then continue the search by trying out moves generated. To create the list of all valid moves, every point board is checked by the valid move checker and if a point is valid then it is added on to the list of valid moves. To reduce redundant processing , the valid moves list is maintained within the Board object and is updated after every move.
 
 \section{Pattern Matcher}
+The pattern matcher within GoLD is able to identify a pattern at the 16 possible variation which can occur. A pattern can be rotated at 45° on the board to create 8 different rotations of the same pattern and each pattern can have the colours as normal or inverted hence 16 variations. Specific to the Go board some points are regarded differently to other points and hence the pattern matcher should be able to distinguish between these. The pattern matcher within GoLD is able to define and identify patterns which are is on the edge, corner or the middle of the board. Note that pattern for the middle of the board can be regard as pattern that is allowed to occur anywhere on the board as along as the pattern shape is occurs as defined by the pattern.
 
 
-\section{Play Mode}
+\subsection{Defining Patterns}
+GoLD uses a limited number of predefined patterns which are used within its heuristic pattern matching methods. These predefined patterns are written in a simple text notation which are all translated into lists of “Point” objects during the initialisation of static variables . A pattern is just a list of Point objects and these Points are the key components the pattern matcher uses to identify patterns on the board. A Point consists of few fields which allows the pattern matcher to relate each Point to another within a pattern. These fields include two integers which is able to relate each Point inside the pattern to the starting point of the search. The other fields include boolean variables to check whether a Point is on the edge, is on the corner, is defending colour or whether it is a wildcard (always matches). The text notation which is used to translate string to a list of Points representing a pattern uses each of characters in the string to create a Point object. Figure 1 shows a Bent Four Corner pattern represented by text notation and a visual representation of the pattern within GoLD. Note here the green stone marked with C shows that in the pattern requires that point be a corner and any colour of stone.
 
-\section{Edit Mode}
 
-\section{Game Board}
 
-\section{Problem File}
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.2\textwidth}
+\includegraphics[width=\textwidth]{pat/1.png}
+\caption{“xrxldxdxlxdxrr\#”}
+\label{fig:pat-1a}
+\end{subfigure}
+\caption{Visual representation of a pattern}
+\label{fig:pat-1}
+\end{figure}
+
+\subsection{Matching Patterns}
+
+The patterns matcher itself is based on the idea that every Point object within the pattern is relative x ,y distance from the starting point of search. Hence the first point of the pattern is always a stone at x and y = 0. The pattern matcher depends on three parameters, the list of Point object which represents the pattern to look for, a list of intersections all containing stones as starting points for the pattern matcher and the colour of the defending team. Simple pseudocode for pattern matching algorithm before enchancements is shown below.
+
+
+\begin{algorithm}[H]
+\caption{Pattern Matcher}\label{Pattern Matcher}
+    \DontPrintSemicolon
+    \SetKwFunction{FselfCapture}{matchPattern}
+    \SetKwProg{Pn}{Procedure}{:}{}
+    \Pn{\FselfCapture{$startingPoints,pattern$}}{
+        $matches \gets$ {init list of Tuple lists }\;
+        $rotations \gets$ {init list of 8 rotations}\;
+
+        \ForEach{$stuple$ in $startingPoints$}{
+            $ matchTries   \gets$ {init list of 8 Tuple lists}\;
+            $ skipList  \gets$ {init list of 8 booleans initialised false}\;
+            \ForEach{$Point$ in  $pattern$}{
+                \lIf{(skipList.allEquals(true))} {$break$}
+                 $ checkingTuple \gets$ {$stuple + (Point.x,Point.y)$}\;
+                 \ForEach{$rot$ in $rotations$}{
+                    \lIf{(skipList[rot]=true)}{break}
+                    $ t \gets$ {$checkingTuple.apply(rot)$}\;
+                    \uIf{Point.matches(t)}{
+                        $matchTries$.get(rot).add(t)\;
+                    }\Else{
+                        $skipList[rot] \gets true$\;
+                    }
+
+                 }
+            }
+            \ForEach{$tupleList$ in $matchTries$}{
+                \uIf{(TupleList.size() = pattern.size() \textbf{and} !matches.contain(TupleList))}{
+                    matches.add(TupleList)
+                }
+
+            }
+
+        {$\KwRet { }matches\;$}
+        }
+
+    }
+\end{algorithm}
+
+The pattern matcher not only returns matched patterns but also the rotation in which pattern was found in. GoLD uses the matched tuples and rotations to find vital points within patterns found and check whether these points are empty, contains enemy stones or ally stones to evaluate the value of the overall pattern found. After which more complex checks are performed to see if the pattern identified is fully formed or incomplete , whether the walls of patterns are safe. Figure 2 shows Pyramid Four pattern incomplete next to a fully complete variation of the same shape and hence the vital point at a is the only point that matters within this pattern.
+
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{pat/2a.png}
+\caption{Incomplete \& unsafe walls}
+\label{fig:pat-2a}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{pat/2b.png}
+\caption{Complete \& safe walls}
+\label{fig:pat-2b}
+\end{subfigure}
+\caption{Pyramid Four pattern with and without corner stones}
+\label{fig:pat-2}
+\end{figure}
+
+\section{Modes}
+
+\subsection{Key Features}
+
+
+\subsection{Differences}
+
+
+
+
+
 
 
 
@@ -662,6 +802,8 @@ Representation
 6.Akl, S.G., \& Newborn, M. (1977). The principal continuation and the killer heuristic. ACM Annual Conference.
 7.Huberman, B.J. (1968). A PROGRAM TO PLAY CHESS END GAMES.
 8.Korf R. Depth-first iterative-deepening. Artif Intell. 1985;27(1):97-109. doi:10.1016/0004-3702(85)90084-0
+9.https://deepmind.com/research/alphago/
+
 
 
 

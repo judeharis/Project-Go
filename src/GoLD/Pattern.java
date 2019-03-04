@@ -15,10 +15,9 @@ public class Pattern {
 	boolean isSide;
 	
 
-	int gcsize = 1000;
-	int boardSize = gcsize * 4 /5;
-	int TileSize = boardSize/20;
-	int stoneSize = TileSize;
+    static int gcsize =  ((SlickGo.gcheigth-50)/50)*50;
+	static int boardSize = (gcsize%100==0?gcsize-50:gcsize);
+	static int TileSize = (((boardSize/18)/10) *10);
 
 
 
@@ -179,10 +178,13 @@ public class Pattern {
     }
 
     public void drawPattern(Graphics g,  int x, int y ,Pattern p) {
-    	int r = (stoneSize/2);
-    	int k = (r/2);
+
     	x = (x+1)*TileSize;
     	y = (y+1)*TileSize;
+    	x+=Board.sPx;
+    	y+=Board.sPy;
+    	int r = (TileSize/2);
+    	int k = (r/2);
     	x = x - r;
     	y = y - r;
     	
@@ -192,7 +194,7 @@ public class Pattern {
     	
     	if (p.wildCard)g.setColor(Color.green);
     	if(p.isSide)g.setColor(Color.yellow);
-        g.fillOval(x, y, stoneSize, stoneSize);
+        g.fillOval(x, y, TileSize, TileSize);
         g.setColor(Color.red);
         
         if (p.isCorner)g.drawString("C",x+(k*3/2),y+k);
@@ -201,7 +203,7 @@ public class Pattern {
         if(p.isNot)  g.drawString("X",x+(k*3/2),y+k);
         
         g.setColor(Color.black);
-        g.drawOval(x, y, stoneSize, stoneSize);
+        g.drawOval(x, y, TileSize, TileSize);
     }
 	
     

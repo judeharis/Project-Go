@@ -21,7 +21,8 @@ public class PatternSearcher {
 		this.colour = colour;
 	}
 	
-
+	
+	
 	
 	public ArrayList<ArrayList<Tuple>> allStringMatchv2(ArrayList<Tuple> sstring, ArrayList<Pattern> pattern,Stone def) {
 		ArrayList<ArrayList<Tuple>> matches = new ArrayList<ArrayList<Tuple>>();
@@ -30,10 +31,11 @@ public class PatternSearcher {
 		for(Tuple t : sstring) {
 			Tuple u,d,l,r,nu,nd,nl,nr;
 			ArrayList<ArrayList<Tuple>> matchTries = new ArrayList<ArrayList<Tuple>>();
-			boolean[] toSkip = new boolean[8];
-			
-
 			for(int n=0 ; n<8;n++) matchTries.add(new ArrayList<Tuple>());
+			boolean[] toSkip = new boolean[8];
+
+
+
 			
 			for(Pattern p : pattern) {
 				if(areAllTrue(toSkip))break;
@@ -96,6 +98,9 @@ public class PatternSearcher {
 		
 		return matches;
 	}
+	
+	
+	
 	
 	public ArrayList<ArrayList<Tuple>> allStringMatchv3(ArrayList<Tuple> sstring, ArrayList<Pattern> pattern,Stone def ) {
 		ArrayList<ArrayList<Tuple>> matches = new ArrayList<ArrayList<Tuple>>();

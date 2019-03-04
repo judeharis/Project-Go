@@ -40,6 +40,7 @@ public class Board{
     Stone keystone = Stone.KEYBLACKSTONE;
     
     Stone[][] stones = new Stone[19][19];
+
     char[][] chars = new char[19][19];
 	int[][] distance = new int[19][19];
     
@@ -66,6 +67,12 @@ public class Board{
 
     ArrayList<ArrayList<Tuple>> bStoneStrings = new ArrayList<ArrayList<Tuple>>();
     ArrayList<ArrayList<Tuple>> wStoneStrings = new ArrayList<ArrayList<Tuple>>();
+    
+    
+
+
+    
+    
 
     
     public boolean takeTurn(int i, int j, boolean  editormode , boolean check) {
@@ -77,17 +84,25 @@ public class Board{
 			if (stones[i][j]== Stone.KO)printSent("Can't Place On KO", check, editormode); 
 			else if (selfCap(i,j,placing.getEC()))printSent("Can't Self Capture", check, editormode); 
 			else if (editormode){
+				
+				
+				
+				
 				undoBoard = cloneBoard(this);
 				redoBoard = null;
 				stones[i][j] = placing;
 				removeKo();
 				if (placing== Stone.KEYBLACKSTONE || placing == Stone.KEYWHITESTONE){
 					keystones.add(new Tuple(i,j));
-					for (Tuple k:keystones) stones[k.a][k.b]=placing;
+					for (Tuple k:keystones) {
+						stones[k.a][k.b]=placing;
+					}
 					placing = placing.getSC();
 				}else keystones.removeIf( new Tuple(i,j)::equals);
+				
+				
 			         
-			}else if (stones[i][j] == Stone.EMPTY || stones[i][j] == Stone.VALID) {     
+			}else if (stones[i][j] == Stone.VALID) {     
 				boardString = boardToString();
 				undoString.push(boardString);    	
 				stones[i][j] = turn;
@@ -116,7 +131,6 @@ public class Board{
 		
 
 		boardString = boardToString();
-		
 		if(moveMade)redoString.clear();
 
 		return moveMade;
@@ -126,6 +140,10 @@ public class Board{
     public Stone[][] getStones(){
     	return this.stones;
     }
+    
+    
+
+    
     
     
 
@@ -219,7 +237,7 @@ public class Board{
     
     
     public boolean checkValidMove(int x , int y) {
-        if(withinBounds(x,y) && stones[x][y]!= Stone.KO && (stones[x][y] == Stone.EMPTY || stones[x][y] == Stone.VALID) && !selfCap(x,y,turn.getEC()))
+        if(withinBounds(x,y) && stones[x][y] == Stone.VALID && !selfCap(x,y,turn.getEC()))
     			return true;
         return false;
 
@@ -323,9 +341,42 @@ public class Board{
 	}
 	
 	
+//    private boolean selfCap(int i , int j, Stone enemycolour ){
+//
+//        if (!enemycolour.isStone()) return false;
+//        
+//        ArrayList<Tuple> enemyCapString =  (enemycolour== Stone.WHITE ? wCapStrings:  bCapStrings);
+//        ArrayList<Tuple> currentCapString =  (enemycolour== Stone.WHITE ? bCapStrings:  wCapStrings);
+//        ArrayList<ArrayList<Tuple>> stoneStrings =  (enemycolour== Stone.WHITE ? bStoneStrings:  wStoneStrings);
+//        
+//
+//        if (enemyCapString.contains(new Tuple(i, j))) return false;
+//        
+//        ArrayList<Tuple> adj = getAdjacent(i, j);
+//        if (currentCapString.contains(new Tuple(i, j))) {
+//            for (Tuple t :adj) {
+//            	if (stones[t.a][t.b].getSC() == enemycolour.getEC()){
+//            		 ArrayList<Tuple> sstring = checkForStrings(t.a,t.b, stoneStrings);
+//            		 if (!sstring.isEmpty() && getNeedList(sstring, enemycolour,true).size() >1)  return false;
+//            	}else if (!stones[t.a][t.b].isStone())return false;
+////            	}else if (stones[t.a][t.b].getSC() != Stone.BLACK && stones[t.a][t.b].getSC() != Stone.WHITE)return false;
+//            }
+//        	return true;
+//        }  
+//        
+//        
+//        for (Tuple t :adj) {
+//		      if(stones[t.a][t.b].getSC()!=enemycolour.getSC()) return false;
+//		}
+//
+//        return true;
+//    }
+    
+    
+	
     private boolean selfCap(int i , int j, Stone enemycolour ){
 
-        if (enemycolour != Stone.BLACK && enemycolour != Stone.WHITE) return false;
+        if (!enemycolour.isStone()) return false;
         
         ArrayList<Tuple> enemyCapString =  (enemycolour== Stone.WHITE ? wCapStrings:  bCapStrings);
         ArrayList<Tuple> currentCapString =  (enemycolour== Stone.WHITE ? bCapStrings:  wCapStrings);
@@ -338,38 +389,59 @@ public class Board{
         if (currentCapString.contains(new Tuple(i, j))) {
             for (Tuple t :adj) {
             	if (stones[t.a][t.b].getSC() == enemycolour.getEC()){
-            		 ArrayList<Tuple> sstring = checkForStrings( t.a ,  t.b, stoneStrings);
-            		 if (!sstring.isEmpty() && getNeedList(sstring, enemycolour,true).size() >1)  return false;}
-            	else if (stones[t.a][t.b].getSC() != Stone.BLACK && stones[t.a][t.b].getSC() != Stone.WHITE)return false;
+            		 ArrayList<Tuple> sstring = checkForStrings(t.a,t.b, stoneStrings);
+            		 if (!sstring.isEmpty() && getNeedList(sstring, enemycolour,true).size() >1)  {
+            			 return false;
+            		 }
+            	}else if (!stones[t.a][t.b].isStone()) {
+            		return false;
+            	}
             }
-        	return true;}  
-        
-        
-        for (Tuple t :adj) {
-		      if(stones[t.a][t.b].getSC()!=enemycolour.getSC()) return false;
-		}
+        	return true;
+        }else {  
 
-        return true;
+	        for (Tuple t :adj) {
+			      if(stones[t.a][t.b].getSC()!=enemycolour.getSC()) return false;
+			}
+
+	        return true;
+        }
     }
  
-
+	
+	
 	public void updateStringsFull(){
 		bStoneStrings = new ArrayList<ArrayList<Tuple>>();
 	    wStoneStrings = new ArrayList<ArrayList<Tuple>>();
-    	for(int i=0; i<stones.length; i++) {
-            for(int j=0; j<stones[i].length; j++) {
-            	if (stones[i][j].isStone()) {
-	            	Tuple t = new Tuple(i,j);
-	            	Stone colour = stones[i][j].getSC();
-	            	ArrayList<ArrayList<Tuple>> stoneStrings = colour.getSStrings(this);
-	            	ArrayList<Tuple> sstring = checkForStrings(t,colour);
-	            	if(sstring.isEmpty()) {
-	            		findStringStones(t,sstring,colour);
-	            		stoneStrings.add(sstring);
-	            	}
-            	}else if (stones[i][j]==Stone.KO && ko==null)ko = new Tuple(i,j);
+	    
+	    ArrayList<Tuple> allPoints = new ArrayList<Tuple>() ;
+        for(int i=0; i<19; i++) {
+            for(int j=0; j<19; j++) {
+            	allPoints.add(new Tuple(i,j));
+            	
             }
-    	}
+        }
+        
+
+	    while(!allPoints.isEmpty()) {
+	    	int i= allPoints.get(0).a;
+	    	int j= allPoints.get(0).b;
+	    	
+	     	if (stones[i][j].isStone()) {
+            	Tuple t = new Tuple(i,j);
+            	Stone colour = stones[i][j].getSC();
+            	ArrayList<ArrayList<Tuple>> stoneStrings = colour.getSStrings(this);
+            	ArrayList<Tuple> sstring = checkForStrings(t,colour);
+            	if(sstring.isEmpty()) {
+            		findStringStones(t,sstring,colour);
+            		stoneStrings.add(sstring);
+            		allPoints.removeAll(sstring);
+            	}
+        	}else if (stones[i][j]==Stone.KO && ko==null)ko = new Tuple(i,j);
+	     	allPoints.removeIf(x -> x.a ==i && x.b==j);
+	    }
+	    
+
 	}
 	
 	public void findStringStones(Tuple t,ArrayList<Tuple> sstring, Stone colour){
@@ -487,11 +559,11 @@ public class Board{
     public void initBoard(boolean editormode){
         for(int i=0; i<stones.length; i++) {
             for(int j=0; j<stones[i].length; j++) {
-                stones[i][j] = Stone.EMPTY;
+//                stones[i][j] = Stone.EMPTY;
+            	stones[i][j] = Stone.INVALID;
                 if (editormode) stones[i][j] = Stone.INVALID;
             }
         }
-
         keystone = Stone.KEYBLACKSTONE;
         placing = Stone.BLACK;
         blackFirst = true;
@@ -537,6 +609,9 @@ public class Board{
     	return nB;
     } 
     
+
+    
+    
     public String boardToString() {
     	StringBuilder s = new StringBuilder();
         for(int i=0; i<stones.length; i++) {
@@ -549,7 +624,7 @@ public class Board{
                     case KEYBLACKSTONE: s.append("| X ") ;  break;
                     case KEYWHITESTONE:  s.append("| O ") ; break;
                     case KO: s.append("| K ") ;break;
-                    case EMPTY: break;
+//                    case EMPTY: break;
                 }
             }
             s.append("|\r\n") ;
@@ -783,10 +858,9 @@ public class Board{
                         drawsquare( g,(i+1)*TileSize,(j+1)*TileSize ,new Color(0f,0f,1f,.5f));
                     break;
 
-                    case EMPTY:
-                        break;
+//                    case EMPTY:break;
                 }
-                boolean idOn = false;
+                boolean idOn = true;
                 if(idOn&&editormode)drawCharOnStone(g,i,j,Color.black,chars[i][j]);
                 if(!idOn&&editormode)drawCharOnStone(g,(i+1)*TileSize,(j+1)*TileSize,Color.black,distance[i][j]);
             }

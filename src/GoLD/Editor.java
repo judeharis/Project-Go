@@ -164,14 +164,14 @@ public class Editor extends BasicGameState {
 
 
 
-//		startSection(970,50);
-//		SlickGo.drawButton(editorx  ,editory,20,20,"D", g,grouping.draw);
-//		SlickGo.drawButton(editorx +30,editory,20,20,"W", g,grouping.drawW);
-//		SlickGo.drawButton(editorx +60,editory,20,20,"B", g,grouping.drawB);
-//		SlickGo.drawButton(editorx +90,editory,20,20,"C", g,grouping.drawC);
-//		SlickGo.drawButton(editorx +120,editory,20,20,"P", g,drawPattern);		
-//		endSection();
-//
+		startSection(970,50);
+		SlickGo.drawButton(editorx  ,editory,20,20,"D", g,grouping.draw);
+		SlickGo.drawButton(editorx +30,editory,20,20,"W", g,grouping.drawW);
+		SlickGo.drawButton(editorx +60,editory,20,20,"B", g,grouping.drawB);
+		SlickGo.drawButton(editorx +90,editory,20,20,"C", g,grouping.drawC);
+		SlickGo.drawButton(editorx +120,editory,20,20,"P", g,drawPattern);		
+		endSection();
+
 
 
 	}
@@ -180,7 +180,7 @@ public class Editor extends BasicGameState {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-//		pattern = Pattern.sToPv2("xlddr#zldxdx");
+		pattern = Pattern.sToPv2("xrxldxdxlxdxrr#");
 		
 		
 		
@@ -261,13 +261,13 @@ public class Editor extends BasicGameState {
 
 
 
-//			startSection(970,50);
-//			if (SlickGo.regionChecker(editorx ,editory,20,20,gc)) {grouping.draw = !grouping.draw;}
-//			if (SlickGo.regionChecker(editorx +30 ,editory,20,20,gc)) {grouping.drawW = !grouping.drawW;}
-//			if (SlickGo.regionChecker(editorx +60 ,editory,20,20,gc)) {grouping.drawB = !grouping.drawB;}
-//			if (SlickGo.regionChecker(editorx +90 ,editory,20,20,gc)) {grouping.drawC = !grouping.drawC;}
-//			if (SlickGo.regionChecker(editorx +120 ,editory,20,20,gc)) {drawPattern = !drawPattern;}
-//			endSection();
+			startSection(970,50);
+			if (SlickGo.regionChecker(editorx ,editory,20,20,gc)) {grouping.draw = !grouping.draw;}
+			if (SlickGo.regionChecker(editorx +30 ,editory,20,20,gc)) {grouping.drawW = !grouping.drawW;}
+			if (SlickGo.regionChecker(editorx +60 ,editory,20,20,gc)) {grouping.drawB = !grouping.drawB;}
+			if (SlickGo.regionChecker(editorx +90 ,editory,20,20,gc)) {grouping.drawC = !grouping.drawC;}
+			if (SlickGo.regionChecker(editorx +120 ,editory,20,20,gc)) {drawPattern = !drawPattern;}
+			endSection();
 
 			
 			

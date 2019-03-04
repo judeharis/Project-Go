@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 
 public enum Stone {
-    BLACK,WHITE,VALID,EMPTY,INVALID, KEYWHITESTONE,KEYBLACKSTONE,KO;
+    BLACK,WHITE,VALID,INVALID, KEYWHITESTONE,KEYBLACKSTONE,KO;//EMPTY;
 	
 
 	public String toString() {
@@ -26,7 +26,7 @@ public enum Stone {
 
           case KO: return "Black";
            
-          case EMPTY: return "Empty";
+//          case EMPTY: return "Empty";
           }
 		  return "";
 
@@ -41,7 +41,7 @@ public enum Stone {
         case VALID: return false;
         case INVALID: return false;
         case KO: return false;
-        case EMPTY: return false;
+//        case EMPTY: return false;
         }
 		return false;
 
