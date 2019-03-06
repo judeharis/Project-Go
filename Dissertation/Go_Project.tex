@@ -8,9 +8,7 @@
 \usepackage{graphicx}
 \usepackage{subcaption}
 
-% \usepackage{algorithm}
-% \usepackage{algorithmicx}
-% \usepackage[noend]{algpseudocode}
+
 
 
 
@@ -28,93 +26,233 @@
 \pagenumbering{arabic}
 
 \chapter{Introduction}
-The ancient game of Go is regarded as the oldest board game still being played in the modern day. The origins of Go are not completely known but it is said to be invented in China 3000-4000 years ago. The game is formed by very simple rules and the officially used board size is a 19x19 board. Each player takes turns placing a black or white stone on the intersections of the grid lines on the board. There are 361 intersections on the Go board whereas Chess’s only has 64 squares to play on. The size of the Go board is key factor in this project. Due to increased board size compared to most western board games, a computer will take significantly more time to search through each valid move in every turn of the game to determine the final outcome. On the other side the basic principles of the game are much simpler to program and execute in software. Some complicated rules such as self-capture, and Ko rule do exist. While implementing these rules can be simple, the effect of them being implemented correctly is great. For instance, without implementing the Ko rule it would be impossible to make progress while searching Go’s game tree. Some situation occurs where it becomes optimal for both players to repeat the same moves over and over in order to capture a single point on the board.  This would lead to a never-ending battle for the same point on the board without the existence of the Ko rule which forbids this to occur. Therefore, any type of game tree search algorithm to solve the position would get stuck in these situation and loop infinitely. This project implements Go using Java to allow the user to not fully play the game of Go but rather solve Go problems.
+Go Life \& Death (GoLD) is a program developed in Java which can solve Go problems. The ancient game of Go is regarded as the oldest board game still being played in the modern day. The origins of Go are not completely known but it is said to be invented in China 3000-4000 years ago. The game has very simple rules and by most official rulesets played on a 19x19 board. Each player takes turns placing a black or white stone on the intersections of the grid lines on the board. There are 361 intersections on the Go board whereas Chess’s only has 64 squares to play on. The size of the Go board is a key factor in this project. Due to increased board size compared to most western board games, a computer will take significantly more time to search through each valid move in every turn of the game to determine the final outcome. On the other hand, the basic principles of the game are much simpler to program and execute in software. Some complicated rules such as self-capture and Ko rules do exist. While implementing these rules can be simple, the effect of them being implemented correctly is great. For instance, without implementing the Ko rule it would be impossible to make progress while searching Go’s game tree. Some situations occur where it becomes optimal for both players to repeat the same moves over and over in order to capture a single point on the board.  This would lead to a never-ending battle for the same point on the board without the existence of the Ko rule which forbids this to occur. Therefore without a correct implementation, any type of game tree search algorithm used to solve the board position would get stuck in these situations and loop infinitely. This project implements Go to allow the user to not fully play the game of Go but rather solve Go problems.
 \section{Motivation}
-The simplicity of the game's rules is deceiving, anyone can learn the rules of the game within 5-10 mins and will be able to play full game of Go. The game's strategy and tactics are incredibly complex compared to the rules. Go players agrees with the sentiment that, to learn the game it takes little time but to become an expert or remotely good at it takes years maybe even decades. Due to the nature of the size of the board possible number of different games that could be played out in Go is inconceivably large. For a computer to calculate the perfect move via searching every valid move that could occur would take too long to be considered viable, not months or years but rather millenniums .
+The simplicity of the game's rules is deceiving, anyone can learn the rules of the game within 5-10 mins and will be able to play a full game of Go. The game's strategy and tactics are incredibly complex compared to the rules. Go players agrees with the sentiment that, to learn the game it takes little time but to become an expert or remotely good at it takes years maybe even decades. Due to the nature of the size of the board, the possible number of different games that could be played out in Go is inconceivably large. For a computer to calculate the perfect move via searching every valid move that could occur would take too long to be considered viable, not months or years but rather millenniums.
 
-The current best AI built to play Go is AlphaGo [9] and its successors built by Google’s DeepMind team. It has defeated some of the world’s best Go players such as Lee Sedol during challenge match in South Korea dropping only 1 game out the 5 played. AlphaGo has also defeated Ke Jie  another highly ranked player in 2017 at Future of Go Summit wining all three games played. AlphaGo uses Monte Carlo Tree Search along with neural networks to evaluate different board positions and calculate the best move according to what it has learned through machine learning. With that in mind AlphaGo is yet to be anywhere near perfectly solving Go due to the enormous complexity and possibility of moves.
+The current best AI built to play Go is AlphaGo [9] and its successors built by Google’s DeepMind team. It has defeated some of the world’s best Go players such as Lee Sedol during a challenge match in South Korea dropping only 1 game out the 5 played. AlphaGo has also defeated Ke Jie another highly ranked player in 2017 at Future of Go Summit winning all three games played. AlphaGo uses Monte Carlo Tree Search along with neural networks to evaluate different board positions and calculate the best move according to what it has learned through machine learning. With that in mind, AlphaGo is yet to be anywhere near perfectly solving Go due to the enormous complexity and possibility of moves, the team working on it is still finding ways to improve it.
 
-The  main motivation behind this project is to create a tool for Go players to enhance their skill at a certain aspect of Go. It is not to create an AI which plays whole games of Go but to create an AI which can play Life and Death problems and solve them.
+The main motivation behind this project is to create a tool for Go players to enhance their skill at a certain aspect of Go. It is not to create an AI which plays whole games of Go but to create an AI which can play Life and Death problems and solve them.
+
+
 \section{Aim}
-The aim of this project was to create a tool program for Go players, from beginners to experienced  which allows them to practise life and death problems and in doing improve their overall skill level at the game.  The aim also includes that the tool should contain an AI to play against its users in Go, which can identify all the valid moves and play the correct move given a board position.
-Specifically, the project’s aim was to create a program which given a life and death  problem for Go it would solve it. If the problem is solvable,  the AI should play the move which solves the problem otherwise it should play the move that it thinks is the best possible. The project was divided into two big milestones to keep track of the progress.
+The aim of this project was to create a tool program for Go players, from beginners to experienced which allows them to practise life and death problems and in doing improve their overall skill level at the game.  The aim also includes that the tool should contain an AI to play against its users in Go, which can identify all the valid moves and play the correct move given a board position.
 
-First milestone within the project was to implement a substantial number of features, enough to let the users create problems and view them. This included implementing the rules of Go, having the ability to place stones and also to implement the bare bones of the AI which would altered in the second part of the project to implement heuristics. This meant to implement a simple tree search which would be able to choose and play the correct move given infinite time or a problem small enough so that every possible variation could be searched. Other features such as loading and saving problem files were also part of the aim for the first milestone.
+Specifically, the project’s aim was to create a program which given a life and death problem for Go it would solve it. If the problem is solvable,  the AI should play the move which solves the problem otherwise it should play the move that it thinks is the best possible. The project was divided into two big milestones to keep track of the progress.
 
-The second milestone was to alter and enhance the tree search implemented in the first milestone to be able to solve larger problems. To achieve this GoLD needed a way to limit the search space hence decreasing the time taken to search but also creating uncertainty of choosing the best move. An aim for the second milestone was to introduce heuristics to determine how favourable a board position is after searching for certain depth into the possible sequence of moves and then picking move which leads to the most favourable board position. The overall goal of the second milestone was to enable GoLD to solve more realistic problems in viable time frame for users to use without waiting too long.
+The first milestone within the project was to implement a substantial number of features, enough to let the users create problems and view them. This included implementing the rules of Go, having the ability to place stones and also to implement the bare bones of the AI which would be altered in the second part of the project to implement heuristics. This meant to implement a simple tree search which would be able to choose and play the correct move given infinite time or a problem small enough so that every valid sequence of moves could be searched. Other features such as loading and saving problem files were also part of the aim for the first milestone.
+
+The second milestone was to alter and enhance the tree search implemented in the first milestone to be able to solve larger and complex problems. To achieve this GoLD needed a way to limit the search space hence decreasing the time taken to search but also creating uncertainty of choosing the best move. The aim for the second milestone was to introduce heuristics to determine how favourable a board position is after searching for certain depth into the possible sequence of moves and then picking move which leads to the most favourable board position. The overall goal of the second milestone was to enable GoLD to solve more realistic problems in a viable time frame for users to use the program without waiting too long.
 
 \section{Project Outline}
 
-Here is a short summary for each chapter within this paper:
+Here is a short summary of each following chapters:
 
 Chapter 2 Background \& Related Works – Explains key concepts which are used within the project, introduces Go and some relevant details of Go in more detail. Also looks at some similar work done.
 
 Chapter 3 Requirements – Deals with expressing the functional requirements of GoLD and also some non-functional requirements.
 
 
-Chapter 4 Design – Goes in depth about the AI and the tree search used with GoLD.  Explores the heuristics used to enable the GoLD to limit time spent search the game tree. This includes board evaluation , move ordering and move generation.
+Chapter 4 Design – Goes in depth about the AI and the tree search used with GoLD.  Explores the heuristics used to enable the GoLD to limit time spent searching the game tree. This includes board evaluation, move ordering and move generation.
 
-Chapter 5 Implementation – Talks about key features of GoLD and how they are implemented. Goes into some detail on how the Go board is represented within the program. Explains the pattern matching functionality used during board evaluation and move generation .
+Chapter 5 Implementation – Talks about the key features of GoLD and how they are implemented. Goes into some detail on how the Go board is represented within the program. Explains the pattern matching functionality used during board evaluation and move generation.
 
-Chapter 6 Evaluation – Contains result of Beta testing and analyses of it. Also evaluates the performance of GoLD for every problem within the problems folder provided to beta testers. Goes into detail about the unit tests designed and tested to prove correctness of the program.
+Chapter 6 Evaluation – Contains result of Beta testing and analyses of it. Also evaluates the performance of GoLD for every problem within the problems folder provided to beta testers. Goes into detail about the unit tests designed and tested to prove the correctness of the program.
 
-Chapter 7 Conclusion – Concludes the whole paper by looking at the successes of the project , places of improvements and any possible future work.
+Chapter 7 Conclusion – Concludes the whole paper by looking at the successes of the project, places of improvements and any possible future work.
+
 
 
 
 
 \chapter{Background \& Related Works}
-To progress through the project certain level of knowledge of the game is required. Here are the key points of research conducted during the project.
+In order to achieve the aim of creating program certain level of knowledge of the game of Go was required. Knowledge such as the rules of Go and details regarding Life and death problems were important factors while designing and implementing GoLD. Along with understanding Go, researching papers and finding inspiration from similar work done were key to this project.
 
-\section{Go}
-To understand Go as normal player would was crucial in the progress of the project. Many simple questions needed to be answered about the game and how it is played. Also, basic concepts and terminology needed to be understood before tackling complex strategies which are built up from these basic concepts.
+Go is a complex board game where the rules are far simpler than the strategies and tactics used to play it. To understand Go as a human player would was crucial in the progression of the project. To begin with, many simple questions needed to be answered about the game and how it is played in order to design GoLD. Basic concepts and terminology needed to be understood before tackling complex strategies which are built up from these basic concepts.
+
 
 \section{Rules}
 
-There are many varied rulesets for Go. These rules sets can be broken into rules used during play and rules used at the end of play. The rules during play changes slightly and in most cases, they do not change at all. Any changes of these rules between rule sets do not affect the strategy of the game or only does so in extremely rare circumstances. Rules used at the end of play refers to scoring and determining the winner of the game, while differences in these rules can be important in normal play, when subjected to the aim of this project they become irrelevant due to dead or alive nature of life and death problems. For these reasons the rules used during play are defined within the project but rules for the end of the game are left out, instead rules to decide if a problem is solved are defined. The basic rules according to Japanese Rules of Go set by Nihon Kiin translated by James Davies [1] were used to define the ruleset used within the project and some variations were made to suit the problem-solving nature of the project rather than playing of Go. They are as follows:
+While there are no official rules for Go and many varied rulesets being used around the world , they are all quite similar. None of them really affect the strategy or tactics used within the game hence comprehending one ruleset was enough to understand the game in order to implement the rules within GoLD. This is especially true because the GoLD does not require counting scores which is the part of the rulesets that vary the most. The basic rules according to Japanese Rules of Go set by Nihon Kiin translated by James Davies [1] were used to define the basic ruleset used within the project. Some variations were made to these rules to suit the problem-solving nature of the project rather than playing whole game of Go which will be explained in a later section.
 
 
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.25\textwidth}
+\includegraphics[width=\textwidth]{ex/Ex1-0.png}
+\caption{Before Move}
+\label{fig:ex1-0}
+\end{subfigure} \qquad\qquad\qquad
+\begin{subfigure}[b]{0.25\textwidth}
+\includegraphics[width=\textwidth]{ex/Ex1-1.png}
+\caption{After Move}
+\label{fig:ex1-1}
+\end{subfigure}
+\caption{The black stone is “captured” as the top white stone is placed because the black stone has no liberty left.}
+\label{fig:ex1}
+\end{figure}
+
+The basic rules are as follows:
 \begin{enumerate}
-  \item The board starting state can be set up as needed by the user to define a life and death problem.
-  \item 	Players takes turn alternately placing the colour of their team. One player places black stones only while the other places white stones.
-  \item The board contains 19x19 gridline pattern with 361 intersections. For purpose of limiting life and death problems boundaries are used to limit area of play.
+
+  \item Initial Go board is empty containing no stones unless handicaps are applied.
+  \item Black plays first and then white. Players take turns alternately placing stones of their own colour.
+  \item The board contains 19x19 gridline pattern with 361 intersections. Stones are played on the intersections not the square in between. Stones can only be played on empty intersections. These intersections are also referred to as points on the board.
+
+
+  \begin{figure}[!ht]
+  \centering
+  \begin{subfigure}[t]{0.25\textwidth}
+  \includegraphics[width=\textwidth]{ex/Ex2-0.png}
+  \caption{Middle point is invalid for black to play}
+  \label{fig:ex2-0}
+  \end{subfigure}  \qquad\qquad\qquad
+  \begin{subfigure}[t]{0.375\textwidth}
+  \includegraphics[width=\textwidth]{ex/Ex2-1.png}
+  \caption{Both middle points are invalid for black to play}
+  \label{fig:ex2-1}
+  \end{subfigure}
+  \caption{A black stone cannot be placed in the middle of the four white stones because this would lead to self-capture.}
+  \label{fig:ex2}
+  \end{figure}
+
   \item Each turn consists of few parts as follows:
   	\begin{enumerate}[label={(\alph*)}]
-		\item Current player is to place stone of their colour on any empty intersection within the boundaries set for the problem.
-		\item Then any of the opponent’s stones that does not have a liberty is removed from the board. See example 1 at ~\autoref{fig:ex1}.
-		\item A move is invalid if it will cause one or more stone of the current player’s colour to be captured – this is to prevent self-capturing moves. See example 2 at ~\autoref{fig:ex2}.
-		\item Removal of opponent’s stones take precedence over self-capture check. This allows for moves which captures opponent’s stones but is suicide if the opponent’s stones are not removed first. See example 3 at ~\autoref{fig:ex3}.
+		\item Current player is to place a stone of their colour on any empty intersection they desire.
+		\item Then any opponent’s stones that does not have a liberty is removed from the board. See ~\autoref{fig:ex1}.
+		\item A move is invalid if it will cause one or more stone of the current player’s colour to be captured – this is to prevent self-capturing moves. See ~\autoref{fig:ex2}.
+		\item Removal of opponent’s stones take precedence over self-capture check. This allows for moves which captures opponent’s stones but is suicide if the opponent’s stones are not removed first. See ~\autoref{fig:ex3}.
 	\end{enumerate}
-  \item Ko rule – Player is not allowed to place a stone on point A if it captures one stone which was placed on point B during the opponent’s previous turn which captured one stone on point A. This is to prevent infinite repetition of the same few moves. See example 4 at ~\autoref{fig:ex4}.
-  \item The problem is solved when attacking player has no valid moves to play and the keystones are still on the board. Otherwise the problem is solved if all the keystones are captured.
 
+    \begin{figure}[!ht]
+    \centering
+    \begin{subfigure}[b]{0.25\textwidth}
+    \includegraphics[width=\textwidth]{ex/Ex3-0.png}
+    \caption{Before Move}
+    \label{fig:ex3-0}
+    \end{subfigure} \qquad\qquad\qquad
+    \begin{subfigure}[b]{0.25\textwidth}
+    \includegraphics[width=\textwidth]{ex/Ex3-1.png}
+    \caption{After Move}
+    \label{fig:ex3-1}
+    \end{subfigure}
+    \caption{A black stone can be placed in the middle of the four white stones because 1 and 2 will be immediately captured before the self-capture rule is applied. }
+    \label{fig:ex3}
+    \end{figure}
+
+    \begin{figure}[!ht]
+    \centering
+    \begin{subfigure}[bt]{0.25\textwidth}
+    \includegraphics[width=\textwidth]{ex/Ex4-0.png}
+    \caption{Before Move}
+    \label{fig:ex4-0}
+    \end{subfigure} \qquad\qquad\qquad
+    \begin{subfigure}[bt]{0.25\textwidth}
+    \includegraphics[width=\textwidth]{ex/Ex4-1.png}
+    \caption{After - Blue Square is Ko}
+    \label{fig:ex4-1}
+    \end{subfigure}
+    \caption{Once a white stone is placed at a to capture the black stone at b , black stone cannot be played at b next turn by the opponent to capture the white stone placed at a.}
+    \label{fig:ex4}
+    \end{figure}
+
+  \item Ko rule – Player is not allowed to place a stone on point A if it will capture exactly one opponent stone which was placed on point B during the opponent’s previous turn. This rule only applies if the opponent in the previous turn captured exactly one stone on point A. This is to prevent infinite repetition of the same few moves. See ~\autoref{fig:ex4}.
+
+  \item The game is over when both players pass consecutively and the player with the more territory wins. (Scoring can be complicated but is irrelevant to understand the basic rules)
 
 \end{enumerate}
 
 
 
 
+\section{Rules for GoLD}
+The rules stated in the previous section outline all the important rules of Go. Some of these rules are slightly altered in order suit the problem-solving environment set in GoLD. The alterations are as follows:
+
+\begin{enumerate}
+
+\item The initial board is set up to represent a life and death problem - should be a valid initial board state.
+\item Not all 361 intersections are can be played on – boundaries are set by the creator of the problem
+\item For the purpose of there problems, one player is considered to be the attacker and the other defender.
+\item Attacking player is not able to pass unless the attacking player has no valid moves and the Ko rule is restricting play.
+\item Two consecutive passes does not end the game/problem.
+\item The problem is solved when attacking player has no valid moves and cannot pass, if the keystones are still on the board then the defending players has won. Otherwise the problem is solved if all the keystones are captured hence the attacking player has won.
+
+\end{enumerate}
+
+
+\bigskip
+A valid initial board state is defined by the following :
+\begin{itemize}
+\item Contain at least one keystone
+\item All keystones are the same colour
+\item Must have a valid empty intersection to play on within the boundaries set
+\item Can only contain up to one point of Ko
+\item Stones that have no liberties cannot exist in the board.
+\end{itemize}
+
+\bigskip
+In a normal game of Go there are no boundaries set on the board, every intersection on the board is playable if the other rules allow it. To achieve the aim of this project there is a definite need for boundaries to be set on the board for each problem. Without doing so, the number of valid moves required to be searched by the AI would be too large to determine the best move in a limited time. To set boundaries during the creation of a problem, the creator can deem relevant points on the board as valid points to play on. Any points on the board with preplaced stones are also regarded as within the boundary. For example, a black stone is captured, the empty point remaining will be regarded within the boundary of play. It can be very difficult or even impossible for a problem creator to determine all relevant points for the problem. GoLD leaves it in the hands of the problem creators to define life and death problems with relevant boundaries. This is a crucial trade-off which is required to allow the program to be able to find the correct answer in feasible time.
+
+The reason behind the 4th alteration to the basic rules is to restrict infinite passing which would allowed due to the 5th alteration. Attacking player is allowed to pass under the circumstance that they have no valid moves and an empty intersection invalid due to the Ko rules, this resolves some rare occurrences where boundaries set by the creator of the problem restricts the attacking player from winning.
+
+
+
+
+
 \section{Go Terminology}
 
-Throughout this dissertation many terms are used to describe many aspects of Go some of which can be said to be common agreed upon terms to desrcibe Go and others are created for the purpose of the project.
+Throughout this paper many terms are used to describe many aspects of Go some of which can be said to be common agreed upon terms to describe Go and others are created for the purpose of the project.
 
-\noindent Keystones – Set of predetermined stones which are used as the objective of the problems. These stones are to be captured by the attacking player and kept alive by the defending player.
+Keystones – Set of predetermined stones which are used as the objective of the problems. These stones are to be captured by the attacking player and kept alive by the defending player.
+
+Attacking player – In terms of life and death problems, the attacking player is the one which is trying to capture the keystones on the board.
+
+Defending player – In terms of life and death problems, the defending player is the one which is trying to capture the keystones on the board.
 
 
 
-\noindent Attacking player – In terms of life and death problems, the attacking player is the one which is trying to capture the keystones on the board.
+Valid points – Set of predetermined intersections that are allowed to be played on for the given the problem. Valid point can also refer to a point which the current player is able to play on.
 
-\noindent Boundaries – Set of predetermined intersections that are removed from play for the given the problem, stones cannot be placed in them.
+String – Set of stones that are connected of the same colour.
 
-\noindent Liberty -  Liberty of a stone is any adjacent empty intersection of the stone or any empty intersection of any stone connected to the original stone. See example 5 at ~\autoref{fig:ex5}.
+Keystring – String which contains one or more keystones.
 
-\noindent Connected - Two stones are connected if they are of the same colour and is adjacent to each other or there is a set of stones of the same colour which are connected to both stones. See example 6 at ~\autoref{fig:ex6}.
 
-\noindent String – Set of stones that are connected of the same colour.
 
-\noindent Keystring – String which contains one or more keystones.
+Liberty -  Liberty of a stone is any adjacent empty intersection of the stone or any empty intersection of any stone connected to the original stone. See ~\autoref{fig:ex5}.
 
-\noindent Atari – String is in atari when it only has 1 liberty.
+
+
+
+
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.25\textwidth}
+\includegraphics[width=\textwidth]{ex/Ex5-0.png}
+\caption{One Stone's liberties}
+\label{fig:ex5-0}
+\end{subfigure}\qquad
+\begin{subfigure}[b]{0.375\textwidth}
+\includegraphics[width=\textwidth]{ex/Ex5-1.png}
+\caption{Stone string's liberties}
+\label{fig:ex5-1}
+\end{subfigure}
+\caption{The liberties of a stone or a string of stone are the empty adjacent intersections.  In ~\autoref{fig:ex5-0} intersections a,b,c and d are the liberties of the black stone.
+In ~\autoref{fig:ex5-1} intersections a to g are the liberties of the black stone string but h is not a liberty due to the white stone that occupies it.}
+\label{fig:ex5}
+\end{figure}
+
+Connected - Two stones are connected if they are of the same colour and is adjacent to each other or there is a set of stones of the same colour which are connected to both stones.
+
+Atari – String is in Atari when it only has 1 liberty.
+
+Atari Point – The last remaining liberty of a string.
+
+Ko Point -  An empty intersection which restricted from play due to the Ko rule
+
+Seki – Two strings of opposing colour that are alive next to each other. Neither player can capture the opponent string without first sacrificing their own.
+
 
 
 \section{Life and Death Problems}
@@ -124,139 +262,127 @@ Life and Death is an essential part of Go. Life and Death is the term used to de
 \subsection{Dead, Alive or Unsettled}
 
 The three main way to describe a string of stones are alive, dead or unsettled. To deduct accurately the state of a group of stone can be difficult and requires a lot of experience and knowledge about the possible moves that could be made and the counter plays to them and the result of counter plays.
-A group of stones are said to be alive if the group can not be captured even if the opponent is to plays first. To expand on this, even if opponent plays a move which threatens the group of stone there is always a responding move which will in turn keep the group of stones alive. Figure 1 shows an example of white group which can be deemed to be alive, if black first plays at 1 then white will play at 2 , if black first plays at 2 then white will play at 1 both outcomes will lead white group having two eyes.
-A group of  stones is said to be dead if the group can be captured even if the group’s colour can play first. A white group can be deemed dead if white can play the first move and black has a responding move which will keep the white group in a dead state. Figure 2 show group of dead white stones, for this group to live it requires white stones on two points diagonals to each other and no white stones on the other two , for example if white can play at a and d then it becomes alive. This is impossible to achieve as black can respond to white’s initial move by playing at diagonally opposite point seen in 2-b.
-A group of stone is said  to be unsettled when the group is alive  if the group’s colour can play first but dead if the opponent plays first. Groups which are unsettled are crucial to out come of the board, who ever can play first near the group can determine who controls the whole territory the unsettled group surrounds. Figure 3 show an unsettled white group which has vital point at a where if white plays first at a then the group achieves two eyes and is alive. On the other hand, if black plays first at a then white cannot achieve two eyes hence it becomes dead.
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\includegraphics[width=\textwidth]{LD/1a.png}
+\caption{Before Moves}
+\label{fig:LD-1a}
+\end{subfigure}\qquad
+\begin{subfigure}[b]{0.45\textwidth}
+\includegraphics[width=\textwidth]{LD/1b.png}
+\caption{After Moves}
+\label{fig:LD-1b}
+\end{subfigure}
+\caption{Straight Four in the corner is alive}
+\label{fig:LD-1}
+\end{figure}
+
+A group of stones are said to be alive if the group cannot be captured even if the opponent is to plays first. To expand on this, even if opponent plays a move which threatens the group of stone there is always a responding move which will in turn keep the group of stones alive. ~\autoref{fig:LD-1} shows an example of white group which can be deemed to be alive, if black first plays at 1 then white will play at 2 , if black first plays at 2 then white will play at 1 both outcomes will lead white group having two eyes.
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.3\textwidth}
+\includegraphics[width=\textwidth]{LD/2a.png}
+\caption{Before Moves}
+\label{fig:LD-2a}
+\end{subfigure}\qquad
+\begin{subfigure}[b]{0.3\textwidth}
+\includegraphics[width=\textwidth]{LD/2b.png}
+\caption{After Moves}
+\label{fig:LD-2b}
+\end{subfigure}
+\caption{Square Four in the corner is dead}
+\label{fig:LD-2}
+\end{figure}
+
+
+A group of  stones is said to be dead if the group can be captured even if the group’s colour can play first. A white group can be deemed dead if white can play the first move and black has a responding move which will keep the white group in a dead state. ~\autoref{fig:LD-2} shows group of dead white stones, for this group to live it requires white stones on two points diagonals to each other and no white stones on the other two , for example if white can play at a and d then it becomes alive. This is impossible to achieve as black can respond to white’s initial move by playing at diagonally opposite point seen in~\autoref{fig:LD-2b}.
+
+
+
+A group of stone is said  to be unsettled when the group is alive  if the group’s colour can play first but dead if the opponent plays first. Groups which are unsettled are crucial to outcome of the board, whoever can play first near the group can determine who controls the whole territory the unsettled group surrounds. ~\autoref{fig:LD-3} shows an unsettled white group which has vital point at a where if white plays first at a then the group achieves two eyes and is alive. On the other hand, if black plays first at a then white cannot achieve two eyes hence it becomes dead.
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.4\textwidth}
+\includegraphics[width=\textwidth]{LD/3a.png}
+\caption{Vital point at a}
+\label{fig:LD-3a}
+\end{subfigure}\qquad
+\begin{subfigure}[b]{0.4\textwidth}
+\includegraphics[width=\textwidth]{LD/3b.png}
+\caption{White lives with 2 eyes}
+\label{fig:LD-3b}
+\end{subfigure}
+\caption{Straight Three on the side is unsettled}
+\label{fig:LD-3}
+\end{figure}
+
+
+
+
 
 \subsection{Eyes}
-The concept of an eye is key in understanding life and death problems and Go in general. There are no perfectly defined statements on what an eye is but in general an eye is a space surround by a group of the same colour. Single eye point shapes as in figure 4. In these shapes stones surrounding eyes are important if any of them are missing then the eye will no longer be a real eye. An important deduction about a single point real eye is the fact opponent cannot play on the single point eye unless the eye is only liberty of the surrounding stones. If two real eyes are connected by the same group of stones, then it becomes impossible to capture that group of stone unless the eyes are covered up by the its own colour. These groups of stones are unconditionally alive which means even if the opponent is  able to play multiple times in a row the group cannot be captured. Figure 5 shows an example of a group of white stone which contains two eyes at a and b , due the self-capture rule black can never place in a without having a stone at b and same applies of b hence the white group in unconditionally alive.
+The concept of an eye is key in understanding life and death problems and Go in general. There are no perfectly defined statements on what an eye is but in general an eye is a space surround by a group of the same colour. Single eye point shapes are shown in ~\autoref{fig:LD-4}. In these shapes stones surrounding eyes are important if any of them are missing then the eye will no longer be a real eye. An important deduction about a single point real eye is the fact opponent cannot play on the single point eye unless the eye is only liberty of the surrounding stones. If two real eyes are connected by the same group of stones, then it becomes impossible to capture that group of stone unless the eyes are covered up by the its own colour. These groups of stones are unconditionally alive which means even if the opponent is  able to play multiple times in a row the group cannot be captured. ~\autoref{fig:LD-3b} shows an example of a group of white stone which contains two eyes at a and b , due the self-capture rule black can never place in a without having a stone at b and same applies of b hence the white group in unconditionally alive.
+
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.3\textwidth}
+\includegraphics[width=\textwidth]{LD/4.png}
+\caption{Different Single Point Eyes}
+\label{fig:LD-4a}
+\end{subfigure}
+\caption{Single Point Eye in the middle, side and corner}
+\label{fig:LD-4}
+\end{figure}
+
+
 
 In cases of larger groups which surround more empty points, these empty points are referred to as the eye space. Eye space are important in determining early on within a game whether a group is dead or alive. Eye space can be reduced to create eyes , the greater the amount of eye space a group surrounds the greater the ability it has to create two real eyes and live unconditionally.
 
-When eyes are not full developed on the board for example at a in fig 6a they are deemed to be half eyes , depending on who plays first at b decides whether a real eye is formed or is stopped from being formed. Half eyes are important because two half eyes add up to one eye.  A group such as the one shown in fig6b which has a real eye at a and 2 half eyes at b and c can be deemed as alive due to the fact that when black plays to deform one half eye at 1 white can play at 2 to fully form the other half eye into a real eye creating an unconditionally alive group.
+When eyes are not full developed on the board for example at a in ~\autoref{fig:LD-5a} they are deemed to be half eyes, depending on who plays first at b decides whether a real eye is formed or is stopped from being formed. Half eyes are important because two half eyes add up to one eye.  A group such as the one shown in ~\autoref{fig:LD-5b} which has a real eye at a and 2 half eyes at b and c can be deemed as alive due to the fact that when black plays to deform one half eye at 1 white can play at 2 to fully form the other half eye into a real eye creating an unconditionally alive group.
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.4\textwidth}
+\includegraphics[width=\textwidth]{LD/5a.png}
+\caption{Vital point at a}
+\label{fig:LD-5a}
+\end{subfigure}\qquad
+\begin{subfigure}[b]{0.5\textwidth}
+\includegraphics[width=\textwidth]{LD/5b.png}
+\caption{White lives with 2 eyes}
+\label{fig:LD-5b}
+\end{subfigure}
+\caption{Straight Three on the side is unsettled}
+\label{fig:LD-5}
+\end{figure}
 
 
 \subsection{Outcomes of Life and Death}
 The possible outcomes of some life and death situations are not as obvious it would seem. There are different type of life and death results. The solution found for a problem can vary the result of the whole board depending on which the following categories it fits into.
 
-Unconditional life or escape into centre of the board is the best outcome a defending player can expect , this means their group of stone will be scoring them the points with uncertainty. Another but lesser type of victory is life through seki, which means mutual life, this is where two groups opposing colour of stones live sharing liberties and neither player can try to capture the opponent’s group because it will lead to their group’s death first. When attacking group of stones is able to live in mutual life along with the defending player’s group then the outcome is slightly less favoured than unconditional life due the end game scoring. In isolated life and death problems and for the purpose of GoLD this difference between unconditional life and seki in not taken to account , seki is to be deemed victory for the defending team.
+Unconditional life or escape into centre of the board is the best outcome a defending player can expect , this means their group of stone will be scoring them the points with uncertainty. Another but lesser type of victory is life through Seki, which means mutual life, this is where two groups opposing colour of stones live sharing liberties and neither player can try to capture the opponent’s group because it will lead to their group’s death first. When attacking group of stones is able to live in mutual life along with the defending player’s group then the outcome is slightly less favoured than unconditional life due the end game scoring. In isolated life and death problems and for the purpose of GoLD this difference between unconditional life and Seki in not taken to account , Seki is to be deemed victory for the defending team.
 
 Life and death problems can also conclude where Ko occurs within the area, in the full game of Go this is very important in deciding ko fights in other parts of the board and can be seen as leverage to be used.  For the purpose of GoLD and in isolated problems these situations are further played on until a defining end is met where group is dead or alive. The final possible result is death where the defending player’s group is captured without any ko situation which the best-case scenario for the attacking player.
 
 
 
-
-
-\section{Examples}
-
-
-
-\begin{figure}[!ht]
-\centering
-\begin{subfigure}[b]{0.45\textwidth}
-\includegraphics[width=\textwidth]{ex/Ex1-0.png}
-\caption{Before Move}
-\label{fig:ex1-0}
-\end{subfigure}
-\begin{subfigure}[b]{0.45\textwidth}
-\includegraphics[width=\textwidth]{ex/Ex1-1.png}
-\caption{After Move}
-\label{fig:ex1-1}
-\end{subfigure}
-\caption{Example 1: The black stone is “captured” as the top white stone is placed because the black stone has no liberty left.}
-\label{fig:ex1}
-\end{figure}
-
-
-\begin{figure}[!ht]
-\centering
-\begin{subfigure}[b]{0.45\textwidth}
-\includegraphics[width=\textwidth]{ex/Ex2-0.png}
-\caption{Middle point is invalid}
-\label{fig:ex2-0}
-\end{subfigure}
-\caption{Example 2: A black stone cannot be placed in the middle of the four white stones because this would lead to self-capture.}
-\label{fig:ex2}
-\end{figure}
-
-\begin{figure}[!ht]
-\centering
-\begin{subfigure}[b]{0.45\textwidth}
-\includegraphics[width=\textwidth]{ex/Ex3-0.png}
-\caption{Before Move}
-\label{fig:ex3-0}
-\end{subfigure}
-\begin{subfigure}[b]{0.45\textwidth}
-\includegraphics[width=\textwidth]{ex/Ex3-1.png}
-\caption{After Move}
-\label{fig:ex3-1}
-\end{subfigure}
-\caption{Example 3: A black stone can be placed in the middle of the four white stones because 1 and 2 will be immediately captured before the self-capture rule is applied. }
-\label{fig:ex3}
-\end{figure}
-
-
-\begin{figure}[!ht]
-\centering
-\begin{subfigure}[b]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{ex/Ex4-0.png}
-\caption{Before Move}
-\label{fig:ex4-0}
-\end{subfigure}
-\begin{subfigure}[b]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{ex/Ex4-1.png}
-\caption{After Move - Blue Square to represent KO}
-\label{fig:ex4-1}
-\end{subfigure}
-\caption{Example 4: Once a white stone is placed at a to capture the black stone at b , black stone cannot be played at b next turn by the opponent to capture the white stone placed at a.}
-\label{fig:ex4}
-\end{figure}
-
-
-\begin{figure}[!ht]
-\centering
-\begin{subfigure}[b]{0.45\textwidth}
-\centering
-\includegraphics[width=0.666\textwidth]{ex/Ex5-0.png}
-\caption{A black stone and its liberties}
-\label{fig:ex5-0}
-\end{subfigure}
-\begin{subfigure}[b]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{ex/Ex5-1.png}
-\caption{A black stone string and its liberties}
-\label{fig:ex5-1}
-\end{subfigure}
-\caption{Example 5: The liberties of a stone or a string of stone are the empty adjacent intersections.  In ~\autoref{fig:ex5-0} intersections a,b,c and d are the liberties of the black stone.
-In ~\autoref{fig:ex5-1} intersections a to g are the liberties of the black stone string but h is not a liberty due to the white stone that occupies it.}
-\label{fig:ex5}
-\end{figure}
-
-\begin{figure}[!ht]
-\centering
-\begin{subfigure}[b]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{ex/Ex6-0.png}
-\caption{Before Move}
-\label{fig:ex6-0}
-\end{subfigure}
-\begin{subfigure}[b]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{ex/Ex6-1.png}
-\caption{After Move}
-\label{fig:ex6-1}
-\end{subfigure}
-\caption{Example 6: The black stones a and b are connected but d is not connected to either a or b. If a black stone is placed at c then a,b,c and d are all said to be connected to each other.}
-\label{fig:ex6}
-\end{figure}
-
-
 \section{Related Works}
-Martin Müller's Explorer [2] was a strong program developed with the intention of playing Go. It captures key aspects of computer Go which can be used along with the minimax algorithm in one program. Explorer can evaluate the board in terms of safe territories for each player and can distinguish between safe stones and safe territories. Safe stones are any stones that are deemed alive but safe territories requires that no opponent stones can live within the safe stones. Explorer also takes into consideration of Semeai positions which are capturing races that occur within a game of Go. The victor of Semeai can be determined early sometimes and hence doing so during the evaluation could save searching further during minimax.
 
-While explorer aims to play the Go, this project aims to create a program to solve life and death situations. To do so, determining safety of keystones within a problem is important.  Safety of strings during the board evaluation can determine whether a correct move is made or not.
+Martin Müller's Explorer [2] was a strong program developed with the intention of playing Go. In his paper he delves into some key aspects of Explorer which have been useful to comprehend ideas behind creating a Go playing software. He describes the importance of board evaluation within a tree search algorithm such as minimax.
+
+Explorer can evaluate certain areas of the board in terms of safe territories for each player and can distinguish between safe stones and safe territories. Safe stones are any stones that are deemed alive but safe territories requires that no opponent stones can live within the safe stones. Explorer also takes into consideration of Semeai positions which are capturing races that occur within Go. The victor of Semeai can be determined early sometimes and hence doing so during the evaluation could save searching further during a tree search algorithm. Müller also goes into detail about the his zone based evaluation where Explorer is able to distinguish areas which are in conflict and areas which are clearly controlled by a certain colour.
+
+While Explorer aims to play Go, this project aims to create a program to solve life and death situations. To do so, determining safety of keystones within a problem is important. Explorer's methods of recognising safe strings such as Benson's alogrithm [10] and also the improved version of the algorithm described in [11] were regarded during the intial design of GoLD.
+
+
+Work done By Ken Chen and Zhinxing Chen [11] in creating Go Intellect and HandTalk were also quite interesting and relevant while working on this project. The key aspects of their work regarding eyes and determining value of a shape depending on the number of eyes the shape can produce was great a motivator during the implementation of GoLD's pattern based heuristics.
+
+Another relevant work researched during this project was Adrian B. Danieli's paper [12] on his own TsumeGo problem solver. In his paper he explorers indepth the process in which his program was delevoped. Explanation of key concepts such as move generation and board evalution were helpful in understanding how to delevop my own work. A particularly relevant piece of information which was used as advice during the desgin of GoLD was that there was a problem in his representation of each node during the tree search. He believed his representation of each node caused extra workload without during tree search without a good reason to do so. He goes on to explain due to the depth-first nature of his program "compressing" and "decompressing" the board posistions for every node was waste of time. Rather than saving some space which is not as relevant when using a depth first search, it would have been better to save time by storing the entire board posistion for each node.
 
 
 
@@ -266,33 +392,76 @@ While explorer aims to play the Go, this project aims to create a program to sol
 
 \chapter{Requirements}
 
-
-The project requires a well-defined and clear list of requirements due to the possible scale of it. Time constraints and resources available had to be taken to consideration before further work on the project was done. More precisely there was a need for identifying key aspects of the goals of this project and put them into more concrete requirements, so they can be implemented accordingly to achieve the goals of the project. Also, to keep track and have a streamlined work flow throughout the project the following requirements and scope were set.
+The project needed a well-defined list of requirements to outline key features and help to with the implementation order of those key features. Time constraints and the resources available had to be taken to consideration before further work on the project was done. From the start the project was divided into to two major milestones each containing a set of requirements to achieve the milestone. These milestones were set to help evaluate the progress through out the project and also to help streamline the work flow throughout the project so that at all points there was goal to strive towards. The functional requirements identified earlier on the project captured most of the work required but throughout the project these requirements were refined and added to in order to solve unseen problems that arose during the project duration. Some non-functional requirements were also discovered earlier on which were used to refine the goals of the project.
 
 \section{Functional Requirements}
-To begin with the project's first milestone's aim which is to create an AI to play against user in Go life and death problems using brute force search. To achieve this, certain key requirements needed to be met:
 
-The basic Go board should be displayed on the screen in which users can place stones in turn through mouse clicks. It needs comply to all the rules of Go and should capture and remove stones from the Board automatically after each turn. The program must be able to generate all the valid moves that can be made each turn and highlight them on the screen. Furthermore, the program itself must let the user create Go problems within it. To do so, split the program into two modes of use, an editor mode and player mode.
+\subsection{Milestone 1}
+The project's first milestone's aim was to implement most of the key features required for users to create and view problems. In addition to this the aim consisted of enabling the computer to play moves according to a simple tree search. This milestone consisted of the following requirements.
 
-Editor mode needs to permit the user the ability to place black and white stones where needed without needing to take turns to create the initial board state they want their problems to be in. The state of the board needs to be valid always such that rules of Go would allow the board position to occur in normal play for it be able to be created in editor mode. Captured stones must be removed from the board and also only one ko point exists on the board. Editor should be able to define the boundary of play area, specifically to be able to choose which points on the board are in play for the problem. Keystones should be place able via editor mode, the keystone/s’s purpose is to identify the stone in which the problem revolves around. Users should also be able to select who to play first, and whether to capture or keep alive the keystone/s. Finally, the editor mode is required to let the user to create a text description of the problem and save the entire problem into a text file. The save files needs be human readable and the program should be able to load them back to either edit the problem or to play them.
-The player mode is required allow the user to play through problems. This means it must allow users to load problems in from save files and play them out against the computer. To achieve the goal of creating an AI to play the game, there needs to be some features within the program to help with debugging. The ability to reset the problem back to original state, undo or redo a move and to also disable or enable the AI when required must be implemented into player mode.
+\subsubsection{Go Board}
+The first milestone required a Go board which the user and the computer will be able to interact with. This meant to implement a Board object was capable of storing relevant data and contained methods which is able to process the relevant data.
 
-The final requirement to achieve the first milestone needs to be addressed. There is a need for the program to contain a simple but effective Alpha-Beta pruning search algorithm to allow the correct move to be determined by the computer given board of stones and which colour’s turn it is, so that the computer can make that move to allow that colour to win. To make things simpler when problems are created, keystone/s needs to be placed on the board to allow the algorithm to surround its evaluations according to the status of the keystone/s on the board. For example, if the current turn is white and there is/are black keystone/s on board then the AI run the search algorithm and would evaluate to choose the move which would lead for the black keystone/s to be captured.
-
-To achieve final aim of the project which is to adapt the AI created in the first part of the project to solve larger and more complex problems the following critical requirements are needed:
-
-To introduce heuristics to the brute force Alpha-Beta search algorithm the program should contain a specialised module which evaluate the state of the board of each colour and returns how good or bad it is. This is so that given depth cut off to the search tree is implemented, the algorithm can return a value more accurately predict what would have been the result if the search has continued deeper. The AI must also use a complex move generator which given set of valid moves it picks certain number of moves and orders them according to the likelihood of being a good move using heuristics. Then the AI searches through this list of moves before going through and checking all the other possible valid moves.
-
-In addition, with these critical requirements some sub-requirements are needed to help with testing and to finalise the product. A set of Go problems are needed to be created and built into the product. This is to allow users to immediately try out the player mode without needing to create problems by themselves, will be especially be useful for players new to Go. Another feature needed to be implemented was a valid move checker, to return a list of all possible moves either to enforce the rules of the game to the users to play properly or to allow the AI playing against the human to have a way to generate a list of possible moves to search through.
-
-
-With all the requirements of the project it had become evident the scope of the project could vary drastically. To create a perfect Go playing AI on full 19x19 board would be far from achievable given the time and resources put into the project. The main constraints to decide the scope were:
+The relevant data needed to include the following:
 \begin{itemize}
-	\item Time given for AI to search and find the correct move?
-	\item The number of given valid moves a problem contains which the AI should solve?
+\item Representation of all the points on the board
+\item Current turn
+\item All of the stone strings for both colours
+\item Colour of keystone
+\item Point of Ko
+\item Lists of Atari points for both colours
+\item List of valid moves for the current turn
 \end{itemize}
-These two constraints are closely related to each other, more valid moves the AI is expected to handle the more time it should be allowed but with an upper bound set to allow users to interact and solve the problems without waiting too long. These were needed to be adjustable according to the feedback given by user testing. Hence the AI had to be built in way to allow for flexibility regarding these two parameters. To do so, the program gives the ability to choose what depth the AB pruning algorithm searches to before it cuts off to the user. This directly affect both run time of the algorithm and scale of the problem as bigger problems can be allowed with smaller cut off depth also would lead to less time required.
 
+The relevant methods which are able to do the following were required:
+\begin{itemize}
+\item Make a move on the board and update the entire board accordingly
+\item Generate all the valid moves for the current turn
+\item Check if a move is valid – this should include self-capture check and Ko check
+\item Check for capture and remove stones accordingly
+\item Obtain all the liberties of a given stone string
+\end{itemize}
+
+\subsubsection{Play Mode}
+Play mode is the screen in which the user can load a problem up and play through it. Play mode needed to contain a Go board in order to display problems. The board itself needs to be interactable, the user should be able to click on valid points on the board to make a move.
+
+Play mode also needed to contain buttons which do the following:
+\begin{itemize}
+\item Load a problem
+\item Save a problem
+\item Switch to editor mode
+\item Tell the computer to start search for the best move of the current board position
+\item Tell the computer to stop search
+\item Reset the problem to how it was loaded
+\item Undo & Redo moves
+\item Switch Turns
+\item Pass the turn
+\end{itemize}
+
+\subsubsection{Editor Mode}
+Editor mode is the screen in which the user can create problems from scratch or edit problems loaded in and save them for future use. Similar to play mode, editor mode needs to contain a Go board in order to display the problem which is being created/edited. The board itself needs to be interactable, the user should be able to place stones by simply clicking on the points on the board. Editor mode also needed a way for the user to decide which stone is currently being placed or whether if stones are being removed when the user clicks on the board.
+
+Editor mode also needed buttons to do the following functions:
+\begin{itemize}
+\item Load a problem
+\item Save a problem
+\item Switch to play mode
+\item Set who plays first during the problem
+\item To reset the board into an empty state
+\item Rotate and flip the board
+\item To place a keystone
+\item Switch keystone colour
+\end{itemize}
+
+\subsubsection{Computer}
+To achieve the first milestone the computer was required to perform a tree search. The tree search chosen for this project was the Alpha-Beta pruning algorithm. The requirement for the computer was that it needed to produce the best move possible given infinite time and or small enough problem via searching every valid sequence of moves then interact with the board in play mode by making the best move found.
+
+\subsection{Milestone 2}
+The second milestone’s aim was to enhance the computer AI by introducing heuristics to allow the user to restrict the time the computer is able to search for the best move. To do this following the requirements were added on top of the requirements for the first milestone.
+
+Play mode required an improved interface containing additional buttons to configure the parameter of the Alpha-Beta search used by the computer. Within the play mode the user needed to able to toggle on and off depth limiting and breadth limiting. Play mode should also allow the user to increase or decrease the limit and the breath of the search as they desire.
+
+The computer’s requirement was that it should be able to limit depth of the search according to the user’s choice. To do this it was required to introduce a board evaluation function. In order to allow the computer to limit the breath of the search it was required to introduce a move generator function which was able to generate a limited number of moves depending on the user’s breadth choice.
 
 \section{Non-Functional Requirements}
 Throughout the project some non-functional requirements where discovered and needed to be addressed , following categories were made to specify the different criteria GoLD need to achieve.
@@ -302,6 +471,10 @@ Performance / Time - Important concern was the time factor a user wants to spend
 Usability - Another concern was the ease of use , whether the program is simple and understandable for untrained users.
 
 Reliability – The program should be able to cope with any kind of user inputs and should maintain running with any failures or crashes.
+
+In order to test all three categories of these non-functional requirement the project also had an additional requirement of producing a folder of problems which can be used during the evaluation phase. This folder of problem was required so that beta tester could have pre-defined problem to test the program on. The folder was also required in order to perform quantitate evaluation of GoLD during the evaluation process, to judge what level of difficult the program can solve under what length of time period it takes.
+
+
 
 
 
@@ -333,59 +506,6 @@ The Alpha-Beta pruning algorithm is a smart improvement on the Minimax algorithm
 \label{fig:ABNumTree}
 \end{figure}
 
-
-
-% \begin{algorithm}
-% \caption{Alpha Beta Pruning Search}\label{Alpha-Beta}
-% \begin{algorithmic}
-%     \Procedure{alphaBeta}{$board,isDefending,depth,alpha,beta$}
-%         \State $depth\gets (depth+1)$
-%         \State $validMoves\gets (board.validMoves)$
-%         \State $keyStones\gets (board.getAliveKeyStones())$
-%         \If {keyStones.size == 0}
-%             \State \Return{$-\infty$}
-%         \EndIf
-%
-%          \If {board.turn = attackingPlayer \& validMoves.size == 0 }
-%             \State \Return{$\infty$}
-%         \EndIf
-%
-%         \If {isDefending}
-%             \State $best\gets -\infty$
-%             \For{move in validMoves}
-%                 \State board.makeMove(move)
-%                 \State $score \gets alphaBeta(board,!isDefending,depth,alpha,beta)$
-%                 \State board.undoMove()
-%                 \If {($depth = 1$  { \& }  $score < best$)}
-%                     \State {$bestMove \gets move$}
-%                 \EndIf
-%                 \State $best \gets max(best,score)$
-%                 \State $alpha \gets max(alpha,score)$
-%                 \If {$beta \leq alpha$}
-%                     \State $break$
-%                 \EndIf
-%             \EndFor
-%             \State \Return{$best$}
-%         \Else
-%            \State $best\gets \infty$
-%             \For{move in validMoves}
-%                 \State board.makeMove(move)
-%                 \State $score \gets alphaBeta(board,!isDefending,depth,alpha,beta)$
-%                 \State board.undoMove()
-%                 \If {($depth = 1$  { \& }  $score < best$)}
-%                     \State $bestMove \gets move$
-%                 \EndIf
-%                 \State $best \gets min(best,score)$
-%                 \State $alpha \gets min(alpha,score)$
-%                 \If {$(beta \leq alpha)$}
-%                     \State $break$
-%                 \EndIf
-%             \EndFor
-%             \State \Return{$best$}
-%         \EndIf
-%     \EndProcedure
-% \end{algorithmic}
-% \end{algorithm}
 
 The following pseudocode addresses the Alpha-Beta pruning search algorithm with Go's Life and Death problems in mind. It was used for the initial design of GoLD's move finder function and later adapted to implement heuristics described in the following sections of this chapter.
 
@@ -770,6 +890,7 @@ The pattern matcher not only returns matched patterns but also the rotation in w
 
 \chapter{Evaluation}
 
+
 \section{Unit Testing}
 
 \section{Evaluation of Heuristics}
@@ -794,6 +915,7 @@ The pattern matcher not only returns matched patterns but also the rotation in w
 
 
 \chapter{References}
+
 1.http://www.cs.cmu.edu/~wjh/go/rules/Japanese.html
 2.Müller, M. (2002). POSITION EVALUATION IN COMPUTER GO. ICGA Journal, 25(4), pp.219-228.
 3.Chikun, C. (1993). All About Life \& Death. Ishi Pr.
@@ -803,7 +925,31 @@ The pattern matcher not only returns matched patterns but also the rotation in w
 7.Huberman, B.J. (1968). A PROGRAM TO PLAY CHESS END GAMES.
 8.Korf R. Depth-first iterative-deepening. Artif Intell. 1985;27(1):97-109. doi:10.1016/0004-3702(85)90084-0
 9.https://deepmind.com/research/alphago/
+10. Life in the Game of Go  - DAVID B. BENSON*
+11.https://webdocs.cs.ualberta.ca/~mmueller/ps/gpw97.pdf  - recognise secure territories
+12.https://webdocs.cs.ualberta.ca/~games/go/seminar/2002/020703/ld.pdf -  Static analysis of life and death in the game of Go Ken Chen
+13.https://dspace.mit.edu/bitstream/handle/1721.1/50434/41567232-MIT.pdf?sequence=2 -
+ A Tsume-Go Life \& Death Problem Solver Adrian B. Danieli
 
+
+
+ % \begin{figure}[!ht]
+ % \centering
+ % \begin{subfigure}[b]{0.3\textwidth}
+ % \centering
+ % \includegraphics[width=\textwidth]{ex/Ex6-0.png}
+ % \caption{Before Move}
+ % \label{fig:ex6-0}
+ % \end{subfigure}
+ % \begin{subfigure}[b]{0.3\textwidth}
+ % \centering
+ % \includegraphics[width=\textwidth]{ex/Ex6-1.png}
+ % \caption{After Move}
+ % \label{fig:ex6-1}
+ % \end{subfigure}
+ % \caption{Example 6: The black stones a and b are connected but d is not connected to either a or b. If a black stone is placed at c then a,b,c and d are all said to be connected to each other.}
+ % \label{fig:ex6}
+ % \end{figure}
 
 
 
