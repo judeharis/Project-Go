@@ -66,15 +66,12 @@ Chapter 7 Conclusion – Concludes the whole paper by looking at the successes o
 
 
 \chapter{Background \& Related Works}
-In order to achieve the aim of creating program certain level of knowledge of the game of Go was required. Knowledge such as the rules of Go and details regarding Life and death problems were important factors while designing and implementing GoLD. Along with understanding Go, researching papers and finding inspiration from similar work done were key to this project.
-
-Go is a complex board game where the rules are far simpler than the strategies and tactics used to play it. To understand Go as a human player would was crucial in the progression of the project. To begin with, many simple questions needed to be answered about the game and how it is played in order to design GoLD. Basic concepts and terminology needed to be understood before tackling complex strategies which are built up from these basic concepts.
-
+In order to achieve the aim of creating a tool program, a certain level of knowledge of the game of Go was required. Knowledge such as the rules of Go and details regarding life and death problems were important factors while designing and implementing GoLD. Along with understanding Go, researching papers and finding inspiration from similar work done was important for the progression of this project.
+Go is a complex board game where the rules are far simpler than the strategies and tactics used to play it. To understand Go in general like how a beginner would,  was crucial in the progression of the project. To begin with, many simple questions needed to be answered about the game and how it is played in order to design GoLD. Basic concepts and terminology needed to be understood before tackling complex strategies which are built up from these basic concepts.
 
 \section{Rules}
 
-While there are no official rules for Go and many varied rulesets being used around the world , they are all quite similar. None of them really affect the strategy or tactics used within the game hence comprehending one ruleset was enough to understand the game in order to implement the rules within GoLD. This is especially true because the GoLD does not require counting scores which is the part of the rulesets that vary the most. The basic rules according to Japanese Rules of Go set by Nihon Kiin translated by James Davies [1] were used to define the basic ruleset used within the project. Some variations were made to these rules to suit the problem-solving nature of the project rather than playing whole game of Go which will be explained in a later section.
-
+While there are no official rules for Go and many varied rulesets being used around the world, they are all quite similar. None of them really affect the strategy or tactics used within the game hence comprehending one ruleset was enough to understand the game in order to implement the rules within GoLD. This is especially true because the GoLD does not require counting scores which is the part of the rulesets that vary the most. The basic rules according to Japanese Rules of Go set by Nihon Kiin translated by James Davies [1] were used to define the basic ruleset used within the project. Some alterations were made to these rules to suit the problem-solving nature of the project rather than playing a whole game of Go which will be explained in a later section.
 
 \begin{figure}[!ht]
 \centering
@@ -88,16 +85,16 @@ While there are no official rules for Go and many varied rulesets being used aro
 \caption{After Move}
 \label{fig:ex1-1}
 \end{subfigure}
-\caption{The black stone is “captured” as the top white stone is placed because the black stone has no liberty left.}
+\caption{The black stone is “captured” when the white stone at the top is placed because the black stone loses its last liberty}
 \label{fig:ex1}
 \end{figure}
 
-The basic rules are as follows:
+The basic rules of Go are as follows:
 \begin{enumerate}
 
   \item Initial Go board is empty containing no stones unless handicaps are applied.
   \item Black plays first and then white. Players take turns alternately placing stones of their own colour.
-  \item The board contains 19x19 gridline pattern with 361 intersections. Stones are played on the intersections not the square in between. Stones can only be played on empty intersections. These intersections are also referred to as points on the board.
+  \item The board contains a 19x19 gridline pattern with 361 intersections. Stones are played on the intersections and not the square in between. Stones can only be played on empty intersections. These intersections are also referred to as points on the board.
 
 
   \begin{figure}[!ht]
@@ -112,16 +109,16 @@ The basic rules are as follows:
   \caption{Both middle points are invalid for black to play}
   \label{fig:ex2-1}
   \end{subfigure}
-  \caption{A black stone cannot be placed in the middle of the four white stones because this would lead to self-capture.}
+  \caption{A black stone cannot be placed in the middle of both of these shapes because it would lead to self-capture.}
   \label{fig:ex2}
   \end{figure}
 
   \item Each turn consists of few parts as follows:
   	\begin{enumerate}[label={(\alph*)}]
-		\item Current player is to place a stone of their colour on any empty intersection they desire.
-		\item Then any opponent’s stones that does not have a liberty is removed from the board. See ~\autoref{fig:ex1}.
+		\item Current player is to place a stone of their colour on an empty intersection of their choice.
+		\item Then all opponent’s stones that do not have a liberty is removed from the board. See ~\autoref{fig:ex1}.
 		\item A move is invalid if it will cause one or more stone of the current player’s colour to be captured – this is to prevent self-capturing moves. See ~\autoref{fig:ex2}.
-		\item Removal of opponent’s stones take precedence over self-capture check. This allows for moves which captures opponent’s stones but is suicide if the opponent’s stones are not removed first. See ~\autoref{fig:ex3}.
+		\item Removal of the opponent’s stones takes precedence over the self-capture check. This allows for moves which capture opponent’s stones but is suicide if the opponent’s stones are not removed first. See ~\autoref{fig:ex3}.
 	\end{enumerate}
 
     \begin{figure}[!ht]
@@ -152,13 +149,13 @@ The basic rules are as follows:
     \caption{After - Blue Square is Ko}
     \label{fig:ex4-1}
     \end{subfigure}
-    \caption{Once a white stone is placed at a to capture the black stone at b , black stone cannot be played at b next turn by the opponent to capture the white stone placed at a.}
+    \caption{ Once a white stone is placed at a to capture the black stone at b, a black stone cannot be played at b next turn by the opponent to capture the white stone placed at a.}
     \label{fig:ex4}
     \end{figure}
 
-  \item Ko rule – Player is not allowed to place a stone on point A if it will capture exactly one opponent stone which was placed on point B during the opponent’s previous turn. This rule only applies if the opponent in the previous turn captured exactly one stone on point A. This is to prevent infinite repetition of the same few moves. See ~\autoref{fig:ex4}.
+  \item Ko rule – Player is not allowed to place a stone on point A if it will capture exactly one opponent stone which was placed on point B during the opponent’s previous turn. This rule only applies if the opponent in the previous turn captured exactly one stone on point A. This is to prevent an infinite repetition of the same few moves. See ~\autoref{fig:ex4}.
 
-  \item The game is over when both players pass consecutively and the player with the more territory wins. (Scoring can be complicated but is irrelevant to understand the basic rules)
+  \item The game is over when both players pass consecutively and the player with more territory wins. (Scoring can be complicated but is irrelevant to understand the basic rules)
 
 \end{enumerate}
 
@@ -166,16 +163,17 @@ The basic rules are as follows:
 
 
 \section{Rules for GoLD}
-The rules stated in the previous section outline all the important rules of Go. Some of these rules are slightly altered in order suit the problem-solving environment set in GoLD. The alterations are as follows:
+The rules stated in the previous section outline all the important rules of Go. Some of these rules are slightly altered in order to suit the problem-solving environment set in GoLD.
 
+The alterations are as follows:
 \begin{enumerate}
 
-\item The initial board is set up to represent a life and death problem - should be a valid initial board state.
-\item Not all 361 intersections are can be played on – boundaries are set by the creator of the problem
-\item For the purpose of there problems, one player is considered to be the attacker and the other defender.
+\item The initial board is set up to represent a life and death problem - should be a valid initial board position.
+\item Not all 361 intersections can be played on – boundaries are set by the creator of the problem
+\item For the purpose of these problems, one player is considered to be the attacker and the other to be the defender.
 \item Attacking player is not able to pass unless the attacking player has no valid moves and the Ko rule is restricting play.
-\item Two consecutive passes does not end the game/problem.
-\item The problem is solved when attacking player has no valid moves and cannot pass, if the keystones are still on the board then the defending players has won. Otherwise the problem is solved if all the keystones are captured hence the attacking player has won.
+\item Two consecutive passes do not end the game/problem.
+\item The problem is solved when the attacking player has no valid moves and cannot pass, if the keystones are still on the board then the defending players have won. Otherwise, the problem is solved if all the keystones are captured hence the attacking player has won.
 
 \end{enumerate}
 
@@ -183,43 +181,42 @@ The rules stated in the previous section outline all the important rules of Go. 
 \bigskip
 A valid initial board state is defined by the following :
 \begin{itemize}
-\item Contain at least one keystone
+\item Contains at least one keystone
 \item All keystones are the same colour
-\item Must have a valid empty intersection to play on within the boundaries set
+\item Must have a valid empty intersection to play on within the boundaries set for the problem
 \item Can only contain up to one point of Ko
-\item Stones that have no liberties cannot exist in the board.
+\item Stones that have no liberties cannot exist on the board
 \end{itemize}
 
 \bigskip
-In a normal game of Go there are no boundaries set on the board, every intersection on the board is playable if the other rules allow it. To achieve the aim of this project there is a definite need for boundaries to be set on the board for each problem. Without doing so, the number of valid moves required to be searched by the AI would be too large to determine the best move in a limited time. To set boundaries during the creation of a problem, the creator can deem relevant points on the board as valid points to play on. Any points on the board with preplaced stones are also regarded as within the boundary. For example, a black stone is captured, the empty point remaining will be regarded within the boundary of play. It can be very difficult or even impossible for a problem creator to determine all relevant points for the problem. GoLD leaves it in the hands of the problem creators to define life and death problems with relevant boundaries. This is a crucial trade-off which is required to allow the program to be able to find the correct answer in feasible time.
-
-The reason behind the 4th alteration to the basic rules is to restrict infinite passing which would allowed due to the 5th alteration. Attacking player is allowed to pass under the circumstance that they have no valid moves and an empty intersection invalid due to the Ko rules, this resolves some rare occurrences where boundaries set by the creator of the problem restricts the attacking player from winning.
-
+In a normal game of Go, there are no boundaries set on the board, every intersection on the board is playable if the other rules allow it. To achieve the aim of this project there is a definite need for boundaries to be set on the board for each problem. Without doing so, the number of valid moves required to be searched by the AI would be too large to determine the best move in a limited time. To set boundaries during the creation of a problem, the creator can deem relevant points on the board as "valid points" to play on. Any points on the board with preplaced stones are also regarded as within the boundary. For example, a black stone is captured, the empty point remaining will be regarded within the boundary of play. It can be very difficult or even impossible for a problem creator to determine all relevant points for the problem. GoLD leaves it in the hands of the problem creators to define life and death problems with relevant boundaries. This is a crucial trade-off which is required to allow the program to be able to find the correct answer in a feasible time.
+The reason behind the 4th alteration to the basic rules is to restrict infinite passing which would be allowed due to the 5th alteration. Attacking player is allowed to pass under the circumstance that they have no valid moves and an empty intersection is invalid to play on due to the Ko rule, this resolves some rare occurrences where boundaries set by the creator of the problem restricts the attacking player from winning.
 
 
 
 
 \section{Go Terminology}
 
-Throughout this paper many terms are used to describe many aspects of Go some of which can be said to be common agreed upon terms to describe Go and others are created for the purpose of the project.
+Throughout this dissertation many terms are used to describe various aspects of Go, some of which are commonly used term within the Go world and others are created for the purpose of this project.
 
 Keystones – Set of predetermined stones which are used as the objective of the problems. These stones are to be captured by the attacking player and kept alive by the defending player.
 
 Attacking player – In terms of life and death problems, the attacking player is the one which is trying to capture the keystones on the board.
 
-Defending player – In terms of life and death problems, the defending player is the one which is trying to capture the keystones on the board.
+In terms of life and death problems, the defending player is the one which is trying to keep the keystones alive on the board.
+
+Board position – Refers to the entire state of the board, not just a single point on the board.
+
+Valid points – Set of predetermined intersections that are allowed to be played on for the given the problem. A valid point can also refer to a point which the current player is able to play on.
+
+Connected - Two stones are connected if they are of the same colour and is adjacent to each other or there is a set of stones of the same colour which is connected to both stones.
+
+String – Set of stones of the same colour which are connected.
+
+Keystring – Any string which contains one or more keystones.
 
 
-
-Valid points – Set of predetermined intersections that are allowed to be played on for the given the problem. Valid point can also refer to a point which the current player is able to play on.
-
-String – Set of stones that are connected of the same colour.
-
-Keystring – String which contains one or more keystones.
-
-
-
-Liberty -  Liberty of a stone is any adjacent empty intersection of the stone or any empty intersection of any stone connected to the original stone. See ~\autoref{fig:ex5}.
+Liberty - The liberties of a stone are all adjacent empty intersection of the stone and all adjacent empty intersection of any stone connected to the original stone. See ~\autoref{fig:ex5}.
 
 
 
@@ -243,25 +240,26 @@ In ~\autoref{fig:ex5-1} intersections a to g are the liberties of the black ston
 \label{fig:ex5}
 \end{figure}
 
-Connected - Two stones are connected if they are of the same colour and is adjacent to each other or there is a set of stones of the same colour which are connected to both stones.
 
-Atari – String is in Atari when it only has 1 liberty.
+Atari – String is in Atari when it only has one liberty.
 
 Atari Point – The last remaining liberty of a string.
 
-Ko Point -  An empty intersection which restricted from play due to the Ko rule
+Ko Point –  An empty intersection which is restricted from play due to the Ko rule
 
-Seki – Two strings of opposing colour that are alive next to each other. Neither player can capture the opponent string without first sacrificing their own.
+Seki – Two strings of opposing colour that are alive next to each other. Neither player can capture the opponent string without first sacrificing their own string.
+
+
 
 
 
 \section{Life and Death Problems}
 
-Life and Death is an essential part of Go. Life and Death is the term used to describe the battle that takes place to either capture stone enemy stone strings or to defend and keep alive ally stone strings. Situations on the board where it become crucial to defend one’s own stone strings or capture enemy ones arrive very often. During the end game in Go the ability to win these battles with as much territory as possible will decide the victor. Beginners are highly recommended to understand and  learn the how to play out these battles as they are clear deciders in the game. Many of the literature on Go are purely based around providing life and death problems  and explaining the importance of them and how to tackle such situations appropriately.[3][4] The purpose of GoLD is to create a tool which helps players to understand and solve these problems.
+Life and Death is an essential part of Go. Life and Death is the term used to describe the battle that takes place to either attack and capture enemy stone strings or to defend and keep alive ally stone strings. Situations on the board where it becomes crucial to defend one’s own stone strings or capture enemy ones arrive very often. During the end game in Go, the ability to win these battles with as much territory as possible will decide the victor. Beginners are highly recommended to understand and learn how to play out these battles as they are clear deciders in the game. Many of the literature on Go is purely based around providing life and death problems and explaining the importance of them and how to tackle such situations appropriately.[3][4] The purpose of GoLD is to create a tool which helps players to understand and solve these problems.
 
 \subsection{Dead, Alive or Unsettled}
 
-The three main way to describe a string of stones are alive, dead or unsettled. To deduct accurately the state of a group of stone can be difficult and requires a lot of experience and knowledge about the possible moves that could be made and the counter plays to them and the result of counter plays.
+The three main ways to describe the status of a string are alive, dead or unsettled. To deduct accurately the state of a group of stone can be difficult and requires a lot of experience and knowledge about the possible moves that could be made and the counter plays to them and the result of counter plays.
 
 \begin{figure}[!ht]
 \centering
@@ -279,7 +277,7 @@ The three main way to describe a string of stones are alive, dead or unsettled. 
 \label{fig:LD-1}
 \end{figure}
 
-A group of stones are said to be alive if the group cannot be captured even if the opponent is to plays first. To expand on this, even if opponent plays a move which threatens the group of stone there is always a responding move which will in turn keep the group of stones alive. ~\autoref{fig:LD-1} shows an example of white group which can be deemed to be alive, if black first plays at 1 then white will play at 2 , if black first plays at 2 then white will play at 1 both outcomes will lead white group having two eyes.
+A group of stones are said to be alive if the group cannot be captured even if the opponent is to play first. To expand on this, even if opponent plays a move which threatens the group of stone there is always a responding move which will in turn keep the group of stones alive. ~\autoref{fig:LD-1} shows an example of white group which can be deemed to be alive, if black first plays at 1 then white will play at 2, if black first plays at 2 then white will play at 1 both outcomes will lead white group having two eyes.
 
 \begin{figure}[!ht]
 \centering
@@ -298,11 +296,10 @@ A group of stones are said to be alive if the group cannot be captured even if t
 \end{figure}
 
 
-A group of  stones is said to be dead if the group can be captured even if the group’s colour can play first. A white group can be deemed dead if white can play the first move and black has a responding move which will keep the white group in a dead state. ~\autoref{fig:LD-2} shows group of dead white stones, for this group to live it requires white stones on two points diagonals to each other and no white stones on the other two , for example if white can play at a and d then it becomes alive. This is impossible to achieve as black can respond to white’s initial move by playing at diagonally opposite point seen in~\autoref{fig:LD-2b}.
+A group of stones is said to be dead if the group can be captured even if the group’s colour can play first. A white group is deemed dead if white can play the first move and black has a responding move which will keep the white group in a dead state. ~\autoref{fig:LD-2} shows a group of dead white stones, for this group to live it requires white stones on two points diagonally opposite to each other and no white stones on the other two points. For example, if white can play at a and d then it becomes alive. This is impossible to achieve as black can respond to white’s initial move by playing at diagonally opposite point seen in~\autoref{fig:LD-2b}.
 
 
-
-A group of stone is said  to be unsettled when the group is alive  if the group’s colour can play first but dead if the opponent plays first. Groups which are unsettled are crucial to outcome of the board, whoever can play first near the group can determine who controls the whole territory the unsettled group surrounds. ~\autoref{fig:LD-3} shows an unsettled white group which has vital point at a where if white plays first at a then the group achieves two eyes and is alive. On the other hand, if black plays first at a then white cannot achieve two eyes hence it becomes dead.
+A group of stone is said to be unsettled when the group is alive if the group’s colour can play first but dead if the opponent plays first. Groups which are unsettled are crucial to the outcome of the board, whoever can play first near the group can determine who controls the whole territory the unsettled group surrounds. ~\autoref{fig:LD-3} shows an unsettled white group which has a vital point at a where if white plays first at a then the group achieves two eyes and is alive. On the other hand, if black plays first at a then white cannot achieve two eyes hence it becomes dead.
 
 \begin{figure}[!ht]
 \centering
@@ -323,10 +320,8 @@ A group of stone is said  to be unsettled when the group is alive  if the group�
 
 
 
-
 \subsection{Eyes}
-The concept of an eye is key in understanding life and death problems and Go in general. There are no perfectly defined statements on what an eye is but in general an eye is a space surround by a group of the same colour. Single eye point shapes are shown in ~\autoref{fig:LD-4}. In these shapes stones surrounding eyes are important if any of them are missing then the eye will no longer be a real eye. An important deduction about a single point real eye is the fact opponent cannot play on the single point eye unless the eye is only liberty of the surrounding stones. If two real eyes are connected by the same group of stones, then it becomes impossible to capture that group of stone unless the eyes are covered up by the its own colour. These groups of stones are unconditionally alive which means even if the opponent is  able to play multiple times in a row the group cannot be captured. ~\autoref{fig:LD-3b} shows an example of a group of white stone which contains two eyes at a and b , due the self-capture rule black can never place in a without having a stone at b and same applies of b hence the white group in unconditionally alive.
-
+The concept of an eye is key in understanding life and death problems and Go in general. There are no perfectly defined statements on what an eye is but in general, an eye is a space surround by a group of the same colour. Single eye point shapes are shown in ~\autoref{fig:LD-4}. In these shapes, the stones surrounding the eyes are important if any of them are missing then the eye will no longer be a real eye. An important deduction about a single point real eye is the fact opponent cannot play on the single point eye unless the eye is only liberty of the surrounding stones. If two real eyes are connected by the same group of stones, then it becomes impossible to capture that group of stone unless the eyes are covered up by its own colour. These groups of stones are unconditionally alive which means even if the opponent is able to play multiple times in a row the group cannot be captured. ~\autoref{fig:LD-3b} shows an example of a group of white stone which contains two eyes at a and b, due to the self-capture rule black can never place in a without having a stone at b and same applies of b hence the white group in unconditionally alive.
 
 \begin{figure}[!ht]
 \centering
@@ -341,10 +336,9 @@ The concept of an eye is key in understanding life and death problems and Go in 
 
 
 
-In cases of larger groups which surround more empty points, these empty points are referred to as the eye space. Eye space are important in determining early on within a game whether a group is dead or alive. Eye space can be reduced to create eyes , the greater the amount of eye space a group surrounds the greater the ability it has to create two real eyes and live unconditionally.
+In cases of larger groups which surround more empty points, these empty points are referred to as the eye space. The eye space of a group is important in determining early on within a game whether a group is dead or alive. An eye space can be reduced to create real eyes, the greater the amount of eye space a group surrounds the greater the ability it has to create two real eyes and live unconditionally.
 
-When eyes are not full developed on the board for example at a in ~\autoref{fig:LD-5a} they are deemed to be half eyes, depending on who plays first at b decides whether a real eye is formed or is stopped from being formed. Half eyes are important because two half eyes add up to one eye.  A group such as the one shown in ~\autoref{fig:LD-5b} which has a real eye at a and 2 half eyes at b and c can be deemed as alive due to the fact that when black plays to deform one half eye at 1 white can play at 2 to fully form the other half eye into a real eye creating an unconditionally alive group.
-
+When eyes are not fully developed on the board for example at a in ~\autoref{fig:LD-5a} they are deemed to be half eyes, depending on who plays first at b decides whether a real eye is formed or is stopped from being formed. Half eyes are important because two half eyes add up to one eye.  A group such as the one shown in ~\autoref{fig:LD-5b} which has a real eye at a and two half eyes at b and c can be deemed as alive due to the fact that when black plays 1 to deform one half eye white can play 2 to fully form the other half eye into a real eye creating an unconditionally alive group.
 \begin{figure}[!ht]
 \centering
 \begin{subfigure}[b]{0.4\textwidth}
@@ -363,26 +357,23 @@ When eyes are not full developed on the board for example at a in ~\autoref{fig:
 
 
 \subsection{Outcomes of Life and Death}
-The possible outcomes of some life and death situations are not as obvious it would seem. There are different type of life and death results. The solution found for a problem can vary the result of the whole board depending on which the following categories it fits into.
+The possible outcomes of some life and death situations are not as obvious it would seem. There are different types of life and death results. The solution found for a problem can vary the result of the whole board depending on which the following categories it fits into.
+Unconditional life or escape into the centre of the board is the best outcome a defending player can expect, this means their group of stone will be scoring them the points without uncertainty. Another but a lesser type of victory is life through Seki, which means mutual life, this is where two groups opposing colour of stones live sharing liberties and neither player can try to capture the opponent’s group because it will lead to their group’s death first. When an attacking group of stones is able to live in mutual life along with the defending player’s group then the outcome is slightly less favoured than unconditional life due to the end game scoring. In isolated life and death problems and for the purpose of GoLD this difference between unconditional life and Seki is not taken to account, Seki is deemed victory for the defending team.
 
-Unconditional life or escape into centre of the board is the best outcome a defending player can expect , this means their group of stone will be scoring them the points with uncertainty. Another but lesser type of victory is life through Seki, which means mutual life, this is where two groups opposing colour of stones live sharing liberties and neither player can try to capture the opponent’s group because it will lead to their group’s death first. When attacking group of stones is able to live in mutual life along with the defending player’s group then the outcome is slightly less favoured than unconditional life due the end game scoring. In isolated life and death problems and for the purpose of GoLD this difference between unconditional life and Seki in not taken to account , Seki is to be deemed victory for the defending team.
-
-Life and death problems can also conclude where Ko occurs within the area, in the full game of Go this is very important in deciding ko fights in other parts of the board and can be seen as leverage to be used.  For the purpose of GoLD and in isolated problems these situations are further played on until a defining end is met where group is dead or alive. The final possible result is death where the defending player’s group is captured without any ko situation which the best-case scenario for the attacking player.
-
+Life and death problems can also conclude where Ko occurs within the area, in the full game of Go this is very important in deciding Ko fights in other parts of the board and can be seen as leverage to be used.  For the purpose of GoLD and in isolated problems these situations are further played on until a defining end is met where the group is dead or alive. The final possible result is death where the defending player’s group is captured without any Ko situation which the best-case scenario for the attacking player.
 
 
 \section{Related Works}
 
-Martin Müller's Explorer [2] was a strong program developed with the intention of playing Go. In his paper he delves into some key aspects of Explorer which have been useful to comprehend ideas behind creating a Go playing software. He describes the importance of board evaluation within a tree search algorithm such as minimax.
+Martin Müller's Explorer [2] was a strong program developed with the intention of playing Go. In his paper, he delves into some key aspects of Explorer which have been useful to comprehend some ideas behind creating a Go-playing software. He describes the importance of board evaluation within a tree search algorithm such as minimax.
 
-Explorer can evaluate certain areas of the board in terms of safe territories for each player and can distinguish between safe stones and safe territories. Safe stones are any stones that are deemed alive but safe territories requires that no opponent stones can live within the safe stones. Explorer also takes into consideration of Semeai positions which are capturing races that occur within Go. The victor of Semeai can be determined early sometimes and hence doing so during the evaluation could save searching further during a tree search algorithm. Müller also goes into detail about the his zone based evaluation where Explorer is able to distinguish areas which are in conflict and areas which are clearly controlled by a certain colour.
+Explorer can evaluate certain areas of the board in terms of safe territories for each player and can distinguish between safe stones and safe territories. Safe stones are any stones that are deemed alive but safe territories requires that opponent stones cannot live within the safe stones. Explorer also takes into consideration of Semeai positions which are capturing races that occur within Go. The victor of Semeai can be determined early sometimes and hence doing so during the evaluation could save searching further during a tree search algorithm. Müller also goes into detail about his zone-based evaluation where Explorer is able to distinguish areas which are in conflict and areas which are clearly controlled by a certain colour.
 
-While Explorer aims to play Go, this project aims to create a program to solve life and death situations. To do so, determining safety of keystones within a problem is important. Explorer's methods of recognising safe strings such as Benson's alogrithm [10] and also the improved version of the algorithm described in [11] were regarded during the intial design of GoLD.
+While Explorer aims to play Go, this project aims to create a program to solve life and death situations. To do so, determining the safety of keystrings within a problem is important. Explorer's methods of recognising safe strings such as Benson's algorithm [10] and also the improved version of the algorithm described in [11] were regarded during the initial design of GoLD.
 
+Work done by Ken Chen and Zhinxing Chen [11] in creating Go Intellect and HandTalk were also quite interesting and relevant while working on this project. The key aspects of their work regarding eyes and determining the value of a shape of stones depending on the number of eyes the shape can produce was great a motivator during the implementation of GoLD's pattern-based heuristics.
+Another relevant work researched during this project was Adrian B. Danieli's paper [12] on his own TsumeGo problem solver. In his paper, he explores in-depth the process in which his program was developed. Explanation of key concepts such as move generation and board evaluation were helpful in understanding how to develop my own work. A particularly relevant piece of information which was used as advice during the design of GoLD was that there was a problem in his representation of each node during the tree search. He believed his representation of each node caused extra workload during tree search without a good reason to do so. He goes on to explain due to the depth-first nature of his program "compressing" and "decompressing" the board positions for every node was waste of time. Rather than saving some space which is not as relevant when using a depth-first search, it would have been better to save time by storing the entire board position for each node.
 
-Work done By Ken Chen and Zhinxing Chen [11] in creating Go Intellect and HandTalk were also quite interesting and relevant while working on this project. The key aspects of their work regarding eyes and determining value of a shape depending on the number of eyes the shape can produce was great a motivator during the implementation of GoLD's pattern based heuristics.
-
-Another relevant work researched during this project was Adrian B. Danieli's paper [12] on his own TsumeGo problem solver. In his paper he explorers indepth the process in which his program was delevoped. Explanation of key concepts such as move generation and board evalution were helpful in understanding how to delevop my own work. A particularly relevant piece of information which was used as advice during the desgin of GoLD was that there was a problem in his representation of each node during the tree search. He believed his representation of each node caused extra workload without during tree search without a good reason to do so. He goes on to explain due to the depth-first nature of his program "compressing" and "decompressing" the board posistions for every node was waste of time. Rather than saving some space which is not as relevant when using a depth first search, it would have been better to save time by storing the entire board posistion for each node.
 
 
 
@@ -392,19 +383,19 @@ Another relevant work researched during this project was Adrian B. Danieli's pap
 
 \chapter{Requirements}
 
-The project needed a well-defined list of requirements to outline key features and help to with the implementation order of those key features. Time constraints and the resources available had to be taken to consideration before further work on the project was done. From the start the project was divided into to two major milestones each containing a set of requirements to achieve the milestone. These milestones were set to help evaluate the progress through out the project and also to help streamline the work flow throughout the project so that at all points there was goal to strive towards. The functional requirements identified earlier on the project captured most of the work required but throughout the project these requirements were refined and added to in order to solve unseen problems that arose during the project duration. Some non-functional requirements were also discovered earlier on which were used to refine the goals of the project.
+The project needed a well-defined list of requirements to outline key features and help with the implementation order of those key features. Time constraints and the resources available had to be taken to consideration before further work on the project was done. From the start, the project was divided into two major milestones each containing a set of requirements to achieve the milestone. These milestones were set up to help evaluate the progress throughout the project and also to help streamline the workflow throughout the project so that at all points there was a goal to strive towards. The functional requirements identified earlier on the project captured most of the work required but throughout the project, these requirements were refined and added to in order to solve unseen problems that arose during the project duration. Some non-functional requirements were also discovered earlier on which were used to refine the goals of the project.
 
 \section{Functional Requirements}
 
 \subsection{Milestone 1}
-The project's first milestone's aim was to implement most of the key features required for users to create and view problems. In addition to this the aim consisted of enabling the computer to play moves according to a simple tree search. This milestone consisted of the following requirements.
+The project's first milestone's aim was to implement most of the key features required for users to create and view problems. In addition to this, the aim consisted of enabling the computer to play moves according to a simple tree search. This milestone consisted of the following requirements.
 
 \subsubsection{Go Board}
-The first milestone required a Go board which the user and the computer will be able to interact with. This meant to implement a Board object was capable of storing relevant data and contained methods which is able to process the relevant data.
+The first milestone required a Go board which the user and the computer will be able to interact with. This meant there was a need to implement a Board object which is capable of storing relevant data and contained methods which are able to process the relevant data.
 
 The relevant data needed to include the following:
 \begin{itemize}
-\item Representation of all the points on the board
+\item A representation of all the points on the board
 \item Current turn
 \item All of the stone strings for both colours
 \item Colour of keystone
@@ -433,14 +424,13 @@ Play mode also needed to contain buttons which do the following:
 \item Tell the computer to start search for the best move of the current board position
 \item Tell the computer to stop search
 \item Reset the problem to how it was loaded
-\item Undo & Redo moves
+\item Undo \& Redo moves
 \item Switch Turns
 \item Pass the turn
 \end{itemize}
 
 \subsubsection{Editor Mode}
-Editor mode is the screen in which the user can create problems from scratch or edit problems loaded in and save them for future use. Similar to play mode, editor mode needs to contain a Go board in order to display the problem which is being created/edited. The board itself needs to be interactable, the user should be able to place stones by simply clicking on the points on the board. Editor mode also needed a way for the user to decide which stone is currently being placed or whether if stones are being removed when the user clicks on the board.
-
+Editor mode is the screen in which the user can create problems from scratch or edit problems that are loaded in and then save them for future use. Similar to play mode, editor mode needs to contain a Go board in order to display the problem which is being created/edited. The board itself needs to be interactable, the user should be able to place stones by simply clicking on the points on the board. Editor mode also needed a way for the user to decide which stone is currently being placed or whether if stones are being removed when the user clicks on the board.
 Editor mode also needed buttons to do the following functions:
 \begin{itemize}
 \item Load a problem
@@ -459,20 +449,19 @@ To achieve the first milestone the computer was required to perform a tree searc
 \subsection{Milestone 2}
 The second milestone’s aim was to enhance the computer AI by introducing heuristics to allow the user to restrict the time the computer is able to search for the best move. To do this following the requirements were added on top of the requirements for the first milestone.
 
-Play mode required an improved interface containing additional buttons to configure the parameter of the Alpha-Beta search used by the computer. Within the play mode the user needed to able to toggle on and off depth limiting and breadth limiting. Play mode should also allow the user to increase or decrease the limit and the breath of the search as they desire.
-
-The computer’s requirement was that it should be able to limit depth of the search according to the user’s choice. To do this it was required to introduce a board evaluation function. In order to allow the computer to limit the breath of the search it was required to introduce a move generator function which was able to generate a limited number of moves depending on the user’s breadth choice.
+Play mode required an improved interface containing additional buttons to configure the parameter of the Alpha-Beta search used by the computer. Within the play mode, the user needed to able to toggle on and off depth limiting and breadth limiting. Play mode should also allow the user to increase or decrease the depth limit and the breadth of the search as they desire.
+The computer’s requirement was that it should be able to limit the depth of the search according to the user’s choice. To do this it was required to introduce a board evaluation function. In order to allow the computer to limit the breadth of the search, it was required to introduce a move generator function which was able to generate a limited number of moves depending on the user’s breadth choice.
 
 \section{Non-Functional Requirements}
-Throughout the project some non-functional requirements where discovered and needed to be addressed , following categories were made to specify the different criteria GoLD need to achieve.
+Throughout the project, some non-functional requirements were discovered and needed to be addressed, the following categories were made to specify the different criteria GoLD need to achieve.
 
-Performance / Time - Important concern was the time factor a user wants to spend during the process of solving problems using GoLD.
+Performance / Time - Important concern was the time a user wants to spend during the process of solving problems using GoLD. Hence the time it took for the computer to make a move.
 
 Usability - Another concern was the ease of use , whether the program is simple and understandable for untrained users.
 
-Reliability – The program should be able to cope with any kind of user inputs and should maintain running with any failures or crashes.
+Reliability – The program should be able to cope with any kind of user inputs and should maintain running without any failures or crashes
 
-In order to test all three categories of these non-functional requirement the project also had an additional requirement of producing a folder of problems which can be used during the evaluation phase. This folder of problem was required so that beta tester could have pre-defined problem to test the program on. The folder was also required in order to perform quantitate evaluation of GoLD during the evaluation process, to judge what level of difficult the program can solve under what length of time period it takes.
+In order to test all three categories of these non-functional requirements the project also had an additional requirement of producing a folder of problems which can be used during the evaluation phase. This folder of problems was required so that beta testers could have a set of pre-defined problems to test the program on. The folder was also required in order to perform quantitate evaluation of GoLD during the evaluation process, to judge the level of difficult the program can solve and what length of time it takes to do so.
 
 
 
@@ -726,26 +715,26 @@ After these checks are done for all the keystrings, any moves remaining in the s
 
 
 
+
+
 \chapter{Implementation}
-This chapter will go into detail about how GoLD is implemented. GoLD is entirely written in Java and uses a simple 2D game engine called Slick2D which is based on LWJGL. All of the major constructs of Go are implemented within GoLD to create a stable environment for user to solve Life and Death problems. Some of the key aspects of the program includes the Go board, the Pattern Matcher and the two modes of play. These features were implemented to be able to facilitate GoLD's requirements such as the "computer" which plays against the player. Which is essential a search function greatly dependant on how the Go Board is structured. Many smaller but crucial features had to be implemented in order to create a completely standalone program which can create and solve problems. To enable complex heuristics to be performed in order to evaluate board positions or generate moves which are relevant, a method of creating and identify patterns of stones is required. A pattern matcher which is able to distinguish between middle , side and corner of the board is built into GoLD.
+This chapter will go into detail about how GoLD is implemented. GoLD is entirely written in Java and uses a simple 2D game engine called Slick2D [14] which is based on LWJGL [15]. All of the major constructs of Go are implemented within GoLD to create a stable environment for the user to solve life and death problems. Some of the key aspects of the program are the Go board, the Pattern Matcher and the two modes of play. These features were implemented in order to facilitate GoLD's requirements such as the "computer" which plays against the player. Which is essentially a search function greatly dependant on how the Go Board is structured. Many smaller but crucial features had to be implemented to create a completely standalone program which can create and solve problems. To enable complex heuristics to be performed in order to evaluate board positions or generate moves which are relevant, a method of creating and identify patterns of stones is required. A pattern matcher which is able to distinguish between middle, side and corner of the board is built into GoLD.
 
 \section{Board}
 
-The Go board is represented as an object class within GoLD which contains all the vital data to represent the current board position. GoLD's board is designed for the purpose of making tree search and board evaluations as quick as possible. This meant storing more information within the board object was ideal  instead of recalculating information every time it was needed. The board object also implements public methods which allows the computer and also the users to interact with the board. The board in essence implements the rules of Go and automatically updates the board position once a move is played either by the user or the computer.
-
+The Go board is represented as an object class within GoLD which contains all the vital data to represent the current board position. GoLD's board is designed for the purpose of making tree search and board evaluations as quick as possible. This meant storing more information within the Board object was ideal instead of recalculating information every time it was needed during board evaluation or move generation. The Board object also implements public methods which allow the computer and also the users to interact with the board. The rules of Go are implemented via the Board object which automatically checks if a move played by the user or the computer is valid. If it is valid then the board position is updated to represent the result of the move played otherwise if the move is invalid the Board object denies the move and creates an in-game message to let the user know.
 \subsection{Stones}
-Representation of stones on the board is simple but effective to keep operation of gathering information about strings and liberties quick. GoLD takes advantage of Java’s enum type to define the different possible states each intersection on the board could be. While it is possible to represent all the points on the board with simply black , white or empty constants , this would lead to extra operations to distinguish between different types of points such as an empty intersection which is within a problem’s boundaries and an empty intersection which is removed from play. Similar operations are required to distinguish between Ko points and Valid points, black stones and key black stones, white stones and key white stones. To bypass this problem GoLD uses 7 different constants to represent all the intersections on the board. The constants used are BLACK, WHITE, VALID, INVALID, KO, BLACKKEYSTONE, WHITEKEYSTONE . The entire board is represented by a 2D array of enum Stone type. While the use of a 1D array is possible to represent a 2D Go board and is more space efficient than a 2D array, it would require extra operations to define the board within a 2D coordinate system. This would lead to an extra operation each time the board is accessed which would in essence slow down the entire program.
+Representation of stones on the board is simple but effective to keep the operation of gathering information about strings and liberties fast. GoLD takes advantage of Java’s enum type to define the different possible states each intersection on the board could be. While it is possible to represent all the points on the board with simply black, white or empty constants, this would lead to extra operations to distinguish between different types of points such as an empty intersection which is within a problem’s boundaries and an empty intersection which is removed from play. Similar operations are required to distinguish between Ko points and Valid points, black stones and key black stones, white stones and key white stones. To avoid this problem GoLD uses 7 different constants to represent all the intersections on the board. The constants used are BLACK, WHITE, VALID, INVALID, KO, BLACKKEYSTONE, WHITEKEYSTONE . The entire board is represented by a 2D array of enum Stone type.
 
-
+While the use of a 1D array is possible to represent a 2D Go board and is more space efficient than a 2D array, it would require extra operations to define the board within a 2D coordinate system. This would lead to an extra operation each time the board is accessed which would slow down the entire program.
 
 \subsection{Strings}
-We can define a string of stone as any number of stones of the same colour which are connected through adjacent stones of the same colour. A key observation of strings is that once a string of stones is formed , the only way to deform it is through capture by placing on all the liberties of the string. Hence the board object maintains two collection of strings , one for black and one for white, for the use of the capture functionality. Both collections of strings are updated after each move to represent any changes on the board. Each string is represented by a list of 2D coordinates, due to the lack of an inbuilt tuple type with Java, GoLD uses a custom-built Tuple object to represent 2D coordinates.
+A string of stones is any number of stones of the same colour which are connected through adjacent stones of the same colour. A key observation of strings is that once a string is formed, the only way to deform it is through capture by placing on all the liberties of the string. Hence the Board object maintains two collections of strings, one for black and one for white, for the use of the capture functionality. Both collections of strings are updated after each move to represent any changes on the board. Each string is represented by a list of 2D coordinates, due to the lack of an inbuilt tuple type with Java, GoLD uses a custom-built Tuple object to represent 2D coordinates.
 
 \subsection{Capture}
-To process capturing of opponent stones, the two collection of strings are used to iterate through each string inside the collection of opponent strings and determine whether any opponent strings lack liberties and then same is done for one’s own strings. If an opponent string has zero liberties, then each of these stones are replaced by a VALID in the 2D array and the string itself is removed from the collection of opponent strings. Same is applied for one’s own strings but if a capture occurs then the move is invalidated under the self-capture rule.
-During this process two additional information is gathered about the board. For every opponent string if the liberty count is one then the string is considered to be in Atari and hence the intersection of liberty is added on to the opponent’s Atari list which consists all of the opponent’s single liberties and the same applies for the current players strings. Two Atari list ,one for each colour, is maintained within the board and is updated during the process of checking for capture.
-The other additional information gathered is whether the Ko rule should be in play the next turn. While checking the opponent’s strings for capture, if a string containing one stone is captured then the intersection of that one stone is in consideration for Ko. After the checking for capture, a simple test for Ko is occurs. If there is an intersection in considerable for Ko, then the stone placed this turn is checked for the following:
-
+To process capturing of opponent stones, the two collections of strings are used to iterate through each string inside the collection of opponent strings and determine whether any opponent strings lack liberties and if there is a string which do not have any liberties then it is captured. After which the same is done for one's own strings to keep the integrity of the board. If an opponent string has zero liberties, then every stone in the string is replaced by a VALID in the 2D array and the string itself is removed from the collection of opponent strings. Same is applied for one’s own strings but if a capture occurs then the move is invalidated under the self-capture rule.
+During this process, two additional information is gathered about the board. For every opponent string if the liberty count is one then the string is considered to be in Atari and hence the intersection of liberty is added on to the opponent’s Atari list which consists all of the opponent’s single liberties and the same applies for the current player's strings. The two Atari list, one for each colour, is maintained within the board and is updated during the process of checking for capture.
+The other additional information gathered is whether the Ko rule should be in play the next turn. While checking the opponent’s strings for capture, if a string containing one stone is captured then the intersection of that one stone is in consideration for Ko. After checking for capture, a simple test for Ko is performed. If there is an intersection in considerable for Ko, then the stone placed this turn is checked for the following:
 
 \begin{itemize}
     \item Is the stone in Atari?
@@ -753,10 +742,10 @@ The other additional information gathered is whether the Ko rule should be in pl
     \item Is the liberty of the stone the same intersection as the one in consideration for Ko?
 \end{itemize}
 
-If true for all three questions, then a KO is placed at the intersection which was in consideration for Ko.
+If true for all three questions, then a KO is placed at the intersection which was in consideration for Ko and in the next turn the opponent cannot play there.
 
 \subsection{Valid Move Checker}
-Valid move check is a simple function which returns true or false depending on whether placing on intersection being checked is valid for the current player. This function consists of three core checks. Is the point being checked on the board ? This is in the case of a human player trying to place a stone outside the board grid area. Is the value of that position in the board’ 2D array VALID? This is multifunctional as it restricts the user and the computer from playing on points of the board which are removed from play during a problem represented by INVALID and also restricts play on the point of KO. The third check is to makes sure that if the current player plays on the point it will not lead to self-capture. To check for self-capture can be intricate , the following algorithm is used to determine whether a move is considered self-capture hence invalid.
+Valid move checker is a simple function which returns true or false depending on whether placing on the intersection being checked is valid for the current player. This function consists of three core checks. Is the point being checked on the board? This is in the case of a human player trying to place a stone outside the board grid area. Is the value of that intersection in the board’s 2D array VALID? This is multifunctional as it restricts the user and the computer from playing on points of the board which are removed from play during a problem represented by INVALID and also restricts play on the point of KO. The third check is to make sure that if the current player plays on the point it will not lead to self-capture. The check for self-capture is intricate, the following algorithm is used to determine whether a move is considered self-capture hence invalid.
 
 \begin{algorithm}[H]
 \caption{Self-Capture Check}\label{Self-Capture Check}
@@ -785,15 +774,13 @@ Valid move check is a simple function which returns true or false depending on w
     }
 \end{algorithm}
 
-The valid move checker plays an integral part during the tree search which the computer uses to determines the move to play. Every time a new board position is visited by the search , the Alpha-Beta algorithm requires the list of all valid moves in order to generate moves using the move generator and then continue the search by trying out moves generated. To create the list of all valid moves, every point board is checked by the valid move checker and if a point is valid then it is added on to the list of valid moves. To reduce redundant processing , the valid moves list is maintained within the Board object and is updated after every move.
+The valid move checker plays an integral part during the tree search which the computer uses to determines the move to play. Every time a new board position is visited by the search, the Alpha-Beta algorithm requires the list of all valid moves in order to generate moves using the move generator and then continue the search by trying out moves generated. To create the list of all valid moves, every point on the board is checked by the valid move checker and if a point is valid then it is added on to the list of valid moves. To reduce redundant processing, the valid moves list is maintained within the Board object and is updated after every move.
 
 \section{Pattern Matcher}
-The pattern matcher within GoLD is able to identify a pattern at the 16 possible variation which can occur. A pattern can be rotated at 45° on the board to create 8 different rotations of the same pattern and each pattern can have the colours as normal or inverted hence 16 variations. Specific to the Go board some points are regarded differently to other points and hence the pattern matcher should be able to distinguish between these. The pattern matcher within GoLD is able to define and identify patterns which are is on the edge, corner or the middle of the board. Note that pattern for the middle of the board can be regard as pattern that is allowed to occur anywhere on the board as along as the pattern shape is occurs as defined by the pattern.
-
+The pattern matcher within GoLD is able to identify a pattern at the 16 possible variations which can occur. A pattern can be rotated at 45° on the board to create 8 different rotations of the same pattern and each pattern can have the colours as normal or inverted hence 16 variations. Specific to the Go board some points are regarded differently to other points and hence the pattern matcher should be able to distinguish between these. The pattern matcher within GoLD is able to define and identify patterns which are on the side, corner or the middle of the board. Note that pattern for the middle of the board can be regarded as a pattern that is allowed to occur anywhere on the board as long as the pattern shape occurs as defined by the pattern.
 
 \subsection{Defining Patterns}
-GoLD uses a limited number of predefined patterns which are used within its heuristic pattern matching methods. These predefined patterns are written in a simple text notation which are all translated into lists of “Point” objects during the initialisation of static variables . A pattern is just a list of Point objects and these Points are the key components the pattern matcher uses to identify patterns on the board. A Point consists of few fields which allows the pattern matcher to relate each Point to another within a pattern. These fields include two integers which is able to relate each Point inside the pattern to the starting point of the search. The other fields include boolean variables to check whether a Point is on the edge, is on the corner, is defending colour or whether it is a wildcard (always matches). The text notation which is used to translate string to a list of Points representing a pattern uses each of characters in the string to create a Point object. Figure 1 shows a Bent Four Corner pattern represented by text notation and a visual representation of the pattern within GoLD. Note here the green stone marked with C shows that in the pattern requires that point be a corner and any colour of stone.
-
+GoLD uses a limited number of predefined patterns which are used within its heuristic pattern matching methods. These predefined patterns are written in simple text notations which are all translated into lists of “Point” objects during the initialisation of static variables. A pattern is just a list of Point objects and these Points are the key components the pattern matcher uses to identify patterns on the board. A Point consists of few fields which allows the pattern matcher to relate each Point to another within a pattern. These fields include two integers which are able to relate each Point inside the pattern to the starting point of the search in terms of distance. The other fields include boolean variables to check whether a Point is on the side, is on the corner, is defending colour or whether it is a wildcard (always matches). The text notation which is used to translate string to a list of Points representing a pattern uses each of characters in the string to create a Point object. ~\autoref{fig:pat-1} shows a Bent Four Corner pattern represented by text notation and the visual representation of the pattern within GoLD. Note here the green stone marked with C shows that the pattern requires that point to be a corner point.
 
 
 \begin{figure}[!ht]
@@ -809,15 +796,14 @@ GoLD uses a limited number of predefined patterns which are used within its heur
 
 \subsection{Matching Patterns}
 
-The patterns matcher itself is based on the idea that every Point object within the pattern is relative x ,y distance from the starting point of search. Hence the first point of the pattern is always a stone at x and y = 0. The pattern matcher depends on three parameters, the list of Point object which represents the pattern to look for, a list of intersections all containing stones as starting points for the pattern matcher and the colour of the defending team. Simple pseudocode for pattern matching algorithm before enchancements is shown below.
-
+The patterns matcher itself is based on the idea that every Point object within the pattern is relative x, y distance from the starting point of search. Hence the pattern matcher always deems the starting point as x and y = 0 for the purpose of the pattern matching and then it will search for the rest of the pattern relative to this starting point, starting point is also required to contain a stone. The pattern matcher depends on three parameters, the list of Point object which represents the pattern to look for, a list of intersections all containing stones, as starting points for the pattern matcher and the colour of the defending team. Simple pseudocode for pattern matching algorithm before additional enhancements is shown below.
 
 \begin{algorithm}[H]
 \caption{Pattern Matcher}\label{Pattern Matcher}
     \DontPrintSemicolon
-    \SetKwFunction{FselfCapture}{matchPattern}
+    \SetKwFunction{FmatchPattern}{matchPattern}
     \SetKwProg{Pn}{Procedure}{:}{}
-    \Pn{\FselfCapture{$startingPoints,pattern$}}{
+    \Pn{\FmatchPattern{$startingPoints,pattern,defColour$}}{
         $matches \gets$ {init list of Tuple lists }\;
         $rotations \gets$ {init list of 8 rotations}\;
 
@@ -830,7 +816,7 @@ The patterns matcher itself is based on the idea that every Point object within 
                  \ForEach{$rot$ in $rotations$}{
                     \lIf{(skipList[rot]=true)}{break}
                     $ t \gets$ {$checkingTuple.apply(rot)$}\;
-                    \uIf{Point.matches(t)}{
+                    \uIf{Point.matches(t,defColour)}{
                         $matchTries$.get(rot).add(t)\;
                     }\Else{
                         $skipList[rot] \gets true$\;
@@ -851,8 +837,7 @@ The patterns matcher itself is based on the idea that every Point object within 
     }
 \end{algorithm}
 
-The pattern matcher not only returns matched patterns but also the rotation in which pattern was found in. GoLD uses the matched tuples and rotations to find vital points within patterns found and check whether these points are empty, contains enemy stones or ally stones to evaluate the value of the overall pattern found. After which more complex checks are performed to see if the pattern identified is fully formed or incomplete , whether the walls of patterns are safe. Figure 2 shows Pyramid Four pattern incomplete next to a fully complete variation of the same shape and hence the vital point at a is the only point that matters within this pattern.
-
+The pattern matcher not only returns the matched patterns but also the rotation in which the pattern was found in. GoLD uses the matched patterns along with its rotations to find vital points within each pattern found. Then checks if these vital points are empty, contains defending colour stones or attacking stones to evaluate the value of the overall pattern found. After which more complex checks are performed to see if the pattern identified is fully formed or incomplete, whether the walls of patterns are safe. ~\autoref{fig:pat-2} shows Pyramid Four pattern incomplete where the vital point is not as important, next to a fully complete variation of the same shape where the vital point at a is the only point that matters.
 
 \begin{figure}[!ht]
 \centering
@@ -878,12 +863,6 @@ The pattern matcher not only returns matched patterns but also the rotation in w
 
 
 \subsection{Differences}
-
-
-
-
-
-
 
 
 
@@ -917,19 +896,35 @@ The pattern matcher not only returns matched patterns but also the rotation in w
 \chapter{References}
 
 1.http://www.cs.cmu.edu/~wjh/go/rules/Japanese.html
+
 2.Müller, M. (2002). POSITION EVALUATION IN COMPUTER GO. ICGA Journal, 25(4), pp.219-228.
+
 3.Chikun, C. (1993). All About Life \& Death. Ishi Pr.
+
 4.Davies, J. (1996). Life and Death. Ishi Pr.
+
 5.Cornelis Diederik van der Werf, E. (2004). AI techniques for the game of Go. [Maastricht]: UPM, Universitaire Pers Maastricht.
+
 6.Akl, S.G., \& Newborn, M. (1977). The principal continuation and the killer heuristic. ACM Annual Conference.
+
 7.Huberman, B.J. (1968). A PROGRAM TO PLAY CHESS END GAMES.
+
 8.Korf R. Depth-first iterative-deepening. Artif Intell. 1985;27(1):97-109. doi:10.1016/0004-3702(85)90084-0
+
 9.https://deepmind.com/research/alphago/
+
 10. Life in the Game of Go  - DAVID B. BENSON*
+
 11.https://webdocs.cs.ualberta.ca/~mmueller/ps/gpw97.pdf  - recognise secure territories
+
 12.https://webdocs.cs.ualberta.ca/~games/go/seminar/2002/020703/ld.pdf -  Static analysis of life and death in the game of Go Ken Chen
+
 13.https://dspace.mit.edu/bitstream/handle/1721.1/50434/41567232-MIT.pdf?sequence=2 -
  A Tsume-Go Life \& Death Problem Solver Adrian B. Danieli
+
+ 14. http://slick.ninjacave.com/ - Slick2D
+
+ 15. https://www.lwjgl.org/ - LWJGL
 
 
 
