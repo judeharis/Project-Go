@@ -745,7 +745,7 @@ The other additional information gathered is whether the Ko rule should be in pl
 If true for all three questions, then a KO is placed at the intersection which was in consideration for Ko and in the next turn the opponent cannot play there.
 
 \subsection{Valid Move Checker}
-Valid move checker is a simple function which returns true or false depending on whether placing on the intersection being checked is valid for the current player. This function consists of three core checks. Is the point being checked on the board? This is in the case of a human player trying to place a stone outside the board grid area. Is the value of that intersection in the board’s 2D array VALID? This is multifunctional as it restricts the user and the computer from playing on points of the board which are removed from play during a problem represented by INVALID and also restricts play on the point of KO. The third check is to make sure that if the current player plays on the point it will not lead to self-capture. The check for self-capture is intricate, the following algorithm is used to determine whether a move is considered self-capture hence invalid.
+Valid move checker is a simple function which returns true or false depending on whether placing on the intersection being checked is valid for the current player. This function consists of three core checks. Is the point being checked on the board? This is in the case of a human player trying to place a stone outside the board grid area. Is the value of that intersection in the board’s 2D array VALID? This is multifunctional as it restricts the user and the computer from playing on points of the board which are removed from play during a problem represented by INVALID and also restricts play on the point of KO. The third check is to make sure that if the current player plays on the point it will not lead to self-capture. Self-capture check is intricate, the following algorithm is used to determine whether a move is considered self-capture hence invalid.
 
 \begin{algorithm}[H]
 \caption{Self-Capture Check}\label{Self-Capture Check}
@@ -869,15 +869,135 @@ The pattern matcher not only returns the matched patterns but also the rotation 
 
 \chapter{Evaluation}
 
+This is chapter covers the evaluation process of the project. This includes evaluation of the “computer” player within GoLD and how well it solves problems. Some specific life and death problems are explained in detail to see how well the computer solves these problems. The computer’s performance is quantitatively evaluated by looking at a set of problems its is able to solve. The chapter also goes into detail of the beta-testing that was performed at the end of the project and reviews the feedback received.
 
-\section{Unit Testing}
+\section{Evaluation of Specific Life and Death Problems}
+\subsection{Problem 1}
+~\autoref{fig:ep1}  shows a basic problem the computer is able to solve at depth 1. If black plays first. Black is able to live here only by playing at a otherwise white will have will be able to capture the black stones. If black plays at a then white needs to play at both b and c. Since white is not able to play at both points at once white should play at b to decrease the eye space as much as possible.
 
-\section{Evaluation of Heuristics}
-\subsection{Types of Problems}
-\subsection{Success Rate}
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.8\textwidth}
+\includegraphics[width=\textwidth]{ep1/1.png}
+\end{subfigure}
+\caption{Basic Life and Death Problem}
+\label{fig:ep1}
+\end{figure}
 
-\section{Beta Testing}
-\subsection{Questionnaires}
+~\autoref{fig:ep1-1} shows the sequence of moves which occurs when black is played by the computer. We can see that computer(black) is able to play out the problem as black to produce two eyes in order to keep the black keystones alive. The computer is able to solve problem with both variations of white’s response.
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\includegraphics[width=\textwidth]{ep1/ep1-1.png}
+\end{subfigure}
+\caption{Computer solves problem as Black first}
+\label{fig:ep1-1}
+\end{figure}
+
+If white were to play first, then white is able to kill the black group in two ways. White can play at a or b in order to capture the group. If white plays at a then black needs to play at both b and d to live and if white plays at b then black needs to play at a and c to live. In both scenarios black needs to play at two points at once which is impossible.
+
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\includegraphics[width=\textwidth]{ep1/ep1-2.png}
+\end{subfigure}
+\caption{Computer solves problem as White first}
+\label{fig:ep1-2}
+\end{figure}
+
+
+Figure 3 shows the sequence of moves which occurs when white is to play first and is controlled is by the computer. The computer (white) decides to play at b to begin. After this black has two choices both will lead to death but gives hope to live if white makes a mistake. We can see that the computer will respond correctly to both of black’s moves.
+
+
+\subsection{Problem 2}
+~\autoref{fig:ep2} shows a more complex problem the computer is able to solve at depth 6. ~\autoref{fig:ep2-a} shows the sequence of moves which white should play to kill black and ~\autoref{fig:ep2-b} shows the sequence of moves black should play to live.
+
+
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.40\textwidth}
+\centering
+\includegraphics[width=\textwidth]{ep2/1a.png}
+\caption{ White to kill}
+\label{fig:ep2-b}
+\end{subfigure}
+\begin{subfigure}[b]{0.40\textwidth}
+\centering
+\includegraphics[width=\textwidth]{ep2/1b.png}
+\caption{Black to Live }
+\label{fig:ep2-a}
+\end{subfigure}
+\caption{Different variations depending on who plays first }
+\label{fig:ep2}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.8\textwidth}
+\includegraphics[width=\textwidth]{ep2/ep2-1.png}
+\end{subfigure}
+\caption{Computer solves problem as White first}
+\label{fig:ep2-1}
+\end{figure}
+
+
+In ~\autoref{fig:ep2-1} we see the moves the computer plays as white, if white were to play first and black responding to maintain a chance at life. The computer is able to figure out that playing 1 is the correct move and responding to black at 3 will disallow black to live. The computer is able to kill black even if black plays its best moves.
+
+In figure 5 we can see the sequence of move the computer plays as black, if black were to play first and white (human player) responding accordingly. We can see the computer is able to provide the correct moves for black to live.
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\includegraphics[width=\textwidth]{ep2/ep2-2.png}
+\end{subfigure}
+\caption{Computer solves problem as Black first}
+\label{fig:ep2-2}
+\end{figure}
+
+\subsection{Problem 3}
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\includegraphics[width=\textwidth]{ep3/1.png}
+\end{subfigure}
+\caption{2 Dan difficulty problem}
+\label{fig:ep3}
+\end{figure}
+
+~\autoref{fig:e3} shows a much more complex problem than the previous examples taken from an online library of problems at [16] and is considered of 2 dan difficulty. Looking from white’s perspective we can see the white group is in a dangerous position. The eye space at the corner is reduced to 4 square points (a,b,c,d) due to the black stone at e. White can only create 1 real eye from the eye space because black can place a stone diagonally opposite to the point white places to disable a second eye from forming. This is a simple case of square four in the corner. In order for white to create 2 real eyes it needs to make use of the 2 whites stones at the f and g to create another eye above the white group.
+
+~\autoref{fig:ep3-1} shows the sequence of moves which allows white to live against the optimal play from black , this is the main line of play given in [16]. The computer is able solve this problem to win as white playing first even if the black plays the optimal moves show in ~\autoref{fig:ep3-1}. Computer is also able to solve this problem from blacks perspective by playing at 1 if black were to play first.
+
+
+
+
+
+
+\begin{figure}[!h]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{ep3/ep3-1.png}
+\end{subfigure}
+\caption{Sequence of moves required for white to live}
+\label{fig:ep3-1}
+\end{figure}
+
+\section{Performance Evaluation}
+
+
+% \section{Unit Testing}
+%
+% \section{Evaluation of Heuristics}
+% \subsection{Types of Problems}
+% \subsection{Success Rate}
+%
+% \section{Beta Testing}
+% \subsection{Questionnaires}
 
 
 
@@ -922,9 +1042,11 @@ The pattern matcher not only returns the matched patterns but also the rotation 
 13.https://dspace.mit.edu/bitstream/handle/1721.1/50434/41567232-MIT.pdf?sequence=2 -
  A Tsume-Go Life \& Death Problem Solver Adrian B. Danieli
 
- 14. http://slick.ninjacave.com/ - Slick2D
+14. http://slick.ninjacave.com/ - Slick2D
 
- 15. https://www.lwjgl.org/ - LWJGL
+15. https://www.lwjgl.org/ - LWJGL
+
+16. http://www.goproblems.com - Problems
 
 
 
