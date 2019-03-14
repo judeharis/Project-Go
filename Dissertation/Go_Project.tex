@@ -867,13 +867,15 @@ The pattern matcher not only returns the matched patterns but also the rotation 
 
 
 
+
+
 \chapter{Evaluation}
 
-This is chapter covers the evaluation process of the project. This includes evaluation of the “computer” player within GoLD and how well it solves problems. Some specific life and death problems are explained in detail to see how well the computer solves these problems. The computer’s performance is quantitatively evaluated by looking at a set of problems its is able to solve. The chapter also goes into detail of the beta-testing that was performed at the end of the project and reviews the feedback received.
+This is chapter covers the evaluation process of the project. This includes evaluation of the “computer” player within GoLD and how well it solves problems. Some specific life and death problems are explained in detail to see how well the computer solves these problems. The computer’s performance is quantitatively evaluated by looking at a set of problems it is able to solve. The chapter also goes into detail of the beta-testing that was performed at the end of the project and reviews the feedback received.
 
 \section{Evaluation of Specific Life and Death Problems}
 \subsection{Problem 1}
-~\autoref{fig:ep1}  shows a basic problem the computer is able to solve at depth 1. If black plays first. Black is able to live here only by playing at a otherwise white will have will be able to capture the black stones. If black plays at a then white needs to play at both b and c. Since white is not able to play at both points at once white should play at b to decrease the eye space as much as possible.
+~\autoref{fig:ep1}  shows a basic problem the computer is able to solve at depth 1. If black plays first. Black is able to live here only by playing at an otherwise white will have will be able to capture the black stones. If black plays at a then white needs to play at both b and c. Since white is not able to play at both points at once white should play at b to decrease the eye space as much as possible.
 
 \begin{figure}[!ht]
 \centering
@@ -968,9 +970,9 @@ In figure 5 we can see the sequence of move the computer plays as black, if blac
 \label{fig:ep3}
 \end{figure}
 
-~\autoref{fig:e3} shows a much more complex problem than the previous examples taken from an online library of problems at [16] and is considered of 2 dan difficulty. Looking from white’s perspective we can see the white group is in a dangerous position. The eye space at the corner is reduced to 4 square points (a,b,c,d) due to the black stone at e. White can only create 1 real eye from the eye space because black can place a stone diagonally opposite to the point white places to disable a second eye from forming. This is a simple case of square four in the corner. In order for white to create 2 real eyes it needs to make use of the 2 whites stones at the f and g to create another eye above the white group.
+~\autoref{fig:ep3} shows a much more complex problem than the previous examples taken from an online library of problems at [16] and is considered of 2 dan difficulty. Looking from white’s perspective we can see the white group is in a dangerous position. The eye space at the corner is reduced to 4 square points (a,b,c,d) due to the black stone at e. White can only create 1 real eye from the eye space because black can place a stone diagonally opposite to the point white places to disable a second eye from forming. This is a simple case of square four in the corner. In order for white to create 2 real eyes it needs to make use of the 2 whites stones at the f and g to create another eye above the white group.
 
-~\autoref{fig:ep3-1} shows the sequence of moves which allows white to live against the optimal play from black , this is the main line of play given in [16]. The computer is able solve this problem to win as white playing first even if the black plays the optimal moves show in ~\autoref{fig:ep3-1}. Computer is also able to solve this problem from blacks perspective by playing at 1 if black were to play first.
+~\autoref{fig:ep3-1} shows the sequence of moves which allows white to live against the optimal play from black , this is the main line of play given in [16]. The computer is able solve this problem to win as white playing first even if the black plays the optimal moves show in ~\autoref{fig:ep3-1}. Computer is also able to solve this problem from black's perspective by playing at 1 if black were to play first.
 
 
 
@@ -989,16 +991,145 @@ In figure 5 we can see the sequence of move the computer plays as black, if blac
 
 \section{Performance Evaluation}
 
+Performance evaluation process for this project was executed to evaluate the speed in which the computer is able to find moves and the level of difficulty the computer is able to solve within reasonable amount of time. Iterative Deepening was also evaluated during this process to determine if the theoretical improvement to speed of the tree search are present within GoLD or if Iterative Deepening decreased performance as a trade-off to give the user the ability to stop the search early .
+The performance evaluation process contained the following steps:
+\begin{enumerate}
+\item Create folder of Go problems from a library of problems which indicates the difficulty of each problem.
+\item From this folder of Go problems test each problem individually to determine if the problem is solvable within a reasonable time frame
+\item For every solvable problem collect relevant data
+\end{enumerate}
 
-% \section{Unit Testing}
-%
-% \section{Evaluation of Heuristics}
-% \subsection{Types of Problems}
-% \subsection{Success Rate}
-%
-% \section{Beta Testing}
-% \subsection{Questionnaires}
+The problems used during this process were attained from [16] , this website was especially helpful because it contained difficulty rating for each problem depending on how the users of the website found the problem. The reasonable time frame used was two mins.
+To determine if the computer is able to solve a problem is difficult task. For larger problems it becomes impossible to test every variation of move sequences to determine if the computer can solve the problem. For this reason, only the main line of play shown on [16] along with other lines of play which seemed relevant were tested. In addition to this every problem was tested with the problem objective inverted. For example, a problem where the objective is for white to kill black and white play first then the problem is also tested with black to live and black plays first to determine if the computer is able to solve the problem from both colour’s perspective. Each problem was tested for up to 30 minutes to determine if it was solvable or not in the reasonable time frame.
 
+The relevant data collected for each solvable problem included: The depth in which the problem is solved; The difficulty indicated on [16] for the problem; The identification number on [16] for the problem; Number of valid moves S1,S2 ; Four different times (T1,T2,T3,T4) were also collected.
+
+S1 – Number of valid moves with the original objective (excluding passing)
+
+S2 – Number of valid moves with the original inverted (excluding passing)
+
+
+T1 – Time taken for the computer to play the first move with Iterative Deepening and the original objective.
+
+T2 – Time taken for the computer to play the first move with Iterative Deepening and the inverted objective.
+
+T3 – Time taken for the computer to play the first move without Iterative Deepening and with original objective.
+
+T4 – Time taken for the computer to play the first move without Iterative Deepening and with inverted objective.
+
+In addition to these data point each solvable problem was categorised by were they appear on the board.
+
+\subsection{Results}
+To understand and gain valuable information to evaluate the performance from the data collected, the data collected was aggregated and processed to find relevant averages and trends within it. The main goal here was to evaluate the solving ability of the “computer” and also to find the average duration of tree search and the optimal depth parameter.
+
+\autoref{table:extract-middle} shows an extract of data gathered from the subset of middle-based problems . Overall, data from 72 different solved problems were used , 30 for middle-based, 21 for side-based and another 21 corner-based.
+
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{ID\#} & \textbf{Difficulty} & \textbf{\begin{tabular}[c]{@{}c@{}}Difficulty \\ Rating\end{tabular}} & \textbf{Depth} & \textbf{S1} & \textbf{S2} & \textbf{\begin{tabular}[c]{@{}c@{}}T1\\ (s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}T2\\ (s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}T3 \\ (s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}T4\\ (s)\end{tabular}} \\ \hline
+11650 & 12 - kyu & 1224 & 5 & 17 & 19 & 13.62 & 17.96 & 28.30 & 24.25 \\ \hline
+11966 & 18 - kyu & 1047 & 5 & 11 & 12 & 3.10 & 4.10 & 3.10 & 4.52 \\ \hline
+615 & 8 - kyu & 1320 & 6 & 9 & 9 & 6.89 & 7.28 & 6.11 & 4.71 \\ \hline
+3206 & 7 - kyu & 1365 & 6 & 13 & 14 & 35.29 & 19.74 & 41.90 & 39.96 \\ \hline
+3255 & 17 - kyu & 1064 & 6 & 14 & 14 & 15.45 & 23.59 & 34.45 & 40.72 \\ \hline
+3350 & 17 - kyu & 1085 & 6 & 12 & 12 & 11.38 & 13.41 & 20.80 & 16.82 \\ \hline
+3630 & 21 - kyu & 964 & 6 & 14 & 13 & 19.42 & 23.82 & 17.84 & 31.59 \\ \hline
+3984 & 5 - kyu & 1412 & 6 & 11 & 11 & 25.51 & 15.40 & 26.39 & 15.94 \\ \hline
+4519 & 11 - kyu & 1259 & 6 & 15 & 14 & 34.16 & 32.90 & 58.80 & 26.39 \\ \hline
+4833 & 10 - kyu & 1282 & 6 & 10 & 10 & 9.25 & 6.34 & 7.91 & 4.90 \\ \hline
+6219 & 8 - kyu & 1339 & 6 & 9 & 9 & 6.33 & 3.92 & 5.80 & 4.81 \\ \hline
+15254 & 2 - kyu & 1508 & 6 & 8 & 8 & 2.93 & 2.20 & 1.72 & 2.50 \\ \hline
+15410 & 30 - kyu & 702 & 6 & 11 & 11 & 7.81 & 9.10 & 9.97 & 12.90 \\ \hline
+611 & 2 - kyu & 1495 & 7 & 9 & 9 & 12.22 & 13.23 & 11.30 & 10.55 \\ \hline
+3267 & 9 - kyu & 1313 & 7 & 9 & 9 & 12.10 & 14.55 & 7.44 & 14.77 \\ \hline
+6218 & 11 - kyu & 1240 & 7 & 10 & 10 & 30.93 & 25.69 & 29.51 & 22.60 \\ \hline
+8626 & 12 - kyu & 1209 & 8 & 10 & 10 & 53.37 & 69.68 & 94.79 & 55.61 \\ \hline
+15256 & 6 - dan & 1793 & 8 & 10 & 10 & 98.21 & 54.84 & 99.98 & 60.75 \\ \hline
+16429 & 2 - dan & 1589 & 8 & 10 & 10 & 36.75 & 39.96 & 42.39 & 38.82 \\ \hline
+7842 & 6 - kyu & 1388 & 9 & 10 & 10 & 94.64 & 62.41 & 61.42 & 19.20 \\ \hline
+6598 & 15 - kyu & 1141 & 10 & 9 & 9 & 59.25 & 78.98 & 15.30 & 31.69 \\ \hline
+
+\end{tabular}
+\caption{Extract from collected data for the middle-based problems subset}
+\label{table:extract-middle}
+\end{table}
+
+
+
+
+\subsubsection{Difficulty vs. Depth}
+
+To find the relationship between difficulty of a problem and the depth in which it is solved the scatter plots shown in \autoref{fig:edvd} were produced which includes the line of best fit to represent the average depth required to solve a problem of different difficulty ratings. From the plots we can see the that increased difficulty does not perfectly corelate to linear increase in depth required. Especially in middle-based problems we can see instances of problems which are low in difficulty but require higher depths of search to solve. For side and corner-based problem we find that increase in difficulty does in general results in a linear increase in depth required.
+
+
+
+\begin{figure}[!h]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{edvd/depthvdiff.png}
+\end{subfigure}
+\caption{Scatter Plots of Difficult v Depth}
+\label{fig:edvd}
+\end{figure}
+
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Difficulty Range} & \textbf{\begin{tabular}[c]{@{}c@{}}Difficulty Rating \\ Range\end{tabular}} & \textbf{Depth} \\ \hline
+30 - 24 kyu $\sim$ & 700 - 900 & 4.5 \\ \hline
+24 - 16 kyu $\sim$ & 900  - 1100 & 5.7 \\ \hline
+16- 9 kyu $\sim$ & 1100- 1300 & 6.2 \\ \hline
+9 - 2 kyu $\sim$ & 1300 - 1500 & 6 \\ \hline
+2 kyu - 4 dan $\sim$ & 1500 - 1700 & 6.1 \\ \hline
+4 - 7 dan $\sim$ & 1700 - 1900 & 8 \\ \hline
+\end{tabular}
+\caption{Average depth  required for varying ranges of difficulties}
+\label{table:dranged}
+\end{table}
+
+\autoref{table:dranged} shows the average depth required for different ranges of difficulty ratings. The naming of the difficulty is similar to the player ranking system used in Go [17] but the actually difficulty does not exactly correlate to the skill level required to solve the problem. Using this table, we can estimate the depth parameter that GoLD should use for a problem of difficulty X. The table also shows that the minimum depth required to solve basic problems is around 4.5. This is good indication of the ability of the board evaluation function , we can see that even at lower depths the board evaluation function can accurately score the board to find the correct move for easier problems. To concluded, the default depth of GoLD is set at 6 because during the testing the average problem could be solved at depth 6b.
+
+
+\subsubsection{Time vs. Difficulty \& Iterative Deepening}
+To evaluate GoLD performance in terms of time we need to set a reasonable time frame which can be considered an interactive period of time. For most users this be would anywhere between 1 - 10 seconds at maximum. Using a 45 second as the time threshold we can estimate the average difficulty of problem which GoLD can solve with in this threshold. This is calculation was only made for T1 and T3 because T2,T4 used inverted objective hence the difficulty rating shown online cannot be applied. Performing the calculation on T1 which the time is taken for the search to find the first move with Iterative Deepening results in an average difficulty rating 1151 which around 14 kyu according to [16]. Doing the same for T3 which is without Iterative Deepening results in an average difficulty rating of 1146.  This shows a marginal increase in speed with Iterative Deepening and we can also state the average difficulty of problem which is solved interactively to be around 14 kyu.
+
+
+
+\begin{figure}[!h]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{edvd/t1vt3.png}
+\end{subfigure}
+\caption{Scatter Plots of Difficult v Depth}
+\label{fig:t1vt3}
+\end{figure}
+
+
+
+
+We can look T1,T3 without setting threshold to evaluate the addition of Iterative Deepening more clearly. \autoref{fig:t1vt3} show a plots T1vsT3 against the depth * S1 of each problem where S1 is the number of initial moves without inverting the objective. Looking at the line of best fit we can evidently see that for shorter searches (around < 10s) the plain search works better but as depth * S1 increases the more effective Iterative Deepening becomes. Note that logarithmic scale is used for time to visualise the data better.
+
+\section{Beta Testing}
+At the end of the project the program was put forwards out for beta testing. The main goal of the beta testing was to evaluate usability and functionality. Small number of beta tester were given the program for a period two weeks to test and provide feedback on different aspects of the program, they were also to report any bugs or issues found during testing. Testers were a given brief which contained an introduction to the project along with simple step by step tutorial to play through the tutorial problem provided to them. The testers were also given collection 30 basic problems designed by me within GoLD for them to test and play through. Along with these problems the collection of 72 problems used during performance were also provided to testers . All problems delivered to the testers contained predefined search parameters at which the computer should be able to solve the problem and these parameters were set to load up along with the problem.
+
+
+
+\subsection{Pre-Testing Questions}
+The testers were sent a google form which they had to fill in throughout testing. To gauge the experience of the tester with the game of few simple questions were asked.
+
+\subsection{Functionality \& Issues}
+
+\subsection{Interface}
+
+
+\subsection{Feedback}
 
 
 
@@ -1048,6 +1179,7 @@ In figure 5 we can see the sequence of move the computer plays as black, if blac
 
 16. http://www.goproblems.com - Problems
 
+17. http://www.mechner.com/david/go/kyu.html - Player ranking
 
 
  % \begin{figure}[!ht]

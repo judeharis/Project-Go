@@ -407,10 +407,41 @@ public class SlickGo extends StateBasedGame {
     	
 
         g.setColor(Color.black);
-        if(hover) g.setColor(Color.yellow);
+        if(hover) g.setColor(new Color(255,225,0));
         g.drawRoundRect(x, y, w, h, 20);
         g.setColor(Color.black);
         
+        g.setFont(Menu.defaultFont);
+        Font oldfont = g.getFont();
+        int width = oldfont.getWidth(string);
+        int height = oldfont.getHeight(string);
+        g.drawString(string,(x + w / 2) - (width / 2), (y + h / 2) - (height / 2));
+  
+    	
+    }
+    
+    public static void drawTitle(int x, int y , int w , int h, String string,Graphics g ,boolean hover) {
+    	
+
+
+    	float hratio = (float) ((gcheigth*1.0)/900);
+    	float wratio = (float) ((gcwidth*1.0)/1600);
+    	h*=hratio;
+    	w*=wratio;
+    	y*=hratio;
+    	x*= wratio;
+    	
+    	
+
+        g.setColor(Color.black);
+        g.drawRoundRect(x-1, y-1, w+2, h+2, 20);
+        g.drawRoundRect(x+1, y+1, w-2, h-2, 20);
+        if(hover) g.setColor(new Color(255,225,0));
+        g.drawRoundRect(x, y, w, h, 20);
+
+
+
+        g.setColor(Color.black);
         
         Font oldfont = g.getFont();
         int width = oldfont.getWidth(string);
@@ -468,6 +499,7 @@ public class SlickGo extends StateBasedGame {
         g.drawRect(x, y, w, h);
         g.setColor(Color.black);
         
+        g.setFont(Menu.defaultFont);
         Font oldfont = g.getFont();
         int width = oldfont.getWidth(string);
         int height = oldfont.getHeight(string);
@@ -498,7 +530,7 @@ public class SlickGo extends StateBasedGame {
 		g.setFont(ttfont);
         g.drawString(string,(x + w / 2) - (width / 2), (y + h / 2) - (height / 2));
         g.setColor(oldcolour);
-        g.setFont(oldfont);
+//        g.setFont(oldfont);
     }
     
     public static void drawRButton(int x, int y , String string,Graphics g ,boolean selected) {
@@ -522,10 +554,11 @@ public class SlickGo extends StateBasedGame {
         g.setColor(Color.black);
         g.drawOval(x, y, w, h);
 
-        
+        Font oldfont = g.getFont();
+        g.resetFont();
 
         g.drawString(string,x+(w*2),y+(h/10) );
-        
+    	g.setFont(oldfont);
     	
     }
     

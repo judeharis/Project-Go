@@ -788,29 +788,45 @@ public class Board{
     	Board.sPy= sPy;
 
 		int bS = TileSize*20;
+		g.setColor(new Color(.9f,0.6f,0.2f,.2f));
+		g.fillRect(0, 0, 1600, 1000);
+		g.setColor(Color.black);
 		
-//		g.setBackground(Color.lightGray);
-		
-		g.setColor(new Color(200,140,80));
+//		g.setColor(new Color(200,140,80));
+		g.setColor(new Color(.7f,.6f,.4f,0.4f));
 		g.fillRect(sPx, sPy, bS, bS);
 		
-        for (float i =TileSize; i < bS; i+=TileSize){
-
-            g.setColor(Color.black);
+//        for (float i =TileSize; i < bS; i+=TileSize){
+//            g.setColor(Color.black);
 //            g.setColor(Color.red);
+//            g.drawLine(x+i,y+TileSize,x+i, y+bS-TileSize);
+//            g.drawLine(x+TileSize,y+i,x+bS-TileSize, y+i);
+//        }
+        
+        for (float i =TileSize; i < bS; i+=TileSize){
+            g.setColor(Color.black);
+            g.drawLine(x+i+1,y+TileSize,x+i+1, y+bS-TileSize);
+            g.drawLine(x+TileSize,y+i+1,x+bS-TileSize, y+i+1);
+//            g.drawLine(x+i-1,y+TileSize,x+i-1, y+bS-TileSize);
+//            g.drawLine(x+TileSize,y+i+1,x+bS-TileSize, y+i+1);
             g.drawLine(x+i,y+TileSize,x+i, y+bS-TileSize);
             g.drawLine(x+TileSize,y+i,x+bS-TileSize, y+i);
         }
         
-        showCoord=false;
+        
+        showCoord=true;
         if(showCoord) {
 	        char c = 'a';
 	        for (float i =TileSize; i < bS; i+=TileSize){
+	        	int a = (c-'a'+1);
+	        	int r =0;
+	        	if(a<10)r=5;
+	        	
 	            g.setColor(Color.black);
-	            g.drawString(c+"", x+i-5, y+TileSize-40);
-	            g.drawString((c-'a'+1)+"", x+TileSize-40,y+i-8);    
-	            g.drawString(c+"",x+i-5, y+ TileSize-20 + (TileSize*19));
-	            g.drawString((c-'a'+1)+"", x+TileSize-20 + (TileSize*19), y+i-8);         
+	            g.drawString(c+"", x+i-5, y+TileSize-35);
+	            g.drawString(a+"", x+TileSize-35+r,y+i-8);    
+	            g.drawString(""+ c+"",x+i-5, y+ TileSize-25 + (TileSize*19));
+	            g.drawString(a+"", x+TileSize-25 + (TileSize*19)+r, y+i-8);         
 	            c++;
 
 	        }
@@ -818,10 +834,14 @@ public class Board{
         
 
         for(int i = 4; i<17; i+=6) {
-        	g.setColor(Color.blue);
+        	g.setColor(Color.black);
             g.fillOval(x+(TileSize*i) - 3 ,y+(TileSize*4) -3,7,7);
             g.fillOval(x+(TileSize*i) - 3 ,y+(TileSize*10) -3,7,7);
             g.fillOval(x+(TileSize*i) - 3 ,y+(TileSize*16) -3,7,7);
+            
+            g.fillOval(x+(TileSize*i) - 4 ,y+(TileSize*4) -5,10,10);
+            g.fillOval(x+(TileSize*i) - 4 ,y+(TileSize*10) -5,10,10);
+            g.fillOval(x+(TileSize*i) - 4 ,y+(TileSize*16) -5,10,10);
       
 
         }
@@ -858,7 +878,6 @@ public class Board{
                         drawsquare( g,(i+1)*TileSize,(j+1)*TileSize ,new Color(0f,0f,1f,.5f));
                     break;
 
-//                    case EMPTY:break;
                 }
                 boolean idOn = true;
                 if(idOn&&editormode)drawCharOnStone(g,i,j,Color.black,chars[i][j]);

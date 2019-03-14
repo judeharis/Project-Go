@@ -58,6 +58,8 @@ public class Play extends BasicGameState {
 	static TrueTypeFont ttfont;
 	static Font defaultFont;
 	static Color bgcolour;
+	
+	public static String times = "";
 
 	public Play(int state) {
 		this.board = SlickGo.mainBoard;
@@ -73,7 +75,7 @@ public class Play extends BasicGameState {
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 
-		Menu.bg.draw(0, 0, (float) 0.5);
+		Menu.bg.draw(0, 0, (float) 1);
 
 
 		int xpos = Mouse.getX();
@@ -99,14 +101,15 @@ public class Play extends BasicGameState {
 		fontStart(g);
 		SlickGo.drawString(playx ,playy,(problemLoaded?("Turn: "+board.placing.toString()):""), g);
 		SlickGo.drawString(playx ,playy +50,board.desc, g);
-//		SlickGo.drawString(playx +300 ,playy,(problemLoaded?("Valid: "+board.validMoves.size()):""), g);
-		SlickGo.drawString(playx +300 ,playy -50,(problemLoaded?problemName:""), g);
+//		SlickGo.drawString(playx +300 ,playy,(problemLoaded?("Valid: "+(board.validMoves.contains(new Tuple(-9,-9))?board.validMoves.size()-1:board.validMoves.size())):""), g);
+//		SlickGo.drawString(playx +300 ,playy -50,(problemLoaded?problemName:""), g);
+		SlickGo.drawString(playx +300 ,playy ,times, g);
 		fontEnd(g);
 		endSection();
 		
 
 
-//		//IDeep
+		//IDeep
 //		startSection(990,40);
 //		SlickGo.drawButton(playx ,playy,200,50,"IterDeepening", g ,iterativeDeepening,Color.green);
 //		endSection();
@@ -237,13 +240,13 @@ public class Play extends BasicGameState {
 				sbg.enterState(0);
 			}
 			
-//			//IDeep
-//			startSection(990,40);
-//			if (SlickGo.regionChecker(playx,playy,200,50,gc)) {
-//				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
-//				else iterativeDeepening =!iterativeDeepening;
-//			}
-//			endSection();
+			//IDeep
+			startSection(990,40);
+			if (SlickGo.regionChecker(playx,playy,200,50,gc)) {
+				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
+				else iterativeDeepening =!iterativeDeepening;
+			}
+			endSection();
 			
 			startSection(990,220);
 			startSection(10,0);
@@ -389,6 +392,7 @@ public class Play extends BasicGameState {
 					if(loadBoard!=null) {
 						board =loadBoard;
 						problemLoaded=true;
+						iterativeDeepening = true; 
 						editorFailBoard=false;
 					}
 				}
@@ -463,6 +467,7 @@ public class Play extends BasicGameState {
 
 	public void resetPlayScreen() {
 		deleteAI();
+		times="";
 		winMsg="";
 		gameOver=false;
 		gameMsg="";

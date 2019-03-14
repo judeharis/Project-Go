@@ -66,10 +66,11 @@ public class Editor extends BasicGameState {
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		Menu.bg.draw(0, 0, (float) 0.5);
-		txt.render(gc, g);
-		txt.setLocation(1000, 20);
+		Menu.bg.draw(0, 0, (float) 1);
 
+		
+//		txt.render(gc, g);
+//		txt.setLocation(1000, 20);
 
 
 
@@ -78,7 +79,11 @@ public class Editor extends BasicGameState {
 		Tuple posb =  board.calulatePostionOnBoard(xpos-Board.TileSize,ypos-Board.TileSize);
 		int bx = posb.a;
 		int by = posb.b;
-
+		
+		board.draw(g,true,100,80);
+        if(withinBounds(bx,by)) {
+        	board.drawoval(g,(bx+1)*Board.TileSize,(by+1)*Board.TileSize,board.placing.stoneToColor(),board.placing.isKey());
+        }
 
 
 		fontStart(g);
@@ -87,10 +92,7 @@ public class Editor extends BasicGameState {
 		fontEnd(g);
 		
 		
-		board.draw(g,true,100,80);
-        if(withinBounds(bx,by)) {
-        	board.drawoval(g,(bx+1)*Board.TileSize,(by+1)*Board.TileSize,board.placing.stoneToColor(),board.placing.isKey());
-        }
+
 
         grouping.draw(g);
         if(!pattern.isEmpty() && drawPattern)pattern.get(0).draw(g,pattern,board);
@@ -164,13 +166,13 @@ public class Editor extends BasicGameState {
 
 
 
-		startSection(970,50);
-		SlickGo.drawButton(editorx  ,editory,20,20,"D", g,grouping.draw);
-		SlickGo.drawButton(editorx +30,editory,20,20,"W", g,grouping.drawW);
-		SlickGo.drawButton(editorx +60,editory,20,20,"B", g,grouping.drawB);
-		SlickGo.drawButton(editorx +90,editory,20,20,"C", g,grouping.drawC);
-		SlickGo.drawButton(editorx +120,editory,20,20,"P", g,drawPattern);		
-		endSection();
+//		startSection(970,50);
+//		SlickGo.drawButton(editorx  ,editory,20,20,"D", g,grouping.draw);
+//		SlickGo.drawButton(editorx +30,editory,20,20,"W", g,grouping.drawW);
+//		SlickGo.drawButton(editorx +60,editory,20,20,"B", g,grouping.drawB);
+//		SlickGo.drawButton(editorx +90,editory,20,20,"C", g,grouping.drawC);
+//		SlickGo.drawButton(editorx +120,editory,20,20,"P", g,drawPattern);		
+//		endSection();
 
 
 
