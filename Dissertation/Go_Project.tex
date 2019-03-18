@@ -1116,21 +1116,33 @@ To evaluate GoLD performance in terms of time we need to set a reasonable time f
 
 We can look T1,T3 without setting threshold to evaluate the addition of Iterative Deepening more clearly. \autoref{fig:t1vt3} show a plots T1vsT3 against the depth * S1 of each problem where S1 is the number of initial moves without inverting the objective. Looking at the line of best fit we can evidently see that for shorter searches (around < 10s) the plain search works better but as depth * S1 increases the more effective Iterative Deepening becomes. Note that logarithmic scale is used for time to visualise the data better.
 
+
+
 \section{Beta Testing}
 At the end of the project the program was put forwards out for beta testing. The main goal of the beta testing was to evaluate usability and functionality. Small number of beta tester were given the program for a period two weeks to test and provide feedback on different aspects of the program, they were also to report any bugs or issues found during testing. Testers were a given brief which contained an introduction to the project along with simple step by step tutorial to play through the tutorial problem provided to them. The testers were also given collection 30 basic problems designed by me within GoLD for them to test and play through. Along with these problems the collection of 72 problems used during performance were also provided to testers . All problems delivered to the testers contained predefined search parameters at which the computer should be able to solve the problem and these parameters were set to load up along with the problem.
 
-
-
 \subsection{Pre-Testing Questions}
-The testers were sent a google form which they had to fill in throughout testing. To gauge the experience of the tester with the game of few simple questions were asked.
+The testers were sent a google form which they had to fill in throughout testing. To gauge the experience of the tester with the game of few simple questions were asked. The results showed 4 out of the 6 testers where aware of the rules of Go, if they were not aware they were provided with a link to a simple Go rule guide to help them with the rest of the testing. Following this they were asked if they had played Go before, result was that only 2 in 6 have played Go before and more importantly only 1 tester have tried solving life and death problems. A crucial take away from this is that the lack of experience playing Go within the tester will limit the extend of which they can test the GoLD’s computer. An experienced Go player might not be able tell if the computer is playing a poor move hence will not be able to report on it.
+
+\subsection{Interface \& Usability}
+The testers were given series of questions regarding the interface and usability of the two modes of GoLD (Play ,Editor). Most testers agreed that the representation of the board was simple and clear, even though the tester answered this question in regard to the board in play mode it would apply for the editor mode as well because the board is represented exactly the same for both modes.
+Testers found the buttons on the play mode interface quite simple to identify , most tester were able to distinguish between the toggleable buttons and the normal buttons. They also rated the labelling on buttons on average 4.5/5 in regard to how useful they were to identify the functionality of the button. One tester reported a lack of visual feedback on buttons and explained “Sometimes I'm not sure if I've pressed a button or not.”
+
+Some testers found parts of the text displayed on screen difficult to read. One tester found the difference in font size for some buttons difficult to read and would have preferred the larger font which was already in use for bigger buttons. Another tester suggested outlining the text used on the screen would help. In terms of interactively playing through problems all tester found that it was quite simple to place stones on the board. The testers also agreed that playing through problems were quite simple in terms of usability and the in-game messages provided were helpful.
+
+For the editor mode interface, testers found the radio buttons to choose between which stones to place were appropriately labelled and simple to use. One tester was not able to distinguish the difference between placing a keystone and a normal stone. This highlights a lack of visual indication for keystones but also a lack of explanation on what a keystone’s purpose is within the GoLD and how they differ from normal stones. Testers on average found the creating problems using the editor mode and placing stones of their choice on the board relatively simple. One tester did find that placing valid points one by one “very tedious” and suggested a functionality to place an area of valid points along with the ability to place one by itself.
+Testers found the background image used for GoLD during beta testing to be too bright and one tester in particular found it “really hard on the eyes” since this was a simple fix the background was changed to something more suitable in opacity.
+
 
 \subsection{Functionality \& Issues}
+In terms of functionality the testers provided quite insightful feedback to evaluate the program. When asked about the speed in which the computer responded with move testers has a variety of responses. Some deemed it to be very quick, one even said that they found it difficult to see where the computer had placed the stone. Other testers found that speed decreasing with increased complexity of the problem. One tester in particular identified the depth levels up to 6 were “fast enough to remain interactive”. The varied tester responses show that the computer dealing with a simpler problem can be too quick for the user to see the stone placed on the board and when dealing with difficult problems requiring higher depths the user has to wait longer on the computer to make a move. These responses confirm the data showed during the performance evaluation process about the speed in which the computer solves the problem is relative to the difficulty of the problem which is only natural.
+The testers combined together found one instance of a Go problem provided to them not being solved at the set default depth for that problem. Apart from this instance the computer was able to solve every problem the tester’s played if they let the computer to play first.
 
-\subsection{Interface}
+The testers were asked if there were any difficulty during testing, one tester pointed out that the editor mode’s board taking priority over play mode’s board when switching between the two modes was an issue. While this is a functionality to allow a problem created on editor mode to be transferred over to play mode in retrospect having the ability to choose whether or not to transfer over the problem from one mode to another would have proved to be a better implementation of the functionality. Another tester found that it was quite difficult to judge the increase in time when adjusting the depth and breadth limits hence would have liked to have warning of sorts to let them know the affect of increasing the limits too high.
 
+A Critical issue that occurred during the early phase of beta testing was that the testers found it difficult to run the program due to difference in java version required to run GoLD to the version they had installed. Since this was a major hinderance the issue was fixed during the beta testing phase by bundling the Java Runtime Environment required along with the entire GoLD beta testing package. Furthermore, the portability has since been tested for on Windows 10 , Ubuntu and the Centos systems used within the Glasgow University to ensure the program is able to simply run from the files inside the zipped folder which is used to package GoLD with a set of Go problems and the JRE required.
 
-\subsection{Feedback}
-
+\subsection{Overall Evaluation Results}
 
 
 
