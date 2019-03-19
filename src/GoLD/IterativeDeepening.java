@@ -66,7 +66,6 @@ public class IterativeDeepening  implements Runnable{
 			return evaluator.evaluateCurrentBoard(false);
 		}
 		
-//	    if(depth>3)goodMoves = moveGen(cB,goodMoves);
 	    goodMoves = moveGen(cB,goodMoves);
 	    goodMoves = moveOrdering(depth,goodMoves);
 	

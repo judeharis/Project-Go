@@ -187,87 +187,13 @@ public class PatternSearcher {
 	
 	
 
-	
-	public ArrayList<Tuple> tupleMatch(Tuple t, ArrayList<Pattern> pattern,Stone def){
-		ArrayList<Tuple> match= new ArrayList<Tuple>(); 
-		
-		
-		Tuple u,d,l,r,nu,nd,nl,nr;
-		ArrayList<ArrayList<Tuple>> matchTries = new ArrayList<ArrayList<Tuple>>();
-		boolean[] toSkip = new boolean[8];
-		for(int n=0 ; n<8;n++) matchTries.add(new ArrayList<Tuple>());
-		
-		for(Pattern p : pattern) {
-			if(areAllTrue(toSkip))break;
-			Stone pcolour = p.def?def:def.getEC();
-			ArrayList<Tuple> allRot = new ArrayList<Tuple>(); 
 
-			u = new Tuple(t.a+p.x,t.b+p.y);
-			nu = new Tuple(t.a-p.x,t.b-p.y);
-			d = new Tuple(t.a-p.x,t.b+p.y);
-			nd = new Tuple(t.a+p.x,t.b-p.y);
-			l = new Tuple(t.a+p.y,t.b+p.x);
-			nl = new Tuple(t.a-p.y,t.b-p.x);
-			r = new Tuple(t.a-p.y,t.b+p.x);
-			nr = new Tuple(t.a+p.y,t.b-p.x);
-			
-			allRot.add(u);
-			allRot.add(nu);
-			allRot.add(d);
-			allRot.add(nd);
-			allRot.add(l);
-			allRot.add(nl);
-			allRot.add(r);
-			allRot.add(nr);
-			
-			int counter=0;
-			for (Tuple k : allRot) {
-				if(toSkip[counter]) {counter++;continue;}
-				if(p.isSide && !b.withinBounds(k)) matchTries.get(counter).add(k);
-				else if(!p.isSide && b.withinBounds(k)) {
-					boolean colourCheck = ((b.stones[k.a][k.b].getSC() == pcolour)!=p.isNot) || p.wildCard;
-					boolean cornerCheck = p.isCorner? isCorner(k):true;
-					if(colourCheck && cornerCheck){
-						matchTries.get(counter).add(k);}
-					else toSkip[counter]=true;}
-				else toSkip[counter]=true;
-				counter++;
-			}
-		}
-		
-		
-		int dirNum=0;
-		foundCount=0;
-		for (ArrayList<Tuple> slist :matchTries) {
-			if(slist.size() == pattern.size()) {
-				foundNum=dirNum;
-				foundCount++;
-				match= slist;}
-			dirNum++;
-		}
-
-		ArrayList<Tuple> ret= new ArrayList<Tuple>(); 
-		
-		for(Tuple k :match)if(b.withinBounds(t)&&b.stones[k.a][k.b].getSC() == colour)ret.add(k);
-
-			
-		return ret;		
-		
-		
-	}
 
 	public int getFoundCount() {
 		return foundCount;
 	}
 	
-	public UDLR dirNumToDir() {
-		if(this.foundNum ==0 || this.foundNum ==2 ) return DOWN;
-		if(this.foundNum ==1 || this.foundNum ==3 ) return UP;
-		if(this.foundNum ==5 || this.foundNum ==6 ) return LEFT;
-		if(this.foundNum ==4 || this.foundNum ==7 ) return RIGHT;
-		
-		return NODIR;
-	}
+
 	
 	public UDLR dirNumToDir(int dirNum) {
 		int dir =matchesDirNums.get(dirNum);
@@ -279,12 +205,7 @@ public class PatternSearcher {
 		return NODIR;
 	}
 	
-	public boolean dirSideToBool() {
-		if(this.foundNum ==0 || this.foundNum ==3 || this.foundNum ==6 || this.foundNum ==4 ) return false;
-		if(this.foundNum ==2 || this.foundNum ==1 || this.foundNum ==5 || this.foundNum ==7 ) return true;
-		
-		return false;
-	}
+
 	
 	public boolean dirSideToBool(int dirNum) {
 		int dir =matchesDirNums.get(dirNum);
@@ -294,14 +215,7 @@ public class PatternSearcher {
 		return false;
 	}
 
-	
-	public boolean tolOk(int tolNumber) {
-		if(tolPoint.get(tolNumber)!=null)return false;
-		
-		return true;
-	}
-	
-	
+
 	public static boolean areAllTrue(boolean[] barray){
 	    for(boolean b : barray) if(!b) return false;
 	    return true;

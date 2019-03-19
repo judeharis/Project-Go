@@ -103,7 +103,7 @@ public class Play extends BasicGameState {
 		SlickGo.drawString(playx ,playy +50,board.desc, g);
 //		SlickGo.drawString(playx +300 ,playy,(problemLoaded?("Valid: "+(board.validMoves.contains(new Tuple(-9,-9))?board.validMoves.size()-1:board.validMoves.size())):""), g);
 //		SlickGo.drawString(playx +300 ,playy -50,(problemLoaded?problemName:""), g);
-		SlickGo.drawString(playx +300 ,playy ,times, g);
+//		SlickGo.drawString(playx +300 ,playy ,times, g);
 		fontEnd(g);
 		endSection();
 		
@@ -118,6 +118,7 @@ public class Play extends BasicGameState {
 		startSection(990,220);
 		SlickGo.drawBox(playx-10 ,playy-20  ,540,210,"", g,false);
 		startSection(10,0);
+		
         //Breadth
 		SlickGo.drawButton(playx ,playy,200,50,"Limit Breadth", g ,MoveFinder.breadthcut,Color.green);
 		SlickGo.drawButton(playx+280 ,playy,100,50, Integer.toString(MoveFinder.breathcutoff), g,MoveFinder.breadthcut,Color.green);
@@ -240,13 +241,13 @@ public class Play extends BasicGameState {
 				sbg.enterState(0);
 			}
 			
-			//IDeep
-			startSection(990,40);
-			if (SlickGo.regionChecker(playx,playy,200,50,gc)) {
-				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
-				else iterativeDeepening =!iterativeDeepening;
-			}
-			endSection();
+//			//IDeep
+//			startSection(990,40);
+//			if (SlickGo.regionChecker(playx,playy,200,50,gc)) {
+//				if(aiStarted) msgMaker("Stop Search To Do This" , 180,250,0,0);
+//				else iterativeDeepening =!iterativeDeepening;
+//			}
+//			endSection();
 			
 			startSection(990,220);
 			startSection(10,0);

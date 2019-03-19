@@ -109,7 +109,6 @@ public class HeuristicsRunner {
 
 
 		
-		MoveGenHeuristics.evaluate(group, e);
 		Hane.evaluate(group,e);
 		Cut.evaluate(group,e);
 		OnePJump.evaluate(group,e);

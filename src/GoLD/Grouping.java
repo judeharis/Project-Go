@@ -25,9 +25,6 @@ public class Grouping {
 
     
 
-//    ArrayList<Group> bGroups = new ArrayList<Group>();
-//    ArrayList<Group> wGroups = new ArrayList<Group>();
-    
     ArrayList<Group> allGroups = new ArrayList<Group>();
     
     
@@ -41,6 +38,8 @@ public class Grouping {
     boolean drawW = false;
     boolean drawB = false;
     boolean drawC = false;
+    
+    
 	public Grouping (Board b){
 		this.b =b;
 		this.stones=b.getStones();
@@ -73,29 +72,6 @@ public class Grouping {
 	}
 
 
-
-//	public void allocateGrouping(){
-//	    bGroups = new ArrayList<Group>();
-//	    wGroups = new ArrayList<Group>();
-//	    
-//    	for(int i=0; i<stones.length; i++) {
-//            for(int j=0; j<stones[i].length; j++) {
-//            	if (stones[i][j].isStone()) {
-//	            	Tuple t = new Tuple(i,j);
-//	            	Stone colour = stones[i][j].getSC();
-//	            	ArrayList<Group> groups = colour==Stone.BLACK? bGroups:wGroups;
-//	            	Group g = inGroup(t,colour);
-//	            	if(g.group.isEmpty()) {
-//	            		findGroupStones(t,g,colour);
-//	            		groups.add(g);
-//	            	}
-//	            	
-//            	}
-//            }
-//    	}
-//		
-//	}
-	
 	
 	public void allocateGrouping(){
 
@@ -121,152 +97,6 @@ public class Grouping {
 
 
 
-
-//	public void waveControl(Tuple t,double strength, int which){
-//		int i = t.a;
-//		int j = t.b;
-//		Stone colour = stones[i][j];
-//		Group g = inGroupv2(new Tuple(i,j),colour);
-//		
-//		if(colour.getSC()==Stone.BLACK && !g.group.isEmpty())strength+=g.strength;
-//		if(colour.getSC()==Stone.WHITE && !g.group.isEmpty())strength-=g.strength;
-//		
-//		strength= strength*1/2;
-//		stonesControl[i][j]=strength;
-//
-//		ArrayList<Tuple> wave = getNextWave(t,which);
-//		
-//		for(Tuple k : wave) waveControl(k,strength,which);		
-//	}
-//	
-//	public void waveControlStart(){
-//
-////		stonesControl= doubleIntegerArray();
-////		waveControl(new Tuple(8,8),0,1);
-////		waveControl(new Tuple(10,8),0,3);
-////		waveControl(new Tuple(10,10),0,5);
-////		waveControl(new Tuple(8,10),0,7);
-////
-////		waveControl(new Tuple(8,9),0,0);
-////		waveControl(new Tuple(9,8),0,2);
-////		waveControl(new Tuple(10,9),0,4);
-////		waveControl(new Tuple(9,10),0,6);
-//		
-////		waveControl(new Tuple(9,9),0,0);
-////		waveControl(new Tuple(9,9),0,2);
-////		waveControl(new Tuple(9,9),0,4);
-////		waveControl(new Tuple(9,9),0,6);
-//		
-//
-////		waveControl(new Tuple(9,9),0,1);
-////		waveControl(new Tuple(9,9),0,3);
-////		waveControl(new Tuple(9,9),0,5);
-////		waveControl(new Tuple(9,9),0,7);
-//		
-//
-//	}
-//	
-//	
-//	public ArrayList<Tuple> getNextWave(Tuple t,int which){
-//		ArrayList<Tuple> list = new  ArrayList<Tuple>();
-//		switch (which) {
-//		
-//		case 0:
-//			safeSideCheck(t.side(LEFT),list);
-//			safeSideCheck(t.side2(LEFT,UP),list);
-//			safeSideCheck(t.side2(LEFT,DOWN),list);
-//			break;
-//		case 1: 
-//			safeSideCheck(t.side(LEFT),list);
-//			safeSideCheck(t.side(UP),list);
-//			safeSideCheck(t.side2(LEFT,UP),list);
-//			break;
-//		case 2:
-//			safeSideCheck(t.side(UP),list);
-//			safeSideCheck(t.side2(UP,LEFT),list);
-//			safeSideCheck(t.side2(UP,RIGHT),list);
-//			break;
-//		case 3:
-//			safeSideCheck(t.side(UP),list);
-//			safeSideCheck(t.side(RIGHT),list);
-//			safeSideCheck(t.side2(UP,RIGHT),list);
-//			break;
-//		case 4:
-//			safeSideCheck(t.side(RIGHT),list);
-//			safeSideCheck(t.side2(RIGHT,UP),list);
-//			safeSideCheck(t.side2(RIGHT,DOWN),list);
-//			break;
-//		case 5:
-//			safeSideCheck(t.side(RIGHT),list);
-//			safeSideCheck(t.side(DOWN),list);
-//			safeSideCheck(t.side2(RIGHT,DOWN),list);
-//			break;
-//		case 6:
-//			safeSideCheck(t.side(DOWN),list);
-//			safeSideCheck(t.side2(DOWN,RIGHT),list);
-//			safeSideCheck(t.side2(DOWN,LEFT),list);
-//			break;
-//		case 7:
-//			safeSideCheck(t.side(DOWN),list);
-//			safeSideCheck(t.side(LEFT),list);
-//			safeSideCheck(t.side2(DOWN,LEFT),list);
-//			break;
-//		}
-//		return list;
-//	}
-//	
-//	public void safeSideCheck(Tuple t, ArrayList<Tuple> list) {
-//		if(b.withinBounds(t))list.add(t);
-//	}
-//	
-
-	
-	
-	
-//	public void allocateControl(){
-//		stonesControl= doubleIntegerArray();
-//		for (Group g : wGroups) g.updateControl(stonesControl);
-//		for (Group g : bGroups) g.updateControl(stonesControl);
-//		
-//		
-//		
-//		for(int i=0; i<stonesControl.length; i++) {
-//            for(int j=0; j<stonesControl[i].length; j++) {
-//            	if(stonesControl[i][j] > 0)bControls.add(new Tuple(i,j));
-//            	else wControls.add(new Tuple(i,j));
-//            }
-//    	}
-//		
-//		for (Group g : wGroups) wControls.removeAll(g.group);
-//		for (Group g : bGroups) bControls.removeAll(g.group);
-//		
-//		
-//		for(Tuple t: bControls) totalb+=stonesControl[t.a][t.b];
-//		for(Tuple t: wControls) totalw-=stonesControl[t.a][t.b];
-//		
-//		totalc = totalb-totalw;
-//	}
-	
-
-	
-	public void allocateControl(){
-		stonesControl= doubleIntegerArray();
-
-//		for (Group g : allGroups) g.updateControl(stonesControl);
-		
-		for(int i=0; i<stonesControl.length; i++) {
-            for(int j=0; j<stonesControl[i].length; j++) {
-            	if(stonesControl[i][j] > 0)bControls.add(new Tuple(i,j));
-            	else if(stonesControl[i][j] < 0) wControls.add(new Tuple(i,j));
-            }
-    	}		
-		for (Group g : allGroups)if(g.colour==Stone.BLACK)  wControls.removeAll(g.group);else bControls.removeAll(g.group);
-		
-		for(Tuple t: bControls) totalb+=stonesControl[t.a][t.b];
-		for(Tuple t: wControls) totalw-=stonesControl[t.a][t.b];
-		
-		totalc = totalb-totalw;
-	}
 	
 	
 	public Group inGroup(Tuple t, Stone colour) {
@@ -274,16 +104,7 @@ public class Grouping {
         return new Group(b,colour);
 	}
 	
-	
-//	public ArrayList<Group> inRegion(Tuple t, Stone colour, boolean r1) {
-//		ArrayList<Group> groups = colour==Stone.BLACK? bGroups:wGroups;
-//		ArrayList<Group> regions = new ArrayList<Group>();
-//        for (Group g : groups ) {
-//        	if (r1 && g.r1.contains(t))regions.add(g);
-//        	else if(!r1 && g.r2.contains(t))regions.add(g);
-//        }
-//        return regions;
-//	}
+
 	
 	public ArrayList<Tuple> distanceGen(ArrayList<Tuple> sstring , Stone enemy){
 		
@@ -346,7 +167,6 @@ public class Grouping {
 	public void findGroupStones(Tuple t, Group g ){
 		ArrayList<Tuple> surrounding = Group.getStoneRegion(t,true);
 		g.group.add(t);
-//		g.score();
 		for(Tuple k: surrounding) {
 			if(stones[k.a][k.b].getSC()==g.colour && !g.group.contains(k))findGroupStones(k,g);
 		}

@@ -263,13 +263,13 @@ public class Editor extends BasicGameState {
 
 
 
-			startSection(970,50);
-			if (SlickGo.regionChecker(editorx ,editory,20,20,gc)) {grouping.draw = !grouping.draw;}
-			if (SlickGo.regionChecker(editorx +30 ,editory,20,20,gc)) {grouping.drawW = !grouping.drawW;}
-			if (SlickGo.regionChecker(editorx +60 ,editory,20,20,gc)) {grouping.drawB = !grouping.drawB;}
-			if (SlickGo.regionChecker(editorx +90 ,editory,20,20,gc)) {grouping.drawC = !grouping.drawC;}
-			if (SlickGo.regionChecker(editorx +120 ,editory,20,20,gc)) {drawPattern = !drawPattern;}
-			endSection();
+//			startSection(970,50);
+//			if (SlickGo.regionChecker(editorx ,editory,20,20,gc)) {grouping.draw = !grouping.draw;}
+//			if (SlickGo.regionChecker(editorx +30 ,editory,20,20,gc)) {grouping.drawW = !grouping.drawW;}
+//			if (SlickGo.regionChecker(editorx +60 ,editory,20,20,gc)) {grouping.drawB = !grouping.drawB;}
+//			if (SlickGo.regionChecker(editorx +90 ,editory,20,20,gc)) {grouping.drawC = !grouping.drawC;}
+//			if (SlickGo.regionChecker(editorx +120 ,editory,20,20,gc)) {drawPattern = !drawPattern;}
+//			endSection();
 
 			
 			
@@ -292,6 +292,7 @@ public class Editor extends BasicGameState {
 			
 		    startSection(960,60);
 		    
+		    //Radio Buttons
 	        startSection(40,100);
 			if (SlickGo.regionChecker(editorx ,editory +20,200,40,gc)) {board.placing = Stone.BLACK;}
 			if (SlickGo.regionChecker(editorx ,editory +60,200,40,gc)) {board.placing = Stone.WHITE;}
@@ -311,6 +312,7 @@ public class Editor extends BasicGameState {
 			if (SlickGo.regionChecker(editorx+280 ,editory +20,200,40,gc)) board.blackFirst=false;
 			endSection();
 
+			
 
 			startSection(0,400);
 			startSection(50,20);

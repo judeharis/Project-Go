@@ -28,8 +28,7 @@ public class Menu extends BasicGameState {
 
 
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-//		bg = new Image("Images/woodenbg3.jpg");
-		bg = new Image("Images/wood2.jpg");
+		bg = new Image("Images/BackGround.jpg");
 		mouse = "b1.0";
 		java.awt.Font newFont = new java.awt.Font("AngelCodeFont", java.awt.Font.PLAIN, 25);
 		java.awt.Font newTitleFont = new java.awt.Font("AngelCodeFont", java.awt.Font.PLAIN, 40);

@@ -108,8 +108,8 @@ public class SlickGo extends StateBasedGame {
     	final JFileChooser fc = new JFileChooser();
         fc.setPreferredSize(new Dimension(800,500));
 //      File workingDirectory = new File(System.getProperty("user.dir")+"\\Computer Boards");
-//        File workingDirectory = new File(System.getProperty("user.dir"));
-        File workingDirectory = new File(System.getProperty("user.dir")+"\\Computer Boards");
+        File workingDirectory = new File(System.getProperty("user.dir"));
+
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", "txt", "text");
         fc.setFileFilter(filter);
         fc.setCurrentDirectory(workingDirectory);
@@ -517,7 +517,7 @@ public class SlickGo extends StateBasedGame {
     	w*=wratio;
     	y*=hratio;
     	x*= wratio;
-    	Font oldfont = g.getFont();
+//    	Font oldfont = g.getFont();
         int width = ttfont.getWidth(string);
         int height = ttfont.getHeight(string);
         
