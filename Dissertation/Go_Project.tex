@@ -207,8 +207,14 @@ A valid initial board state is defined by the following :
 \end{itemize}
 
 \bigskip
-In a normal game of Go, there are no boundaries set on the board, every intersection on the board is playable if the other rules allow it. To achieve the aim of this project there is a definite need for boundaries to be set on the board for each problem. Without doing so, the number of valid moves required to be searched by the AI would be too large to determine the best move in a limited time. To set boundaries during the creation of a problem, the creator can deem relevant points on the board as "valid points" to play on. Any points on the board with preplaced stones are also regarded as within the boundary. For example, a black stone is captured, the empty point remaining will be regarded within the boundary of play. It can be very difficult or even impossible for a problem creator to determine all relevant points for the problem. GoLD leaves it in the hands of the problem creators to define life and death problems with relevant boundaries. This is a crucial trade-off which is required to allow the program to be able to find the correct answer in a feasible time.
 The reason behind the 4th alteration to the basic rules is to restrict infinite passing which would be allowed due to the 5th alteration. Attacking player is allowed to pass under the circumstance that they have no valid moves and an empty intersection is invalid to play on due to the Ko rule, this resolves some rare occurrences where boundaries set by the creator of the problem restricts the attacking player from winning.
+
+\subsection{Boundaries}
+A normal game of Go is played on the a 19x19 board where every intersection of on the board is playable if the rules of the game allow it. The implications of the size of the board for this project and in computer Go in general is that the search space is too large to obtain good results in a short period of time even with a limited depth search.
+
+To achieve the aim of this project there was a definite need for boundaries to be set on the board for each problem. Without doing so, the number of valid moves required to be searched by the computer would be too large to determine the best move in a limited time. While setting boundaries is great to enable the computer solve more problems, the drawback of adding boundaries is that problems themselves become substantially easier compared to the same problem with no boundaries Setting boundaries is limiting the options given to the computer hence increasing the chance of it finding the correct answer. For the computer to solve a difficult problem with no boundaries and therefore have more than 300+ moves to search through is an unachievable task using standard search algorithms. In comparison for the computer to solve the same problem with boundaries which limits the possible moves to less than 20 is a much simpler task which could be done in a reasonable time.
+
+To set boundaries during the creation of problems, the creator can deem which points are relevant for the problem by placing “valid points” on the board. Any points on the board with preplaced stones are also regarded to be within the boundary. For example, a black stone is captured, the empty point remaining will be regarded within the boundary of play. Ideally the creator of the problem should distribute “valid points” in a way to maintain the same level of difficult for human player but also limit the number of points for the computer to search through. It can be very difficult or even impossible for a problem creator to determine all the relevant points for the problem. GoLD leaves it in the hands of the problem creators to define life and death problems with relevant boundaries. This is a crucial trade-off which is required to allow the program to be able to find the correct answer in a feasible time.
 
 
 
@@ -398,18 +404,18 @@ Another relevant work researched during this project was Adrian B. Danieli's pap
 
 
 
+\chapter{Requirements \& Software Development}
 
-\chapter{Requirements}
-
-The project needed a well-defined list of requirements to outline key features and help with the implementation order of those key features. Time constraints and the resources available had to be taken to consideration before further work on the project was done. From the start, the project was divided into two major milestones each containing a set of requirements to achieve the milestone. These milestones were set up to help evaluate the progress throughout the project and also to help streamline the workflow throughout the project so that at all points there was a goal to strive towards. The functional requirements identified earlier on the project captured most of the work required but throughout the project, these requirements were refined and added to in order to solve unseen problems that arose during the project duration. Some non-functional requirements were also discovered earlier on which were used to refine the goals of the project.
+The project needed a well-defined list of requirements to outline key features and help with the implementation order of those key features. Time constraints and the resources available had to be taken to consideration before further work on the project was done. The functional requirements identified earlier on the project captured most of the work required but throughout the project, these requirements were refined and added to in order to solve unseen problems that arose during the project duration. Some non-functional requirements were also discovered earlier on which were used to refine the goals of the project.
 
 \section{Functional Requirements}
 
-\subsection{Milestone 1}
-The project's first milestone's aim was to implement most of the key features required for users to create and view problems. In addition to this, the aim consisted of enabling the computer to play moves according to a simple tree search. This milestone consisted of the following requirements.
+The program was split into to three core parts from beginning of the project : play mode, editor mode and the “computer”. Hence splitting the functional requirements into these three sections of the program was ideal.
 
+\subsection{General Requirements Across Both Modes}
+There were many requirements which were required for both play mode and editor mode, to save redundancy its better to express them together.
 \subsubsection{Go Board}
-The first milestone required a Go board which the user and the computer will be able to interact with. This meant there was a need to implement a Board object which is capable of storing relevant data and contained methods which are able to process the relevant data.
+The Go board is an integral part of both modes and is required for the user and the computer to interact with the program. A board object which is capable of storing relevant data and contained methods which are able to process the relevant data was required.
 
 The relevant data needed to include the following:
 \begin{itemize}
@@ -431,44 +437,51 @@ The relevant methods which are able to do the following were required:
 \item Obtain all the liberties of a given stone string
 \end{itemize}
 
-\subsubsection{Play Mode}
-Play mode is the screen in which the user can load a problem up and play through it. Play mode needed to contain a Go board in order to display problems. The board itself needs to be interactable, the user should be able to click on valid points on the board to make a move.
+\subsubsection{Other Features}
+Along with the Go board, play mode and editor modes had multiple features which were both required to allow the users to perform the tasks they needed.
 
-Play mode also needed to contain buttons which do the following:
+Both modes needed the following features implemented:
 \begin{itemize}
-\item Load a problem
-\item Save a problem
-\item Switch to editor mode
-\item Tell the computer to start search for the best move of the current board position
-\item Tell the computer to stop search
-\item Reset the problem to how it was loaded
+\item Load problem
+\item Save problem
+\item Switch modes
+\item Reset the problem
 \item Undo \& Redo moves
-\item Switch Turns
-\item Pass the turn
 \end{itemize}
 
-\subsubsection{Editor Mode}
-Editor mode is the screen in which the user can create problems from scratch or edit problems that are loaded in and then save them for future use. Similar to play mode, editor mode needs to contain a Go board in order to display the problem which is being created/edited. The board itself needs to be interactable, the user should be able to place stones by simply clicking on the points on the board. Editor mode also needed a way for the user to decide which stone is currently being placed or whether if stones are being removed when the user clicks on the board.
-Editor mode also needed buttons to do the following functions:
+\subsection{Play Mode}
+The play mode required some unique features which allowed the user to play through problems and also to adjust the computer’s settings.
+
+Play mode needed the following features most likely in the form of a button:
 \begin{itemize}
-\item Load a problem
-\item Save a problem
-\item Switch to play mode
-\item Set who plays first during the problem
-\item To reset the board into an empty state
-\item Rotate and flip the board
-\item To place a keystone
-\item Switch keystone colour
+\item Request the computer to start search for the best move
+\item Request the computer to stop search
+\item Pass
+\item Swap turns
+\item Reset the problem to when it was loaded
+\item Set whether the computer responds automatically to user’s move or not
+\item Set the breadth limit for the search
+\item Set the depth limit for the search
 \end{itemize}
 
-\subsubsection{Computer}
-To achieve the first milestone the computer was required to perform a tree search. The tree search chosen for this project was the Alpha-Beta pruning algorithm. The requirement for the computer was that it needed to produce the best move possible given infinite time and or small enough problem via searching every valid sequence of moves then interact with the board in play mode by making the best move found.
+\subsection{Editor Mode}
+The editor mode required some unique features to allow the user’s create Go problems with ease.
 
-\subsection{Milestone 2}
-The second milestone’s aim was to enhance the computer AI by introducing heuristics to allow the user to restrict the time the computer is able to search for the best move. To do this following the requirements were added on top of the requirements for the first milestone.
+Editor mode needed the following features most likely in the form of a button:
+\begin{itemize}
+\item Set who plays first during the problem
+\item Reset the board into an empty state
+\item Rotate and flip the board
+\item Place keystone
+\item Switch keystone colour
+\item Choose which colour of stone to place
+\item Set and remove “valid points”
+\end{itemize}
 
-Play mode required an improved interface containing additional buttons to configure the parameter of the Alpha-Beta search used by the computer. Within the play mode, the user needed to able to toggle on and off depth limiting and breadth limiting. Play mode should also allow the user to increase or decrease the depth limit and the breadth of the search as they desire.
-The computer’s requirement was that it should be able to limit the depth of the search according to the user’s choice. To do this it was required to introduce a board evaluation function. In order to allow the computer to limit the breadth of the search, it was required to introduce a move generator function which was able to generate a limited number of moves depending on the user’s breadth choice.
+\subsection{The Computer}
+Main aim of project required the computer to perform a tree search. The tree search chosen for this project was the Alpha-Beta pruning algorithm. The requirement for the computer was that it needed to be able to find the best move possible and play it on the board in a limited time frame. This needs to be done through a tree search where many valid sequences of moves are searched through and the move which results in the best board position for the current colour needs to be played. An additional requirement for the computer was that it should be able to limit the depth of the search according to the user’s choice. This consequently implies a requirement for a board evaluation function which is used to score the board positions found at the depth limit. The computer was also required to have the ability to limit the breadth i.e. the number of move per ply according to the user’s choice. Hence there was a need for a move generator to produce a subset of moves from all the valid moves.
+
+
 
 \section{Non-Functional Requirements}
 Throughout the project, some non-functional requirements were discovered and needed to be addressed, the following categories were made to specify the different criteria GoLD need to achieve.
@@ -480,6 +493,25 @@ Usability - Another concern was the ease of use , whether the program is simple 
 Reliability – The program should be able to cope with any kind of user inputs and should maintain running without any failures or crashes
 
 In order to test all three categories of these non-functional requirements the project also had an additional requirement of producing a folder of problems which can be used during the evaluation phase. This folder of problems was required so that beta testers could have a set of pre-defined problems to test the program on. The folder was also required in order to perform quantitate evaluation of GoLD during the evaluation process, to judge the level of difficult the program can solve and what length of time it takes to do so.
+
+\section{Software Development Process}
+From the start, the project was divided into two major milestones each containing a set of requirements to achieve the milestone. These milestones were set up to help evaluate the progress throughout the project and also to help streamline the workflow throughout the project so that at all points there was a goal to strive towards.
+
+\subsubsection{Milestone 1}
+The first milestone consisted of creating and implementing most of essential features of the program. The first choice made during the project was to choose Java was the main programming language within the project. This choice came completely out of preference and ease of use. Once this was determined a 2D graphics engine was required to draw the program. Initially to immediately start work on the project , the Swing tool kit along with Java’s Canvas was used. After further development and research , it was found that this combination of tools kits was sufficient for the project. From there onwards the Slick2D graphics tool kit was used to render the program.
+
+The first milestone came with the challenge of implementing a tree search. The final tree search used within GoLD was created after two iteration of designing and implementing a tree search. The first iteration was based on the Minimax tree search algorithm which was adapted to play Go. Following on the next iteration of the tree search consisted of Alpha-Beta pruning tree search which greatly improved the performance compared to the simple Minimax search. Finally, to improve quality of the over program in terms of usability and to improve performance, Iterative Deepening was used along with Alpha-Beta. Note that Iterative Deepening was implemented much later on the project and was part of the second milestone.
+
+\subsubsection{Milestone 2}
+The second milestone was concerned with implementing heuristics within GoLD. This is included board evaluation, move generator and move ordering. Board evaluation features was the first of the three to be designed and implemented because it was arguably the most important of the three and required the most time and effort.
+
+To implement board evaluation research was done about Go and how humans perceive the value of different Go board positions. Countless hours were spent understanding some of essential strategy regarding eyes and alive shapes and dead shapes. Lot of the information gathering was done through Sensei’s Library \cite{Senseis} which is website which has information on almost every aspect of Go from simple to advanced. The result of researched inspired the pattern matching based board evaluation used within GoLD
+
+Once the board evaluation function became sufficient enough to solve moderately difficult problems, the focus was set on Move ordering. At this is point the Killer Move heuristic was already thoroughly searched when research was done about Alpha-Beta. Hence it was simple matter of apply it to Go and implementing it within the search. When Iterative Deepening was introduced it was simply a matter of some alteration to the code to implement move ordering using the principal variation of each previous iteration. This was also essential to keep the performance of Iterative Deepening comparable to a fixed-Depth search.
+
+The final part of program to be implemented was the move generator. It was essential that this was kept simple it is called during every ply of the search hence a complex move generator would drastically slow down the performance. To keep it simple a distance-based generator was designed , which prioritised moves nearer to keystones. After implementation and testing the simple distance-based generator was found to be in adequate to generate moves for spread-out Go problems. Therefore, a pattern-matching based move generator was designed and implemented combined with distance-based generator to yield better results.
+
+
 
 
 
@@ -739,7 +771,7 @@ After these checks are done for all the keystrings, any moves remaining in the s
 
 
 \chapter{Implementation}
-This chapter will go into detail about how GoLD is implemented. GoLD is entirely written in Java and uses a simple 2D game engine called Slick2D \cite{SLICK2D} which is based on LWJGL \cite{SLICK2D}. All of the major constructs of Go are implemented within GoLD to create a stable environment for the user to solve life and death problems. Some of the key aspects of the program are the Go board, the Pattern Matcher and the two modes of play. These features were implemented in order to facilitate GoLD's requirements such as the "computer" which plays against the player. Which is essentially a search function greatly dependant on how the Go Board is structured. Many smaller but crucial features had to be implemented to create a completely standalone program which can create and solve problems. To enable complex heuristics to be performed in order to evaluate board positions or generate moves which are relevant, a method of creating and identify patterns of stones is required. A pattern matcher which is able to distinguish between middle, side and corner of the board is built into GoLD.
+This chapter will go into detail about how GoLD is implemented. GoLD is entirely written in Java and uses a simple 2D game engine called Slick2D \cite{SLICK2D} which is based on LWJGL \cite{LWJGL}. All of the major constructs of Go are implemented within GoLD to create a stable environment for the user to solve life and death problems. Some of the key aspects of the program are the Go board, the Pattern Matcher and the two modes of play. These features were implemented in order to facilitate GoLD's requirements such as the "computer" which plays against the player. Which is essentially a search function greatly dependant on how the Go Board is structured. Many smaller but crucial features had to be implemented to create a completely standalone program which can create and solve problems. To enable complex heuristics to be performed in order to evaluate board positions or generate moves which are relevant, a method of creating and identify patterns of stones is required. A pattern matcher which is able to distinguish between middle, side and corner of the board is built into GoLD.
 
 \section{Board}
 
@@ -878,12 +910,6 @@ The pattern matcher not only returns the matched patterns but also the rotation 
 \label{fig:pat-2}
 \end{figure}
 
-\section{Modes}
-
-\subsection{Key Features}
-
-
-\subsection{Differences}
 
 
 
@@ -1103,12 +1129,12 @@ To find the relationship between difficulty of a problem and the depth in which 
 \begin{tabular}{|c|c|c|}
 \hline
 \textbf{Difficulty Range} & \textbf{\begin{tabular}[c]{@{}c@{}}Difficulty Rating \\ Range\end{tabular}} & \textbf{Depth} \\ \hline
-30 - 24 kyu $\sim$ & 700 - 900 & 4.5 \\ \hline
-24 - 16 kyu $\sim$ & 900  - 1100 & 5.7 \\ \hline
-16- 9 kyu $\sim$ & 1100- 1300 & 6.2 \\ \hline
-9 - 2 kyu $\sim$ & 1300 - 1500 & 6 \\ \hline
-2 kyu - 4 dan $\sim$ & 1500 - 1700 & 6.1 \\ \hline
-4 - 7 dan $\sim$ & 1700 - 1900 & 8 \\ \hline
+$\sim$  30 - 24 kyu  & 700 - 900 & 4.5 \\ \hline
+$\sim$  24 - 16 kyu  & 900  - 1100 & 5.7 \\ \hline
+$\sim$  16- 9 kyu  & 1100- 1300 & 6.2 \\ \hline
+$\sim$  9 - 2 kyu & 1300 - 1500 & 6 \\ \hline
+$\sim$  2 kyu - 4 dan  & 1500 - 1700 & 6.1 \\ \hline
+$\sim$  4 - 7 dan & 1700 - 1900 & 8 \\ \hline
 \end{tabular}
 \caption{Average depth  required for varying ranges of difficulties}
 \label{table:dranged}
@@ -1137,6 +1163,11 @@ To evaluate GoLD performance in terms of time we need to set a reasonable time f
 
 We can look T1,T3 without setting threshold to evaluate the addition of Iterative Deepening more clearly. \autoref{fig:t1vt3} show a plots T1vsT3 against the depth * S1 of each problem where S1 is the number of initial moves without inverting the objective. Looking at the line of best fit we can evidently see that for shorter searches (around < 10s) the plain search works better but as depth * S1 increases the more effective Iterative Deepening becomes. Note that logarithmic scale is used for time to visualise the data better.
 
+\subsection{Performance Evaluation Summary}
+
+Through the performance evaluation process the extent of GoLD’s “computer” player’s ability was found. Out of the 72 solvable problems gathered 18 of them took more than 30 seconds by the Iterative Deepening search. The remaining 54 had an average difficulty rating of 1179 (\textasciitilde 13 kyu ). It was also found that Iterative Deepening had minimal negative effect for shorter searches and had a positive effect for longer searches compared the fixed-depth search. Therefore, the choice of implementing Iterative Deepening is fairly validated as it will give users more control over the search result without hindering the performance, sometimes even improving it. This process also made the limitation of search evident, there were round 30 other problems initially re-created with GoLD which were unable to be solved in reasonable time frame. Most of these were of higher difficulty and larger in size than the solvable problems. This limitation was for seen as it is the nature of heuristics, it can never be perfect and only through increased knowledge can it become more accurate. Increased knowledge requires deeper and broader search which leads to exponential time increase.
+
+
 
 
 \section{Beta Testing}
@@ -1161,9 +1192,11 @@ The testers combined together found one instance of a Go problem provided to the
 
 The testers were asked if there were any difficulty during testing, one tester pointed out that the editor mode’s board taking priority over play mode’s board when switching between the two modes was an issue. While this is a functionality to allow a problem created on editor mode to be transferred over to play mode in retrospect having the ability to choose whether or not to transfer over the problem from one mode to another would have proved to be a better implementation of the functionality. Another tester found that it was quite difficult to judge the increase in time when adjusting the depth and breadth limits hence would have liked to have warning of sorts to let them know the affect of increasing the limits too high.
 
-A Critical issue that occurred during the early phase of beta testing was that the testers found it difficult to run the program due to difference in java version required to run GoLD to the version they had installed. Since this was a major hinderance the issue was fixed during the beta testing phase by bundling the Java Runtime Environment required along with the entire GoLD beta testing package. Furthermore, the portability has since been tested for on Windows 10 , Ubuntu and the Centos systems used within the Glasgow University to ensure the program is able to simply run from the files inside the zipped folder containing the final version of GoLD and the all the deliverables.
+A Critical issue that occurred during the early phase of beta testing was that the testers found it difficult to run the program due to difference in java version required to run GoLD to the version they had installed. Since this was a major hinderance the issue was fixed during the beta testing phase by bundling the Java Runtime Environment required along with the entire GoLD beta testing package. Furthermore, the portability has since been tested for on Windows 10 , Ubuntu and a Fedora system to ensure the program is able to simply run from the files inside the zipped folder containing the final version of GoLD. Due to a lack of access to a Mac system, Go-LD was not tested on the Mac OS.
 
-\subsection{Overall Evaluation Results}
+\subsection{Beta Testing Summary}
+Beta testing was a great opportunity to understand how the software tool would perform in the hands of inexperienced users. To begin with the positives, users found the program itself pretty simple  granted a simple tutorial was provided to them which mostly focused on introducing the testers to the basic concept of a Life and Death problems more than the whole program itself. In terms of reliability of program, there were no issues reported by the tester, no major bugs or crashes were reported. GoLD could be said to be adequate in terms of performance (of the computer) from the tester’s responses. Tester found that simpler problems could be solved quickly but increasing the depth higher could result in longer waiting times which is to be expected . The visual aspect of the program overall the weakest point of program , testers reported two major concerns , text readability and the background image. Due to simplicity of these issues , they were immediately improved upon for the final results. Yet the tester’s issues highlight an area of the program which requires a lot of improvement for future versions.
+
 
 
 
