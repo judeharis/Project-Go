@@ -7,6 +7,8 @@
 \usepackage{enumitem}
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{float}
+\usepackage{longtable}
 
 
 
@@ -37,6 +39,11 @@
     ABC was 20\% better than XYZ, though it caused rabies in half of subjects.''
 \end{abstract}
 
+
+
+
+\def\consentname {Jude Christudas Haris} % your full name
+\def\consentdate {25 March 2019} % the date you agree
 
 \educationalconsent
 
@@ -610,10 +617,10 @@ Due to the depth-first nature of a fixed-depth limited Alpha-Beta search, the se
 
 Alpha-Beta with Iterative Deepening is a process in which AB search is performed multiple times, and at each iteration, the depth limit is increased by 1. This cycle takes place until max depth limit is reached, or a favourable game-ending state is found. Iterative Deepening effectively alters AB search to only increment depth by one at a time.  ~\autoref{fig:iter-deep} illustrates the process of Iterative Deepening, it is essential to understand that Iterative Deepening is not a new search algorithm itself but rather a framework which contains the Alpha-Beta search.
 
+
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.9\textwidth]{ABNumIDeep.pdf}
-
 \caption{ The same simple number game as ~\autoref{fig:ABNumTree} but using Iterative Deepening. Note here the thinner oval shapes represents an evaluated state due to depth limitation. Whereas the emboldened oval shapes represent a game-ending state. End of each iteration there is a resulting answer which the search can return if the user decides to stop in the middle of the search.}
 \label{fig:iter-deep}
 \end{figure}
@@ -637,13 +644,13 @@ When evaluating a board position GoLD looks at the board similar to how humans w
 
 \begin{figure}[!ht]
 \centering
-\begin{subfigure}[b]{0.45\textwidth}
+\begin{subfigure}[b]{0.35\textwidth}
 \centering
 \includegraphics[width=\textwidth]{heur/1a.png}
 \caption{Before}
 \label{fig:heur-1a}
 \end{subfigure}
-\begin{subfigure}[b]{0.45\textwidth}
+\begin{subfigure}[b]{0.35\textwidth}
 \centering
 \includegraphics[width=\textwidth]{heur/1b.png}
 \caption{After}
@@ -660,13 +667,13 @@ Most of the patterns used within GoLD have a distinct feature common in Life and
 
 \begin{figure}[!ht]
 \centering
-\begin{subfigure}[b]{0.45\textwidth}
+\begin{subfigure}[b]{0.35\textwidth}
 \centering
 \includegraphics[width=\textwidth]{heur/2a.png}
 \caption{Before}
 \label{fig:heur-2a}
 \end{subfigure}
-\begin{subfigure}[b]{0.45\textwidth}
+\begin{subfigure}[b]{0.35\textwidth}
 \centering
 \includegraphics[width=\textwidth]{heur/2b.png}
 \caption{After}
@@ -682,13 +689,14 @@ An essential insight into creating a better evaluation function is to recognise 
 
 \begin{figure}[!ht]
 \centering
-\begin{subfigure}[b]{0.34\textwidth}
+% \begin{subfigure}[b]{0.34\textwidth}
+\begin{subfigure}[b]{0.2625\textwidth}
 \centering
 \includegraphics[width=\textwidth]{heur/3a.png}
 \caption{Black Hanes at 1}
 \label{fig:heur-3a}
 \end{subfigure}
-\begin{subfigure}[b]{0.45\textwidth}
+\begin{subfigure}[b]{0.35\textwidth}
 \centering
 \includegraphics[width=\textwidth]{heur/3b.png}
 \caption{Black Cuts at 1}
@@ -731,13 +739,13 @@ One approach to determine which moves are good moves is to simulate each move be
 
 \begin{figure}[!ht]
 \centering
-\begin{subfigure}[b]{0.45\textwidth}
+\begin{subfigure}[b]{0.35\textwidth}
 \centering
 \includegraphics[width=\textwidth]{heur/4a.png}
 \caption{Value is halfed each step away from the key group}
 \label{fig:heur-4a}
 \end{subfigure}
-\begin{subfigure}[b]{0.45\textwidth}
+\begin{subfigure}[b]{0.35\textwidth}
 \centering
 \includegraphics[width=\textwidth]{heur/4b.png}
 \caption{White stones devalues moves outside the wall}
@@ -755,13 +763,13 @@ The other heuristic method used for move generation is based on pattern matching
 
 \begin{figure}[!ht]
 \centering
-\begin{subfigure}[b]{0.45\textwidth}
+\begin{subfigure}[b]{0.35\textwidth}
 \centering
 \includegraphics[width=\textwidth]{heur/5a.png}
 \caption{Not surrounded by white stones}
 \label{fig:heur-5a}
 \end{subfigure}
-\begin{subfigure}[b]{0.45\textwidth}
+\begin{subfigure}[b]{0.35\textwidth}
 \centering
 \includegraphics[width=\textwidth]{heur/5b.png}
 \caption{Surrounded by white stones}
@@ -776,19 +784,36 @@ Relevancy score from the distance-based heuristic and pattern-based heuristic ar
 
 
 
-\subsection{Suicidal Move Removal}
-Keystones are the absolute objective in a problem, they are one of the reference points which the tree search checks to see if the problem is solved or not. From the defender’s perspective, any moves that are detrimental to the immediate safety of the keystones needs to be removed from the list of valid moves to be searched. That entails removing any suicidal moves that decrease the number of liberties of a keystring to one.
+% \subsection{Suicidal Move Removal}
+% Keystones are the absolute objective in a problem, they are one of the reference points which the tree search checks to see if the problem is solved or not. From the defender’s perspective, any moves that are detrimental to the immediate safety of the keystones needs to be removed from the list of valid moves to be searched. That entails removing any suicidal moves that decrease the number of liberties of a keystring to one.
+%
+% The program uses the fact that placing one stone can at maximum remove one liberty of a keystring to identify the moves which need to be removed from the moves list. GoLD only needs to look at the moves that place a stone in liberties of keystrings with two liberties; any more liberties would ensure at least two liberties would remain intact if a stone were to be placed on a liberty. For a keystring with two liberties, placing in one of those two liberties does not automatically mean it is a suicidal move for two reasons: Move captures an opponent string; Move would increase or maintain the liberty count. If any of these two reasons are met, then the move is not suicidal. Note that "suicidal move" referred in this section is not the same as a self-capture move but rather it is a move which will lead to the opponent winning next turn.
+% The following steps are used to determine the “suicidal moves” to remove from the moves list. The steps are performed on keystrings with only two liberties.
+% \begin{itemize}
+%     \item Both liberties of the keystring is added to the suicidal move list.
+%     \item Moves that places a stone in the liberty of any opponent string which is in Atari is removed from the suicidal move list.
+%     \item Moves that connects the keystring to another string which fits the following criteria are removed from the suicidal move list: Must be the same colour as the keystring; Has more than 2 liberties or has 2 liberties which are not the same 2 liberties of the keystring.
+%     \item Moves that places a stone adjacent to any empty point which is not a liberty of the keystring are removed from the suicidal move list.
+% \end{itemize}
+%
+% After these steps are performed on all keystrings with two only two liberties, any moves remaining in the suicidal moves list are removed from the valid moves list – this new list of moves is referred to as the good moves list. The good moves list is used during Alpha-Beta search instead of valid moves list to save time by not searching valid moves which would lead to immediate capture of keystones. If no moves are considered “good” then the defending player is to pass instead of making a suicidal move during Alpha-Beta search.
 
-The program uses the fact that placing one stone can at maximum remove one liberty of a keystring to identify the moves which need to be removed from the moves list. GoLD only needs to look at the moves that place a stone in liberties of keystrings with two liberties; any more liberties would ensure at least two liberties would remain intact if a stone were to be placed on a liberty. For a keystring with two liberties, placing in one of those two liberties does not automatically mean it is a suicidal move for two reasons: Move captures an opponent string; Move would increase or maintain the liberty count. If any of these two reasons are met, then the move is not suicidal. Note that "suicidal move" referred in this section is not the same as a self-capture move but rather it is a move which will lead to the opponent winning next turn.
-The following steps are used to determine the “suicidal moves” to remove from the moves list. The steps are performed on keystrings with only two liberties.
+
+
+
+\subsection{Bad Move Removal}
+To limit the search space, the "bad move" removal removes any moves from the defender's side which helps the attacker win the next turn — removing any moves which would decrease the number of liberties for keystring from two to one.
+
+Placing a stone can at maximum decrease a keystring's liberty by one hence only keystrings with two liberties are checked via the following procedure. The following steps are used to determine the "bad moves” to remove from the moves list. The steps are performed on every keystrings with only two liberties.
+
 \begin{itemize}
-    \item Both liberties of the keystring is added to the suicidal move list.
-    \item Moves that places a stone in the liberty of any opponent string which is in Atari is removed from the suicidal move list.
-    \item Moves that connects the keystring to another string which fits the following criteria are removed from the suicidal move list: Must be the same colour as the keystring; Has more than 2 liberties or has 2 liberties which are not the same 2 liberties of the keystring.
-    \item Moves that places a stone adjacent to any empty point which is not a liberty of the keystring are removed from the suicidal move list.
+    \item Both liberties of the keystring are added to the "bad moves" list.
+    \item Moves that capture opponent stones (i.e. play on opponent group's last liberty) are removed from the "bad moves" list.
+    \item Moves that connect the keystring to another string of the same colour which has more than two liberties or has two new liberties are removed from the "bad moves" list.
+    \item Moves that place a stone adjacent to any empty point which is not already a liberty of the keystring are removed from the "bad moves" list.
 \end{itemize}
 
-After these steps are performed on all keystrings with two only two liberties, any moves remaining in the suicidal moves list are removed from the valid moves list – this new list of moves is referred to as the good moves list. The good moves list is used during Alpha-Beta search instead of valid moves list to save time by not searching valid moves which would lead to immediate capture of keystones. If no moves are considered “good” then the defending player is to pass instead of making a suicidal move during Alpha-Beta search.
+After, any moves remaining in the "bad moves" list are removed from the valid moves list. The remaining moves list is used during the Alpha-Beta search. If no moves remain in the moves list, then the defending player is to pass instead of making a "bad move" during the search.
 
 
 
@@ -1257,36 +1282,340 @@ Another realm of possibilities can be opened up by introducing Machine Learning 
 
 
 
- \begin{appendices}
+\begin{appendices}
 
- \chapter{Appendices}
+\chapter{Performance Evaluation Data Collected}
 
- Typical inclusions in the appendices are:
+Here is all the data collected through out the performance evaluation process. All data were collected from a computer of the following specification.
 
- \begin{itemize}
- \item
-   Copies of ethics approvals (required if obtained)
- \item
-   Copies of questionnaires etc. used to gather data from subjects.
- \item
-   Extensive tables or figures that are too bulky to fit in the main body of
-   the report, particularly ones that are repetitive and summarised in the body.
+Operating System: Windows 10 Home 64-bit
 
- \item Outline of the source code (e.g. directory structure), or other architecture documentation like class diagrams.
+Processor: AMD Ryzen 7 2700X Eight-Core Processor          (16 CPUs), ~3.7GHz
 
- \item User manuals, and any guides to starting/running the software.
+Memory: 16384MB RAM
 
- \end{itemize}
-
- \textbf{Don't include your source code in the appendices}. It will be
- submitted separately.
-
- \end{appendices}
+Display Device : NVIDIA GeForce GTX 1080
 
 
- \bibliographystyle{abbrvnat}
 
- \bibliography{Go_Project}
+
+\begin{longtable}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{ID \#} & \textbf{Difficulty} & \textbf{\begin{tabular}[c]{@{}c@{}}Difficulty \\ Rating\end{tabular}} & \textbf{Depth} & \textbf{S1} & \textbf{S2} & \textbf{\begin{tabular}[c]{@{}c@{}}T1 \\ (s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}T2 \\ (s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}T3 \\ (s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}T4 \\ (s)\end{tabular}} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+4776 & 15 - kyu & 1145 & 3 & 7 & 8 & 0.19 & 0.22 & 0.17 & 0.22 \\ \hline
+5300 & 1 - dan & 1559 & 4 & 7 & 7 & 0.73 & 0.60 & 0.52 & 0.47 \\ \hline
+5505 & 22 - kyu & 946 & 4 & 16 & 17 & 2.37 & 2.16 & 2.30 & 2.91 \\ \hline
+7106 & 16 - kyu & 1117 & 4 & 6 & 6 & 0.26 & 0.27 & 0.18 & 0.20 \\ \hline
+10491 & 24 - kyu & 895 & 4 & 6 & 6 & 0.17 & 0.24 & 0.16 & 0.13 \\ \hline
+10541 & 23 - kyu & 918 & 4 & 18 & 18 & 2.73 & 2.49 & 5.24 & 4.81 \\ \hline
+1384 & 19 - kyu & 1015 & 5 & 6 & 6 & 0.62 & 0.66 & 0.23 & 0.62 \\ \hline
+3269 & 11 - kyu & 1242 & 5 & 13 & 13 & 3.20 & 2.89 & 4.36 & 2.64 \\ \hline
+3492 & 20 - kyu & 1001 & 5 & 9 & 9 & 1.66 & 1.76 & 1.52 & 1.66 \\ \hline
+11650 & 12 - kyu & 1224 & 5 & 17 & 19 & 13.62 & 17.96 & 28.30 & 24.25 \\ \hline
+11966 & 18 - kyu & 1047 & 5 & 11 & 12 & 3.10 & 4.10 & 3.10 & 4.52 \\ \hline
+615 & 8 - kyu & 1320 & 6 & 9 & 9 & 6.89 & 7.28 & 6.11 & 4.71 \\ \hline
+3206 & 7 - kyu & 1365 & 6 & 13 & 14 & 35.29 & 19.74 & 41.90 & 39.96 \\ \hline
+3255 & 17 - kyu & 1064 & 6 & 14 & 14 & 15.45 & 23.59 & 34.45 & 40.72 \\ \hline
+3350 & 17 - kyu & 1085 & 6 & 12 & 12 & 11.38 & 13.41 & 20.80 & 16.82 \\ \hline
+3630 & 21 - kyu & 964 & 6 & 14 & 13 & 19.42 & 23.82 & 17.84 & 31.59 \\ \hline
+3984 & 5 - kyu & 1412 & 6 & 11 & 11 & 25.51 & 15.40 & 26.39 & 15.94 \\ \hline
+4519 & 11 - kyu & 1259 & 6 & 15 & 14 & 34.16 & 32.90 & 58.80 & 26.39 \\ \hline
+4833 & 10 - kyu & 1282 & 6 & 10 & 10 & 9.25 & 6.34 & 7.91 & 4.90 \\ \hline
+6219 & 8 - kyu & 1339 & 6 & 9 & 9 & 6.33 & 3.92 & 5.80 & 4.81 \\ \hline
+15254 & 2 - kyu & 1508 & 6 & 8 & 8 & 2.93 & 2.20 & 1.72 & 2.50 \\ \hline
+15410 & 30 - kyu & 702 & 6 & 11 & 11 & 7.81 & 9.10 & 9.97 & 12.90 \\ \hline
+611 & 2 - kyu & 1495 & 7 & 9 & 9 & 12.22 & 13.23 & 11.30 & 10.55 \\ \hline
+3267 & 9 - kyu & 1313 & 7 & 9 & 9 & 12.10 & 14.55 & 7.44 & 14.77 \\ \hline
+6218 & 11 - kyu & 1240 & 7 & 10 & 10 & 30.93 & 25.69 & 29.51 & 22.60 \\ \hline
+8626 & 12 - kyu & 1209 & 8 & 10 & 10 & 53.37 & 69.68 & 94.79 & 55.61 \\ \hline
+15256 & 6 - dan & 1793 & 8 & 10 & 10 & 98.21 & 54.84 & 99.98 & 60.75 \\ \hline
+16429 & 2 - dan & 1589 & 8 & 10 & 10 & 36.75 & 39.96 & 42.39 & 38.82 \\ \hline
+7842 & 6 - kyu & 1388 & 9 & 10 & 10 & 94.64 & 62.41 & 61.42 & 19.20 \\ \hline
+6598 & 15 - kyu & 1141 & 10 & 9 & 9 & 59.25 & 78.98 & 15.30 & 31.69 \\ \hline
+\caption{ Data collected for the middle-based problems}
+\label{table:data-middle}
+\end{longtable}
+
+
+\begin{longtable}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{ID \#} & \textbf{Difficulty} & \textbf{\begin{tabular}[c]{@{}c@{}}Difficulty \\ Rating\end{tabular}} & \textbf{Depth} & \textbf{S1} & \textbf{S2} & \textbf{\begin{tabular}[c]{@{}c@{}}T1 \\ (s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}T2 \\ (s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}T3 \\ (s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}T4 \\ (s)\end{tabular}} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+3153 & 19 - kyu & 1008 & 4 & 8 & 7 & 0.49 & 0.32 & 0.38 & 0.37 \\ \hline
+3154 & 24 - kyu & 876 & 4 & 6 & 6 & 0.30 & 0.27 & 0.25 & 0.25 \\ \hline
+689 & 7 - kyu & 1371 & 5 & 11 & 11 & 3.13 & 3.67 & 2.27 & 2.79 \\ \hline
+1087 & 6 - kyu & 1387 & 5 & 5 & 6 & 0.54 & 0.20 & 0.22 & 0.06 \\ \hline
+3055 & 23 - kyu & 907 & 6 & 10 & 10 & 6.39 & 4.28 & 4.35 & 2.45 \\ \hline
+3138 & 10 - kyu & 1284 & 6 & 16 & 16 & 32.29 & 36.45 & 28.98 & 30.86 \\ \hline
+3141 & 15 - kyu & 1136 & 6 & 13 & 13 & 17.56 & 16.65 & 25.35 & 20.84 \\ \hline
+3162 & 8 - kyu & 1337 & 6 & 14 & 14 & 27.39 & 17.43 & 26.70 & 37.45 \\ \hline
+3171 & 15 - kyu & 1140 & 6 & 12 & 12 & 15.77 & 13.85 & 24.48 & 17.66 \\ \hline
+3172 & 15 - kyu & 1138 & 6 & 11 & 10 & 11.44 & 8.38 & 8.65 & 11.40 \\ \hline
+3178 & 10 - kyu & 1270 & 6 & 8 & 8 & 3.50 & 3.29 & 3.86 & 2.25 \\ \hline
+3180 & 15 - kyu & 1145 & 6 & 13 & 14 & 19.37 & 25.82 & 29.90 & 14.88 \\ \hline
+21360 & 17 - kyu & 1076 & 6 & 15 & 15 & 19.60 & 22.89 & 25.92 & 33.73 \\ \hline
+21495 & 3 - kyu & 1477 & 6 & 15 & 15 & 32.37 & 29.16 & 38.75 & 28.78 \\ \hline
+604 & 14 - kyu & 1155 & 7 & 11 & 11 & 23.61 & 35.76 & 23.38 & 34.36 \\ \hline
+3152 & 17 - kyu & 1091 & 7 & 14 & 14 & 83.13 & 55.26 & 97.16 & 90.10 \\ \hline
+3156 & 7 - kyu & 1347 & 7 & 13 & 12 & 69.39 & 39.33 & 53.23 & 40.64 \\ \hline
+3159 & 14 - kyu & 1163 & 7 & 10 & 10 & 17.48 & 17.71 & 20..65 & 12.29 \\ \hline
+3181 & 17 - kyu & 1078 & 7 & 10 & 10 & 32.59 & 14.75 & 30.53 & 23.88 \\ \hline
+21563 & 3 - dan & 1617 & 7 & 9 & 9 & 11.55 & 11.80 & 8.35 & 10.81 \\ \hline
+21576 & 11 - kyu & 1235 & 7 & 12 & 12 & 22.12 & 66.90 & 49.32 & 81.10 \\ \hline
+\caption{ Data collected for the side-based problems}
+\label{table:data-side}
+\end{longtable}
+
+
+
+\begin{longtable}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{ID \#} & \textbf{Difficulty} & \textbf{\begin{tabular}[c]{@{}c@{}}Difficulty \\ Rating\end{tabular}} & \textbf{Depth} & \textbf{S1} & \textbf{S2} & \textbf{\begin{tabular}[c]{@{}c@{}}T1 \\ (s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}T2 \\ (s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}T3 \\ (s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}T4 \\ (s)\end{tabular}} \\ \hline
+\endfirsthead
+%
+\endhead
+%
+3318 & 4 - kyu & 1454 & 4 & 12 & 12 & 0.68 & 0.51 & 0.56 & 0.46 \\ \hline
+3371 & 26 - kyu & 818 & 4 & 5 & 5 & 0.13 & 0.02 & 0.07 & 0.02 \\ \hline
+3524 & 7 - kyu & 1347 & 4 & 6 & 6 & 0.18 & 0.14 & 0.11 & 0.08 \\ \hline
+3644 & 13 - kyu & 1198 & 5 & 9 & 9 & 1.94 & 1.36 & 2.46 & 1.11 \\ \hline
+3686 & 22 - kyu & 938 & 5 & 9 & 9 & 1.07 & 1.56 & 1.15 & 1.19 \\ \hline
+9 & 23 - kyu & 909 & 6 & 11 & 11 & 9.17 & 16.65 & 11.27 & 16.38 \\ \hline
+1188 & 16 - kyu & 1098 & 6 & 17 & 16 & 32.74 & 30.74 & 31.69 & 37.75 \\ \hline
+2916 & 7 - kyu & 1360 & 6 & 13 & 13 & 13.69 & 20.12 & 18.69 & 12.75 \\ \hline
+3204 & 18 - kyu & 1062 & 6 & 11 & 11 & 9.89 & 7.50 & 12.04 & 11.67 \\ \hline
+3221 & 9 - kyu & 1302 & 6 & 15 & 14 & 23.64 & 40.20 & 32.55 & 38.80 \\ \hline
+3321 & 16 - kyu & 1109 & 6 & 14 & 13 & 30.45 & 25.90 & 43.25 & 39.03 \\ \hline
+3743 & 7 - kyu & 1369 & 6 & 12 & 11 & 12.73 & 17.65 & 11.46 & 16.56 \\ \hline
+4199 & 10 - kyu & 1285 & 6 & 12 & 12 & 11.40 & 7.87 & 11.92 & 14.17 \\ \hline
+2929 & 15 -kyu & 1131 & 7 & 6 & 6 & 0.69 & 0.82 & 0.34 & 0.31 \\ \hline
+3375 & 2 - dan & 1571 & 7 & 10 & 10 & 13.39 & 15.25 & 11.96 & 11.10 \\ \hline
+3483 & 18 - kyu & 1048 & 7 & 8 & 8 & 5.65 & 5.14 & 3.50 & 3.36 \\ \hline
+4169 & 9 - kyu & 1290 & 7 & 7 & 7 & 1.58 & 1.44 & 1.47 & 1.45 \\ \hline
+2914 & 17 - kyu & 1065 & 8 & 7 & 9 & 11.07 & 14.67 & 5.31 & 9.70 \\ \hline
+4037 & 4 - dan & 1648 & 8 & 12 & 12 & 89.77 & 124.34 & 213.96 & 184.49 \\ \hline
+4225 & 7 - dan & 1859 & 8 & 13 & 13 & 114.07 & 61.27 & 84.74 & 123.87 \\ \hline
+3785 & 3 - dan & 1621 & 10 & 9 & 9 & 66.57 & 9.08 & 44.84 & 23.95 \\ \hline
+\caption{ Data collected for the corner-based problems}
+\label{table:data-corner}
+\end{longtable}
+
+
+
+
+
+\chapter{Beta-Test Results}
+
+\section{Starting Questions}
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1/1.png}
+\end{subfigure}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1/2.png}
+\end{subfigure}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1/3.png}
+\end{subfigure}
+\end{figure}
+
+\section{Play Mode}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1/4.png}
+\end{subfigure}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1/5.png}
+\end{subfigure}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1/6.png}
+\end{subfigure}
+\end{figure}
+
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1/7.png}
+\end{subfigure}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1/8.png}
+\end{subfigure}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1/9.png}
+\end{subfigure}
+\end{figure}
+
+\section{Editor Mode}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1/10.png}
+\end{subfigure}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1/11.png}
+\end{subfigure}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1/12.png}
+\end{subfigure}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1/13.png}
+\end{subfigure}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1/14.png}
+\end{subfigure}
+\end{figure}
+
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1/15.png}
+\end{subfigure}
+\end{figure}
+
+
+\section{Solving Problems}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1-2/1.png}
+\end{subfigure}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1-2/2.png}
+\end{subfigure}
+\end{figure}
+
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1-2/3.png}
+\end{subfigure}
+\end{figure}
+
+\section{General}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1-2/4.png}
+\end{subfigure}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1-2/5.png}
+\end{subfigure}
+\end{figure}
+
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A1-2/6.png}
+\end{subfigure}
+\end{figure}
+
+
+
+
+\end{appendices}
+
+
+\bibliographystyle{abbrvnat}
+
+\bibliography{Go_Project}
 
 
  % \begin{figure}[!ht]
