@@ -63,8 +63,8 @@ public class PatternSearcher {
 				int counter=0;
 				for (Tuple k : allRot) {
 					if(toSkip[counter]) {counter++;continue;}
-					if(p.isSide && !b.withinBounds(k)) matchTries.get(counter).add(k);
-					else if(!p.isSide && b.withinBounds(k)) {
+					if(p.isSide && !Board.withinBounds(k)) matchTries.get(counter).add(k);
+					else if(!p.isSide && Board.withinBounds(k)) {
 						boolean colourCheck = ((b.stones[k.a][k.b].getSC() == pcolour)!=p.isNot) || p.wildCard;
 						boolean cornerCheck = p.isCorner? isCorner(k):true;
 						if(colourCheck && cornerCheck)matchTries.get(counter).add(k);
@@ -81,8 +81,8 @@ public class PatternSearcher {
 					Iterator<Tuple> itr = slist.iterator(); 
 			        while (itr.hasNext()){ 
 			            Tuple k = itr.next(); 
-			            if(b.withinBounds(k)&&b.stones[k.a][k.b].getSC() != colour)itr.remove();
-			            else if(!b.withinBounds(k))itr.remove();
+			            if(Board.withinBounds(k)&&b.stones[k.a][k.b].getSC() != colour)itr.remove();
+			            else if(!Board.withinBounds(k))itr.remove();
 			        } 
 			        
 					for(ArrayList<Tuple> m: matches) if(m.containsAll(slist)) {skip=true;break;}
@@ -141,8 +141,8 @@ public class PatternSearcher {
 				int counter=0;
 				for (Tuple k : allRot) {
 					if(toSkip[counter]) {counter++;continue;}
-					if(p.isSide && !b.withinBounds(k)) matchTries.get(counter).add(k);
-					else if(!p.isSide && b.withinBounds(k)) {
+					if(p.isSide && !Board.withinBounds(k)) matchTries.get(counter).add(k);
+					else if(!p.isSide && Board.withinBounds(k)) {
 						boolean colourCheck = ((b.stones[k.a][k.b].getSC() == pcolour)!=p.isNot) || p.wildCard;
 						boolean cornerCheck = p.isCorner? isCorner(k):true;
 						if(colourCheck && cornerCheck)matchTries.get(counter).add(k);
@@ -166,8 +166,8 @@ public class PatternSearcher {
 					Iterator<Tuple> itr = slist.iterator(); 
 			        while (itr.hasNext()){ 
 			            Tuple k = itr.next(); 
-			            if(b.withinBounds(k)&&b.stones[k.a][k.b].getSC() != colour)itr.remove();
-			            else if(!b.withinBounds(k))itr.remove();
+			            if(Board.withinBounds(k)&&b.stones[k.a][k.b].getSC() != colour)itr.remove();
+			            else if(!Board.withinBounds(k))itr.remove();
 			        } 
 			        
 					for(ArrayList<Tuple> m: matches) if(m.containsAll(slist)) {skip=true;break;}

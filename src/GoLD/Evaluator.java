@@ -18,7 +18,7 @@ public class Evaluator {
 	
 	public ArrayList<Tuple> eyes = new ArrayList<Tuple>();
 	ArrayList<ArrayList<Tuple>> collectionOfEyeSpaces = new ArrayList<ArrayList<Tuple>>();
-	public static long timed = 0;
+
 	
 	public Evaluator(Board cB) {
 		this.cB = cB;
@@ -64,7 +64,7 @@ public class Evaluator {
 	}
 
 	public ArrayList<Tuple> moveGen(ArrayList<Tuple> goodMoves,int max) {
-		long start = System.currentTimeMillis();
+
 		
 		cB.distance = new int[19][19];
 		
@@ -101,17 +101,6 @@ public class Evaluator {
 		}
 		
 
-//		cB.distance = new int[19][19];
-//		int counter =1;
-//		for(Tuple t :oPP) {
-//			if(cB.withinBounds(t)) {
-//				cB.distance[t.a][t.b]= counter;
-//				counter++;
-//			}
-//		}
-//		
-		long end = System.currentTimeMillis();	
-		timed += end-start;
 
 		
 		return oPP;
@@ -127,7 +116,7 @@ public class Evaluator {
 	    List<Tuple>[] bucket = new List[checkedMapSize + 1];
 
 	    for (Tuple key : map.keySet()) {
-	    	if(cB.withinBounds(key) && !cB.stones[key.a][key.b].isStone())cB.distance[key.a][key.b]= map.getOrDefault(key, 0);
+	    	if(Board.withinBounds(key) && !cB.stones[key.a][key.b].isStone())cB.distance[key.a][key.b]= map.getOrDefault(key, 0);
 	        int frequency = map.get(key);
 	        if (bucket[frequency] == null) {
 	            bucket[frequency] = new ArrayList<>();
@@ -268,17 +257,17 @@ public class Evaluator {
 	}
 
 	public boolean isThere(Tuple t){
-		if(!cB.withinBounds(t)) return false;
+		if(!Board.withinBounds(t)) return false;
 		return cB.stones[t.a][t.b].getSC() == kscolour;
 	}
 
 	public boolean isEnemy(Tuple t) {
-		if(!cB.withinBounds(t)) return false;
+		if(!Board.withinBounds(t)) return false;
 		return cB.stones[t.a][t.b].getSC() == kscolour.getEC();
 	}
 	
 	public boolean isEmptySpace(Tuple t) {
-		if(!cB.withinBounds(t)) return false;
+		if(!Board.withinBounds(t)) return false;
 		return !cB.stones[t.a][t.b].isStone();
 	}
 	
@@ -311,7 +300,7 @@ public class Evaluator {
 	}
 	
 	public boolean isInvalid(Tuple t) {
-		if(!cB.withinBounds(t)) return false;
+		if(!Board.withinBounds(t)) return false;
 		return cB.stones[t.a][t.b].getSC() == Stone.INVALID;
 	}
 

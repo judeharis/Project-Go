@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="Project - Go">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../java-latest/eclipse/"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="10"/>
+    <property name="source" value="10"/>
+    <path id="Project - Go.classpath">
+        <pathelement location="out/production/Project - Go"/>
+        <pathelement location="libs/jinput.jar"/>
+        <pathelement location="libs/lwjgl.jar"/>
+        <pathelement location="libs/slick.jar"/>
+    </path>
+    <path id="run.SlickGo.classpath">
+        <path refid="Project - Go.classpath"/>
+        <pathelement location="libs/jinput.jar"/>
+        <pathelement location="libs/lwjgl.jar"/>
+        <pathelement location="libs/slick.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="out/production/Project - Go"/>
+        <copy includeemptydirs="false" todir="out/production/Project - Go">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.xtend"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="out/production/Project - Go">
+            <fileset dir="libs">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.xtend"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="out/production/Project - Go"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="out/production/Project - Go" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <src path="libs"/>
+            <classpath refid="Project - Go.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="SlickGo">
+        <java classname="GoLD.SlickGo" failonerror="true" fork="yes">
+            <classpath refid="run.SlickGo.classpath"/>
+        </java>
+    </target>
+</project>

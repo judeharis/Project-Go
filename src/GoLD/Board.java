@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 
 
@@ -18,30 +17,24 @@ public class Board{
     boolean passing;
     
 	
-    static int gcsize =  ((SlickGo.gcheigth-50)/50)*50;
+    static int gcsize =  ((GoLD.gcheigth-50)/50)*50;
 	static int boardSize = (gcsize%100==0?gcsize-50:gcsize);
 	static int TileSize = (((boardSize/18)/10) *10);
-	
-	public static int sPx =0;
-	public static int sPy =0;
-	
+	static int sPx =0;
+	static int sPy =0;
 	static boolean showCoord = true;
-
-	static float fullTime = 0;
-	static long[] arrayTimes = new long[10];
-	static float takeTurnTime = 0;
 	String desc ="No Problem Loaded";
 	String boardString;
 
 	
 	
-    public Stone placing= Stone.BLACK;
+    Stone placing= Stone.BLACK;
     Stone turn = Stone.BLACK;
     Stone keystone = Stone.KEYBLACKSTONE;
     
     Stone[][] stones = new Stone[19][19];
 
-    char[][] chars = new char[19][19];
+
 	int[][] distance = new int[19][19];
     
     Board resetboard;
@@ -84,10 +77,6 @@ public class Board{
 			if (stones[i][j]== Stone.KO)printSent("Can't Place On KO", check, editormode); 
 			else if (selfCap(i,j,placing.getEC()))printSent("Can't Self Capture", check, editormode); 
 			else if (editormode){
-				
-				
-				
-				
 				undoBoard = cloneBoard(this);
 				redoBoard = null;
 				stones[i][j] = placing;
@@ -98,10 +87,7 @@ public class Board{
 						stones[k.a][k.b]=placing;
 					}
 					placing = placing.getSC();
-				}else keystones.removeIf( new Tuple(i,j)::equals);
-				
-				
-			         
+				}else keystones.removeIf( new Tuple(i,j)::equals);        
 			}else if (stones[i][j] == Stone.VALID) {     
 				boardString = boardToString();
 				undoString.push(boardString);    	
@@ -113,7 +99,6 @@ public class Board{
 		}else if (passing) {
 			passing=false;
 			moveMade=true;
-			if (!check) print(turn + " passed");    
 			boardString = boardToString();
 			undoString.push(boardString);
 			removeKo();
@@ -237,141 +222,14 @@ public class Board{
     
     
     public boolean checkValidMove(int x , int y) {
-        if(withinBounds(x,y) && stones[x][y] == Stone.VALID && !selfCap(x,y,turn.getEC()))
-    			return true;
+        if(withinBounds(x,y) && stones[x][y] == Stone.VALID && !selfCap(x,y,turn.getEC()))return true;
         return false;
 
     }
 
 	
-	public void iTov() {
-        for(int i=0; i<stones.length; i++) {
-            for(int j=0; j<stones[i].length; j++) {
-            	if(stones[i][j]==Stone.INVALID) stones[i][j]=Stone.VALID;
-            }
-        } 
-	}
-    
-    
 	
-	public boolean checkStringSafetyv2(ArrayList<Tuple> list,Stone colour) {
-		
-		Board checkBoard = cloneBoard(this);
-		checkBoard.iTov();
-		Board newBoard;
-		boolean noDead = false;
-		while(!noDead) {
-			ArrayList<Tuple> toRemove = new ArrayList<Tuple>();
-			noDead=true;
-			for(ArrayList<Tuple> blist :colour.getSStrings(checkBoard)) {
-				if(blist.containsAll(list))continue;
-				newBoard = cloneBoard(checkBoard);
-				if(!checkSingleStringForSafety(blist,colour,newBoard)) {
-					toRemove.addAll(blist);
-					noDead=false;
-					break;
-				}
-			}
-			checkBoard.removeStonesOnBoard(toRemove, false);
-			checkBoard.updateStringsFull();
-			checkBoard.checkForCaps(colour.getEC(), false);
-			checkBoard.checkForCaps(colour,false);
-		}
-		
-		return checkSingleStringForSafety(list,colour,checkBoard);
-	}
-	
-	
-	public boolean checkSingleStringForSafety(ArrayList<Tuple> list,Stone colour,Board b) {
-		
-		Board checkBoard = b;
-		checkBoard.turn = colour.getEC();
-		ArrayList<Tuple> vMoves = checkBoard.getAllValidMoves();
-		ArrayList<Tuple> libs = getLibs(list,true);
-		checkBoard.removeKo();
-		checkBoard.boardString = checkBoard.boardToString();
-		while (!vMoves.isEmpty()) {	
-			ArrayList<Tuple> preValidMoves =tupleArrayClone(vMoves);
-			vMoves.retainAll(libs);
-			checkBoard.boardString = checkBoard.boardToString();
-			if(vMoves.isEmpty()) {
-				vMoves = preValidMoves;
-				ArrayList<ArrayList<Tuple>> empty = getConnected(vMoves);
-				ArrayList<Tuple> newVmoves = new ArrayList<Tuple>();
-				for(ArrayList<Tuple> tlist : empty) {
-					if(tlist.size()> 1) {
-						boolean removed = false;
-						for(Tuple t : tlist) {
-							if (!libs.contains(t)) {
-								removed = true;
-								tlist.remove(t);
-								break;
-							}
-						}
-						if(!removed)tlist.remove(0);
-					}
-					newVmoves.addAll(tlist);
-					break;
-				}
-				vMoves = newVmoves;
-			}
-			Board nCB= cloneBoard(checkBoard);
-			for (Tuple t: vMoves) checkBoard.stones[t.a][t.b]= colour.getEC();
-			checkBoard.updateStringsFull();
-			checkBoard.checkForCaps(colour.getEC(), false);
-			checkBoard.checkForCaps(colour,false);
-			checkBoard.boardString = checkBoard.boardToString();	
-			ArrayList<Tuple> cappedStrings = (colour == Stone.WHITE ? checkBoard.bCappedStrings: checkBoard.wCappedStrings);
-			if(!cappedStrings.isEmpty()) {
-				checkBoard=nCB;		
-				for(Tuple t:cappedStrings) if(vMoves.remove(t))break;
-				continue;
-			}
 
-			checkBoard.boardString = checkBoard.boardToString();	
-			checkBoard.removeKo();
-			vMoves = checkBoard.getAllValidMoves();
-			if(!colour.getSStrings(checkBoard).contains(list)) return false;
-		}
-
-		
-		if(colour.getSStrings(checkBoard).contains(list)) return true;
-		
-		return false;
-	}
-	
-	
-//    private boolean selfCap(int i , int j, Stone enemycolour ){
-//
-//        if (!enemycolour.isStone()) return false;
-//        
-//        ArrayList<Tuple> enemyCapString =  (enemycolour== Stone.WHITE ? wCapStrings:  bCapStrings);
-//        ArrayList<Tuple> currentCapString =  (enemycolour== Stone.WHITE ? bCapStrings:  wCapStrings);
-//        ArrayList<ArrayList<Tuple>> stoneStrings =  (enemycolour== Stone.WHITE ? bStoneStrings:  wStoneStrings);
-//        
-//
-//        if (enemyCapString.contains(new Tuple(i, j))) return false;
-//        
-//        ArrayList<Tuple> adj = getAdjacent(i, j);
-//        if (currentCapString.contains(new Tuple(i, j))) {
-//            for (Tuple t :adj) {
-//            	if (stones[t.a][t.b].getSC() == enemycolour.getEC()){
-//            		 ArrayList<Tuple> sstring = checkForStrings(t.a,t.b, stoneStrings);
-//            		 if (!sstring.isEmpty() && getNeedList(sstring, enemycolour,true).size() >1)  return false;
-//            	}else if (!stones[t.a][t.b].isStone())return false;
-////            	}else if (stones[t.a][t.b].getSC() != Stone.BLACK && stones[t.a][t.b].getSC() != Stone.WHITE)return false;
-//            }
-//        	return true;
-//        }  
-//        
-//        
-//        for (Tuple t :adj) {
-//		      if(stones[t.a][t.b].getSC()!=enemycolour.getSC()) return false;
-//		}
-//
-//        return true;
-//    }
-    
     
 	
     private boolean selfCap(int i , int j, Stone enemycolour ){
@@ -559,7 +417,6 @@ public class Board{
     public void initBoard(boolean editormode){
         for(int i=0; i<stones.length; i++) {
             for(int j=0; j<stones[i].length; j++) {
-//                stones[i][j] = Stone.EMPTY;
             	stones[i][j] = Stone.INVALID;
                 if (editormode) stones[i][j] = Stone.INVALID;
             }
@@ -567,8 +424,7 @@ public class Board{
         keystone = Stone.KEYBLACKSTONE;
         placing = Stone.BLACK;
         blackFirst = true;
-//        if(editormode)capToWin = false;
-//        else capToWin = true;
+
         
         keystones.clear();
         bStoneStrings.clear();
@@ -739,13 +595,13 @@ public class Board{
         validMoves =getAllValidMoves();
     }
   
-    public boolean withinBounds(int x, int y){
+    public static boolean withinBounds(int x, int y){
     	if(x <= 18 && x>=0 && y <= 18 && y>=0) return true;
     	return false;
     	
     }
     
-    public boolean withinBounds(Tuple t){
+    public static boolean withinBounds(Tuple t){
     	if(t.a <= 18 && t.a>=0 && t.b <= 18 && t.b>=0) return true;
     	return false;
     	
@@ -879,9 +735,7 @@ public class Board{
                     break;
 
                 }
-                boolean idOn = true;
-                if(idOn&&editormode)drawCharOnStone(g,i,j,Color.black,chars[i][j]);
-                if(!idOn&&editormode)drawCharOnStone(g,(i+1)*TileSize,(j+1)*TileSize,Color.black,distance[i][j]);
+
             }
 
         }
@@ -916,76 +770,6 @@ public class Board{
 
     }
     
-    public void drawCharOnStone(Graphics g,  int i, int j , Color c ,char chars) {
-
-    	if((int)chars==0)return;
-    	int x = (i+1)*TileSize;
-    	int y = (j+1)*TileSize;
-    	x+=sPx;
-    	y+=sPy;
-    	int r = (TileSize/2);
-    	x = x - r;
-    	y = y - r;
-    	int w = TileSize;
-    	int h = TileSize-6;
-    	
-    	
-    	String s = chars+"";
-
-        Font oldfont = g.getFont();
-        int width = oldfont.getWidth(s);
-        int height = oldfont.getHeight(s);
-        
-		g.setColor(new Color(200,140,80));
-		if(!stones[i][j].isStone())g.fillOval((x + w / 2) - (width / 2), (y + h / 2) - (height / 2),(width)+2,(height)+2);
-        
-        
-        if(stones[i][j].isStone())g.setColor(Color.red);
-        else g.setColor(c);
-    
-        
-        g.drawString(s,(x + w / 2) - (width / 2), (y + h / 2) - (height / 2));
-
-        g.setColor(Color.black);
-
-
-    }
-    
-    public void drawCharOnStone(Graphics g,  int x, int y , Color c ,int chars) {
-    	if (chars ==0 )return;
-    	x+=sPx;
-    	y+=sPy;
-    	int r = (TileSize/2);
-    	x = x - r;
-    	y = y - r;
-    	int w = TileSize;
-    	int h = TileSize-6;
-    	
-    	
-    	
-    	
-    	String s = chars+"";
-    	boolean isInt =true;
- 
-        try{Integer.parseInt(s);} 
-        catch (NumberFormatException nfe) {isInt=false;}
-        
-
-    
-        Font oldfont = g.getFont();
-        int width = oldfont.getWidth(s);
-        int height = oldfont.getHeight(s);
-        
-		g.setColor(new Color(200,140,80));
-        g.fillOval((x + w / 2) - (width / 2), (y + h / 2) - (height / 2),(width)+2,(height)+2);
-        if(isInt)g.setColor(c);
-        else g.setColor(c);
-        g.drawString(s,(x + w / 2) - (width / 2), (y + h / 2) - (height / 2));
-
-        g.setColor(Color.black);
-
-
-    }
 
     public void drawsquare(Graphics g,  int x, int y , Color c) {
     	x+=sPx;
@@ -994,13 +778,10 @@ public class Board{
         g.fillRect(x-(TileSize/2), y-(TileSize/2), TileSize, TileSize);
     }
 
-    public static void print(Object o){
-        System.out.println(o);
-        //Play.gameMsg=(String)o;
-    }
+
     
     public static void printSent(Object o,boolean check ,boolean editormode){
-        System.out.println(o);
+//        System.out.println(o);
         if(!check && !editormode)Play.gameMsg = o.toString();
         if(!check && editormode) {
         	Editor.msg = o.toString();

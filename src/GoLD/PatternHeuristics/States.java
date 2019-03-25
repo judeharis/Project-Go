@@ -3,6 +3,7 @@ package GoLD.PatternHeuristics;
 
 import java.util.ArrayList;
 
+import GoLD.Board;
 import GoLD.Evaluator;
 import GoLD.Tuple;
 
@@ -101,7 +102,7 @@ public enum States {
 		else if(retval <1) addNumber=10*val;
 		else if(retval ==1) addNumber=5*val;
 		for(Tuple t : nothings) {
-			if(e.cB.withinBounds(t) && addNumber>0) {
+			if(Board.withinBounds(t) && addNumber>0) {
 				e.checkedMap.put(t, e.checkedMap.getOrDefault(t, 0)+addNumber);	
 				e.checkedMapSize+=addNumber;
 			}

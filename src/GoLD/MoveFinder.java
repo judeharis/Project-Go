@@ -2,7 +2,7 @@ package GoLD;
 
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+
 
 
 
@@ -20,13 +20,12 @@ public class MoveFinder  implements Runnable{
 
 
 	 boolean exit;
-	 boolean useHashTable = false;
+
 	 int result=0;
 	
 	 Board originalBoard ;
 	 Tuple choice;
-	 Hashtable<String, Integer> good =  new Hashtable<String,Integer>();
-	 Hashtable<String, Integer> bad =  new Hashtable<String,Integer>();
+
 	 Tuple[][] killers =  new Tuple[100][2];
 	 ArrayList<String> searched = new ArrayList<String>();
 	 ArrayList<Tuple> keystones;
@@ -68,7 +67,6 @@ public class MoveFinder  implements Runnable{
 	    if(searched.contains(cB.boardString) && !goodMoves.isEmpty()) goodMoves.add(goodMoves.remove(0));
 	    else if(!searched.contains(cB.boardString)) searched.add(cB.boardString);
 	
-//	    if(depth>3)goodMoves = moveGen(cB,goodMoves);
 	    goodMoves = moveGen(cB,goodMoves);
 	    goodMoves = moveOrdering(depth,goodMoves);
 	
@@ -80,14 +78,8 @@ public class MoveFinder  implements Runnable{
 				if(depth==1)print(t.clone()+ " :");
 				
 				int returnscore = 0;
-				if(useHashTable) {
-				 	String key = b.boardToString();
-					if(good.containsKey(key)) returnscore = good.get(key);
-					else {
-						returnscore =alphaBeta(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);
-						good.put(key, returnscore);
-					}
-				}else returnscore =alphaBeta(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);	
+				returnscore =alphaBeta(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);	
+				
 				if(returnscore > best && depth==1 )this.choice = t.clone();
 				best = Math.max(best, returnscore); 
 				alpha = Math.max(alpha, best);
@@ -107,14 +99,7 @@ public class MoveFinder  implements Runnable{
 				if(depth==1)print(t.clone()+ " :");
 				
 				int returnscore = 0;
-				if(useHashTable) {
-				 	String key = b.boardToString();
-					if(bad.containsKey(key)) returnscore = bad.get(key);
-					else {
-						returnscore =alphaBeta(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);
-						bad.put(key, returnscore);
-					}
-				}else returnscore =alphaBeta(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);
+				returnscore =alphaBeta(b,liveKeys(b,keystonelist),!isLive,depth,alpha,beta);
 				if(returnscore < best && depth==1 )this.choice = t.clone();
 				best = Math.min(best, returnscore); 
 				beta = Math.min(beta, best);
@@ -132,8 +117,8 @@ public class MoveFinder  implements Runnable{
 
 	public void run() {
 
-		Evaluator.timed =0;
-		long startTime = System.currentTimeMillis();
+
+
 		
 		Board cB = Board.cloneBoard(originalBoard);
 		boolean iterativeDeepening =Play.iterativeDeepening;
@@ -141,7 +126,6 @@ public class MoveFinder  implements Runnable{
 		
 		
 		if(!iterativeDeepening || editormode) {
-			useHashTable= false;
 			Evaluator e1 = new Evaluator(cB);
 			e1.evaluateCurrentBoard(true);
 			
@@ -183,26 +167,6 @@ public class MoveFinder  implements Runnable{
 			
 			print(choice + ": " + result +"\n To Depth: " + iterDepth );
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		long endTime = System.currentTimeMillis();
-		long duration = (endTime - startTime);
-		
-		long millis = (duration % 1000)/10 ;
-		long second = (duration / 1000) % 60;
-		long minute = (duration / (1000 * 60)) % 60;
-		long hour = (duration / (1000 * 60 * 60)) % 24;
-
-		String time = String.format("%02d:%02d:%02d.%2d", hour, minute, second, millis);
-		System.out.println(time);		
-		Play.times = time;
-		System.out.println(Evaluator.timed );		
 
 	}
 
@@ -231,14 +195,6 @@ public class MoveFinder  implements Runnable{
 	
 	
 	static public ArrayList<Tuple> liveKeys(Board b,ArrayList<Tuple> keystonelist){
-		
-//	 	ArrayList<Tuple> liveList = new ArrayList<Tuple>();
-//		for (Tuple t : keystonelist){
-//			if (b.stones[t.a][t.b].getSC() == keystonecolour) liveList.add(new Tuple(t.a,t.b));
-//		}
-//		return liveList;
-		
-		
 	 	ArrayList<Tuple> liveList = new ArrayList<Tuple>();
 	    for(int i=0; i<b.stones.length; i++) {
             for(int j=0; j<b.stones[i].length; j++) {

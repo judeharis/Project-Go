@@ -27,7 +27,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 
 
-public class SlickGo extends StateBasedGame {
+public class GoLD extends StateBasedGame {
 	
 	public static final String gamename = "GoLD";
 	public static final int menu = 0;
@@ -35,6 +35,8 @@ public class SlickGo extends StateBasedGame {
 	public static final int editor = 2;
 	public static final int gcwidth = 1600;
 	public static final int gcheigth = 900;
+	static float hratio = (float) ((gcheigth*1.0)/gcheigth);
+	static float wratio = (float) ((gcwidth*1.0)/gcwidth);
 	public static final int maxfps = 60;
 	public static Board mainBoard;
 	public static Menu menuI;
@@ -46,11 +48,11 @@ public class SlickGo extends StateBasedGame {
 
 
 	
-	public SlickGo(String gamename) {
+	public GoLD(String gamename) {
 
 		super(gamename);
 		mainBoard =new Board();
-		SlickGo.mainBoard.initBoard(true);
+		GoLD.mainBoard.initBoard(true);
 		menuI = new Menu(menu);
 		playI = new Play(play);
 		editorI = new Editor(editor);
@@ -82,7 +84,7 @@ public class SlickGo extends StateBasedGame {
 //		catch (IllegalAccessException e1){ e1.printStackTrace();}
 //		catch (UnsupportedLookAndFeelException e1) {e1.printStackTrace();}
 
-		appgc = new AppGameContainer(new SlickGo(gamename));
+		appgc = new AppGameContainer(new GoLD(gamename));
 		appgc.setShowFPS(false);
 		appgc.setDisplayMode(gcwidth, gcheigth, false);
 		appgc.setTargetFrameRate(maxfps);
@@ -107,7 +109,6 @@ public class SlickGo extends StateBasedGame {
  
     	final JFileChooser fc = new JFileChooser();
         fc.setPreferredSize(new Dimension(800,500));
-//      File workingDirectory = new File(System.getProperty("user.dir")+"\\Computer Boards");
         File workingDirectory = new File(System.getProperty("user.dir"));
 
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Documents (*.txt)", "txt", "text");
@@ -235,7 +236,7 @@ public class SlickGo extends StateBasedGame {
             
             String sfilename = fc.getSelectedFile().getName();
             sfilename = sfilename.substring(0, sfilename.length() - 4);
-            print(sfilename);
+
             
             newBoard.blackFirst = (newBoard.turn==Stone.BLACK);
             newBoard.placing = newBoard.turn;
@@ -250,11 +251,11 @@ public class SlickGo extends StateBasedGame {
             
 
         	MoveFinder.keystonecolour = newBoard.keystone.getSC();
-        	if(editormode) SlickGo.editorI.blackKeyStone = newBoard.keystone.getSC()==Stone.BLACK?true:false;
-        	else  SlickGo.playI.blackKeyStone = newBoard.keystone.getSC()==Stone.BLACK?true:false;
+        	if(editormode) GoLD.editorI.blackKeyStone = newBoard.keystone.getSC()==Stone.BLACK?true:false;
+        	else  GoLD.playI.blackKeyStone = newBoard.keystone.getSC()==Stone.BLACK?true:false;
         	
         	if(sfilename.length() > 20 )sfilename= sfilename.substring(0, 20);
-        	Play.problemName =sfilename+": " ;
+
         	if(depthcut>0) {
         		MoveFinder.cutoff = depthcut;
         		Play.heuristic = true;
@@ -370,18 +371,11 @@ public class SlickGo extends StateBasedGame {
 		return board;
     }
  
-    public static boolean withinBounds(int x, int y){
-    	if(x <= 18 && x>=0 && y <= 18 && y>=0) return true;
-    	return false;
-    	
-    }
+
 	
     
 	public static boolean regionChecker(int x, int y , int w , int h , GameContainer gc) {
 
-
-    	float hratio = (float) ((gcheigth*1.0)/900);
-    	float wratio = (float) ((gcwidth*1.0)/1600);
     	h*=hratio;
     	w*=wratio;
     	y*=hratio;
@@ -394,11 +388,7 @@ public class SlickGo extends StateBasedGame {
 	
 	
     public static void drawButton(int x, int y , int w , int h, String string,Graphics g ,boolean hover) {
-    	
 
-
-    	float hratio = (float) ((gcheigth*1.0)/900);
-    	float wratio = (float) ((gcwidth*1.0)/1600);
     	h*=hratio;
     	w*=wratio;
     	y*=hratio;
@@ -410,7 +400,6 @@ public class SlickGo extends StateBasedGame {
         if(hover) g.setColor(new Color(255,225,0));
         g.drawRoundRect(x, y, w, h, 20);
         g.setColor(Color.black);
-        
         g.setFont(Menu.defaultFont);
         Font oldfont = g.getFont();
         int width = oldfont.getWidth(string);
@@ -421,11 +410,7 @@ public class SlickGo extends StateBasedGame {
     }
     
     public static void drawTitle(int x, int y , int w , int h, String string,Graphics g ,boolean hover) {
-    	
 
-
-    	float hratio = (float) ((gcheigth*1.0)/900);
-    	float wratio = (float) ((gcwidth*1.0)/1600);
     	h*=hratio;
     	w*=wratio;
     	y*=hratio;
@@ -438,11 +423,7 @@ public class SlickGo extends StateBasedGame {
         g.drawRoundRect(x+1, y+1, w-2, h-2, 20);
         if(hover) g.setColor(new Color(255,225,0));
         g.drawRoundRect(x, y, w, h, 20);
-
-
-
         g.setColor(Color.black);
-        
         Font oldfont = g.getFont();
         int width = oldfont.getWidth(string);
         int height = oldfont.getHeight(string);
@@ -452,18 +433,12 @@ public class SlickGo extends StateBasedGame {
     }
     
     public static void drawBox(int x, int y , int w , int h, String string,Graphics g ,boolean hover) {
-    	
 
 
-    	float hratio = (float) ((gcheigth*1.0)/900);
-    	float wratio = (float) ((gcwidth*1.0)/1600);
     	h*=hratio;
     	w*=wratio;
     	y*=hratio;
     	x*= wratio;
-    	
-    	
-
         g.setColor(Color.black);
         if(hover) g.setColor(Color.yellow);
         g.drawRect(x, y, w, h);
@@ -480,11 +455,6 @@ public class SlickGo extends StateBasedGame {
     
     public static void drawButton(int x, int y , int w , int h, String string,Graphics g ,boolean hover , Color hc) {
 
-
-
-    	
-    	float hratio = (float) ((gcheigth*1.0)/900);
-    	float wratio = (float) ((gcwidth*1.0)/1600);
     	h*=hratio;
     	w*=wratio;
     	y*=hratio;
@@ -498,39 +468,28 @@ public class SlickGo extends StateBasedGame {
         if(hover) g.setColor(hc);
         g.drawRect(x, y, w, h);
         g.setColor(Color.black);
-        
         g.setFont(Menu.defaultFont);
         Font oldfont = g.getFont();
         int width = oldfont.getWidth(string);
         int height = oldfont.getHeight(string);
         g.drawString(string,(x + w / 2) - (width / 2), (y + h / 2) - (height / 2));
-
-        
-    	
     }
     public static void drawMessageBox(int x, int y , int w , int h, String string,Graphics g ,Color hc, TrueTypeFont ttfont) {
-    	
-    	
-    	float hratio = (float) ((gcheigth*1.0)/900);
-    	float wratio = (float) ((gcwidth*1.0)/1600);
+
     	h*=hratio;
     	w*=wratio;
     	y*=hratio;
     	x*= wratio;
-//    	Font oldfont = g.getFont();
+
         int width = ttfont.getWidth(string);
         int height = ttfont.getHeight(string);
-        
         Color oldcolour = g.getColor();
         g.setColor(Color.black);
         g.drawRect(x, y, w, h);
         g.setColor(hc);
-        
-
 		g.setFont(ttfont);
         g.drawString(string,(x + w / 2) - (width / 2), (y + h / 2) - (height / 2));
         g.setColor(oldcolour);
-//        g.setFont(oldfont);
     }
     
     public static void drawRButton(int x, int y , String string,Graphics g ,boolean selected) {
@@ -540,8 +499,7 @@ public class SlickGo extends StateBasedGame {
     	
 
     	
-    	float hratio = (float) ((gcheigth*1.0)/900);
-    	float wratio = (float) ((gcwidth*1.0)/1600);
+
     	h*=hratio;
     	w*=wratio;
     	y*=hratio;
@@ -564,8 +522,7 @@ public class SlickGo extends StateBasedGame {
     
     public static void drawString(int x, int y,String s ,Graphics g) {
 
-    	float hratio = (float) ((gcheigth*1.0)/900);
-    	float wratio = (float) ((gcwidth*1.0)/1600);
+
     	y*=hratio;
     	x*= wratio;
 
@@ -576,9 +533,9 @@ public class SlickGo extends StateBasedGame {
     	
     }
     
-    public static void print(Object o){
-	        System.out.println(o);
-	    }
+//    public static void print(Object o){
+//	        System.out.println(o);
+//	    }
 	    
 
 

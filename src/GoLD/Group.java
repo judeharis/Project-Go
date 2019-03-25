@@ -20,7 +20,7 @@ public class Group {
 
 	Board b;
 	
-    static int gcsize =  ((SlickGo.gcheigth-50)/50)*50;
+    static int gcsize =  ((GoLD.gcheigth-50)/50)*50;
 	static int boardSize = (gcsize%100==0?gcsize-50:gcsize);
 	static int TileSize = ((boardSize/18)/10) *10;
     

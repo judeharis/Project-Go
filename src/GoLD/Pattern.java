@@ -15,7 +15,7 @@ public class Pattern {
 	boolean isSide;
 	
 
-    static int gcsize =  ((SlickGo.gcheigth-50)/50)*50;
+    static int gcsize =  ((GoLD.gcheigth-50)/50)*50;
 	static int boardSize = (gcsize%100==0?gcsize-50:gcsize);
 	static int TileSize = (((boardSize/18)/10) *10);
 
@@ -95,8 +95,8 @@ public class Pattern {
             		int y = j+p.y;
             		Tuple k = new Tuple(x,y);
                 		
-            		if(p.isSide && !b.withinBounds(k)) okcount++;	
-    				else if(!p.isSide && b.withinBounds(k)) {
+            		if(p.isSide && !Board.withinBounds(k)) okcount++;	
+    				else if(!p.isSide && Board.withinBounds(k)) {
     					boolean colourCheck = true;
     					boolean cornerCheck = p.isCorner? ps.isCorner(k):true;
     					if(colourCheck && cornerCheck)okcount++;

@@ -51,14 +51,14 @@ public class Menu extends BasicGameState {
 		int h =  (gc.getHeight()/2)-120;
 		
 		g.setFont(titleFont);
-		SlickGo.drawTitle(w-200,h-200,600,100,"Go-LD", g ,true);
+		GoLD.drawTitle(w-200,h-200,600,100,"Go-LD", g ,true);
 		g.setFont(defaultFont);
 		
-		SlickGo.drawButton(w,h,200,100,"Player Mode", g ,SlickGo.regionChecker(w,h,200,100,gc));
-		SlickGo.drawButton(w,h+120,200,100,"Editor Mode", g,SlickGo.regionChecker(w,h+120,200,100,gc));
+		GoLD.drawButton(w,h,200,100,"Player Mode", g ,GoLD.regionChecker(w,h,200,100,gc));
+		GoLD.drawButton(w,h+120,200,100,"Editor Mode", g,GoLD.regionChecker(w,h+120,200,100,gc));
 //		SlickGo.drawButton(w,h+240,200,100,gc.isFullscreen()?"Windowed Mode":"Full Screen", g,SlickGo.regionChecker(w,h+240,200,100,gc));
 		
-		SlickGo.drawButton(w,h+240,200,100,"Exit", g,SlickGo.regionChecker(w,h+240,200,100,gc));
+		GoLD.drawButton(w,h+240,200,100,"Exit", g,GoLD.regionChecker(w,h+240,200,100,gc));
 	}
 
 
@@ -73,14 +73,14 @@ public class Menu extends BasicGameState {
 		
 
 		if(input.isMousePressed(0)) {
-			if (SlickGo.regionChecker(w,h,200,100,gc)) sbg.enterState(1);
+			if (GoLD.regionChecker(w,h,200,100,gc)) sbg.enterState(1);
 			
 			
-			if (SlickGo.regionChecker(w,h+120,200,100,gc)) sbg.enterState(2);
+			if (GoLD.regionChecker(w,h+120,200,100,gc)) sbg.enterState(2);
 			
 			
 			
-			if (SlickGo.regionChecker(w,h+240,200,100,gc)) System.exit(0);
+			if (GoLD.regionChecker(w,h+240,200,100,gc)) System.exit(0);
 		}
 	}
 
