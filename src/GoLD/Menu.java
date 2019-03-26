@@ -54,7 +54,7 @@ public class Menu extends BasicGameState {
 		GoLD.drawTitle(w-200,h-200,600,100,"Go-LD", g ,true);
 		g.setFont(defaultFont);
 		
-		GoLD.drawButton(w,h,200,100,"Player Mode", g ,GoLD.regionChecker(w,h,200,100,gc));
+		GoLD.drawButton(w,h,200,100,"Play Mode", g ,GoLD.regionChecker(w,h,200,100,gc));
 		GoLD.drawButton(w,h+120,200,100,"Editor Mode", g,GoLD.regionChecker(w,h+120,200,100,gc));
 //		SlickGo.drawButton(w,h+240,200,100,gc.isFullscreen()?"Windowed Mode":"Full Screen", g,SlickGo.regionChecker(w,h+240,200,100,gc));
 		

@@ -1619,6 +1619,121 @@ Display Device : NVIDIA GeForce GTX 1080
 \end{subfigure}
 \end{figure}
 
+\chapter{User Guide}
+
+\section{Menu}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A3/1.png}
+\caption{The menu screen}
+\end{subfigure}
+\end{figure}
+
+Menu Screen contains three buttons. "Play Mode" enters play mode , to load and solve problems. "Editor Mode" enters editor ode , to create, edit and save problems. "Exit" quits out of the program.
+
+
+\section{Play Mode}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A3/2.png}
+\caption{The menu screen}
+\end{subfigure}
+\end{figure}
+
+Play Screen contains the Go board on the left and some controls on the right. The user can interact with the Go board by simply clicking on different points on the board to place a stone.
+\subsection{Buttons}
+
+Start: Tells the computer to start searching for the best move as the current colour.
+
+Stop: Stops the computer in middle of the search, and makes the best move found so far in the search.
+
+Undo: Reverts the board back to the previous state before the last move. (only goes back one move per click)
+
+Redo: Reverts an undone move. (only goes forward one move per click)
+
+Pass: Allows the user to pass – pass is disabled for attacking player unless no valid points of play due to Ko.
+
+Reset: Goes back to the board state in which the board was loaded in.
+
+Auto Play: Enable the computer to begin the search for a move immediately after you move.
+
+Switch Turn: Changes the current turn to the opponent.
+
+
+Limit Depth: If on, the computer only looks a set number of moves ahead before selecting a move. Otherwise it keeps searching until it finds a winning move or until there are no more moves to search.
+
+Limit Breadth: If on, the computer only looks at the set number of valid moves at each depth. Otherwise looks at every valid move in each depth.
+
+
+You can increase or decrease the breadth and depth using + or – buttons.
+The number right of Limit Breadth is the breadth limit.
+The number right of Limit Depth is the depth limit
+
+Auto Play: Enable the computer to begin the search for a move immediately after you move.
+
+Switch To Editor Mode: Enters editor mode. Wipes away the current board unless instead of switching back user goes to the menu and enter play mode.
+
+
+Load : Allows you to load a problem.
+
+Save : Allows you to save a problem mid way through.
+
+
+\section{Editor Mode}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{A3/3.png}
+\caption{The menu screen}
+\end{subfigure}
+\end{figure}
+
+Editor Screen contains the Go board on the left and some controls on the right. The user can place stones on the board by simply clicking on the points of the board where they want stones.
+
+\subsection{Buttons}
+
+Place Black Stones : Switches the placing stone colour to be black.
+
+Place White Stones : Switches the placing stone colour to be white.
+
+Mark Valid Points : Switches the placing to a valid point marker. Used to set all valid points of the problem.
+
+Remove Stones : Switches to deleting stones / valid points and replace them with an invalid point.
+
+
+Black Keystone : Sets the keystone colour of the problem to black. This means black is the defending player.
+
+White Keystone : Sets the keystone colour of the problem to white. This means white is the defending player.
+
+Place KeyStone : Next stone to be placed is a keystone. Used to mark the objective of the problem. Capture keystone if you are the attacking player, proctect the keystone if you are the defending player.
+
+Undo: Reverts the board back to the previous state before the last placement. (only goes back one placement per click)
+
+Redo: Reverts an undone placement. (only goes forward one placement per click)
+
+Flip V: Flips the board with line of horizontal symmetry.
+
+Flip H: Flips the board with line of vertical  symmetry.
+
+Rotate: Rotates the board in 90 degress.
+
+Reset: Clears the entire board (cannot undo!)
+
+
+
+Switch To Play Mode: Enters Play mode. Transfers the current board to play mode.
+
+Load : Allows you to load a problem.
+
+Save : Allows you to save a problem.
 
 
 
