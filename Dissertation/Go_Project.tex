@@ -32,12 +32,12 @@
 \maketitle
 
 \begin{abstract}
-    Go is a difficult board game to learn and master. This project tried to address this problem by creating a software tool for Go players to help improve their skill in Go. Project work  focused on the creation of the computer player which can solve Go problems to play against the users. The computer can solve Life and Death problems which are limited by boundaries using a tree search along with heuristics. The resulting software allows the user to create and play through problems against the "computer" player which can solve moderately difficult problems.
+    Go is a challenging board game to learn and master. This project tried to address this problem by creating a software tool for Go players to help improve their skill in Go. Project work focused on the creation of the computer player which can solve Go problems to play against the users. The computer can solve Life and Death problems which are limited by boundaries using a tree search along with heuristics. The resulting software allows the user to create and play through Go problems against the "computer" player which can solve moderately difficult problems.
 \end{abstract}
 
 \renewcommand{\abstractname}{Acknowledgements}
 \begin{abstract}
-I would like to express my gratitude towards my supervisor John O'Donnell for supporting me throughout the this project. I also would like to thank all the participants who helped beta test the program for their valuable time and responses.
+I would like to express my gratitude towards my supervisor John O'Donnell for supporting me throughout this project. I also would like to thank all the participants who helped beta test the program for their valuable time and responses.
 \end{abstract}
 
 
@@ -55,19 +55,21 @@ I would like to express my gratitude towards my supervisor John O'Donnell for su
 \chapter{Introduction}
 \pagenumbering{arabic}
 
-Go Life \& Death (Go-LD) is a program developed in Java which can solve Life and Death problems in Go. The ancient game of Go is regarded as the oldest board game still being played in the modern day. The origins of Go are not entirely known, but it is said to be invented in China 3000-4000 years ago. The game has very simple rules and by most official rulesets played on a 19x19 board. Each player takes turns placing a black or white stone on the intersections of the grid lines on the board. There are 361 intersections on the Go board whereas Chess’s only has 64 squares to play on. The size of the Go board is a crucial factor in this project. Due to increased board size compared to most western board games, a computer will take significantly more time to search through each valid move in every turn of the game to determine the outcome.
+Go Life \& Death (Go-LD) is a program developed in Java which can solve Life and Death problems in Go. The ancient game of Go is regarded as the oldest board game still being played in the modern day. The origins of Go are not entirely known, but it is said to be invented in China 3000-4000 years ago. The game has very simple rules and by most official rulesets played on a 19x19 board. Each player takes turns placing a black or white stone on the intersections of the grid lines on the board. There are 361 intersections on the Go board whereas a Chess board only has 64 squares to play on. The size of the Go board is a crucial factor in this project. Due to increased board size compared to most western board games, a computer will take significantly more time to search through each valid move in every turn of the game to determine the outcome.
 
 On the other hand, the basic principles of the game are much simpler to program and execute in software. Some complicated rules such as self-capture and Ko rules do exist. Ensuring these rules are implemented correctly is essential. For instance, without implementing the Ko rule, it would be impossible to make progress while searching Go’s game tree. Some situations occur where it becomes optimal for both players to repeat the same moves over and over in order to capture a single point on the board, which would lead to a never-ending battle for the same point on the board without the existence of the Ko rule which forbids this to occur. Therefore without a correct implementation, any game tree search algorithm used to solve the board position would get stuck in these situations and loop infinitely. This project implements Go to allow the users to solve Go problems, not to play full games of Go.
 
 \section{Motivation}
-The simplicity of the game's rules is deceiving, anyone can learn the rules of the game within 5-10 mins and will be able to play a full game of Go. The game's strategy and tactics are incredibly complicated compared to the rules. Most Go players agree with the sentiment that, to learn the game it takes little time but to become an expert or remotely good at it takes years maybe even decades. Due to the nature of the size of the board, the possible number of different games that could be played out in Go is inconceivably vast. For a computer to calculate the perfect move via searching every valid move that could occur would take too long to be considered viable, not months or years but rather millenniums.
+The simplicity of the game's rules is deceiving, anyone can learn the rules of the game within 5-10 mins and will be able to play a full game of Go. The game's strategy and tactics are incredibly complicated compared to the rules. Most Go players agree with the sentiment that, to learn the game it takes little time but to become an expert or remotely good at it takes years maybe even decades. Due to the nature of the size of the board, the possible number of different games that could be played out in Go is inconceivably vast. For a computer to calculate the perfect move via searching every valid move that could occur would take too long to be considered viable, not months or years but rather millennia.
 
-The current best AI built to play Go is AlphaGo \citep{AlphaGo} and its successors built by Google’s DeepMind team. It has defeated some of the world’s best Go players such as Lee Sedol during a challenge match in South Korea dropping only one game out the five played \citep{AlphaGoLeeSedol}. AlphaGo has also defeated Ke Jie another highly ranked player in 2017 at Future of Go Summit winning all three games played \citep{AlphaGoKeJie}. AlphaGo uses Monte Carlo Tree Search along with neural networks to evaluate different board positions and calculate the best move according to what it has learned through machine learning. With that in mind, AlphaGo is yet to be anywhere near perfectly solving Go due to the enormous complexity and possibility of moves; the team working on AlphaGo is still finding ways to improve it.
+The current best AI built to play Go is AlphaGo \citep{AlphaGo} and its successors built by Google’s DeepMind team. It has defeated some of the world’s best Go players such as Lee Sedol during a challenge match in South Korea dropping only one game out the five played \citep{AlphaGoLeeSedol}. AlphaGo has also defeated Ke Jie another highly ranked player in 2017 at Future of Go Summit winning all three games played \citep{AlphaGoKeJie}. AlphaGo uses Monte Carlo Tree Search along with neural networks to evaluate different board positions and calculate the best move according to what it has learned through machine learning. With that in mind, AlphaGo is yet to be anywhere near to perfectly solving Go due to the enormous complexity and possibility of moves; the team working on AlphaGo is still finding ways to improve it.
 The main motivation behind this project is to create a tool for Go players to enhance their skill at a specific aspect of Go. It is not to create an AI which plays whole games of Go but to create a “computer” player which can play Life and Death problems and solve them.
 
 
 \section{Aim}
-This project aimed to create a tool program for Go players, from beginners to experienced which allows them to practise Life and Death problems and in doing so improve their overall skill level at the game.  The aim also included that the tool contains a computer player which could solve the problems and also play against the users and against itself. The primary challenge was to create the  "computer" player and design heuristics to enable the computer to play the correct move without searching the entire game tree.
+This project aimed to create a software tool for Go players, from beginners to experienced which allows them to practise Life and Death problems and in doing so improve their overall skill level at the game.  The aim also included that the tool contains a computer player which could solve the problems and also play against the users and against itself. The primary challenge was to create the  "computer" player and design heuristics to enable the computer to play the correct move without searching the entire game tree in a reasonable amount of time. The intent was to have the computer player play against the user and also allow it to play against itself.
+
+The tool itself should allow the users to create these Life and Death problems inside the software. The problems created should be saveable for later use or to be tranfered to other users to play and solve.
 
 \section{Project Outline}
 
@@ -75,14 +77,14 @@ Here is a short summary for each of the following chapters:
 
 Chapter 2 Background \& Related Works – Explains key concepts which are used within the project, introduces Go and some relevant details of Go in more detail. Also looks at some similar work done.
 
-Chapter 3 Requirements \& Software Development– Deals with expressing the functional requirements of Go-LD and also some non-functional requirements. Also briefly explains the development process.
+Chapter 3 Requirements \& Software Development – Deals with expressing the functional requirements of Go-LD and also some non-functional requirements. Also briefly explains the development process.
 
 
-Chapter 4 Design – Goes in depth about the computer player and the tree search used within Go-LD.  Explores the heuristics used to enable the Go-LD to limit time spent searching the game tree. Which includes board evaluation, move ordering and move generation.
+Chapter 4 Design – Goes in depth about the computer player and the tree search used within Go-LD.  Explores the heuristics used to enable the Go-LD to limit the time spent searching the game tree. Which includes board evaluation, move ordering and move generation.
 
 Chapter 5 Implementation – Talks about the key features of Go-LD and how they are implemented. Goes into some detail on how the Go board itself is represented within the program. Explains the pattern matching functionality used during board evaluation and move generation.
 
-Chapter 6 Evaluation – Contains result of beta testing and analyses of it. Also details the explain the performance evaluation process and the results of it.
+Chapter 6 Evaluation – Contains result of beta testing and analyses of it. Also details the performance evaluation process and the result of it. Also looks at how the computer handles three specific Go problems.
 
 Chapter 7 Conclusion – Concludes the whole paper by the summarising the project, looking at places of improvements and any possible future development.
 
@@ -94,13 +96,13 @@ Chapter 7 Conclusion – Concludes the whole paper by the summarising the projec
 
 
 \chapter{Background \& Related Works}
-In order to achieve the aim of creating a tool program, a certain level of knowledge of the game of Go was required. Knowledge such as the rules of Go and details regarding life and death problems were essential factors while designing and implementing Go-LD. Along with understanding Go, researching papers and finding inspiration from similar work done was necessary for the progression of this project.
+In order to achieve the aim of creating a software tool, a certain level of knowledge of the game of Go was required. Knowledge such as the rules of Go and details regarding Life and Death problems were essential factors while designing and implementing Go-LD. Along with understanding Go, researching papers and finding inspiration from similar work done was necessary for the progression of this project.
 
 Go is a complex board game where the rules are far simpler than the strategies and tactics used to play it.  To progress through the project many simple questions needed to be answered about the game and how it is played to design Go-LD. Basic concepts and terminology needed to be understood before tackling complex strategies which are built up from these basic concepts.
 
 \section{Rules}
 
-While there are no official rules for Go and many varied rulesets are being used around the world, they are all quite similar. None of the changes between the rulesets affects the strategy or tactics used within the game hence comprehending one ruleset was enough to understand the game in order to implement the rules within Go-LD. This is especially true because the Go-LD does not require counting scores which is the part of the rulesets that vary the most. The basic rules according to Japanese Rules of Go set by Nihon Kiin and translated by James Davies \cite{NihonKiinRules} were used to define the basic ruleset used within the project. Some alterations were made to these rules to suit the problem-solving nature of the project rather than playing a whole game of Go which will be explained later in this chapter.
+While there are no official rules for Go and many varied rulesets are being used around the world, they are all quite similar. None of the differences between the rulesets affects the strategy or tactics used within the game hence comprehending one ruleset was enough to understand the game to implement the rules within Go-LD. This is especially true because the Go-LD does not require counting scores which is the part of the ruleset that varies the most. The basic rules according to Japanese Rules of Go set by Nihon Kiin and translated by James Davies \citep{NihonKiinRules} were used to define the basic ruleset used within the project. Some alterations were made to these rules to suit the problem-solving nature of the project rather than playing a whole game of Go which will be explained later in this chapter.
 
 \begin{figure}[!ht]
 \centering
@@ -114,7 +116,7 @@ While there are no official rules for Go and many varied rulesets are being used
 \caption{After Move}
 \label{fig:ex1-1}
 \end{subfigure}
-\caption{The black stone is “captured” when the white stone at the top is placed because the black stone loses its last liberty}
+\caption{The black stone is “captured” when the white stone is placed at the top because the black stone loses its last liberty}
 \label{fig:ex1}
 \end{figure}
 
@@ -122,7 +124,7 @@ The basic rules of Go are as follows:
 \begin{enumerate}
 
   \item Initial Go board is empty containing no stones unless handicaps are applied.
-  \item Black plays first and then white. Players take turns alternately placing stones of their own colour.
+  \item Black plays first and then white. Players take turns alternately placing a stone of their colour.
   \item The board contains a 19x19 gridline pattern with 361 intersections. Stones are played on the intersections and not the square in between. Stones can only be played on empty intersections. These intersections are also referred to as points on the board.
 
 
@@ -145,9 +147,9 @@ The basic rules of Go are as follows:
   \item Each turn consists of few parts as follows:
   	\begin{enumerate}[label={(\alph*)}]
 		\item Current player is to place a stone of their colour on an empty intersection of their choice.
-		\item Then all opponent’s stones that do not have a liberty is removed from the board. See ~\autoref{fig:ex1}.
-		\item A move is invalid if it will cause one or more stone of the current player’s colour to be captured – this is to prevent self-capturing moves. See ~\autoref{fig:ex2}.
-		\item Removal of the opponent’s stones takes precedence over the self-capture check. This allows for moves which capture opponent’s stones but is suicide if the opponent’s stones are not removed first. See ~\autoref{fig:ex3}.
+		\item Then any opponent stones that do not have a liberty are removed from the board. See ~\autoref{fig:ex1}.
+		\item A move is invalid if it will cause one or more stones of the current player to be captured – this is to prevent self-capturing moves. See ~\autoref{fig:ex2}.
+		\item Removal of the opponent’s stones takes precedence over the self-capture check. This allows for moves which capture opponent’s stones which is otherwise sucidal if the opponent’s stones are not removed first. See ~\autoref{fig:ex3}.
 	\end{enumerate}
 
     \begin{figure}[!ht]
@@ -197,18 +199,18 @@ The previous section outlines all the essential rules of Go. Some of these rules
 The alterations are as follows:
 \begin{enumerate}
 
-\item The initial board is set up to represent a life and death problem - should be a valid initial board position.
-\item Not all 361 intersections can be played on – boundaries are set by the creator of the problem
+\item The initial board is set up to represent a Life and Death problem - should be a \bo{valid initial board position}.
+\item Not all 361 intersections can be played on – boundaries are set by the creator of the problem.
 \item For the purpose of these problems, one player is considered to be the attacker and the other to be the defender.
-\item Attacking player is not able to pass unless the attacking player has no valid moves and the Ko rule is restricting play.
+\item Attacking player is not able to pass unless they have no valid moves and the Ko rule is restricting play.
 \item Two consecutive passes do not end the game/problem.
-\item The problem is solved when the attacking player has no valid moves and cannot pass, if the keystones are still on the board then the defending players have won. Otherwise, the problem is solved if all the keystones are captured hence the attacking player has won.
+\item The problem is solved when they attacking player has no valid moves and cannot pass, if the keystones are still on the board then the defending players have won. Otherwise, the problem is solved when all the keystones are captured hence the attacking player has won.
 
 \end{enumerate}
 
 
 \bigskip
-A valid initial board state is defined by the following :
+A \bo{valid initial board position} is defined by the following :
 \begin{itemize}
 \item Contains at least one keystone
 \item All keystones are the same colour
@@ -221,21 +223,21 @@ A valid initial board state is defined by the following :
 The reason behind the 4th alteration to the basic rules is to restrict infinite passing which would be allowed due to the 5th alteration. Attacking player is allowed to pass under the circumstance that they have no valid moves and an empty intersection is invalid to play on due to the Ko rule, this resolves some rare occurrences where boundaries set by the creator of the problem restricts the attacking player from winning.
 
 \subsection{Boundaries}
-A standard game of Go is played on a 19x19 board where every intersection on the board is playable if the rules of the game allow it. The implications of the size of the board for this project and in computer Go in general is that the search space is too large to obtain good results in a short period of time even with a limited depth search.
+A standard game of Go is played on a 19x19 board where every intersection on the board is playable if the rules of the game allow it. The implications of the size of the board for this project and for computer Go in general is that the search space is too large to obtain good results in a short period of time even with a depth limited search.
 
 There was a definite need for boundaries to be set on the board for each problem to achieve the aim of this project. Without doing so, the number of valid moves required to be searched by the computer would be too large to determine the best move in a limited time. Setting boundaries allow the computer to solve more problems.
 
 The drawback of adding boundaries is that problems themselves become substantially easier compared to the same problem with no boundaries. Boundaries limit the options given to the computer hence increasing the chance of it finding the correct answer. For the computer to solve a difficult problem with no boundaries and therefore have more than 300+ moves to search through is an unachievable task using standard search algorithms. In comparison for the computer to solve the same problem with boundaries which limits the possible moves to less than 20 is a much simpler task which could be done in a reasonable time.
 
-To set boundaries during the creation of problems, the creator can deem which points are relevant for the problem by placing “valid points” on the board. Any points on the board with preplaced stones are also regarded to be within the boundary. For example, if a black stone is captured then the empty point remaining will be regarded within the boundary of play. Ideally, the creator of the problem should distribute “valid points” in a way to maintain the same level of difficulty for human players but also limit the number of points for the computer to search through. It can be very difficult or even impossible for a problem creator to determine all the relevant points for the problem. Go-LD leaves it in the hands of the problem creators to define Life and Death problems with appropriate boundaries. This is a crucial trade-off which is required to allow the program to be able to find the correct answer in a feasible time.
+To set boundaries during the creation of a problem, the creator can deem which points are relevant for the problem by placing “valid points” on the board. Any points on the board with preplaced stones are also regarded to be within the boundary. For example, if a black stone is captured then the empty point remaining will be regarded within the boundary of play. Ideally, the creator of the problem should distribute “valid points” in a way to maintain the same level of difficulty for human players but also limit the number of intersections for the computer to search through. It can be very difficult or even impossible for a problem creator to determine all the relevant points for the problem. Go-LD leaves it in the hands of the problem creators to define Life and Death problems with appropriate boundaries. This is a crucial trade-off which is required to allow the program to be able to find the correct answer in a feasible time.
 
 
 
 \section{Go-LD Terminology}
 
-Throughout this dissertation many terms are used to describe various aspects of Go, some of which are commonly used term within the Go world and others were created for the purpose of this project.
+Throughout this dissertation many terms are used to describe various aspects of Go, some of which are commonly used terms within the Go world and others were created for the purpose of this project.
 
-Keystones – Set of predetermined stones which are used as the marker for groups of stones which are the objective of the problem. These stones are to be captured by the attacking player and kept alive by the defending player.
+Keystones – Set of predetermined stones which are used as markers for groups of stones which are the objective of the problem. These stones are to be captured by the attacking player and kept alive by the defending player.
 
 Attacking player – In terms of Life and Death problems, the attacking player is the player who is trying to capture the keystones on the board.
 
@@ -243,13 +245,16 @@ Defending player – In terms of Life and Death problems, the defending player i
 
 Board position – Refers to the entire state of the board, not just a single point on the board. Includes Ko points, whose turn it is and all the stones on the board.
 
-Valid points – Set of predetermined intersections that are allowed to be played on for the given the problem. A valid point/move can also refer to a point which the current player is able to play on according to the rules.
+Valid points – Set of predetermined intersections that are allowed to be played on for the given problem. A valid point/move can also refer to a point which the current player is able to play on according to the rules.
 
 Connected - Two stones are connected if they are of the same colour and are adjacent to each other or there is a set of stones of the same colour which is connected to both stones.
 
-String – Set of stones of the same colour which are connected.
+String – Set of stones of the same colour which are directly connected.
 
 Keystring – Any string which contains one or more keystones.
+
+Group - A broader term used to decribe a collection of stones of the same colour, meaning changes depending on the context.
+
 
 \begin{figure}[!ht]
 \centering
@@ -269,6 +274,7 @@ In ~\autoref{fig:ex5-1} intersections \bo{a} to \bo{g} are the liberties of the 
 \end{figure}
 
 
+
 Liberty - The liberties of a stone are all the adjacent empty intersection of the stone and all adjacent empty intersection of any stone connected to the original stone. See ~\autoref{fig:ex5}.
 
 
@@ -281,7 +287,7 @@ Atari Point – The last remaining liberty of a string.
 
 Ko Point –  An empty intersection which is restricted from play due to the Ko rule
 
-Seki – Two strings of opposing colour that are alive next to each other. Neither player can capture the opponent string without first sacrificing their own string.
+Seki – Two strings of opposing colours that are alive next to each other. Neither player can capture the opponent string without first sacrificing their own string.
 
 
 
@@ -289,7 +295,7 @@ Seki – Two strings of opposing colour that are alive next to each other. Neith
 
 \section{Life and Death Problems}
 
-Life and Death is an essential part of Go. Life and Death is the term used to describe the battle that takes place to either attack and capture enemy stones or to defend and keep alive one's stones.  These situations on the board where it becomes crucial to defend one’s stone strings or capture enemy ones arrive very often. During the end game in Go, the ability to win these battles with as much territory as possible will decide the victor. Beginners are highly recommended to understand and learn how to play out these battles as they are clear deciders in the game. Many of the literature on Go is purely based around providing life and death problems and explaining the importance of them and how to tackle such situations appropriately \citep{Cho1993}\citep{Davies1975}. The purpose of Go-LD is to create a tool which helps players to understand and solve these problems.
+Life and Death is an essential part of Go. Life and Death is the term used to describe the battle that takes place to either attack and capture enemy stones or to defend and keep alive one's stones.  These situations on the board where it becomes crucial to defend one’s stone strings or capture enemy ones arrive very often. During the end game in Go, the ability to win these battles with as much territory as possible will decide the victor. Beginners are highly recommended to understand and learn how to play out these battles as they are clear deciders of the game. Much of the literature on Go is purely based around providing Life and Death problems and explaining the importance of them and how to tackle such situations appropriately \citep{Cho1993}\citep{Davies1975}. The purpose of Go-LD is to create a tool which helps players to understand and solve these problems.
 
 \subsection{Dead, Alive or Unsettled}
 
@@ -311,7 +317,7 @@ The three main ways to describe the status of a string are alive, dead or unsett
 \label{fig:LD-1}
 \end{figure}
 
-A group of stones are said to be alive if the group cannot be captured even if the opponent is to play first. To expand on this, even if the opponent plays a move which threatens the group of stones there is always a responding move which will, in turn, keep the group of stones alive. ~\autoref{fig:LD-1} shows an example of a white group which can be deemed to be alive. If black first plays at \bo{1} then white will play at \bo{2}, if black first plays at \bo{2} then white will play at \bo{1}; both outcomes will lead white group having two eyes.
+A group of stones are said to be alive if the group cannot be captured even if the opponent is to play first. To expand on this, even if the opponent plays a move which threatens the group of stones there is always a responding move which will, in turn, keep the group of stones alive. ~\autoref{fig:LD-1} shows an example of a white group which can be deemed to be alive. If black first plays at \bo{1} then white will play at \bo{2}, if black first plays at \bo{2} then white will play at \bo{1}; both outcomes will lead white group having two eyes and therefore alive. Eyes are explained in the next section.
 
 \begin{figure}[!ht]
 \centering
@@ -333,7 +339,7 @@ A group of stones are said to be alive if the group cannot be captured even if t
 A group of stones is said to be dead if the group can be captured even if the group’s colour can play first. For example, a white group is deemed dead if white can play the first move and black has a responding move which will keep the white group in a dead state. ~\autoref{fig:LD-2} shows a group of dead white stones, for this group to live, it would require two white stones on two points diagonally opposite to each other and no white stones on the other two points. For example, if white can play at \bo{a} and \bo{d} then it becomes alive. This is impossible to achieve as black can respond to white’s initial move by playing at the diagonally opposite point as seen in~\autoref{fig:LD-2b}.
 
 
-A group of stones is said to be unsettled when the group is alive if the group’s colour can play first but dead if the opponent plays first. Groups which are unsettled are crucial to the outcome of the board, whoever can play first near the group can determine who controls the whole territory the unsettled group surrounds. ~\autoref{fig:LD-3} shows an unsettled white group which has a vital point at \bo{a}. If white plays first at \bo{a} then the group achieves two eyes and is alive. On the other hand, if black plays at \bo{a} first then white cannot achieve two eyes, hence it becomes dead.
+A group of stones is said to be unsettled when the group is alive if the group’s colour can play first but dead if the opponent plays first. Groups which are unsettled are crucial to the outcome of the board, whoever can play first near the group can determine who controls the whole territory the unsettled group surrounds. ~\autoref{fig:LD-3a} shows an unsettled white group which has a vital point at \bo{a}. If white plays first at \bo{a} then the group achieves two eyes and is alive. On the other hand, if black plays at \bo{a} first then white cannot achieve two eyes, hence it becomes dead.
 
 \begin{figure}[!ht]
 \centering
@@ -355,7 +361,7 @@ A group of stones is said to be unsettled when the group is alive if the group�
 
 
 \subsection{Eyes}
-The concept of an eye is critical in understanding Life and Death problems and Go in general. There are no correctly defined statements on what an eye is but in general, an eye is an empty space surround by a group of the same colour. Single eye point shapes are shown in ~\autoref{fig:LD-4}. In these shapes, the stones surrounding the eyes are essential if any of them are missing then the eye will no longer be a real eye. The opponent cannot play on a single point eye unless the eye is the only liberty of the surrounding stones. If the same group of stones connects two real eyes, then it becomes impossible to capture that group of stones unless the eyes are covered up by its own colour of stones. These groups of stones are unconditionally alive which means even if the opponent can play multiple times in a row the group cannot be captured. ~\autoref{fig:LD-3b} shows an example of a group of white stone which contains two eyes at \bo{a} and \bo{b}. Due to the self-capture rule black can never place a stone at \bo{a} without having a stone at \bo{b} and the same applies for \bo{b} hence the white group in unconditionally alive.
+The concept of an eye is critical in understanding Life and Death problems and Go in general. There are no correctly defined statements on what an eye is but in general, an eye is an empty space surround by a group of the same colour. Single eye point shapes are shown in ~\autoref{fig:LD-4}. In these shapes, the stones surrounding the eyes are essential if any of them are missing then the eye will no longer be a real eye hence the shape is much weaker. The opponent cannot play on a single point eye unless the eye is the only liberty of the surrounding stones. If a group of stones contains two real eyes, then it becomes impossible to capture that group of stones unless the eyes are covered up by its own colour of stones. These groups of stones are unconditionally alive which means even if the opponent can play multiple times in a row the group cannot be captured. ~\autoref{fig:LD-3b} shows an example of a group of white stone which contains two eyes at \bo{a} and \bo{b}. Due to the self-capture rule black can never place a stone at \bo{a} without having a stone at \bo{b} and the same applies for \bo{b} hence the white group in unconditionally alive.
 
 \begin{figure}[!ht]
 \centering
@@ -396,11 +402,11 @@ The possible outcomes of some Life and Death situations are not as obvious it wo
 
 Unconditional life or escape into the centre of the board is the best outcome a defending player can expect; this means their group of stone will be scoring them points without uncertainty.
 
-Another but a lesser type of victory is life through Seki, which means mutual life, this is where two groups opposing colour of stones live sharing liberties, and neither player can try to capture the opponent’s group because it will lead to their group’s death first. When an attacking group of stones can live in mutual life along with the defending player’s group then the outcome is slightly less favoured than unconditional life due to the end game scoring. In isolated Life and Death problems and for Go-LD this difference between unconditional life and Seki is not taken to account, Seki is deemed to be victory for the defending team.
+Another but a lesser type of victory for the defending player is life through Seki, which means mutual life, this is where two groups of opposing colours of stones live sharing liberties. Neither player can try to capture the opponent’s group because it will lead to their group’s death first. When an attacking group of stones can live in mutual life along with the defending player’s group then the outcome is slightly less favoured than unconditional life due to the end game scoring. In isolated Life and Death problems and for Go-LD this difference between unconditional life and Seki is not taken into account, Seki is deemed to be victory for the defending team.
 
-Life and death problems can also conclude where Ko occurs within the area. In a full game of Go this is very important in deciding Ko fights in other parts of the board and can be seen as leverage to be used.  For Go-LD and in isolated problems these situations are played further on until a defining end is met where the group is dead or alive.
+Life and Death problems can also conclude where Ko occurs within the area. In a full game of Go this is very important in deciding Ko fights in other parts of the board and can be seen as leverage to be used.  For Go-LD and in isolated problems these situations are played further on until a defining end is met where the group is dead or alive.
 
-The final possible result is death where the defending player’s group is captured without any Ko situation which the best-case scenario for the attacking player.
+The final possible result is death where the defending player’s group is captured without any Ko situation occurring which the best-case scenario for the attacking player.
 
 \section{Related Works}
 
@@ -408,7 +414,7 @@ Martin Müller's Explorer \citep{Muller2002} was a strong program developed with
 
 Explorer can evaluate certain areas of the board in terms of safe territories for each player and can distinguish between safe stones and safe territories. Safe stones are any stones that are deemed alive but safe territories requires that opponent stones cannot live within the safe stones' territory. Explorer also takes into consideration of Semeai positions which are capturing races that occur within Go. The victor of Semeai can be determined early sometimes and hence doing so during the evaluation could save searching further during a tree search algorithm. Müller also goes into detail about his zone-based evaluation where Explorer can distinguish areas which are in conflict and areas which are clearly controlled by a certain player.
 
-While Explorer aims to play Go, this project aims to create a program to solve Life and Death problems. To do so, determining the safety of keystrings within a problem can be helpful. Explorer's methods of recognising safe strings such as Benson's algorithm \citep{Benson1976} and also the improved version of the algorithm described in Müller's previuous work \citep{Muller1998} were regarded during the initial design of Go-LD.
+While Explorer aims to play Go, this project aims to create a program to solve Life and Death problems. To do so, determining the safety of keystrings within a problem can be helpful. Explorer's methods of recognising safe strings such as Benson's algorithm \citep{Benson1976} and also the improved version of the algorithm described in Müller's previous work \citep{Muller1998} were regarded during the initial design of Go-LD.
 
 Work done by Ken Chen and Zhinxing Chen \citep{Chen1999} in creating Go Intellect and HandTalk were also quite interesting and relevant while working on this project. Their work regarding eyes and determining the value of a shape of stones depending on the number of eyes the shape can produce was great a motivator during the implementation of Go-LD's pattern-based heuristics.
 
@@ -427,15 +433,15 @@ The project needed a well-defined list of requirements to outline key features a
 
 \section{Functional Requirements}
 
-The program was split into to three core parts from beginning of the project : play mode, editor mode and the “computer”. Hence splitting the functional requirements into these three sections of the program was ideal.
+The program was split into to three core parts from the beginning of the project : play mode, editor mode and the “computer”. Hence splitting the functional requirements into the following sections was ideal.
 
 \subsection{General Requirements Across Both Modes}
-There were many requirements which were required for both play mode and editor mode, to reduce redundancy it is better to express them together.
+There were many requirements which were common between play mode and editor mode, to reduce redundancy it is better to express them together.
 
 \subsubsection{Go Board}
 The Go board is an integral part of both modes and is required for the user and the computer to interact with the program. A board object which is capable of storing relevant data and contained methods which can process the relevant data was essential.
 
-The relevant data needed to include the following:
+The relevant data required includes the following:
 \begin{itemize}
 \item A representation of all the points on the board
 \item Current turn
@@ -446,10 +452,10 @@ The relevant data needed to include the following:
 \item List of valid moves for the current turn
 \end{itemize}
 
-The relevant methods which are able to do the following were required:
+The relevant methods which are able to do the following were also required:
 \begin{itemize}
 \item Make a move on the board and update the entire board accordingly
-\item Generate all the valid moves for the current turn
+\item Generate all the valid moves for the current player
 \item Check if a move is valid – this should include self-capture check and Ko check
 \item Check for capture and remove stones accordingly
 \item Obtain all the liberties of a given stone string
@@ -463,7 +469,6 @@ Both modes needed the following features implemented:
 \item Load problem
 \item Save problem
 \item Switch modes
-\item Reset the problem
 \item Undo \& Redo moves
 \end{itemize}
 
@@ -493,17 +498,18 @@ Editor mode needed the following features most likely in the form of a button:
 \item Place keystone
 \item Switch keystone colour
 \item Choose which colour of stone to place
+\item Remove stones
 \item Set and remove “valid points”
 \end{itemize}
 
 \subsection{The Computer}
-The main aim of the project required the computer to perform a tree search. The tree search chosen for this project was the Alpha-Beta pruning algorithm. The requirement for the computer was that it needed to be able to find the best move possible and play it on the board in a limited time frame. This needs to be done through a tree search where many valid sequences of moves are searched through, and the move which results in the best board position for the current colour needs to be played. An additional requirement for the computer was that it should be able to limit the depth of the search according to the user’s choice. This consequently implies a requirement for a board evaluation function which is used to score the board positions found at the depth limit. The computer was also required to have the ability to limit the breadth, i.e. the number of move per ply, according to the user’s choice. Hence there was a need for a move generator to produce a subset of moves from all the valid moves.
+The main aim of the project required the computer to perform a tree search. The tree search chosen for this project was the Alpha-Beta pruning algorithm. The requirement for the computer was that it needed to be able to find the best move possible and play it on the board in a limited time frame. This needs to be done through a tree search where many valid sequences of moves are searched through, and the move which results in the best board position for the current colour needs to be played. An additional requirement for the computer was that it should be able to limit the depth of the search according to the user’s choice. This consequently implies a requirement for a board evaluation function which is used to score the board positions found at the depth limit. The computer was also required to have the ability to limit the breadth, i.e. the number of moves per ply to be searched, according to the user’s choice. Hence there was a need for a move generator to produce a subset of moves from all the valid moves.
 
 
 \section{Non-Functional Requirements}
-Throughout the project, some non-functional requirements were discovered and needed to be addressed. The following categories were made to specify the different criteria Go-LD need to achieve.
+Throughout the project, some non-functional requirements were discovered and needed to be addressed. The following categories were used to specify the different criteria Go-LD need to achieve.
 
-Performance / Time - A significant concern was the time a user wants to spend during the process of solving problems. For example, the time it took for the computer to make a move had to be reasonable
+Performance / Time - A significant concern was the time a user wants to spend during the process of solving problems. For example, the time it took for the computer to make a move had to be reasonable.
 
 Usability - Another concern was the ease of use, whether the program is simple and understandable for untrained users.
 
@@ -515,17 +521,18 @@ In order to test all three categories of these non-functional requirements the p
 From the start, the project was divided into two major milestones each containing a set of requirements to achieve the milestone. These milestones were set up to help evaluate the progress throughout the project and also to help streamline the workflow throughout the project so that at all points there was a goal to strive towards.
 
 \subsubsection{Milestone 1}
-The first milestone consisted of creating and implementing most of the essential features of the program. The first choice made during the project was to choose Java was the primary programming language within the project. This choice came entirely out of preference and ease of use. Once this was determined a 2D graphics engine was required to draw the program. Initially, to immediately start work on the project, the Swing tool kit along with Java’s Canvas was used. After further development and research, it was found that this combination of tools kits was insufficient for the project. From there onwards the  \cite{SLICK2D} graphics tool kit was used to render the program.
-The first milestone came with the challenge of implementing a tree search. The final tree search used within Go-LD was created after two iterations of designing and implementing a tree search. The first iteration was based on the Minimax tree search algorithm which was adapted to play Go. The next iteration of the tree search consisted of Alpha-Beta pruning tree search which greatly improved the performance compared to the simple Minimax search. Finally, to improve the quality of the over program in terms of usability and to improve performance, Iterative Deepening was used along with Alpha-Beta. Note that Iterative Deepening was implemented much later on the project and was part of the second milestone.
+The first milestone consisted of creating and implementing most of the essential features of the program. The first choice made during the project was to choose Java as the primary programming language within the project. This choice came entirely out of preference and ease of use. Once this was determined a 2D graphics engine was required to draw the program. Initially, to immediately start work on the project, the Swing tool kit along with Java’s Canvas was used. After further development and research, it was found that this combination of tools kits was insufficient for the project. From there onwards the  \cite{SLICK2D} ,a graphics tool kit, was used to render the program.
+
+The first milestone came with the challenge of implementing a tree search. The final tree search used within Go-LD was created after two iterations of designing and implementing a tree search. The first iteration was based on the Minimax tree search algorithm which was adapted to play Go. The next iteration of the tree search consisted of Alpha-Beta pruning tree search which greatly improved the performance compared to the simple Minimax search. Finally, to improve the quality of the overall program in terms of usability and to improve performance, Iterative Deepening was used along with Alpha-Beta. Note that Iterative Deepening was implemented much later on the project and was part of the second milestone.
 
 \subsubsection{Milestone 2}
 The second milestone was concerned with implementing heuristics within Go-LD. Which  included board evaluation, move generation and move ordering. Board evaluation features were the first of the three to be designed and implemented because it was arguably the most important of the three and required the most time and effort.
 
-To implement board evaluation research was done about Go and how humans perceive the value of different Go board positions. Countless hours were spent understanding some of the essential strategies regarding eyes and alive shapes and dead shapes. A lot of the information gathering was done through Sensei’s Library , a website \citep{Senseis} which has information on almost every aspect of Go from simple to advanced. The result of research inspired the pattern matching based board evaluation used within Go-LD.
+To implement board evaluation research was done about Go and how humans perceive the value of different Go board positions. Countless hours were spent understanding some of the essential strategies regarding eyes and alive shapes and dead shapes. A lot of the information gathering was done through Sensei’s Library, a website \citep{Senseis} which has information on almost every aspect of Go from simple to advanced. The result of research inspired the pattern matching based board evaluation used within Go-LD.
 
-Once the board evaluation function became sufficient enough to solve moderately difficult problems, the focus was set on move ordering. At this point, the Killer Move heuristic was already thoroughly explored when the research was done about Alpha-Beta. Hence it was a simple matter to apply it to Go and implementing it within the search. When Iterative Deepening was introduced, it was merely a matter of some alteration to the code to implement move ordering using the Principal Variation of each previous iteration. This was also essential to keep the performance of Iterative Deepening comparable to a fixed-depth search.
+Once the board evaluation function became sufficient enough to solve moderately difficult problems, the focus was set on move ordering. At this point, the Killer Move heuristic was already thoroughly explored when the research was done about Alpha-Beta. Hence it was a simple matter to apply it to Go and implementing it within the search. When Iterative Deepening was introduced, it was merely a matter of some alteration to the code to implement move ordering using the Principal Variation of each previous iteration. This was also essential to keep the performance of Iterative Deepening comparable and sometimes better than a fixed-depth search.
 
-The final part of the program to be implemented was the move generator. It was essential that this was kept simple as it is used during every ply of the search. Hence a complex move generator would drastically slow down the performance. To keep it simple a distance-based generator was designed, which prioritised moves nearer to keystones. After implementation and testing the distance-based generator was found to be inadequate to generate moves for spread-out Go problems. Therefore, a pattern-matching based move generator was designed and implemented combined with the distance-based generator to yield better results.
+The final part of the program to be implemented was the move generator. It was essential that this was kept simple as it is used during every ply of the search. Hence a complex move generator would drastically slow down the performance. To keep it simple a distance-based generator was designed, which prioritised moves nearer to keystones. After implementation and testing the distance-based generator was found to be inadequate to generate moves for more spread-out Go problems. Therefore, a pattern-matching based move generator was designed and implemented combined with the distance-based generator to yield better results.
 
 
 
@@ -551,10 +558,12 @@ The method of finding the correct move within Go-LD is the Alpha-Beta pruning se
 \end{figure}
 
 \subsubsection{Game-Ending State}
-Go-LD is only concerned with Life and Death situations in Go hence it is simple to determine if the current board position is a game-ending state. If the attacking player has no valid moves and the keystones, marked by the problem creator, remains on the board then the defending player has won. Alternatively, as soon as the attacking player captures all the keystones, they win. In a real game of Go, the result of life and death situations are not as simple. There might be multiple solutions which result in the capture of all the keystones, but there might only be one solution which will do so without allowing losses on other parts of the board for the attacking player. These kinds of difference in result are ignored within Go-LD as we are only interested in the result of the Life and Death problem, and not the outcome of the board. Hence any solution which captures all the keystones are sufficient for the Go-LD. ~\autoref{fig:MinMaxNumTree} shows an example of minimax for a simple game where the max player tries to obtain the highest value and the min player tries to obtain the lowest value. Note an oval shape represents a game-ending state.
+Go-LD is only concerned with Life and Death situations in Go hence it is simple to determine if the current board position is a game-ending state. If the attacking player has no valid moves and the keystones, marked by the problem creator, remain on the board then the defending player has won. Alternatively, as soon as the attacking player captures all the keystones, they win. In a real game of Go, the result of Life and Death situations is not as simple. There might be multiple solutions which result in the capture of all the keystones, but there might only be one solution which will do so without allowing losses on other parts of the board for the attacking player. These kinds of difference in result are ignored within Go-LD as we are only interested in the result of the Life and Death problem, and not the outcome of the board. Hence any solution which captures all the keystones are sufficient for the program.
+
+~\autoref{fig:MinMaxNumTree} shows an example of Minimax for a simple game where the max player tries to obtain the highest value and the min player tries to obtain the lowest value. Note an oval shape represents a game-ending state.
 
 \subsection{Alpha-Beta Pruning Search}
-The Alpha-Beta pruning algorithm is a smart improvement on the Minimax algorithm in order to reduce the search time. It determines the same result without having to search through as many subtrees as Minimax does. It uses alpha and beta values to determine whether searching a subtree further ahead is a waste of effort or not. The search begins with the alpha value set to -inf and the beta value set to +inf. These values are passed down from the parent tree to each of its subtrees during the search. If a maximising subtree finds a move which results in a score higher than the previous best score for that board position, then the alpha value of that subtree is increased to the value of the new best score. If a minimising subtree finds a move which results in a score lower than the previous best score for that board position, then the beta value of that subtree is decreased to the value of the new best score. After searching each move within a subtree, the algorithm checks if the alpha value is greater than or equal to the beta value and if it is then the algorithm decides that searching more moves within that subtree is pointless and returns the best score found so far back to the parent tree. These “alpha-beta cut-offs” reduces the search space for the algorithm by cutting off the rest of the moves of that subtree from being searched. Reduction in search space amounts to a significant improvement in search time compared to the minimax algorithm without changing the result. The results do not differ because the move that caused the alpha-beta cutoff to occur is worse than the parent tree’s best move found so far.
+The Alpha-Beta pruning algorithm is a smart improvement on the Minimax algorithm in order to reduce the search time. It determines the same result without having to search through as many subtrees as Minimax does. It uses alpha and beta values to determine whether searching a subtree further is a waste of effort or not. The search begins with the alpha value set to -inf and the beta value set to +inf. These values are passed down from the parent tree to each of its subtrees during the search. If a maximising subtree finds a move which results in a score higher than the previous best score for that board position, then the alpha value of that subtree is increased to the value of the new best score. If a minimising subtree finds a move which results in a score lower than the previous best score for that board position, then the beta value of that subtree is decreased to the value of the new best score. After searching each move within a subtree, the algorithm checks if the alpha value is greater than or equal to the beta value and if it is then the algorithm decides that searching more moves within that subtree is pointless and returns the best score found so far back to the parent tree. These “alpha-beta cut-offs” reduces the search space for the algorithm by cutting off the rest of the moves of that subtree from being searched. Reduction in search space amounts to a significant improvement in search time compared to the Minimax algorithm without changing the result. The results do not differ because the move that caused the alpha-beta cutoff to occur is worse than the parent tree’s best move found so far.
 
 \begin{figure}[!ht]
 \centering
@@ -566,7 +575,7 @@ The Alpha-Beta pruning algorithm is a smart improvement on the Minimax algorithm
 
 
 \subsubsection{Limiting Depth}
-A non-depth limited Alpha-Beta search will search deeper and deeper until a terminal state is found; this is very impractical for larger problems. Note that “depth” and “deeper” refers to how many moves ahead computer searches, the higher the depth the further ahead the computer has searched. Best way to deal with this is to introduce a depth limit where once depth X is reached the search is not continued. The problem with this is that when these depth cut-offs occur the board position will not be in a game-ending state. Therefore, the Alpha-Beta search needs to do some type of board evaluation to determine the value of the current board position, board evaluation used within Go-LD is detailed further on the chapter.
+A non-depth limited Alpha-Beta search will search deeper and deeper until a game-ending state is found; this is very impractical for larger problems. Note that “depth” and “deeper” refers to how many moves ahead the computer searches, the higher the depth the further ahead the computer has searched. Best way to deal with this is to introduce a depth limit where once depth x is reached the search is not continued. The problem with this is that when these depth cut-offs occur the board position will not be in a game-ending state. Therefore, the Alpha-Beta search needs to do some type of board evaluation to determine the value of the current board position, board evaluation used within Go-LD is detailed further on the chapter.
 
 \subsubsection{Go Adapted Alpha-Beta Pseudocode}
 The following pseudocode addresses the Alpha-Beta pruning search algorithm with Go's Life and Death problems in mind. It was used for the initial design of Go-LD's move finder function and later adapted to implement heuristics described in the following sections of this chapter.
@@ -615,7 +624,7 @@ The following pseudocode addresses the Alpha-Beta pruning search algorithm with 
 
 Due to the depth-first nature of a fixed-depth limited Alpha-Beta search, the search will not provide a result until every move is searched to a game-ending state or the limited depth. This means the search will not be able to produce the best move searched so for if it is stopped in the middle. Without the introduction of Iterative Deepening in Go-LD’s search the user is not able to search for a limited amount of time, instead, the user would have to predict which depth limit to set in order for the search to complete in the time they desire. Predicting the depth limit could lead the user to set the depth limit too high which would lead the search to last longer than what the user would prefer. Iterative deepening fixes this issue by allowing the user to stop the search whenever they desire and to use the result of the last completed iteration to make the best move found so far hence improving the usability of the Go-LD.
 
-Alpha-Beta with Iterative Deepening is a process in which AB search is performed multiple times, and at each iteration, the depth limit is increased by 1. This cycle takes place until max depth limit is reached, or a favourable game-ending state is found. Iterative Deepening effectively alters AB search to only increment depth by one at a time.  ~\autoref{fig:iter-deep} illustrates the process of Iterative Deepening, it is essential to understand that Iterative Deepening is not a new search algorithm itself but rather a framework which contains the Alpha-Beta search.
+Alpha-Beta with Iterative Deepening is a process in which the search is performed multiple times, and at each iteration, the depth limit is increased by 1. This cycle takes place until max depth limit is reached, or a favourable game-ending state is found. Iterative Deepening effectively alters Alpha-Beta search to only increment depth by one at a time.  ~\autoref{fig:iter-deep} illustrates the process of Iterative Deepening, it is essential to understand that Iterative Deepening is not a new search algorithm itself but rather a framework which contains the Alpha-Beta search.
 
 
 \begin{figure}[!ht]
@@ -633,7 +642,7 @@ The drawback of this process is that it requires multiple iterations of the Alph
 
 \section{Heuristics}
 
-The Alpha-Beta pruning search algorithm by itself is a significant improvement over the standard Minimax algorithm, but even with this improvement, the sheer size of the search space for a game tree can become quickly overwhelming for the search to handle in a reasonable time. Alpha-Beta even at best case has a complexity of $O(\sqrt{b^d})$ and at worst, $O(b^d)$  which means for problems with a higher number of initial valid moves or problems that require to search further ahead to come to a game-ending state could take an endless amount of time to search. For this reason, we have to introduce heuristics to allow the search to come to a quicker solution which could be incorrect rather than taking a long time to find a guaranteed correct solution. There are quite a few methods of implementing heuristics within the Alpha-Beta search. Go-LD will be able to use a few of these in combination or by themselves to restrict the time taken for the computer to respond to the user.
+The Alpha-Beta pruning search algorithm by itself is a significant improvement over the standard Minimax algorithm, but even with this improvement, the sheer size of the search space for a game tree can become quickly overwhelming for the search to handle in a reasonable time. Alpha-Beta even at best case has a complexity of $O(\sqrt{b^d})$ and at worst, $O(b^d)$  which means for problems with a higher number of initial valid moves or problems that require to search further ahead to come to a game-ending state could take an endless amount of time to search. For this reason, we have to introduce heuristics to allow the search to come to a quicker solution which might not always guarantee the best move rather than taking a much longer time to find the guaranteed best move. There are quite a few methods of implementing heuristics within the Alpha-Beta search. Go-LD will be able to use a few of these in combination or by themselves to restrict the time taken for the computer to respond to the user.
 
 \subsection{Board Evaluation}
 The Alpha-Beta search will have to evaluate the board position when the cut-off depth is reached and return a value which represents how good the board is for the players. For example, if the board position will lead the attacking player to capture all the keystones then the board evaluation should return -5000,   on the other hand, if the board position is in favour of the defending team, then it should return 5000. Creating a function which evaluates the board accurately is a difficult task and doing so which can perform at the level of humans is even more difficult. An essential factor to consider when designing an evaluation function is the time it takes to evaluate a board position. More complex the evaluation function becomes the longer it takes to evaluate single a board position hence the more time it takes to evaluate the board position every time the depth limit is reached.
@@ -684,7 +693,7 @@ Most of the patterns used within Go-LD have a distinct feature common in Life an
 \end{figure}
 
 
-An essential insight into creating a better evaluation function is to recognise that patterns like the one mentioned earlier will be able to create a single point eye at the worst-case scenario. If the opponent can play at a pattern's vital point and restrict it from creating two eyes, the pattern will still be able to create one real eye which should be valued quite highly. By connecting two groups each containing one real eye, the defending player can achieve an alive shape. When searched patterns fail to meet two eyes, Go-LD stores the eye space of each failed pattern in a collection of eye spaces. These eye spaces are highly probable to contain one real eye. Once the whole board is searched for all the different patterns used within Go-LD and each identified pattern's values totalled, the evaluating function is left with the collection of eye spaces which all contain one real eye. Using the collection of eye spaces Go-LD is able to group multiple eye spaces which are connected through stones of the same colour. Any group of eye spaces that contains two or more unique eye spaces are identified as highly valuable because they will most likely produce two real eyes.
+An essential insight into creating a better evaluation function is to recognise that patterns like the one mentioned earlier will be able to create a single point eye at the worst-case scenario. If the opponent can play at a pattern's vital point and restrict it from creating two eyes, the pattern will still be able to create one real eye which should be also valued quite highly. By connecting two groups each containing one real eye, the defending player can achieve an alive shape. When searched patterns fail to meet two eyes, Go-LD stores the eye space of each failed pattern in a collection of eye spaces. These eye spaces are highly probable to contain one real eye. Once the whole board is searched for all the different patterns used within Go-LD and each identified pattern's values totalled, the evaluating function is left with the collection of eye spaces which all contain one real eye. Using the collection of eye spaces Go-LD is able to group multiple eye spaces which are connected through stones of the same colour. Any group of eye spaces that contains two or more unique eye spaces are identified as highly valuable because they will most likely produce two real eyes.
 ~\autoref{fig:heur-2} shows an example of where Go-LD can recognise a new shape with two real eyes. Bent Three in the corner is about to lose its vital point once black plays at \bo{a}, but white can connect to the Single Point Eye nearby by playing at \bo{b}. Doing so will create a new shape which contains two real eyes. Go-LD recognises that the Bent Three in the corner will create one real eye even though it has lost its vital point. When white connects at \bo{b}, Go-LD's eye space grouping algorithm identifies that the new shape contains at least two real eyes and hence will score the shape highly.
 
 \begin{figure}[!ht]
@@ -718,7 +727,7 @@ To limit time spent on board evaluation only a small number of unique patterns c
 
 
 \subsection{Move Ordering}
-The benefit of Alpha-Beta pruning search over simple Minimax search is that when cut-offs occur a significant number of subtrees of possible board positions do not need to be searched. Erik van der Werf talks about the importance of move ordering during Alpha-Beta search and the effects of good move ordering heuristics \citep{ErikvanderWerf2004}. If the best move is always selected to be searched first, then the algorithm will produce cut-offs when all the other moves are searched afterwards. The idea behind this is if the best move is found first then all other moves will never return a score which is better than the best move. With this in mind, we can see that ordering the list of moves to consider the best move first or even a move which will produce more cut-offs first, is a great way to reduce the number of board positions to search without altering the result.
+The benefit of Alpha-Beta pruning search over simple Minimax search is that when alpha-beta cut-offs occur a significant number of subtrees of possible board positions do not need to be searched. Erik van der Werf talks about the importance of move ordering during Alpha-Beta search and the effects of good move ordering heuristics \citep{ErikvanderWerf2004}. If the best move is always selected to be searched first, then the algorithm will produce cut-offs when all the other moves are searched afterwards. The idea behind this is if the best move is found first then all other moves will never return a score which is better than the best move. With this in mind, we can see that ordering the list of moves to consider the best move first or even a move which will produce more cut-offs first, is a great way to reduce the number of board positions to search without altering the result.
 
 \subsubsection{Killer Move Heuristic}
 Go-LD uses a deeply researched \citep{Akl1977} method, Killer Heuristic, introduced by Huberman, B.J. to order moves when searching through endgames of Chess using Alpha-Beta. Huberman’s theory \citep{Huberman1968} was that a move (killer move) which led to a better board position from an initial board position \bo{A} will also lead to a better position from a similar initial board position \bo{B} if the move is a valid move for \bo{B}. Using this theory, these killer moves should be searched first when a similar board position occurs during Alpha-Beta search. The moves which are considered killer moves are defined easily by using the cut-off characteristics of the Alpha-Beta search, during the search if a move causes an alpha-beta cut-off to occur then this move can be considered a killer move and hence will be stored to be used for move ordering.  We can define what a similar board position is by merely looking at the depth in which the board position occurs in. Hence an ideal way to implement the killer heuristic is to store some moves for each depth which caused alpha-beta cut-offs to occur. Storing a high number of moves for each depth can lead to increased work during the move ordering process hence it is most effective only to store a few moves. Go-LD only stores two killer moves \bo{k1} and \bo{k2}  for each depth.
@@ -780,7 +789,7 @@ The other heuristic method used for move generation is based on pattern matching
 \end{figure}
 
 
-Relevancy score from the distance-based heuristic and pattern-based heuristic are combined together for each valid move and is ordered into a list from the highest to the lowest relevancy.  Depending on the user’s choice of breadth limit x,  the top x number of moves from this list will be generated and used  within the Alpha-Beta search.~\autoref{fig:heur-5} shows the same board positions shown in  ~\autoref{fig:heur-4} but both the distance-based and pattern-based heuristic applied. We can see that relevancy value for the vital points of the key group is significantly higher than all the other points nearby. The move generator would pick the two vital points as the first two moves to generate which is the best case scenario for the move generator.
+Relevancy score from the distance-based heuristic and pattern-based heuristic are combined together for each valid move and is ordered into a list from the highest to the lowest relevancy.  Depending on the user’s choice of breadth limit x,  the top x number of moves from this list will be generated and used  within the search.~\autoref{fig:heur-5} shows the same board positions shown in  ~\autoref{fig:heur-4} but with both distance-based and pattern-based heuristic applied. We can see that relevancy value for the vital points of the key group is significantly higher than all the other points nearby. The move generator would pick the two vital points as the first two moves to generate which is the best case scenario for the move generator.
 
 
 
@@ -829,16 +838,16 @@ After, any moves remaining in the "bad moves" list are removed from the valid mo
 
 
 \chapter{Implementation}
-This chapter will go into detail about Go-LD implementation. Go-LD is entirely written in Java and uses a simple 2D game engine called  \cite{SLICK2D} based on  \cite{LWJGL}. All of the major constructs of Go are implemented within Go-LD to create a stable environment for the user to solve life and death problems.  The Go board and the pattern matcher are two key aspects of Go-LD. The Go board is essentially the entire backbone of the tool required to either play the problems or to create them. The pattern matcher is used to implement heuristics for both board evaluation and move generation.
+This chapter will go into detail about Go-LD's implementation. Go-LD is entirely written in Java and uses a simple 2D game engine called  \cite{SLICK2D} based on  \cite{LWJGL}. All of the major constructs of Go are implemented within Go-LD to create a stable environment for the user to solve Life and Death problems.  The Go board and the pattern matcher are two key aspects of Go-LD. The Go board is essentially the entire backbone of the program required to either play the problems or to create them. The pattern matcher is used to implement heuristics for both board evaluation and move generation.
 
 \section{Board}
 
-The Go board is represented as an object class within Go-LD which contains all the vital data to represent the current board position. Go-LD's board is designed to make the tree search and board evaluations as quick as possible. To do so meant storing more information within the Board object was ideal instead of recalculating information every time it was needed during board evaluation or move generation. The Board object also implements public methods which allow the computer and also the users to interact with the board. The rules of Go are implemented via the Board object which automatically checks if a move played by the user or the computer is valid. If it is valid then the board position is updated to represent the result of the move played otherwise if the move is invalid the Board object denies the move and creates an in-game message to let the user know.
+The Go board is represented as an object class within Go-LD which contains all the vital data to represent the current board position. Go-LD's board is designed to make the tree search and board evaluations as quick as possible. To do so meant storing more information within the Board object was ideal instead of recalculating information every time it was needed during board evaluation or move generation. The Board object also implements public methods which allow the computer and also the user to interact with the board. The rules of Go are implemented via the Board object which automatically checks if a move played by the user or the computer is valid. If it is valid then the board position is updated to represent the result of the move played otherwise if the move is invalid the Board object denies the move and creates an in-game message to let the user know.
 
 \subsection{Stones}
-Representation of stones on the board is simple but sufficient to keep the operation of gathering information about stone strings and liberties fast. Go-LD takes advantage of Java’s enum type to define the different possible states each intersection on the board could be. While it is possible to represent all the points on the board with merely black, white or empty constants, this would lead to additional operations to distinguish between different types of points such as an empty intersection which is within a problem’s boundaries and an empty intersection which is removed from play. Similar operations are required to distinguish between Ko points and Valid points, black stones and key black stones, white stones and key white stones. To avoid this problem, Go-LD uses seven different constants to represent all the intersections on the board. The "Stone" enum class consists of the following constants: BLACK, WHITE, VALID, INVALID, KO, BLACKKEYSTONE, WHITEKEYSTONE . The entire board is represented by a 2D array of the "Stone" objects.
+Representation of stones on the board is simple but sufficient to keep the operation of gathering information about stone strings and liberties fast. Go-LD takes advantage of Java’s enum type to define the different possible states each intersection on the board could be. While it is possible to represent all the points on the board with merely black, white or empty constants, this would lead to additional operations to distinguish between different types of points such as an empty intersection which is within a problem’s boundaries and an empty intersection which is removed from play. Similar operations are required to distinguish between Ko points and Valid points, black stones and key black stones, white stones and key white stones. To avoid this problem, Go-LD uses seven different constants to represent all the intersections on the board. The "Stone" enum class consists of the following constants: BLACK, WHITE, VALID, INVALID, KO, BLACKKEYSTONE, WHITEKEYSTONE .
 
-While the use of a 1D array is possible to represent a 2D Go board and is more space efficient than a 2D array, it would require additional operations to define the board within a 2D coordinate system. This would lead to an additional operation each time the board is accessed which would slow down the entire program.
+The entire board is represented by a 2D array of the "Stone" objects. While the use of a 1D array is possible to represent a 2D Go board and is more space efficient than a 2D array, it would require additional operations to define the board within a 2D coordinate system. This would lead to an additional operation each time the board is accessed which would slow down the entire program.
 
 \subsection{Strings}
 A string of stones is any number of stones of the same colour which are connected through adjacent stones of the same colour. A key observation of strings is that once a string is formed, the only way to deform it is through capture by placing on all the liberties of the string. Hence the Board object maintains two collections of strings, one for black and one for white, for the use of the capture functionality. Both collections of strings are updated after each move to represent any changes on the board. A list of 2D coordinates represents each string, due to the lack of an inbuilt tuple type with Java, Go-LD uses a custom-built Tuple object to represent 2D coordinates.
@@ -859,7 +868,7 @@ The other additional information gathered is whether or not the Ko rule should b
 If true for all three questions, then a KO is placed inside the 2D array at the intersection which was in consideration for Ko. Next turn, the opponent cannot play there.
 
 \subsection{Valid Move Checker}
-Valid move checker is a simple function which returns true or false depending on whether placing on the intersection being checked is valid for the current player. This function consists of three core checks. Is the point being checked on the board? In case of a human player trying to place a stone outside the board grid area. Is the value of that intersection in the board’s 2D array VALID? This restricts the user and the computer from playing on points of the board which are removed from play during a problem represented by INVALID and also restricts play on the point of KO. The third check is to make sure that if the current player plays on the point, it will not lead to self-capture. The self-capture check used is quite intricate, the following algorithm is used to determine whether a move is considered self-capture hence invalid.
+Valid move checker is a simple function which returns true or false depending on whether placing on the intersection being checked is valid for the current player. This function consists of three core checks. Is the point being checked on the board? In case of a human player trying to place a stone outside the board grid area. Is the value of that intersection in the board’s 2D array VALID? This restricts the user and the computer from playing on points of the board which are removed from play during a problem represented by INVALID and also restricts play on the point of KO. The third check is to make sure that if the current player plays on the point, it will not lead to self-capture. The self-capture check is quite intricate, the following algorithm is used to determine whether a move is considered self-capture hence invalid.
 
 \begin{algorithm}[H]
 \caption{Self-Capture Check}\label{Self-Capture Check}
@@ -950,17 +959,17 @@ The patterns matcher itself is based on the idea that every Point object within 
     }
 \end{algorithm}
 
-The pattern matcher returns not only the matched patterns but also the rotation of the matched pattern. Go-LD uses the matched patterns along with its rotations to find vital points within each pattern found. Then checks if these vital points are empty, contains defending colour stones or attacking stones to evaluate the value of the overall pattern found. After which more complex checks are performed to see if the pattern identified is fully formed or incomplete, whether the walls of patterns are safe or not. ~\autoref{fig:pat-2} shows Pyramid Four pattern incomplete where the vital point is not as important, next to a fully complete variation of the same shape where the vital point at a is the only point that matters.
+The pattern matcher returns not only the matched patterns but also the rotation of the matched pattern. Go-LD uses the matched patterns along with its rotations to find vital points within each pattern found. Then checks if these vital points are empty, contains defending colour stones or attacking stones to evaluate the value of the overall pattern found. After which more complex checks are performed to see if the pattern identified is fully formed or incomplete, whether the walls of shape are safe or not. ~\autoref{fig:pat-2} shows Pyramid Four pattern incomplete where the vital point is not as important, next to a fully complete variation of the same shape where the vital point at \bo{a} is the only point that matters.
 
 \begin{figure}[!ht]
 \centering
-\begin{subfigure}[b]{0.45\textwidth}
+\begin{subfigure}[b]{0.35\textwidth}
 \centering
 \includegraphics[width=\textwidth]{pat/2a.png}
 \caption{Incomplete \& unsafe walls}
 \label{fig:pat-2a}
 \end{subfigure}
-\begin{subfigure}[b]{0.45\textwidth}
+\begin{subfigure}[b]{0.35\textwidth}
 \centering
 \includegraphics[width=\textwidth]{pat/2b.png}
 \caption{Complete \& safe walls}
@@ -981,9 +990,9 @@ The pattern matcher returns not only the matched patterns but also the rotation 
 
 This chapter covers the evaluation process of the project. Which includes evaluation of the “computer” player within Go-LD and how well it solves problems and also the evaluation of the overall program.  First, we look at how the computer handles some specific Life and Death problems which are explained in detail for the reader to understand. A set of problems solvable by the computer were used to evaluate the computer’s performance quantitatively. We also go into detail about beta-testing performed at the end of the project and review the feedback/reports received.
 
-\section{Evaluation of Specific Life and Death Problems}
+\section{Example Life and Death Problems}
 \subsection{Problem 1}
-~\autoref{fig:ep1}  shows a basic problem the computer can solve at depth 1. To begin with, let us look at what happens if black is to play the initial move. Black can only live here by playing at \bo{a} or \bo{b} otherwise optimal white play will capture the black group. If black plays at \bo{a} then white needs to play at both \bo{b} and \bo{c}.Otherwise if black play at \bo{b} the white needs to play at \bo{d}and \bo{a}. Since white cannot make two moves at once, the black group lives if played correctly. Let us assume black plays at \bo{a} then the best move possible is for white to challenge black is either \bo{b} or \bo{c}.Keep in mind in a real game of Go white would avoid playing in this area once black plays at \bo{a} or \bo{b} as it becomes impossible for white to win the situation.
+~\autoref{fig:ep1}  shows a basic problem the computer can solve at depth 1. To begin with, let us look at what happens if black is to play the initial move. Black can only live here by playing at \bo{a} or \bo{b} otherwise optimal white play will capture the black group. If black plays at \bo{a} then white needs to play at both \bo{b} and \bo{c}.Otherwise if black play at \bo{b} the white needs to play at \bo{d} and \bo{a}. Since white cannot make two moves at once, the black group lives if played correctly. Let us assume black plays at \bo{a} then the best move possible for white to challenge black is either \bo{b} or \bo{c}.Keep in mind in a real game of Go white would avoid playing in this area once black plays at \bo{a} or \bo{b} as it becomes impossible for white to win the situation.
 \begin{figure}[!ht]
 \centering
 \begin{subfigure}[b]{0.8\textwidth}
@@ -993,7 +1002,7 @@ This chapter covers the evaluation process of the project. Which includes evalua
 \label{fig:ep1}
 \end{figure}
 
-~\autoref{fig:ep1-1} shows the sequence of moves which occurs when the computer plays black. We can see the computer(black) can play out the problem as black to produce two eyes in order to keep the black keystones alive. The computer can solve the problem with both variations of white’s response.
+~\autoref{fig:ep1-1} shows the sequence of moves which occurs when the computer plays black. We can see the computer can play out the problem as black to produce two eyes in order to keep the black keystones alive. The computer can solve the problem with both variations of white’s response.
 
 \begin{figure}[!ht]
 \centering
@@ -1074,7 +1083,7 @@ In ~\autoref{fig:ep2-2} we can see the sequence of move the computer plays as bl
 \label{fig:ep3}
 \end{figure}
 
-~\autoref{fig:ep3} shows a more complex problem than the previous examples taken from \cite{GoProblems} and is of 2 dan difficulty according to the website. Looking from white’s perspective, we can see the white group in a dangerous position. The black stone at \bo{e} reduces the eye space in the corner to 4 square points (a,b,c,d). White can only create one real eye from this eye space because black can place a stone diagonally opposite to the point white places to disable a second eye from forming. In order for white to create two real eyes it needs to make use of the two whites stones at the \bo{f} and \bo{g} to create another eye above the white group.
+~\autoref{fig:ep3} shows a more complex problem than the previous examples taken from \cite{GoProblems} and is of 2 dan difficulty according to the website. Looking from white’s perspective, we can see the white group in a dangerous position. The black stone at \bo{e} reduces the eye space in the corner to 4 square points (\bo{a},\bo{b},\bo{c},\bo{d}). White can only create one real eye from this eye space because black can place a stone diagonally opposite to the point white places to disable a second eye from forming. In order for white to create two real eyes it needs to make use of the two whites stones at the \bo{f} and \bo{g} to create another eye above the white group.
 
 ~\autoref{fig:ep3-1} shows the sequence of moves which allows white to live against the optimal play from black, this is the main line of play given in GoProblems. The computer can solve this problem to win as white playing first even if black plays the optimal moves shown in ~\autoref{fig:ep3-1}. The computer is also able to solve this problem from black's perspective by playing at \bo{1} if black is supposed to play first.
 
@@ -1088,7 +1097,7 @@ In ~\autoref{fig:ep2-2} we can see the sequence of move the computer plays as bl
 \centering
 \includegraphics[width=\textwidth]{ep3/ep3-1.png}
 \end{subfigure}
-\caption{The sequence of moves required for white to live. Go-LD's "computer" does replicate this exact sequence as white if the opponent black plays the same points.}
+\caption{The sequence of moves required for white to live. Go-LD's "computer" replicates this exact sequence as white if the opponent black plays the same points.}
 \label{fig:ep3-1}
 \end{figure}
 
@@ -1104,8 +1113,12 @@ The performance evaluation process contained the following steps:
 \end{enumerate}
 
 The problems used during this process were attained from \cite{GoProblems}, this website was especially helpful because it contained difficulty rating for each problem depending on how the users of the website found the problem. The reasonable time frame was two mins, but some problems were allowed slightly more time.
-To determine if the computer can successfully solve a problem is a difficult task. For larger problems, it becomes impossible to test every variation of move sequences to determine if the computer can solve the problem. For this reason,  the main line of play shown on GoProblems along with some other lines of play which seemed relevant were the only ones tested. Some solution found by the computer were regarded as incorrect by GoProblems due to the difference in Ko is treated. Within Go-LD, if the attacking player can capture then they win, the occurrence of Ko does not matter whereas it does on the website. Every problem was also tested with the objective and starting condition inverted to prove the computer is able to solve the problem from both perspectives. For example, what this means is a problem where the objective is for white to kill black and white play first then the problem is also tested with black to live and black plays first. Each problem was tested for up to 30 minutes (multiple run-throughs) to determine if it was solvable in a reasonable time frame.
-The relevant data collected for each solvable problem included: The depth in which the problem is solved; The difficulty indicated on GoProblems; The identification number on GoProblems; Number of valid moves S1, S2 ; Four different times T1, T2, T3 and T4.
+
+To determine if the computer can successfully solve a problem is a difficult task. For larger problems, it becomes impossible to test every variation of move sequences to determine if the computer can solve the problem. For this reason,  the main line of play shown on GoProblems along with some other lines of play which seemed relevant were the only ones tested. Some solution found by the computer were regarded as incorrect by GoProblems due to the difference in Ko is treated. Within Go-LD, if the attacking player can capture then they win, the occurrence of Ko does not matter whereas it does on the website.
+
+Every problem was also tested with the objective and starting condition inverted to prove the computer is able to solve the problem from both perspectives. For example, what this means is a problem where the objective is for white to kill black and white play first then the problem is also tested with black to live and black plays first. Each problem was tested for up to 30 minutes (multiple run-throughs) to determine if it was solvable in a reasonable time frame.
+
+The relevant data collected for each solvable problem included: The depth in which the problem is solved; The difficulty indicated on GoProblems; The identification number on GoProblems; Number of valid moves S1, S2; Four different times T1, T2, T3 and T4.
 
 S1 – Number of valid moves with the original objective (excluding passing).
 
@@ -1147,8 +1160,8 @@ The data collected was aggregated and processed to find relevant averages and tr
 15410 & 30 - kyu & 702 & 6 & 11 & 11 & 7.81 & 9.10 & 9.97 & 12.90 \\ \hline
 611 & 2 - kyu & 1495 & 7 & 9 & 9 & 12.22 & 13.23 & 11.30 & 10.55 \\ \hline
 3267 & 9 - kyu & 1313 & 7 & 9 & 9 & 12.10 & 14.55 & 7.44 & 14.77 \\ \hline
-6218 & 11 - kyu & 1240 & 7 & 10 & 10 & 30.93 & 25.69 & 29.51 & 22.60 \\ \hline
-8626 & 12 - kyu & 1209 & 8 & 10 & 10 & 53.37 & 69.68 & 94.79 & 55.61 \\ \hline
+% 6218 & 11 - kyu & 1240 & 7 & 10 & 10 & 30.93 & 25.69 & 29.51 & 22.60 \\ \hline
+% 8626 & 12 - kyu & 1209 & 8 & 10 & 10 & 53.37 & 69.68 & 94.79 & 55.61 \\ \hline
 % 15256 & 6 - dan & 1793 & 8 & 10 & 10 & 98.21 & 54.84 & 99.98 & 60.75 \\ \hline
 % 16429 & 2 - dan & 1589 & 8 & 10 & 10 & 36.75 & 39.96 & 42.39 & 38.82 \\ \hline
 % 7842 & 6 - kyu & 1388 & 9 & 10 & 10 & 94.64 & 62.41 & 61.42 & 19.20 \\ \hline
@@ -1164,7 +1177,7 @@ The data collected was aggregated and processed to find relevant averages and tr
 
 \subsubsection{Difficulty vs. Depth}
 
-To find the relationship between the difficulty of a problem and the depth in which it is solved the scatter plots shown in \autoref{fig:edvd} were produced which includes the line of best fit. From the plots, we can see that increased difficulty does correlate to a linear increase in depth required. Look the plots we can is exceptions to this rule especially in middle-based problems we can see instances of problems which are low in difficulty but require higher depths of search to solve. For side and corner-based problems, we find that increase in difficulty does in general results in a linear increase in depth required. We can also gather from the plots that the computer can solve difficult side-based problems at lower depths than middle or corner based ones.
+To find the relationship between the difficulty of a problem and the depth in which it is solved at the scatter plots shown in \autoref{fig:edvd} were produced which includes the line of best fit. From the plots, we can see that increased difficulty does correlate to a linear increase in depth required. Looking at the plots we can see exceptions to this rule especially for middle-based problems, we can see instances of problems which are low in difficulty but require higher depths of search to solve. For side and corner-based problems, we find that increase in difficulty does in general results in a linear increase in depth required. We can also gather from the plots that the computer can solve difficult side-based problems at lower depths than middle or corner based ones.
 
 \begin{figure}[!h]
 \centering
@@ -1193,10 +1206,10 @@ $\sim$  4 - 7 dan & 1700 - 1900 & 8 \\ \hline
 \label{table:dranged}
 \end{table}
 
-\autoref{table:dranged} shows the average depth required for different ranges of difficulty ratings. The naming of the difficulty is similar to the player ranking system used in Go \citep{GoRanks}, but the actual difficulty does not precisely correlate to the skill level required to solve the problem. Using this table, we can estimate the depth parameter that Go-LD should use for a problem of difficulty X. The table also shows that the minimum depth required to solve basic problems is around 4.5. Which is a good indication of the ability of the board evaluation function, we can see that even at lower depths the board evaluation function can accurately score the board to find the correct move for easier problems. During the testing the average problem could be solved at depth 6 therefore 6 is set to be the default depth limit for the computer.
+\autoref{table:dranged} shows the average depth required for different ranges of difficulty ratings. The naming of the difficulty is similar to the player ranking system used in Go \citep{GoRanks}, but the actual difficulty does not precisely correlate to the skill level required to solve the problem. Using this table, we can estimate the depth parameter that Go-LD should use for a problem of difficulty x. The table also shows that the average minimum depth required to solve basic problems is around 4.5. Which is a good indication of the ability of the board evaluation function, we can see that even at lower depths the board evaluation function can accurately score the board to find the correct move for easier problems. During the testing the average problem could be solved at depth 6 therefore 6 is set to be the default depth limit for the computer.
 
 \subsubsection{Difficulty vs.Time \& Iterative Deepening}
-To evaluate Go-LD's performance in terms of difficulty versus time, we need to set a time frame which can be considered as an interactive period. Using a 45 second as the time threshold, we can estimate the average difficulty of a problem which Go-LD can solve within this threshold. The average difficulty for threshold was calculated for T1 and T3 because T2, T4 used the inverted objective; hence the difficulty rating shown online cannot be applied to the problem. Performing the calculation on T1 which is the time taken for the search to find the first move with Iterative Deepening resulted in an average difficulty of rating 1179 which around 13 kyu according to \cite{GoProblems}. The same calculation for T3 which is with fixed-depth search results in an average difficulty rating of 1181 also around 13 kyu.
+To evaluate Go-LD's performance in terms of difficulty versus time, we need to set a time frame which can be considered as an interactive period. Using a 45 second as the time threshold, we can estimate the average difficulty of a problem which Go-LD can solve within this threshold. The average difficulty for threshold was calculated for T1 and T3 but not T2, T4 because they used the inverted objective hence the difficulty rating shown online cannot be applied to the problem. Performing the calculation on T1 which is the time taken for the search to find the first move with Iterative Deepening resulted in an average difficulty of rating 1179 which around 13 kyu according to \cite{GoProblems}. The same calculation for T3 which is with fixed-depth search results in an average difficulty rating of 1181 also around 13 kyu.
 
 \begin{figure}[!h]
 \centering
@@ -1214,14 +1227,15 @@ To evaluate Go-LD's performance in terms of difficulty versus time, we need to s
 We can look T1, T3 without setting a threshold to evaluate the addition of Iterative Deepening more clearly. \autoref{fig:t1vt3} show a plot of T1, T3 against the depth * S1 of each problem where S1 is the number of initial moves without inverting the objective. Looking at the line of best fit we can see that for shorter searches (around < 10s) the fixed depth search works better but as depth * S1 increases the more effective Iterative Deepening becomes. Note: T1 is with Iterative Deepening and T3 is fixed-depth.
 \subsection{Performance Evaluation Summary}
 
-Through the performance evaluation process, the extent of Go-LD’s “computer” player’s ability was found. Out of the 72 solvable problems gathered 18 took more than 30 seconds by the Iterative Deepening search. The remaining 54 had an average difficulty rating of 1179 (\textasciitilde 13 kyu ). Iterative Deepening had a minimal negative effect for shorter searches and had a positive effect for longer searches compared the fixed-depth search. Therefore, the choice of implementing Iterative Deepening is reasonably validated as it will give users more control over the search result without hindering the performance, sometimes even improving it. This process also made the limitation of search evident; there were around 30 other problems initially re-created with Go-LD which were unable to be solved in a reasonable time frame. Most of these were of higher difficulty and larger in size than the solvable problems. This limitation was for seen as it is the nature of heuristics, it can never be perfect and only through increased knowledge can it become more accurate. Increased knowledge requires a deeper and broader search which leads to exponential time increase.
+Through the performance evaluation process, the extent of Go-LD’s “computer” player’s ability was found. Out of the 72 solvable problems gathered 18 took more than 30 seconds by the Iterative Deepening search. The remaining 54 had an average difficulty rating of 1179 (\textasciitilde 13 kyu). Iterative Deepening had a minimal negative effect for shorter searches and had a positive effect for longer searches compared the fixed-depth search. Therefore, the choice of implementing Iterative Deepening is reasonably validated as it will give users more control over the search result without hindering the performance, sometimes even improving it. This process also made the limitation of search evident; there were around 30 other problems initially re-created with Go-LD which were unable to be solved in a reasonable time frame. Most of these were of higher difficulty and larger in size than the solvable problems. This limitation was foreseen as it is the nature of heuristics, it can never be perfect and only through increased knowledge can it become more accurate. Increased knowledge requires a deeper and broader search which leads to exponential time increase.
 
 
 
 \section{Beta Testing}
 At the end of the project, the program was put forward for beta testing. The primary goal of the beta testing was to evaluate usability and functionality. A small number of beta tester were given the program for a period two weeks to test and provide feedback on different aspects of the program. They were also to report any bugs or issues found during testing. Testers were a given brief which contained an introduction to the project along with simple step by step tutorial to play through the tutorial problem provided to them. The testers also received 30 self-designed problems and the collection of 72 problems used during performance evaluation. All problems delivered to the testers contained predefined search parameters at which the computer should be able to solve the problem, and these parameters were set to load up along with the problem.
+
 \subsection{Pre-Testing Questions}
-The testers were sent a google form which they had to fill in throughout testing. To gauge the experience of the testers with Go few simple questions were asked. The results showed 4 out of the 6 testers were aware of the rules of Go, if they were not aware they were provided with a link to a simple Go rule guide to help them with the rest of the testing. Following this they were asked if they had played Go before, the result was that only 2 in 6 had played Go before and more importantly only one tester have tried solving life and death problems. A crucial take away from this is that the lack of experience playing Go within the tester will limit the extent to which they can test the Go-LD’s computer. An experienced Go player might not be able to tell if the computer is playing a poor move hence will not be able to report on it.
+The testers were sent a google form which they had to fill in throughout testing. To gauge the experience of the testers with Go few simple questions were asked. The results showed 4 out of the 6 testers were aware of the rules of Go, if they were not aware they were provided with a link to a simple Go rule guide to help them with the rest of the testing. Following this they were asked if they had played Go before, the result was that only 2 in 6 had played Go before and more importantly only one tester have tried solving life and death problems. A crucial take away from this is that the lack of experience playing Go within the testers would have limited the extent to which they can test the Go-LD’s computer. An inexperienced Go player might not be able to tell if the computer is playing a poor move hence will not be able to report on it.
 
 \subsection{Interface \& Usability}
 The testers were asked a series of questions regarding the interface and usability of the two modes of Go-LD (Play, Editor). Most testers agreed that the representation of the board was simple and clear, even though the testers answered this question in regard to the board in play mode it would apply for the editor mode as well because the board is represented the same for both modes.
@@ -1238,7 +1252,7 @@ Testers found the background image used for Go-LD during beta testing too bright
 In terms of functionality, the testers provided quite insightful feedback to evaluate the program. When asked about the speed in which the computer responded with move testers had a variety of responses. Some deemed it to be very quick; one even said that they found it difficult to see where the computer had placed the stone. Other testers found that speed decreased with increased complexity of the problem. One tester in particular identified depth up to 6 was “fast enough to remain interactive”. The varied tester responses show that the computer dealing with simpler problems can be too quick for the user to see the stone placed on the board and when dealing with difficult problems requiring higher depths the user has to wait longer on the computer to make a move. These responses confirm the data showed during the performance evaluation process about the speed in which the computer solves the problem is relative to the difficulty of the problem which is only natural.
 All testers combined found one instance of a Go problem provided to them not being solved at the set default depth for that problem. Apart from this instance, the computer was able to solve every problem the testers played if they let the computer play first.
 
-The testers were asked if there were any difficulty during testing, one tester pointed out that the editor mode’s board taking priority over play mode’s board when switching between the two modes was an issue. While this is a functionality to allow a problem created on editor mode to be transferred over to play mode in retrospect having the ability to choose whether or not to transfer over the problem from one mode to another would have proved to be a better implementation of the functionality. Another tester found that it was quite difficult to judge the increase in time when adjusting the depth and breadth limits hence would have liked to have a warning of sorts to let them know the effect of increasing the limits too high.
+The testers were asked if there were any difficulties during testing, one tester pointed out that the editor mode’s board taking priority over play mode’s board when switching between the two modes was an issue. While this is a functionality to allow a problem created on editor mode to be transferred over to play mode in retrospect having the ability to choose whether or not to transfer over the problem from one mode to another would have proved to be a better implementation of the functionality. Another tester found that it was quite difficult to judge the increase in time when adjusting the depth and breadth limits hence would have liked to have a warning of sorts to let them know the effect of increasing the limits too high.
 
 A critical issue that occurred during the early phase of beta testing was that the testers found it difficult to run the program due to the difference in java version required to run Go-LD to the version they had installed. Since this was a significant hindrance, the issue was fixed during the beta testing phase by bundling the Java Runtime Environment required along with the entire Go-LD beta testing package. Furthermore, the portability has since been tested for on Windows 10, Ubuntu and  Fedora systems to ensure the program can simply run from the files inside the zipped folder containing the final version of Go-LD. Due to a lack of access to a Mac system, Go-LD was not tested on the Mac OS.
 
@@ -1272,7 +1286,7 @@ The evaluation process consisted of two parts, the performance evaluation proces
 \section{Future Development}
 There are many features and improvements which could be looked at to progress the work done throughout this project further. Some of the suggestions made by the beta testers seemed interesting. A popular suggestion was to add a hint button which could show the user a few good moves determined by the computer searching in the background. Another great idea was to visualise which moves the computer is considering during the search; this would mean to show the current best move according to the latest iteration of Alpha-Beta completed.
 
-The nature of heuristics means that they are not perfect, hence looking at new methodologies to perform board evaluation, move generation and move ordering would be an ideal way to improve on what is currently in use. Specifically, some work done by B.Bouzy in his paper \citep{Bouzy2003} where he looks at improving upon the Zobrist model \citep{Zobrist1969} which is based on the idea of creating a map of influence-based positions of stones on the board. Applying this work to Life and Death problems could help in determining which moves to generate by looking at points of high influence on an influence map. A way to improve on B.Bouzy's improved model could be by taking into consideration the difference in strength of stone patterns during the creation of an influence map. For example, four stones arranged in a square block would have a lot less influence than four stones arranged to create an eye in the middle.
+The nature of heuristics means that they are not perfect, hence looking at new methodologies to perform board evaluation, move generation and move ordering would be an ideal way to improve on what is currently in use. Specifically, some work done by B.Bouzy in his paper \citep{Bouzy2003} where he looks at improving upon the Zobrist model \citep{Zobrist1969} which is based on the idea of creating a map of influence based on the positions of stones on the board. Applying this work to Life and Death problems could help in determining which moves to generate by looking at points of high influence on the influence map. A way to improve on B.Bouzy's improved model could be by taking into consideration the difference in strength of stone patterns during the creation of an influence map. For example, four stones arranged in a square block would have a lot less influence than four stones arranged to create an eye in the middle.
 
 Another realm of possibilities can be opened up by introducing Machine Learning to identify and group similar stone patterns to determine the value of each pattern to be used during a board evaluation function. Machine Learning could even be used to create an entirely new board evaluation function from scratch. Doing so would provide significant improvements over any human-designed evaluation function granted a large enough training set is used.
 
