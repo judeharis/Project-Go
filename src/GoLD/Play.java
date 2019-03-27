@@ -91,12 +91,12 @@ public class Play extends BasicGameState {
         if(board.checkValidMove(bx,by) && board.validMoves.contains(new Tuple(bx,by))) {
         	board.drawoval(g,(bx+1)*Board.TileSize,(by+1)*Board.TileSize,board.placing.stoneToColor(),board.placing.isKey());}
         
-        if(t1!=null) {
-        	if(mf.choice !=null && mf.choice.a != -9) {
-        		
-        		board.drawoval(g,(mf.choice.a+1)*Board.TileSize,(mf.choice.b+1)*Board.TileSize,new Color(0,1,0,0.5f),board.placing.isKey());
-        		}
-        }
+
+//        if(t1!=null && mf.choice !=null && mf.choice.a != -9) 
+//        	board.drawoval(g,(mf.choice.a+1)*Board.TileSize,(mf.choice.b+1)*Board.TileSize,new Color(0,1,0,0.5f),board.placing.isKey());
+        
+        
+        
 		fontStart(g);
 		GoLD.drawButton(playx-20 ,playy+20  ,200,50,"Back", g,GoLD.regionChecker(playx-20 ,playy +20,200,50,gc));
 		GoLD.drawBox(playx+330 ,playy+20  ,340,50,"Play Mode", g, false);
@@ -418,7 +418,7 @@ public class Play extends BasicGameState {
         		if(mf.choice.a == -9 && mf.choice.b==-9)gameMsg= "Computer Passed";
         		else gameMsg= "Computer Placed at " + Board.coord(mf.choice);
         	}else winMsg= "Computer says " + board.placing.getEC()+" Wins";
-        	deleteAI();
+//        	deleteAI();
 			afterMove();
     	}
 

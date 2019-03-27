@@ -714,7 +714,7 @@ public class Board{
                         break;
 
                     case VALID: // if (editormode)drawoval(g,(i+1)*TileSize,(j+1)*TileSize,new Color(0f,1f,0f,.0f ),false);
-                    	 if (editormode)drawoval(g,(i+1)*TileSize,(j+1)*TileSize,new Color(0f,0f,0f,.0f ),false);
+                    	if (editormode)drawoval(g,(i+1)*TileSize,(j+1)*TileSize,new Color(0f,0f,0f,.0f ),false);
                         else if(!validMoves.contains(new Tuple(i,j)))drawoval( g,(i+1)*TileSize,(j+1)*TileSize ,new Color(1f,0f,0f,.2f),false);
                         break;
 
@@ -769,6 +769,8 @@ public class Board{
 
 
     }
+    
+
     
 
     public void drawsquare(Graphics g,  int x, int y , Color c) {
